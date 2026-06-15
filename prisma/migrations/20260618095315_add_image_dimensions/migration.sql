@@ -1,0 +1,3 @@
+-- AlterTable
+ALTER TABLE "portfolio_items" ADD COLUMN     "height" INTEGER NOT NULL DEFAULT 600,
+ADD COLUMN     "width" INTEGER NOT NULL DEFAULT 800;

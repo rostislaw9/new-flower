@@ -1,0 +1,176 @@
+"use client";
+
+import { useState } from "react";
+
+import { useLocale, useTranslations } from "next-intl";
+import { useRouter } from "next/navigation";
+
+import { AdminPageHeader } from "@/components/admin/AdminPageHeader";
+import { ImageUploader } from "@/components/admin/ImageUploader";
+import { Badge } from "@/components/styled/Badge";
+import { Button } from "@/components/styled/Button";
+import { FormField } from "@/components/styled/FormField";
+import { Checkbox } from "@/components/ui/checkbox";
+import { Input } from "@/components/ui/input";
+import { Label } from "@/components/ui/label";
+import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from "@/components/ui/select";
+import { Textarea } from "@/components/ui/textarea";
+import { createPortfolioItem } from "@/lib/actions/portfolio";
+import { PORTFOLIO_CATEGORIES } from "@/lib/portfolio-data";
+
+export default function NewPortfolioItemPage() {
+  const router = useRouter();
+  const locale = useLocale();
+  const t = useTranslations("admin.portfolio");
+  const actions = useTranslations("admin.common.actions");
+  const [isSubmitting, setIsSubmitting] = useState(false);
+  const [category, setCategory] = useState("");
+  const [uploadedImageUrl, setUploadedImageUrl] = useState<string>("");
+  const [imageDimensions, setImageDimensions] = useState<{
+    width: number;
+    height: number;
+  } | null>(null);
+
+  async function handleSubmit(formData: FormData) {
+    if (!uploadedImageUrl) {
+      alert(t("new.alerts.uploadRequired"));
+      return;
+    }
+
+    setIsSubmitting(true);
+    try {
+      formData.append("imageUrl", uploadedImageUrl);
+      if (imageDimensions) {
+        formData.append("width", imageDimensions.width.toString());
+        formData.append("height", imageDimensions.height.toString());
+      }
+      const result = await createPortfolioItem(formData);
+
+      if (result.success) {
+        router.push(`/${locale}/admin/portfolio`);
+        router.refresh();
+      } else {
+        alert(result.message || t("new.alerts.createFailed"));
+      }
+    } catch {
+      alert(t("new.alerts.genericError"));
+    } finally {
+      setIsSubmitting(false);
+    }
+  }
+
+  return (
+    <div className="flex flex-col gap-8">
+      <AdminPageHeader title={t("new.title")} subtitle={t("new.subtitle")} />
+
+      <form action={handleSubmit} className="flex max-w-2xl flex-col gap-6">
+        <div className="grid gap-4 md:grid-cols-2">
+          <FormField label={t("form.titleLabel")} htmlFor="title" required>
+            <Input
+              id="title"
+              name="title"
+              type="text"
+              required
+              placeholder={t("form.titlePlaceholder")}
+            />
+          </FormField>
+
+          <FormField
+            label={t("form.categoryLabel")}
+            htmlFor="category"
+            required
+          >
+            <input type="hidden" name="category" value={category} />
+
+            <Select value={category} onValueChange={setCategory}>
+              <SelectTrigger id="category">
+                <SelectValue placeholder={t("form.categoryPlaceholder")} />
+              </SelectTrigger>
+
+              <SelectContent>
+                {PORTFOLIO_CATEGORIES.map((cat) => (
+                  <SelectItem key={cat} value={cat}>
+                    {cat.charAt(0).toUpperCase() +
+                      cat.slice(1).replace("-", " ")}
+                  </SelectItem>
+                ))}
+              </SelectContent>
+            </Select>
+          </FormField>
+        </div>
+
+        <FormField
+          label={t("form.descriptionLabel")}
+          htmlFor="description"
+          hint={t("form.optionalTag")}
+        >
+          <Textarea
+            id="description"
+            name="description"
+            rows={3}
+            placeholder={t("form.descriptionPlaceholder")}
+          />
+        </FormField>
+
+        <div className="flex justify-between">
+          <div className="flex items-center gap-2">
+            <Checkbox
+              name="featured"
+              defaultChecked={false}
+              className="border-accent data-[state=checked]:bg-accent"
+            />
+            <Badge variant="accent">{t("form.featuredLabel")}</Badge>
+          </div>
+          <FormField label={t("form.orderLabel")} htmlFor="displayOrder">
+            <Input
+              type="number"
+              name="displayOrder"
+              defaultValue={undefined}
+              min={0}
+            />
+          </FormField>
+        </div>
+
+        <div className="flex flex-col gap-2">
+          <Label>{t("form.imageLabel")}</Label>
+          <ImageUploader
+            folder="portfolio"
+            maxFiles={1}
+            onUploadComplete={(data) => {
+              if (data[0]) {
+                setUploadedImageUrl(data[0].url);
+                setImageDimensions({
+                  width: data[0].width,
+                  height: data[0].height,
+                });
+              }
+            }}
+          />
+        </div>
+
+        <div className="flex gap-4">
+          <Button
+            variant="accent"
+            type="submit"
+            disabled={isSubmitting || !uploadedImageUrl}
+          >
+            {isSubmitting ? actions("creating") : actions("create")}
+          </Button>
+          <Button
+            type="button"
+            variant="outline"
+            onClick={() => router.push(`/${locale}/admin/portfolio`)}
+          >
+            {actions("cancel")}
+          </Button>
+        </div>
+      </form>
+    </div>
+  );
+}

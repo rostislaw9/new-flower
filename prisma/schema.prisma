@@ -1,0 +1,69 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+enum AppointmentStatus {
+  pending
+  contacted
+  approved
+  rejected
+  completed
+}
+
+model Appointment {
+  id                 String            @id @default(cuid())
+  createdAt          DateTime          @default(now())
+  updatedAt          DateTime          @updatedAt
+  fullName           String
+  email              String
+  contactMethod      String
+  phone              String?
+  tattooDescription  String
+  bodyPlacement      String?
+  tattooSize         String?
+  preferredDates     String[]
+  budgetRange        String?
+  referenceImages    String[]
+  status             AppointmentStatus @default(pending)
+
+  @@index([status, createdAt])
+  @@index([email])
+  @@index([createdAt])
+  @@map("appointments")
+}
+
+model PortfolioItem {
+  id           String   @id @default(cuid())
+  createdAt    DateTime @default(now())
+  updatedAt    DateTime @updatedAt
+  title        String
+  description  String?
+  imageUrl     String
+  category     String
+  featured     Boolean  @default(false)
+  displayOrder Int      @default(0)
+  width        Int      @default(800)
+  height       Int      @default(600)
+
+  @@map("portfolio_items")
+}
+
+model Review {
+  id         String   @id @default(cuid())
+  createdAt  DateTime @default(now())
+  updatedAt  DateTime @updatedAt
+  clientName String
+  clientEmail String?
+  rating     Int
+  text       String
+  featured   Boolean  @default(false)
+
+  @@map("reviews")
+  @@index([featured, createdAt])
+  @@index([rating])
+}

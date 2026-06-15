@@ -1,0 +1,840 @@
+{
+  "metadata": {
+    "title": "New Flower — Tattoo Artist, Phuket",
+    "shortTitle": "New Flower",
+    "description": "Premium tattoo art by a professional artist based in Phuket, Thailand. Specialising in fine line, blackwork, botanical illustration, and realism. Book your appointment today."
+  },
+  "nav": {
+    "portfolio": "Portfolio",
+    "about": "About",
+    "faq": "FAQ",
+    "contact": "Contact",
+    "bookNow": "Book Now"
+  },
+  "home": {
+    "metadata": {
+      "title": "New Flower Tattoo — Premium Tattoo Art",
+      "description": "Fine line, blackwork, and botanical tattoo art by a professional tattoo artist based in Phuket, Thailand. Book your appointment today.",
+      "openGraphTitle": "New Flower Tattoo — Premium Tattoo Art",
+      "openGraphDescription": "Fine line, blackwork, and botanical tattoo art. Every piece begins with a conversation.",
+      "twitterTitle": "New Flower Tattoo — Premium Tattoo Art",
+      "twitterDescription": "Fine line, blackwork, and botanical tattoo art. Every piece begins with a conversation."
+    },
+    "hero": {
+      "eyebrow": "Tattoo Artist · Phuket",
+      "title": "Art that lives on skin",
+      "subtitle": "Specialising in fine line, blackwork, and botanical illustration. Every piece begins with a conversation and ends with something permanent.",
+      "bookButton": "Book Appointment",
+      "portfolioButton": "View Portfolio"
+    },
+    "featured": {
+      "eyebrow": "Selected Work",
+      "title": "Masterpieces",
+      "viewAll": "View All Work"
+    },
+    "aboutPreview": {
+      "eyebrow": "The Artist",
+      "title": "Precision meets intention",
+      "paragraph1": "With over eight years of dedicated practice, every line is placed with purpose. The studio is a space for collaboration — where your ideas and the artist's craft meet.",
+      "paragraph2": "Trained in classical illustration before transitioning to tattooing, the approach is rooted in composition, contrast, and longevity on skin.",
+      "button": "Read the Full Story",
+      "imageAlt": "New Flower Tattoo artist"
+    },
+    "testimonials": {
+      "eyebrow": "Client Stories",
+      "title": "What clients say",
+      "empty": "Featured reviews will appear here once clients share them",
+      "ratingAria": "{rating} out of 5 stars"
+    },
+    "cta": {
+      "eyebrow": "Ready to begin?",
+      "title": "Let's create something together",
+      "subtitle": "Every tattoo starts with a conversation. Reach out to discuss your idea — no commitment required.",
+      "bookButton": "Book Appointment",
+      "contactButton": "Get in Touch"
+    },
+    "notFound": {
+      "eyebrow": "The page has faded",
+      "title": "404",
+      "subtitle": "The link you followed no longer exists or has moved. Let's guide you back to work that is very much alive.",
+      "primary": "Return home",
+      "secondary": "View portfolio"
+    }
+  },
+  "portfolio": {
+    "metadata": {
+      "title": "Portfolio",
+      "description": "Browse the full tattoo portfolio — fine line, blackwork, botanical illustration, realism, neo traditional, and geometric work.",
+      "openGraphTitle": "Portfolio | New Flower Tattoo",
+      "openGraphDescription": "Fine line, blackwork, botanical, realism, neo traditional, and geometric tattoo work.",
+      "twitterTitle": "Portfolio | New Flower Tattoo",
+      "twitterDescription": "Fine line, blackwork, botanical, realism, neo traditional, and geometric tattoo work."
+    },
+    "hero": {
+      "eyebrow": "All Work",
+      "title": "Masterpieces",
+      "subtitle": "A selection of pieces across styles. Each tattoo is custom-designed for the client. No templates, no stock — just original art."
+    },
+    "noItems": "No portfolio items yet",
+    "processCards": {
+      "process": {
+        "eyebrow": "Process",
+        "title": "All original designs",
+        "description": "Every piece shown is a custom design created for a specific client. No flash, no catalogue work."
+      },
+      "commissions": {
+        "eyebrow": "Commissions",
+        "title": "Similar work welcome",
+        "description": "Inspired by something in the portfolio? Describe it in your booking request — a new interpretation can be created."
+      },
+      "updates": {
+        "eyebrow": "Updates",
+        "title": "Refreshed regularly",
+        "description": "New work is added after each completed session. Follow on Instagram for the most current output."
+      }
+    }
+  },
+  "about": {
+    "metadata": {
+      "title": "About",
+      "description": "Meet the artist behind New Flower Tattoo — eight years of intentional practice rooted in classical illustration.",
+      "openGraphTitle": "About | New Flower Tattoo",
+      "openGraphDescription": "Eight years of precision, illustration training, and collaborative tattoo work.",
+      "twitterTitle": "About | New Flower Tattoo",
+      "twitterDescription": "Eight years of precision, illustration training, and collaborative tattoo work."
+    },
+    "hero": {
+      "eyebrow": "The Artist",
+      "title": "Eight years of intention",
+      "subtitle": "Tattooing is permanent, so every decision is deliberate — from the weight of a line to where it lives on the body."
+    },
+    "bio": {
+      "eyebrow": "Biography",
+      "title": "From illustration to ink",
+      "imageAlt": "New Flower Tattoo artist",
+      "paragraphs": [
+        "More than eight years of dedicated practice means every line is placed with purpose. The studio is collaborative — your ideas and the artist's craft meeting in the middle.",
+        "Before tattooing came classical illustration: botanical drawing, etching, and printmaking. That training guides composition, contrast, and longevity on skin.",
+        "Sessions are appointment-only and intentionally unhurried. Consultation, design, and execution happen together to produce work that endures."
+      ]
+    },
+    "specialisations": {
+      "eyebrow": "Areas of Expertise",
+      "title": "Specialisations",
+      "items": [
+        {
+          "title": "Fine Line",
+          "description": "Delicate, precise linework that ages beautifully. Ideal for botanical motifs, portraits, and geometric patterns."
+        },
+        {
+          "title": "Blackwork",
+          "description": "Bold negative space and solid black forms — from minimalist icons to intricate illustrative pieces."
+        },
+        {
+          "title": "Botanical Illustration",
+          "description": "Rooted in scientific drawing. Plants, flowers, and organic forms rendered with accuracy and interpretation."
+        },
+        {
+          "title": "Realism",
+          "description": "Photorealistic portraits, animals, or objects planned across multiple sessions with meticulous placement."
+        }
+      ]
+    },
+    "timeline": {
+      "eyebrow": "Journey",
+      "title": "How it unfolded",
+      "events": [
+        {
+          "year": "2016",
+          "title": "First tattoo apprenticeship",
+          "description": "Began a two-year apprenticeship in Saint Petersburg under master tattooist Dmitri Volkov, focusing on traditional techniques and skin theory."
+        },
+        {
+          "year": "2018",
+          "title": "Moved to fine line specialisation",
+          "description": "Travelled to Berlin to study under contemporary fine-line artists, developing a style rooted in botanical illustration and negative space."
+        },
+        {
+          "year": "2020",
+          "title": "Opened independent studio",
+          "description": "Established New Flower Studio in Phuket — a private, appointment-only space for focused, collaborative sessions."
+        },
+        {
+          "year": "2022",
+          "title": "International guest spots",
+          "description": "Residencies in Amsterdam, Copenhagen, and Tokyo brought global perspectives back to Phuket."
+        },
+        {
+          "year": "2024",
+          "title": "500+ pieces completed",
+          "description": "Surpassed 500 completed tattoos with work featured in Tattooist Art Magazine and European exhibitions."
+        }
+      ]
+    },
+    "studio": {
+      "location": {
+        "eyebrow": "Studio",
+        "title": "Location",
+        "description": "Private studio in Phuket. The address is shared once a booking is confirmed."
+      },
+      "process": {
+        "eyebrow": "Process",
+        "title": "By appointment only",
+        "description": "No walk-ins. Every session begins with a detailed consultation before any deposit is taken."
+      },
+      "standards": {
+        "eyebrow": "Standards",
+        "title": "Safety & hygiene",
+        "description": "Single-use needles, hospital-grade sterilisation, and full compliance with Thailand health regulations."
+      }
+    },
+    "cta": {
+      "eyebrow": "Work together",
+      "title": "Start a conversation",
+      "subtitle": "Describe your idea — even a rough concept is enough to begin. The design process happens in dialogue.",
+      "bookButton": "Book Appointment",
+      "contactButton": "Get in Touch"
+    }
+  },
+  "faq": {
+    "metadata": {
+      "title": "FAQ",
+      "description": "Answers to common questions about pricing, deposits, preparation, healing, rescheduling, and what to expect from a tattoo session.",
+      "openGraphTitle": "FAQ | New Flower Tattoo",
+      "openGraphDescription": "Answers to common questions about pricing, deposits, preparation, and healing.",
+      "twitterTitle": "FAQ | New Flower Tattoo",
+      "twitterDescription": "Answers to common questions about pricing, deposits, preparation, and healing."
+    },
+    "hero": {
+      "eyebrow": "Questions",
+      "title": "Frequently asked",
+      "subtitle": "Everything you need to know before, during, and after your session. If your question is not answered here, reach out directly."
+    },
+    "sections": {
+      "pricing": {
+        "category": "Pricing",
+        "items": {
+          "pricingDetermined": {
+            "question": "How is pricing determined?",
+            "answer": "Pricing is based on size, placement, complexity, and estimated time. A small, simple piece may start from €150. Large-scale work is quoted per session or as a project total. An accurate quote is given after the consultation."
+          },
+          "consultationFee": {
+            "question": "Do you charge a consultation fee?",
+            "answer": "No. Initial consultations — whether in person or via message — are free of charge. A deposit is only requested once both parties are happy with the design direction and a session is confirmed."
+          },
+          "paymentMethods": {
+            "question": "What forms of payment do you accept?",
+            "answer": "Cash, bank transfer, and major card payments are all accepted. The deposit is typically paid via bank transfer to secure the appointment."
+          }
+        }
+      },
+      "deposits": {
+        "category": "Deposits",
+        "items": {
+          "depositRequired": {
+            "question": "Is a deposit required to book?",
+            "answer": "Yes. A non-refundable deposit is required to confirm all appointments. The deposit amount varies by project size but typically ranges from €50–€150. It is deducted from the final session cost."
+          },
+          "depositReschedule": {
+            "question": "What happens to my deposit if I need to reschedule?",
+            "answer": "Deposits transfer to a rescheduled appointment if at least 48 hours notice is given. Cancellations with less than 48 hours notice forfeit the deposit."
+          }
+        }
+      },
+      "preparation": {
+        "category": "Preparation",
+        "items": {
+          "sessionPrep": {
+            "question": "How should I prepare for my session?",
+            "answer": "Arrive well-rested and having eaten a proper meal within two hours of the session. Stay hydrated in the days leading up to your appointment. Avoid alcohol for at least 24 hours beforehand. Wear or bring clothing that allows easy access to the area being tattooed."
+          },
+          "moisturise": {
+            "question": "Should I moisturise the area beforehand?",
+            "answer": "Yes — keep the skin well moisturised in the week leading up to your session, but do not apply any lotion on the day of the appointment."
+          },
+          "bringGuest": {
+            "question": "Can I bring someone with me?",
+            "answer": "The studio accommodates one guest per client. For longer sessions it is generally recommended to attend alone to maintain focus and comfort."
+          }
+        }
+      },
+      "healing": {
+        "category": "Healing",
+        "items": {
+          "healingProcess": {
+            "question": "What is the healing process like?",
+            "answer": "Most tattoos move through three stages: the initial healing of the surface skin (1–2 weeks), deeper skin healing (2–4 weeks), and full settling of ink into the skin (up to 4 months). Detailed aftercare instructions are provided after every session."
+          },
+          "aftercareProducts": {
+            "question": "What aftercare products do you recommend?",
+            "answer": "An unscented, gentle moisturiser is all that is needed after the first few days. Specific product recommendations are shared at the end of each session based on skin type and tattoo placement."
+          },
+          "exerciseSwim": {
+            "question": "When can I exercise or swim after getting tattooed?",
+            "answer": "Avoid swimming (pools, the sea, or any submersion) for at least four weeks. Light exercise that does not cause heavy sweating over the tattooed area is generally acceptable after one week."
+          }
+        }
+      },
+      "rescheduling": {
+        "category": "Rescheduling & Cancellations",
+        "items": {
+          "rescheduleNotice": {
+            "question": "How much notice do I need to reschedule?",
+            "answer": "At least 48 hours notice is required to reschedule without losing your deposit. To reschedule, send a message via the contact form or directly via Instagram or WhatsApp."
+          },
+          "artistCancel": {
+            "question": "What if the artist needs to cancel?",
+            "answer": "In the unlikely event that a session must be cancelled by the studio, a full refund of the deposit is offered, or the appointment is rescheduled at a time that suits you."
+          }
+        }
+      }
+    },
+    "cta": {
+      "eyebrow": "Still have questions?",
+      "title": "Ask directly",
+      "subtitle": "If something is not covered here, reach out. Every question is welcome — there are no silly ones when it comes to something permanent.",
+      "bookButton": "Book Appointment",
+      "contactButton": "Get in Touch"
+    }
+  },
+  "contact": {
+    "metadata": {
+      "title": "Contact",
+      "description": "Get in touch with New Flower Tattoo. Reach out via Instagram, Facebook, WhatsApp, or email. Studio located in Phuket, Thailand.",
+      "openGraphTitle": "Contact | New Flower Tattoo",
+      "openGraphDescription": "Get in touch via Instagram, Facebook, WhatsApp, or email. Studio located in Phuket, Thailand.",
+      "twitterTitle": "Contact | New Flower Tattoo",
+      "twitterDescription": "Get in touch via Instagram, Facebook, WhatsApp, or email. Studio located in Phuket, Thailand."
+    },
+    "hero": {
+      "eyebrow": "Get in touch",
+      "title": "Let's talk",
+      "subtitle": "Every project begins with a conversation. Reach out through any of the channels below — Instagram and Facebook are the quickest."
+    },
+    "channels": {
+      "eyebrow": "Channels",
+      "title": "How to reach us",
+      "openLabel": "Open →",
+      "methods": {
+        "instagram": {
+          "channel": "Instagram",
+          "handle": "@tattoo_by_newflower",
+          "description": "The fastest way to reach out and see the latest work. DMs are checked daily."
+        },
+        "facebook": {
+          "channel": "Facebook",
+          "handle": "@NewFlowerTattoo",
+          "description": "Preferred for detailed project discussions and sharing reference images."
+        },
+        "whatsapp": {
+          "channel": "WhatsApp",
+          "handle": "+66 96 807 6646",
+          "description": "For voice or video consultations. Please message first before calling."
+        },
+        "email": {
+          "channel": "Email",
+          "handle": "flowerpowernew@gmail.com",
+          "description": "For formal enquiries, press, or collaboration requests. Response within 48 hours."
+        }
+      }
+    },
+    "location": {
+      "eyebrow": "The Studio",
+      "title": "Where to find us",
+      "shop1": "Shop I",
+      "shop3": "Shop III",
+      "workingHours": {
+        "text": "Working hours",
+        "everyday": "Everyday",
+        "sundayToFriday": "Sunday–Friday",
+        "saturday": "Saturday",
+        "2to11pm": "2–11 PM",
+        "3pmTo1am": "3 PM – 1 AM",
+        "3pmToMidnight": "3 PM – 12 AM"
+      }
+    }
+  },
+  "booking": {
+    "metadata": {
+      "title": "Book an Appointment",
+      "description": "Submit a tattoo appointment request. Describe your idea, preferred dates, and contact method — no deposit required until a design is agreed.",
+      "openGraphTitle": "Book an Appointment | New Flower Tattoo",
+      "openGraphDescription": "Submit a tattoo appointment request. No deposit until a design is agreed.",
+      "twitterTitle": "Book an Appointment | New Flower Tattoo",
+      "twitterDescription": "Submit a tattoo appointment request. No deposit until a design is agreed."
+    },
+    "hero": {
+      "eyebrow": "Start the process",
+      "title": "Book a session",
+      "subtitle": "Fill in as much detail as possible — the more context you provide, the better the first consultation will be. No deposit is required until both parties are happy with a direction."
+    },
+    "process": {
+      "title": "What happens next",
+      "ariaLabel": "Booking process steps",
+      "steps": [
+        {
+          "title": "Review",
+          "body": "Your request is reviewed within 48 hours."
+        },
+        {
+          "title": "Consultation",
+          "body": "A brief conversation — in person, by message, or call — to refine the design."
+        },
+        {
+          "title": "Deposit",
+          "body": "Once both parties are happy, a deposit is requested to confirm the date."
+        },
+        {
+          "title": "Session",
+          "body": "The tattoo session takes place. Aftercare instructions provided."
+        }
+      ]
+    },
+    "faqPrompt": {
+      "title": "Questions?",
+      "faq": {
+        "prefix": "Check the",
+        "linkLabel": "FAQ page",
+        "suffix": "for answers about pricing, deposits, preparation, and healing."
+      },
+      "contact": {
+        "prefix": "Or reach out directly via",
+        "linkLabel": "contact channels"
+      }
+    },
+    "form": {
+      "sections": {
+        "contact": "Contact Information",
+        "tattoo": "Tattoo Details",
+        "availability": "Availability",
+        "references": "Reference Images"
+      },
+      "fullName": {
+        "label": "Full Name",
+        "placeholder": "Your full name",
+        "errors": {
+          "required": "Full name is required",
+          "min": "Full name must be at least 2 characters"
+        }
+      },
+      "email": {
+        "label": "Email Address",
+        "placeholder": "your@email.com",
+        "errors": {
+          "required": "Email is required",
+          "invalid": "Please enter a valid email address"
+        }
+      },
+      "contactMethod": {
+        "label": "Preferred Contact Method",
+        "placeholder": "Select a channel",
+        "options": {
+          "instagram": "Instagram",
+          "facebook": "Facebook",
+          "whatsapp": "WhatsApp",
+          "email": "Email"
+        },
+        "errors": {
+          "required": "Select a contact method"
+        }
+      },
+      "phone": {
+        "label": "Phone / Handle",
+        "placeholder": "+66 99 000 0000 or @handle",
+        "hint": "Optional",
+        "errors": {
+          "required": "Phone or social handle is required"
+        }
+      },
+      "description": {
+        "label": "Describe Your Idea",
+        "placeholder": "Describe the concept, style, mood, references, or anything that helps communicate your vision...",
+        "hint": "Min. 20 characters",
+        "errors": {
+          "required": "Description is required",
+          "min": "Please describe your idea in at least 20 characters"
+        }
+      },
+      "bodyPlacement": {
+        "label": "Body Placement",
+        "placeholder": "Not specified",
+        "hint": "Optional",
+        "options": {
+          "arm": "Arm",
+          "forearm": "Forearm",
+          "upperArm": "Upper arm",
+          "shoulder": "Shoulder",
+          "back": "Back",
+          "chest": "Chest",
+          "rib": "Rib",
+          "leg": "Leg",
+          "thigh": "Thigh",
+          "calf": "Calf",
+          "ankle": "Ankle",
+          "foot": "Foot",
+          "neck": "Neck",
+          "hand": "Hand",
+          "wrist": "Wrist",
+          "other": "Other"
+        }
+      },
+      "size": {
+        "label": "Approximate Size",
+        "placeholder": "e.g. palm-sized, full sleeve",
+        "hint": "Optional"
+      },
+      "budget": {
+        "label": "Budget Range",
+        "placeholder": "Prefer not to say",
+        "hint": "Optional",
+        "options": {
+          "under200": "Under €200",
+          "200to500": "€200 – €500",
+          "500to1000": "€500 – €1,000",
+          "1000to2000": "€1,000 – €2,000",
+          "over2000": "€2,000+",
+          "toDiscuss": "To discuss"
+        }
+      },
+      "preferredDates": {
+        "label": "Preferred Dates",
+        "hint": "Up to 5 dates",
+        "placeholder": "Select a date",
+        "clear": "Clear date",
+        "add": "+ Add a date",
+        "addAnother": "+ Add another date",
+        "dateAria": "Preferred date {number}",
+        "removeAria": "Remove date {number}",
+        "errors": {
+          "required": "Provide at least one preferred date"
+        }
+      },
+      "reference": {
+        "title": "Reference Images",
+        "toggle": {
+          "urls": "Add URLs",
+          "upload": "Upload Files"
+        },
+        "urls": {
+          "label": "Reference Image URLs",
+          "hint": "Optional",
+          "placeholder": "https://...",
+          "add": "+ Add a link",
+          "addAnother": "+ Add another link",
+          "aria": "Reference image URL {number}",
+          "removeAria": "Remove reference URL {number}"
+        },
+        "upload": {
+          "label": "Upload Reference Images",
+          "hint": "Optional"
+        }
+      },
+      "disclaimer": {
+        "line1": "By submitting this form you agree to be contacted regarding your tattoo request.",
+        "line2": "No deposit is required until both parties agree on a design and date."
+      },
+      "actions": {
+        "submit": "Submit Request",
+        "saving": "Saving your request..."
+      }
+    },
+    "success": {
+      "eyebrow": "Request received",
+      "title": "Thank you — we'll be in touch",
+      "message": "Your appointment request has been saved. Expect a reply within 48 hours via your chosen contact method.",
+      "bookingIdLabel": "Booking ID",
+      "copyAction": "Copy",
+      "copied": "Copied",
+      "copyAria": "Copy booking ID",
+      "returnHome": "Return home"
+    }
+  },
+  "reviews": {
+    "metadata": {
+      "title": "Leave a review",
+      "description": "Share your experience working with New Flower Tattoo so future clients know what to expect.",
+      "openGraphTitle": "Leave a review | New Flower Tattoo",
+      "openGraphDescription": "Share your New Flower Tattoo session experience so others can book with confidence.",
+      "twitterTitle": "Leave a review | New Flower Tattoo",
+      "twitterDescription": "Share your experience with New Flower Tattoo so others can book with confidence."
+    },
+    "hero": {
+      "eyebrow": "Client stories",
+      "title": "Share your experience",
+      "subtitle": "Your words help others feel confident booking their session. It only takes a minute to leave a few thoughts."
+    },
+    "form": {
+      "nameLabel": "Full name",
+      "emailLabel": "Email (optional)",
+      "ratingLabel": "Rating",
+      "ratingHelp": "Tap to select from 1 to 5 stars",
+      "reviewLabel": "Review",
+      "reviewPlaceholder": "Tell us about your session, the artwork, or the overall experience…",
+      "submit": "Submit review",
+      "submitting": "Submitting…",
+      "error": "We couldn’t save your review. Please try again.",
+      "ratingAria": "{rating} star rating"
+    },
+    "success": {
+      "eyebrow": "Thank you",
+      "title": "Your review has been received",
+      "subtitle": "Once it’s reviewed, it may appear on the homepage."
+    }
+  },
+  "footer": {
+    "text": "Premium tattoo art. Every piece is a collaboration between artist and client — crafted with intention.",
+    "copyright": "© {year} New Flower Tattoo. All rights reserved.",
+    "crafted": "Handcrafted with care.",
+    "navigation": "Navigation",
+    "connect": "Connect",
+    "links": {
+      "portfolio": "Portfolio",
+      "about": "About",
+      "faq": "FAQ",
+      "contact": "Contact",
+      "booking": "Book Now"
+    },
+    "leaveReview": "Leave a Review"
+  },
+  "admin": {
+    "common": {
+      "actions": {
+        "back": "Back",
+        "cancel": "Cancel",
+        "delete": "Delete",
+        "deleting": "Deleting...",
+        "create": "Create item",
+        "creating": "Creating...",
+        "save": "Save changes"
+      }
+    },
+    "layout": {
+      "title": "Admin Panel",
+      "nav": {
+        "dashboard": "Dashboard",
+        "portfolio": "Portfolio",
+        "bookings": "Bookings",
+        "reviews": "Reviews"
+      },
+      "openWebsite": "Open Website"
+    },
+    "dashboard": {
+      "title": "Dashboard",
+      "subtitle": "Overview of your studio",
+      "stats": {
+        "totalBookings": {
+          "title": "Total",
+          "description": "All appointment requests"
+        },
+        "pending": {
+          "title": "Pending",
+          "description": "Awaiting confirmation"
+        },
+        "completed": {
+          "title": "Completed",
+          "description": "Finished appointments"
+        },
+        "portfolio": {
+          "title": "Portfolio",
+          "description": "Masterpieces"
+        }
+      },
+      "actions": {
+        "bookings": {
+          "title": "Manage bookings",
+          "description": "View and manage all appointment requests"
+        },
+        "portfolio": {
+          "title": "Manage portfolio",
+          "description": "Add, edit, or remove portfolio items"
+        },
+        "reviews": {
+          "title": "Manage reviews",
+          "description": "View and manage client reviews"
+        }
+      }
+    },
+    "bookings": {
+      "title": "Bookings management",
+      "subtitle": "View and manage all appointment requests",
+      "filters": {
+        "searchLabel": "Search",
+        "searchPlaceholder": "Search by name or email...",
+        "statusLabel": "Status",
+        "bookingIdLabel": "Booking ID",
+        "bookingIdPlaceholder": "Paste booking ID",
+        "submittedRangeLabel": "Submitted between",
+        "updatedRangeLabel": "Updated between",
+        "preferredRangeLabel": "Preferred dates between",
+        "dateClearLabel": "Clear date",
+        "statusOptions": {
+          "all": "All statuses",
+          "pending": "Pending",
+          "contacted": "Contacted",
+          "approved": "Approved",
+          "rejected": "Rejected",
+          "completed": "Completed"
+        },
+        "dateFrom": "From",
+        "dateTo": "To",
+        "filter": "Apply Filters",
+        "clear": "Clear"
+      },
+      "table": {
+        "client": "Client",
+        "status": "Status",
+        "dates": "Preferred dates",
+        "submitted": "Submitted",
+        "updated": "Updated",
+        "bookingId": "Booking ID · {code}",
+        "actions": "Actions",
+        "empty": "No bookings found",
+        "view": "View details →",
+        "moreDates": "+{count} more"
+      },
+      "statuses": {
+        "pending": "Pending",
+        "contacted": "Contacted",
+        "approved": "Approved",
+        "rejected": "Rejected",
+        "completed": "Completed"
+      },
+      "pagination": {
+        "showing": "Page {current}/{totalPages} · {total} bookings",
+        "previous": "Previous",
+        "next": "Next"
+      },
+      "detail": {
+        "title": "Booking details",
+        "subtitle": "Status, contact details, and reference material submitted by the client.",
+        "bookingCodeLabel": "Booking ID · {code}",
+        "sectionEyebrow": {
+          "status": "Status overview",
+          "contact": "Client contact",
+          "tattoo": "Tattoo brief",
+          "references": "Reference material"
+        },
+        "meta": {
+          "preferredDatesCount": "{count, plural, one {# preferred date} other {# preferred dates}}",
+          "referenceCount": "{count, plural, one {# reference image} other {# reference images}}"
+        },
+        "back": "Back to bookings",
+        "updated": "Updated",
+        "submitted": "Submitted",
+        "fullName": "Full name",
+        "email": "Email",
+        "contactMethod": "Preferred contact method",
+        "phone": "Phone / handle",
+        "description": "Description",
+        "bodyPlacement": "Body placement",
+        "tattooSize": "Approximate size",
+        "preferredDates": "Preferred dates",
+        "noDates": "No preferred dates provided",
+        "budget": "Budget range",
+        "noBudget": "Not specified",
+        "referenceImages": "Reference images",
+        "noReferences": "No reference images provided",
+        "referenceLinkLabel": "Reference {index}",
+        "notFound": "Booking not found",
+        "notProvided": "Not provided",
+        "statusControl": {
+          "button": "Save status",
+          "success": "Status updated",
+          "error": "Failed to update status"
+        }
+      }
+    },
+    "reviews": {
+      "title": "Client reviews",
+      "subtitle": "Moderate testimonials and choose what appears on the homepage",
+      "filters": {
+        "searchLabel": "Search",
+        "searchPlaceholder": "Search by name or email…",
+        "ratingLabel": "Rating",
+        "ratingAll": "All ratings",
+        "ratingOption": "{rating} stars",
+        "apply": "Apply filters",
+        "clear": "Clear"
+      },
+      "table": {
+        "client": "Client",
+        "rating": "Rating",
+        "review": "Review",
+        "created": "Submitted",
+        "featured": "Featured",
+        "actions": "Actions",
+        "empty": "No reviews found",
+        "deleteTitle": "Delete review",
+        "deleteDescription": "This action cannot be undone."
+      },
+      "pagination": {
+        "showing": "Page {current}/{totalPages} · {total} reviews"
+      }
+    },
+    "portfolio": {
+      "title": "Portfolio Management",
+      "description": "Manage your showcase collection",
+      "addButton": "Add New Item",
+      "addFirstButton": "Add your first piece",
+      "noItems": "No portfolio items yet",
+      "featured": "Featured",
+      "loading": "Loading collection...",
+      "deleteTitle": "Delete item",
+      "deleteConfirm": "Are you sure you want to delete \"{title}\"? This action cannot be undone.",
+      "form": {
+        "titleLabel": "Title",
+        "titlePlaceholder": "Tattoo title",
+        "categoryLabel": "Category",
+        "categoryPlaceholder": "Select category",
+        "descriptionLabel": "Description",
+        "descriptionPlaceholder": "Describe the tattoo...",
+        "featuredLabel": "Featured",
+        "orderLabel": "Display order",
+        "imageLabel": "Image",
+        "replaceImageLabel": "Replace image",
+        "currentImageLabel": "Current image",
+        "noImage": "No image selected",
+        "optionalTag": "Optional"
+      },
+      "new": {
+        "title": "Add portfolio item",
+        "subtitle": "Create a new portfolio entry",
+        "alerts": {
+          "uploadRequired": "Please upload an image first",
+          "createFailed": "Failed to create portfolio item",
+          "genericError": "An error occurred"
+        }
+      },
+      "edit": {
+        "title": "Edit portfolio item",
+        "subtitle": "Edit an existing portfolio entry",
+        "alerts": {
+          "loadFailed": "Failed to load portfolio item",
+          "updateFailed": "Failed to update portfolio item",
+          "notFound": "Item not found"
+        }
+      }
+    },
+    "imageUploader": {
+      "alerts": {
+        "invalidType": "Skipping {file}: Invalid file type",
+        "fileTooLarge": "Skipping {file}: File too large (max 10MB)",
+        "maxFiles": "Maximum {count} files allowed",
+        "uploadFailed": "Upload failed"
+      },
+      "dropzone": {
+        "hint": "Drag and drop images here, or <action>browse</action>",
+        "specs": "Max {count} files · {size}MB each · {types}"
+      },
+      "buttons": {
+        "upload": "Upload images",
+        "uploading": "Uploading..."
+      },
+      "status": {
+        "allUploaded": "All images uploaded successfully"
+      },
+      "previewAlt": "Upload {index}",
+      "removeAria": "Remove image"
+    }
+  }
+}

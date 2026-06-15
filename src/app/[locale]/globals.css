@@ -1,0 +1,99 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer base {
+  :root {
+    /* Dark-first palette — warm near-black + off-white + gold */
+    --background: 0 0% 4%;
+    --foreground: 30 15% 95%;
+
+    --card: 0 0% 6%;
+    --card-foreground: 30 15% 95%;
+
+    --popover: 0 0% 6%;
+    --popover-foreground: 30 15% 95%;
+
+    /* Primary = off-white for text/buttons on dark */
+    --primary: 30 15% 95%;
+    --primary-foreground: 0 0% 4%;
+
+    /* Secondary = subtle surface lift */
+    --secondary: 0 0% 10%;
+    --secondary-foreground: 30 15% 85%;
+
+    /* Muted = dimmed text and surfaces */
+    --muted: 0 0% 10%;
+    --muted-foreground: 30 10% 55%;
+
+    /* Accent = warm gold */
+    --accent: 36 45% 60%;
+    --accent-foreground: 0 0% 4%;
+
+    --destructive: 0 62% 48%;
+    --destructive-foreground: 30 15% 95%;
+
+    /* Borders are subtle, barely-visible lines */
+    --border: 0 0% 14%;
+    --input: 0 0% 10%;
+    --ring: 36 45% 60%;
+
+    /* Sharp, editorial radius */
+    --radius: 0.125rem;
+  }
+}
+
+@layer base {
+  * {
+    @apply border-border;
+  }
+
+  html {
+    @apply scroll-smooth;
+  }
+
+  body {
+    @apply bg-background text-foreground antialiased;
+    font-feature-settings:
+      "kern" 1,
+      "liga" 1,
+      "calt" 1;
+  }
+
+  ::selection {
+    @apply bg-accent text-accent-foreground;
+  }
+
+  :focus-visible {
+    @apply outline-none ring-1 ring-ring ring-offset-1 ring-offset-background;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+    scroll-behavior: auto !important;
+  }
+}
+
+@layer utilities {
+  .font-display {
+    font-family: var(--font-display), "New Rocker", cursive;
+  }
+
+  .font-sans {
+    font-family: var(--font-sans), "Geist", sans-serif;
+  }
+
+  .text-balance {
+    text-wrap: balance;
+  }
+
+  .text-pretty {
+    text-wrap: pretty;
+  }
+}
