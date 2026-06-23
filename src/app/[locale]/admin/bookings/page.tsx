@@ -276,8 +276,8 @@ export default async function BookingsAdminPage({
       <AdminPageHeader title={t("title")} subtitle={t("subtitle")} />
 
       {/* Filters */}
-      <Card>
-        <CardContent className="p-4">
+      <Card className="rounded-2xl border border-border/60 bg-card/60 shadow-lg">
+        <CardContent className="pt-6">
           <BookingsFilters
             initialValues={{
               search: search ?? "",
@@ -311,8 +311,8 @@ export default async function BookingsAdminPage({
         </CardContent>
       </Card>
 
-      {/* Results */}
-      <Card>
+      {/* Bookings Table */}
+      <Card className="rounded-2xl border border-border/60 bg-card/60 shadow-lg">
         <CardContent className="p-0">
           <div className="overflow-x-auto">
             <Table>

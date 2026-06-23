@@ -90,7 +90,7 @@ export function ReviewsFilters({
   return (
     <form className="flex flex-col gap-4" onSubmit={handleSubmit}>
       <div className="grid gap-4 md:grid-cols-2">
-        <div className="space-y-2">
+        <div className="flex flex-col gap-2">
           <Label htmlFor="reviews-search">{labels.searchLabel}</Label>
           <div className="relative">
             <Search className="pointer-events-none absolute left-3 top-1/2 h-4 w-4 -translate-y-1/2 text-muted-foreground" />
@@ -105,7 +105,7 @@ export function ReviewsFilters({
           </div>
         </div>
 
-        <div className="space-y-2">
+        <div className="flex flex-col gap-2">
           <Label htmlFor="reviews-rating">{labels.ratingLabel}</Label>
           <Select value={ratingValue} onValueChange={setRatingValue}>
             <SelectTrigger id="reviews-rating">

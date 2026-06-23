@@ -154,7 +154,7 @@ export function BookingsFilters({
   return (
     <form className="flex flex-col gap-4" onSubmit={handleSubmit}>
       <div className="grid gap-4 md:grid-cols-3">
-        <div className="space-y-2">
+        <div className="flex flex-col gap-2">
           <Label htmlFor="booking-search">{labels.searchLabel}</Label>
           <div className="relative">
             <Search className="pointer-events-none absolute left-3 top-1/2 h-4 w-4 -translate-y-1/2 text-muted-foreground" />
@@ -168,7 +168,7 @@ export function BookingsFilters({
             />
           </div>
         </div>
-        <div className="space-y-2">
+        <div className="flex flex-col gap-2">
           <Label htmlFor="booking-id">{labels.bookingIdLabel}</Label>
           <Input
             id="booking-id"
@@ -178,7 +178,7 @@ export function BookingsFilters({
             placeholder={labels.bookingIdPlaceholder}
           />
         </div>
-        <div className="space-y-2">
+        <div className="flex flex-col gap-2">
           <Label>{labels.statusLabel}</Label>
           <Select value={statusValue} onValueChange={setStatusValue}>
             <SelectTrigger>
@@ -193,9 +193,19 @@ export function BookingsFilters({
             </SelectContent>
           </Select>
         </div>
-      </div>
-
-      <div className="grid gap-4 lg:grid-cols-3">
+        <DateRangeField
+          label={labels.preferredRangeLabel}
+          fromId="preferred-from"
+          toId="preferred-to"
+          fromPlaceholder={labels.dateFrom}
+          toPlaceholder={labels.dateTo}
+          fromValue={preferredFromValue}
+          toValue={preferredToValue}
+          onFromChange={setPreferredFromValue}
+          onToChange={setPreferredToValue}
+          clearLabel={labels.dateClearLabel}
+          formatDateLabel={formatDateLabel}
+        />
         <DateRangeField
           label={labels.submittedRangeLabel}
           fromId="submitted-from"
@@ -219,19 +229,6 @@ export function BookingsFilters({
           toValue={updatedToValue}
           onFromChange={setUpdatedFromValue}
           onToChange={setUpdatedToValue}
-          clearLabel={labels.dateClearLabel}
-          formatDateLabel={formatDateLabel}
-        />
-        <DateRangeField
-          label={labels.preferredRangeLabel}
-          fromId="preferred-from"
-          toId="preferred-to"
-          fromPlaceholder={labels.dateFrom}
-          toPlaceholder={labels.dateTo}
-          fromValue={preferredFromValue}
-          toValue={preferredToValue}
-          onFromChange={setPreferredFromValue}
-          onToChange={setPreferredToValue}
           clearLabel={labels.dateClearLabel}
           formatDateLabel={formatDateLabel}
         />
@@ -278,9 +275,9 @@ function DateRangeField({
   formatDateLabel,
 }: DateRangeFieldProps) {
   return (
-    <div className="space-y-2">
+    <div className="flex flex-col gap-2">
       <Label>{label}</Label>
-      <div className="grid gap-4 sm:grid-cols-2">
+      <div className="grid grid-cols-2 gap-2">
         <DatePicker
           id={fromId}
           value={fromValue}

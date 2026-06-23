@@ -106,34 +106,28 @@ export default async function BookingDetailPage({
         }
       />
 
-      <Card className="border border-border shadow-lg">
-        <CardContent className="space-y-6 p-6">
-          <div className="flex flex-wrap items-center justify-between gap-4">
-            <Eyebrow muted>{detailT("sectionEyebrow.status")}</Eyebrow>
-            <Text size="xs" muted className="font-mono uppercase">
-              {detailT("bookingCodeLabel", { code: booking.id })}
-            </Text>
+      <SectionCard
+        eyebrow={detailT("sectionEyebrow.status")}
+        hint={detailT("bookingCodeLabel", { code: booking.id })}
+      >
+        <div className="grid gap-6">
+          <div className="rounded-xl border border-border/60 bg-card/60 p-4 shadow-lg">
+            <BookingStatusControl
+              bookingId={booking.id}
+              currentStatus={booking.status}
+              statusOptions={statusOptions}
+              labels={{
+                currentStatus: statusesT(booking.status),
+                button: detailT("statusControl.button"),
+              }}
+            />
           </div>
-
-          <div className="grid gap-6">
-            <div className="border border-border/50 p-4 shadow-lg">
-              <BookingStatusControl
-                bookingId={booking.id}
-                currentStatus={booking.status}
-                statusOptions={statusOptions}
-                labels={{
-                  currentStatus: statusesT(booking.status),
-                  button: detailT("statusControl.button"),
-                }}
-              />
-            </div>
-            <div className="grid gap-4 md:grid-cols-2">
-              <InfoField label={detailT("submitted")} value={submittedFormat} />
-              <InfoField label={detailT("updated")} value={updatedFormat} />
-            </div>
+          <div className="grid gap-4 md:grid-cols-2">
+            <InfoField label={detailT("submitted")} value={submittedFormat} />
+            <InfoField label={detailT("updated")} value={updatedFormat} />
           </div>
-        </CardContent>
-      </Card>
+        </div>
+      </SectionCard>
 
       <SectionCard eyebrow={detailT("sectionEyebrow.contact")}>
         <div className="grid gap-4 md:grid-cols-2">
@@ -227,13 +221,21 @@ function notFoundResponse(
 interface SectionCardProps {
   eyebrow: string;
   children: ReactNode;
+  hint?: string;
 }
 
-function SectionCard({ eyebrow, children }: SectionCardProps) {
+function SectionCard({ eyebrow, children, hint }: SectionCardProps) {
   return (
-    <Card className="border border-border shadow-lg">
+    <Card className="rounded-2xl border border-border/60 bg-card/60 shadow-lg">
       <CardContent className="space-y-6 p-6">
-        <Eyebrow muted>{eyebrow}</Eyebrow>
+        <div className="flex flex-wrap items-center justify-between gap-4">
+          <Eyebrow muted>{eyebrow}</Eyebrow>
+          {hint && (
+            <Text size="xs" muted>
+              {hint}
+            </Text>
+          )}
+        </div>
         {children}
       </CardContent>
     </Card>
@@ -250,7 +252,7 @@ function InfoField({ label, value, valueHref }: InfoFieldProps) {
   const valueClasses = "mt-3 text-base font-semibold leading-snug";
 
   return (
-    <div className="border border-border/50 p-4 shadow-lg">
+    <div className="rounded-xl border border-border/60 bg-card p-4 shadow-lg">
       <Text size="sm" muted>
         {label}
       </Text>

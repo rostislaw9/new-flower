@@ -20,15 +20,15 @@ import { AdminPageHeader } from "@/components/admin/AdminPageHeader";
 import { Badge } from "@/components/styled/Badge";
 import { Button } from "@/components/styled/Button";
 import { DeleteConfirmDialog } from "@/components/styled/DeleteConfirmDialog";
-import { Heading, Text } from "@/components/styled/Typography";
-import { Card, CardContent } from "@/components/ui/card";
 import {
   DropdownMenu,
   DropdownMenuContent,
   DropdownMenuItem,
   DropdownMenuSeparator,
   DropdownMenuTrigger,
-} from "@/components/ui/dropdown-menu";
+} from "@/components/styled/DropdownMenu";
+import { Heading, Text } from "@/components/styled/Typography";
+import { Card, CardContent } from "@/components/ui/card";
 import {
   Empty,
   EmptyContent,
@@ -149,7 +149,10 @@ export default function PortfolioAdminPage() {
     <div className="flex flex-col gap-6">
       <div className="grid grid-cols-2 gap-3 sm:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5">
         {visibleItems.map((item) => (
-          <Card key={item.id} className="overflow-hidden rounded-xl">
+          <Card
+            key={item.id}
+            className="overflow-hidden rounded-xl border-border/60 bg-card/60 shadow-lg"
+          >
             <div className="relative aspect-[3/4]">
               <Image
                 src={item.imageUrl}

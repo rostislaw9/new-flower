@@ -97,8 +97,9 @@ export default async function AdminReviewsPage({
     <div className="flex flex-col gap-8">
       <AdminPageHeader title={t("title")} subtitle={t("subtitle")} />
 
-      <Card>
-        <CardContent className="p-4">
+      {/* Filters */}
+      <Card className="rounded-2xl border border-border/60 bg-card/60 shadow-lg">
+        <CardContent className="pt-6">
           <ReviewsFilters
             initialSearch={search}
             {...(rating ? { initialRating: rating } : {})}
@@ -118,7 +119,8 @@ export default async function AdminReviewsPage({
         </CardContent>
       </Card>
 
-      <Card>
+      {/* Reviews Table */}
+      <Card className="rounded-2xl border border-border/60 bg-card/60 shadow-lg">
         <CardContent className="p-0">
           <div className="overflow-x-auto">
             <Table>
@@ -214,6 +216,7 @@ export default async function AdminReviewsPage({
             </Table>
           </div>
 
+          {/* Pagination */}
           {totalPages > 1 && (
             <div className="flex flex-col gap-4 border-t border-border px-4 py-4 md:flex-row md:items-center md:justify-between">
               <Text size="sm" muted className="whitespace-nowrap">
