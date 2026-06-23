@@ -1,13 +1,12 @@
-import type { ReactNode } from "react";
-
 import { getTranslations } from "next-intl/server";
 import { unstable_noStore as noStore } from "next/cache";
-import Link from "next/link";
 
 import type { AppointmentStatus } from "@prisma/client";
 import { ArrowLeft } from "lucide-react";
 
 import { AdminPageHeader } from "@/components/admin/AdminPageHeader";
+import { InfoField } from "@/components/admin/InfoField";
+import { SectionCard } from "@/components/admin/SectionCard";
 import {
   type BookingReferenceItem,
   BookingReferencesGallery,
@@ -15,12 +14,10 @@ import {
 import { BookingStatusControl } from "@/components/admin/bookings/BookingStatusControl";
 import { Badge } from "@/components/styled/Badge";
 import { Button } from "@/components/styled/Button";
-import { Eyebrow, Text } from "@/components/styled/Typography";
-import { Card, CardContent } from "@/components/ui/card";
+import { Text } from "@/components/styled/Typography";
 import { type Locale, defaultLocale } from "@/i18n/config";
 import { getLocalizedPath, isSupportedLocale } from "@/lib/locale-utils";
 import { prisma } from "@/lib/prisma";
-import { cn } from "@/lib/utils";
 
 export const revalidate = 0;
 
@@ -218,61 +215,6 @@ function notFoundResponse(
         {detailT("back")}
       </Button>
       <Text muted>{detailT("notFound")}</Text>
-    </div>
-  );
-}
-
-interface SectionCardProps {
-  eyebrow: string;
-  children: ReactNode;
-  hint?: string;
-}
-
-function SectionCard({ eyebrow, children, hint }: SectionCardProps) {
-  return (
-    <Card className="rounded-2xl border border-border/60 bg-card/60 shadow-lg">
-      <CardContent className="space-y-6 p-6">
-        <div className="flex flex-wrap items-center justify-between gap-4">
-          <Eyebrow muted>{eyebrow}</Eyebrow>
-          {hint && (
-            <Text size="xs" muted className="font-mono uppercase">
-              {hint}
-            </Text>
-          )}
-        </div>
-        {children}
-      </CardContent>
-    </Card>
-  );
-}
-
-interface InfoFieldProps {
-  label: string;
-  value: ReactNode;
-  valueHref?: string;
-}
-
-function InfoField({ label, value, valueHref }: InfoFieldProps) {
-  const valueClasses = "mt-3 text-base font-semibold leading-snug";
-
-  return (
-    <div className="rounded-xl border border-border/60 bg-card p-4 shadow-lg">
-      <Text size="sm" muted>
-        {label}
-      </Text>
-      {valueHref ? (
-        <Link
-          href={valueHref}
-          className={cn(
-            valueClasses,
-            "inline-flex text-primary underline-offset-4 transition hover:underline",
-          )}
-        >
-          {value}
-        </Link>
-      ) : (
-        <div className={cn(valueClasses, "text-foreground")}>{value}</div>
-      )}
     </div>
   );
 }
