@@ -1,9 +1,9 @@
 import { getTranslations } from "next-intl/server";
-import Link from "next/link";
 
-import { Calendar, CheckCircle, Clock, Images, Star } from "lucide-react";
+import { Calendar, CheckCircle, Clock, Images } from "lucide-react";
 
 import { AdminPageHeader } from "@/components/admin/AdminPageHeader";
+import { ActionCard } from "@/components/admin/dashboard/ActionCard";
 import { Eyebrow, Heading, Text } from "@/components/styled/Typography";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { prisma } from "@/lib/prisma";
@@ -41,7 +41,7 @@ const StatCard = ({
   description: string;
 }) => {
   return (
-    <Card>
+    <Card className="rounded-2xl border border-border/60 bg-card/60 shadow-lg">
       <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
         <CardTitle>
           <Eyebrow size="xs">{title}</Eyebrow>
@@ -57,35 +57,6 @@ const StatCard = ({
         </Text>
       </CardContent>
     </Card>
-  );
-};
-
-const ActionCard = ({
-  title,
-  description,
-  href,
-  icon: Icon,
-}: {
-  title: string;
-  description: string;
-  href: string;
-  icon: React.ElementType;
-}) => {
-  return (
-    <Link
-      href={href}
-      className="col-span-2 flex flex-col gap-2 border border-border bg-card p-6 transition-colors hover:bg-secondary"
-    >
-      <div className="flex items-center gap-2">
-        <Icon size={24} />
-        <Heading serif={false} size="md">
-          {title}
-        </Heading>
-      </div>
-      <Text size="sm" muted>
-        {description}
-      </Text>
-    </Link>
   );
 };
 
@@ -126,19 +97,19 @@ export default async function AdminDashboard() {
           title={t("actions.bookings.title")}
           description={t("actions.bookings.description")}
           href="/admin/bookings"
-          icon={Calendar}
+          icon="calendar"
         />
         <ActionCard
           title={t("actions.portfolio.title")}
           description={t("actions.portfolio.description")}
           href="/admin/portfolio"
-          icon={Images}
+          icon="images"
         />
         <ActionCard
           title={t("actions.reviews.title")}
           description={t("actions.reviews.description")}
           href="/admin/reviews"
-          icon={Star}
+          icon="star"
         />
       </div>
     </div>
