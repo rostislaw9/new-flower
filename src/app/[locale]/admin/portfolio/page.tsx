@@ -168,7 +168,7 @@ export default function PortfolioAdminPage() {
             <CardContent className="p-4">
               <div className="flex items-start justify-between gap-2">
                 <div>
-                  <Heading as="h3" size="sm">
+                  <Heading serif={false} as="h3" size="sm">
                     {item.title}
                   </Heading>
                   <Text size="sm" muted className="capitalize">
@@ -181,7 +181,7 @@ export default function PortfolioAdminPage() {
                       size="icon-borderless"
                       variant="ghost"
                       aria-label={portfolioMenu("menuLabel")}
-                      className="-mt-2 -mr-2"
+                      className="-mr-2 -mt-2"
                     >
                       <MoreHorizontal />
                       <span className="sr-only">
@@ -214,7 +214,7 @@ export default function PortfolioAdminPage() {
                         event.preventDefault();
                         setDeleteItem(item);
                       }}
-                      className="text-destructive focus:text-primary-foreground focus:bg-destructive"
+                      className="text-destructive focus:bg-destructive focus:text-primary-foreground"
                     >
                       <Trash2 className="h-4 w-4" />
                       <span>{portfolioMenu("delete")}</span>

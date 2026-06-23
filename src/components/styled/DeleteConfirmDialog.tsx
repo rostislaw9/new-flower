@@ -14,6 +14,15 @@ import {
   DialogHeader,
   DialogTitle,
 } from "@/components/ui/dialog";
+import {
+  Drawer,
+  DrawerContent,
+  DrawerDescription,
+  DrawerFooter,
+  DrawerHeader,
+  DrawerTitle,
+} from "@/components/ui/drawer";
+import { useIsMobile } from "@/hooks/use-mobile";
 
 interface DeleteConfirmDialogProps {
   open: boolean;
@@ -37,6 +46,7 @@ export function DeleteConfirmDialog({
   cancelLabel,
 }: DeleteConfirmDialogProps) {
   const [deleting, setDeleting] = useState(false);
+  const isMobile = useIsMobile();
 
   async function handleConfirm() {
     setDeleting(true);
@@ -44,34 +54,64 @@ export function DeleteConfirmDialog({
     setDeleting(false);
   }
 
+  const actionButtons = (
+    <>
+      <Button
+        variant="outline"
+        onClick={onCancel}
+        disabled={deleting}
+        className="w-full sm:w-auto"
+      >
+        {cancelLabel ?? "Cancel"}
+      </Button>
+      <Button
+        variant="destructive"
+        onClick={handleConfirm}
+        disabled={deleting}
+        className="w-full sm:w-auto"
+      >
+        {deleting ? (
+          <>
+            <Loader2 className="mr-2 h-4 w-4 animate-spin" />
+            {confirmLoadingLabel ?? "Deleting..."}
+          </>
+        ) : (
+          (confirmLabel ?? "Delete")
+        )}
+      </Button>
+    </>
+  );
+
+  if (isMobile) {
+    return (
+      <Drawer open={open} onOpenChange={(isOpen) => !isOpen && onCancel()}>
+        <DrawerContent>
+          <DrawerHeader>
+            <DrawerTitle asChild>
+              <Heading serif={false} className="text-red-600">
+                {title}
+              </Heading>
+            </DrawerTitle>
+            <DrawerDescription>{description}</DrawerDescription>
+          </DrawerHeader>
+          <DrawerFooter>{actionButtons}</DrawerFooter>
+        </DrawerContent>
+      </Drawer>
+    );
+  }
+
   return (
     <Dialog open={open} onOpenChange={(isOpen) => !isOpen && onCancel()}>
       <DialogContent>
         <DialogHeader>
           <DialogTitle asChild>
-            <Heading className="text-red-600">{title}</Heading>
+            <Heading serif={false} className="text-red-600">
+              {title}
+            </Heading>
           </DialogTitle>
           <DialogDescription>{description}</DialogDescription>
         </DialogHeader>
-        <DialogFooter>
-          <Button variant="outline" onClick={onCancel} disabled={deleting}>
-            {cancelLabel ?? "Cancel"}
-          </Button>
-          <Button
-            variant="destructive"
-            onClick={handleConfirm}
-            disabled={deleting}
-          >
-            {deleting ? (
-              <>
-                <Loader2 className="mr-2 h-4 w-4 animate-spin" />
-                {confirmLoadingLabel ?? "Deleting..."}
-              </>
-            ) : (
-              (confirmLabel ?? "Delete")
-            )}
-          </Button>
-        </DialogFooter>
+        <DialogFooter>{actionButtons}</DialogFooter>
       </DialogContent>
     </Dialog>
   );
