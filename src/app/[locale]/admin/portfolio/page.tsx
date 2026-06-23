@@ -4,7 +4,6 @@ import { useEffect, useRef, useState } from "react";
 
 import { useTranslations } from "next-intl";
 import Image from "next/image";
-import Link from "next/link";
 import { useRouter } from "next/navigation";
 
 import {
@@ -25,10 +24,9 @@ import {
   DropdownMenu,
   DropdownMenuContent,
   DropdownMenuItem,
-  DropdownMenuSeparator,
   DropdownMenuTrigger,
 } from "@/components/styled/DropdownMenu";
-import { Heading, Text } from "@/components/styled/Typography";
+import { Eyebrow, Text } from "@/components/styled/Typography";
 import { Card, CardContent } from "@/components/ui/card";
 import {
   Empty,
@@ -153,7 +151,16 @@ export default function PortfolioAdminPage() {
         {visibleItems.map((item) => (
           <Card
             key={item.id}
-            className="overflow-hidden rounded-xl border-border/60 bg-card/60 shadow-lg"
+            role="button"
+            tabIndex={0}
+            onClick={() => router.push(`/admin/portfolio/${item.id}/edit`)}
+            onKeyDown={(event) => {
+              if (event.key === "Enter" || event.key === " ") {
+                event.preventDefault();
+                router.push(`/admin/portfolio/${item.id}/edit`);
+              }
+            }}
+            className="cursor-pointer overflow-hidden rounded-xl border-border/60 bg-card/60 shadow-lg transition-transform duration-200 ease-out hover:-translate-y-1 hover:shadow-xl focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-accent"
           >
             <div className="relative aspect-[3/4]">
               <Image
@@ -173,9 +180,7 @@ export default function PortfolioAdminPage() {
             <CardContent className="p-4">
               <div className="flex items-start justify-between gap-2">
                 <div>
-                  <Heading serif={false} as="h3" size="sm">
-                    {item.title}
-                  </Heading>
+                  <Eyebrow size="sm">{item.title}</Eyebrow>
                   <Text size="sm" muted className="capitalize">
                     {item.category}
                   </Text>
@@ -187,6 +192,9 @@ export default function PortfolioAdminPage() {
                       variant="ghost"
                       aria-label={portfolioMenu("menuLabel")}
                       className="-mr-2 -mt-2"
+                      onClick={(event) => event.stopPropagation()}
+                      onPointerDown={(event) => event.stopPropagation()}
+                      onKeyDown={(event) => event.stopPropagation()}
                     >
                       <MoreHorizontal />
                       <span className="sr-only">
@@ -195,28 +203,20 @@ export default function PortfolioAdminPage() {
                     </Button>
                   </DropdownMenuTrigger>
                   <DropdownMenuContent>
-                    <DropdownMenuItem asChild>
-                      <Link
-                        href={`/portfolio?category=${item.category}`}
-                        target="_blank"
-                      >
-                        <Eye className="h-4 w-4" />
-                        <span>{portfolioMenu("viewPublic")}</span>
-                      </Link>
-                    </DropdownMenuItem>
                     <DropdownMenuItem
                       onSelect={(event) => {
                         event.preventDefault();
+                        event.stopPropagation();
                         router.push(`/admin/portfolio/${item.id}/edit`);
                       }}
                     >
                       <Pencil className="h-4 w-4" />
                       <span>{portfolioMenu("edit")}</span>
                     </DropdownMenuItem>
-                    <DropdownMenuSeparator />
                     <DropdownMenuItem
                       onSelect={(event) => {
                         event.preventDefault();
+                        event.stopPropagation();
                         setDeleteItem(item);
                       }}
                       className="text-destructive focus:bg-destructive focus:text-primary-foreground"
@@ -252,10 +252,21 @@ export default function PortfolioAdminPage() {
         subtitle={t("description")}
         actions={
           hasItems ? (
-            <Button variant="accent" href="/admin/portfolio/new">
-              <Plus className="mr-2 h-4 w-4" />
-              {t("addButton")}
-            </Button>
+            <div className="flex flex-wrap gap-2">
+              <Button
+                variant="outline"
+                href="/portfolio"
+                target="_blank"
+                className="gap-2"
+              >
+                <Eye className="h-4 w-4" />
+                {portfolioMenu("viewPublic")}
+              </Button>
+              <Button variant="accent" href="/admin/portfolio/new">
+                <Plus className="mr-2 h-4 w-4" />
+                {t("addButton")}
+              </Button>
+            </div>
           ) : undefined
         }
       />

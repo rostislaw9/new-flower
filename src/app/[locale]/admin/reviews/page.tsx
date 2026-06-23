@@ -185,7 +185,7 @@ export default async function AdminReviewsPage({
                       <TableCell className="text-sm text-muted-foreground">
                         {formatDateWithTime(review.createdAt)}
                       </TableCell>
-                      <TableCell>
+                      <TableCell className="min-w-32">
                         {review.featured ? (
                           <Badge variant="accent">{t("table.featured")}</Badge>
                         ) : (

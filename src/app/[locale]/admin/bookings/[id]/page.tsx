@@ -235,7 +235,7 @@ function SectionCard({ eyebrow, children, hint }: SectionCardProps) {
         <div className="flex flex-wrap items-center justify-between gap-4">
           <Eyebrow muted>{eyebrow}</Eyebrow>
           {hint && (
-            <Text size="xs" muted>
+            <Text size="xs" muted className="font-mono uppercase">
               {hint}
             </Text>
           )}
