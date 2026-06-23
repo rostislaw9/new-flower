@@ -7,8 +7,8 @@ export function ToastProvider() {
     <Toaster
       position="top-center"
       richColors
-      closeButton
-      duration={4500}
+      duration={5000}
+      theme="dark"
     />
   );
 }

@@ -778,6 +778,10 @@
       "addFirstButton": "Add your first piece",
       "noItems": "No portfolio items yet",
       "featured": "Featured",
+      "alerts": {
+        "deleteSuccess": "Portfolio item deleted",
+        "deleteFailed": "Failed to delete portfolio item"
+      },
       "actions": {
         "menuLabel": "Open item actions",
         "viewPublic": "View on website",
@@ -808,7 +812,8 @@
         "alerts": {
           "uploadRequired": "Please upload an image first",
           "createFailed": "Failed to create portfolio item",
-          "genericError": "An error occurred"
+          "genericError": "An error occurred",
+          "created": "Portfolio item created"
         }
       },
       "edit": {
@@ -817,7 +822,8 @@
         "alerts": {
           "loadFailed": "Failed to load portfolio item",
           "updateFailed": "Failed to update portfolio item",
-          "notFound": "Item not found"
+          "notFound": "Item not found",
+          "updated": "Portfolio item updated"
         }
       }
     },

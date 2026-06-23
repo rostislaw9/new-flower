@@ -6,6 +6,7 @@ import { useTranslations } from "next-intl";
 import Image from "next/image";
 
 import { Check, Loader2, Upload, X } from "lucide-react";
+import { toast } from "sonner";
 
 import { Button } from "@/components/styled/Button";
 import { Text } from "@/components/styled/Typography";
@@ -61,11 +62,11 @@ export function ImageUploader({
 
       const newFiles = Array.from(files).filter((file) => {
         if (!allowedTypes.includes(file.type)) {
-          alert(t("alerts.invalidType", { file: file.name }));
+          toast.error(t("alerts.invalidType", { file: file.name }));
           return false;
         }
         if (file.size > sizeLimitMb * 1024 * 1024) {
-          alert(
+          toast.error(
             t("alerts.fileTooLarge", { file: file.name, size: sizeLimitMb }),
           );
           return false;
@@ -74,7 +75,7 @@ export function ImageUploader({
       });
 
       if (images.length + newFiles.length > maxFiles) {
-        alert(t("alerts.maxFiles", { count: maxFiles }));
+        toast.error(t("alerts.maxFiles", { count: maxFiles }));
         return;
       }
 

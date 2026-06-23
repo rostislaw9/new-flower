@@ -8,6 +8,7 @@ import Link from "next/link";
 import { useRouter } from "next/navigation";
 
 import { ArrowLeft, Loader2 } from "lucide-react";
+import { toast } from "sonner";
 
 import { AdminPageHeader } from "@/components/admin/AdminPageHeader";
 import { ImageUploader } from "@/components/admin/ImageUploader";
@@ -59,7 +60,9 @@ export default function EditPortfolioItemPage({
         setImageUrl(data.imageUrl);
         setCategory(data.category);
       } catch {
-        setError(t("edit.alerts.loadFailed"));
+        const message = t("edit.alerts.loadFailed");
+        setError(message);
+        toast.error(message);
       } finally {
         setLoading(false);
       }
@@ -78,9 +81,12 @@ export default function EditPortfolioItemPage({
     const result = await updatePortfolioItem(id, formData);
 
     if (result.success) {
+      toast.success(t("edit.alerts.updated"));
       router.push(`/${locale}/admin/portfolio`);
     } else {
-      setError(result.message || t("edit.alerts.updateFailed"));
+      const message = result.message || t("edit.alerts.updateFailed");
+      toast.error(message);
+      setError(message);
       setSaving(false);
     }
   }

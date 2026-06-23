@@ -5,6 +5,8 @@ import { useState } from "react";
 import { useLocale, useTranslations } from "next-intl";
 import { useRouter } from "next/navigation";
 
+import { toast } from "sonner";
+
 import { AdminPageHeader } from "@/components/admin/AdminPageHeader";
 import { ImageUploader } from "@/components/admin/ImageUploader";
 import { Badge } from "@/components/styled/Badge";
@@ -40,7 +42,7 @@ export default function NewPortfolioItemPage() {
 
   async function handleSubmit(formData: FormData) {
     if (!uploadedImageUrl) {
-      alert(t("new.alerts.uploadRequired"));
+      toast.error(t("new.alerts.uploadRequired"));
       return;
     }
 
@@ -54,13 +56,14 @@ export default function NewPortfolioItemPage() {
       const result = await createPortfolioItem(formData);
 
       if (result.success) {
+        toast.success(t("new.alerts.created"));
         router.push(`/${locale}/admin/portfolio`);
         router.refresh();
       } else {
-        alert(result.message || t("new.alerts.createFailed"));
+        toast.error(result.message || t("new.alerts.createFailed"));
       }
     } catch {
-      alert(t("new.alerts.genericError"));
+      toast.error(t("new.alerts.genericError"));
     } finally {
       setIsSubmitting(false);
     }

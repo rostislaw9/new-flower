@@ -15,6 +15,7 @@ import {
   Plus,
   Trash2,
 } from "lucide-react";
+import { toast } from "sonner";
 
 import { AdminPageHeader } from "@/components/admin/AdminPageHeader";
 import { Badge } from "@/components/styled/Badge";
@@ -113,8 +114,9 @@ export default function PortfolioAdminPage() {
     if (result.success) {
       setItems((prev) => prev.filter((i) => i.id !== deleteItem.id));
       setDeleteItem(null);
+      toast.success(t("alerts.deleteSuccess"));
     } else {
-      alert(result.message);
+      toast.error(result.message || t("alerts.deleteFailed"));
     }
     setDeleting(false);
   }
