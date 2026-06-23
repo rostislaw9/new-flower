@@ -120,6 +120,10 @@ export default async function BookingDetailPage({
                 currentStatus: statusesT(booking.status),
                 button: detailT("statusControl.button"),
               }}
+              messages={{
+                success: detailT("statusControl.success"),
+                error: detailT("statusControl.error"),
+              }}
             />
           </div>
           <div className="grid gap-4 md:grid-cols-2">

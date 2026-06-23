@@ -767,6 +767,13 @@
         "deleteTitle": "Delete review",
         "deleteDescription": "This action cannot be undone."
       },
+      "messages": {
+        "toggleFeaturedOn": "Review added to homepage",
+        "toggleFeaturedOff": "Review removed from homepage",
+        "toggleError": "Failed to update featured state",
+        "deleteSuccess": "Review deleted",
+        "deleteError": "Failed to delete review"
+      },
       "pagination": {
         "showing": "Page {current}/{totalPages} · {total} reviews"
       }

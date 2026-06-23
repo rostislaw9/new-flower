@@ -6,6 +6,7 @@ import { useRouter } from "next/navigation";
 
 import type { AppointmentStatus } from "@prisma/client";
 import { Loader2 } from "lucide-react";
+import { toast } from "sonner";
 
 import { Badge } from "@/components/styled/Badge";
 import { Button } from "@/components/styled/Button";
@@ -31,6 +32,10 @@ interface BookingStatusControlProps {
     currentStatus: string;
     button: string;
   };
+  messages: {
+    success: string;
+    error: string;
+  };
 }
 
 export function BookingStatusControl({
@@ -38,6 +43,7 @@ export function BookingStatusControl({
   currentStatus,
   statusOptions,
   labels,
+  messages,
 }: BookingStatusControlProps) {
   const router = useRouter();
   const [selectedStatus, setSelectedStatus] = useState(currentStatus);
@@ -64,9 +70,11 @@ export function BookingStatusControl({
           "[BookingStatusControl] Status update failed",
           result.message,
         );
+        toast.error(result.message || messages.error);
         return;
       }
 
+      toast.success(messages.success);
       router.refresh();
     });
   };

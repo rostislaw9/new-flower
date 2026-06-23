@@ -207,6 +207,13 @@ export default async function AdminReviewsPage({
                             confirm: actions("delete"),
                             confirming: actions("deleting"),
                           }}
+                          messages={{
+                            toggleOn: t("messages.toggleFeaturedOn"),
+                            toggleOff: t("messages.toggleFeaturedOff"),
+                            toggleError: t("messages.toggleError"),
+                            deleteSuccess: t("messages.deleteSuccess"),
+                            deleteError: t("messages.deleteError"),
+                          }}
                         />
                       </TableCell>
                     </TableRow>

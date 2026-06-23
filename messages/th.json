@@ -767,6 +767,13 @@
         "deleteTitle": "ลบรีวิว",
         "deleteDescription": "การกระทำนี้ไม่สามารถย้อนกลับได้"
       },
+      "messages": {
+        "toggleFeaturedOn": "เพิ่มรีวิวบนหน้าแรกแล้ว",
+        "toggleFeaturedOff": "นำรีวิวออกจากหน้าแรกแล้ว",
+        "toggleError": "อัปเดตสถานะไฮไลต์ไม่สำเร็จ",
+        "deleteSuccess": "ลบรีวิวเรียบร้อย",
+        "deleteError": "ลบรีวิวไม่สำเร็จ"
+      },
       "pagination": {
         "showing": "หน้า {current}/{totalPages} · ทั้งหมด {total} รีวิว"
       }
