@@ -22,6 +22,7 @@ import {
 
 import { ImageUploader } from "@/components/admin/ImageUploader";
 import { Button } from "@/components/styled/Button";
+import { DatePicker } from "@/components/styled/DatePicker";
 import { FormField } from "@/components/styled/FormField";
 import { Eyebrow, Heading, Text } from "@/components/styled/Typography";
 import { Input } from "@/components/ui/input";
@@ -48,8 +49,6 @@ import {
   BUDGET_RANGES,
   CONTACT_METHODS,
 } from "@/lib/schemas/appointment";
-
-import { DatePicker } from "../styled/DatePicker";
 
 const INITIAL_STATE: ActionResult | null = null;
 

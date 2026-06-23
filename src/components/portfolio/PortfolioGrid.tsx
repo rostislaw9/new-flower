@@ -6,9 +6,8 @@ import Image from "next/image";
 import { motion } from "framer-motion";
 
 import { Text } from "@/components/styled/Typography";
+import { Empty, EmptyHeader, EmptyTitle } from "@/components/ui/empty";
 import type { PortfolioItem } from "@/lib/portfolio-data";
-
-import { Empty, EmptyHeader, EmptyTitle } from "../ui/empty";
 
 interface PortfolioGridProps {
   items: PortfolioItem[];

@@ -2,6 +2,8 @@ import type { ReactNode } from "react";
 
 import { Geist, New_Rocker } from "next/font/google";
 
+import { ToastProvider } from "@/components/providers/ToastProvider";
+
 import "./globals.css";
 
 const fontDisplay = New_Rocker({
@@ -38,7 +40,10 @@ export default function RootLayout({ children }: RootLayoutProps) {
         />
         <link rel="preconnect" href="https://res.cloudinary.com" />
       </head>
-      <body className="font-sans">{children}</body>
+      <body className="font-sans">
+        {children}
+        <ToastProvider />
+      </body>
     </html>
   );
 }

@@ -6,6 +6,7 @@ import { Loader2 } from "lucide-react";
 
 import { RatingInput } from "@/components/reviews/RatingInput";
 import { Button } from "@/components/styled/Button";
+import { Eyebrow, Heading } from "@/components/styled/Typography";
 import {
   Card,
   CardContent,
@@ -21,8 +22,6 @@ import {
   type ReviewFormState,
   submitReview,
 } from "@/lib/actions/reviews";
-
-import { Eyebrow, Heading } from "../styled/Typography";
 
 interface ReviewFormProps {
   labels: {

@@ -4,7 +4,7 @@ import { useState } from "react";
 
 import { Star } from "lucide-react";
 
-import { Button } from "../styled/Button";
+import { Button } from "@/components/styled/Button";
 
 interface RatingInputProps {
   label: string;

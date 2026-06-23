@@ -9,9 +9,8 @@ import { usePathname, useRouter } from "next/navigation";
 import { Button } from "@/components/styled/Button";
 import { LanguageSwitcher } from "@/components/styled/LanguageSwitcher";
 import { Logo } from "@/components/styled/Logo";
+import { Heading } from "@/components/styled/Typography";
 import { cn } from "@/lib/utils";
-
-import { Heading } from "../styled/Typography";
 
 const NAV_LINKS = [
   { href: "/portfolio", key: "portfolio" },
