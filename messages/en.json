@@ -778,6 +778,12 @@
       "addFirstButton": "Add your first piece",
       "noItems": "No portfolio items yet",
       "featured": "Featured",
+      "actions": {
+        "menuLabel": "Open item actions",
+        "viewPublic": "View on website",
+        "edit": "Edit item",
+        "delete": "Delete item"
+      },
       "loading": "Loading collection...",
       "deleteTitle": "Delete item",
       "deleteConfirm": "Are you sure you want to delete \"{title}\"? This action cannot be undone.",

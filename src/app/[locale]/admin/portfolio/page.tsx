@@ -1,13 +1,20 @@
 "use client";
 
-import { useEffect, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 
 import { useTranslations } from "next-intl";
 import Image from "next/image";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
 
-import { Eye, Loader2, Pencil, Plus, Trash2 } from "lucide-react";
+import {
+  Eye,
+  Loader2,
+  MoreHorizontal,
+  Pencil,
+  Plus,
+  Trash2,
+} from "lucide-react";
 
 import { AdminPageHeader } from "@/components/admin/AdminPageHeader";
 import { Badge } from "@/components/styled/Badge";
@@ -16,35 +23,35 @@ import { DeleteConfirmDialog } from "@/components/styled/DeleteConfirmDialog";
 import { Heading, Text } from "@/components/styled/Typography";
 import { Card, CardContent } from "@/components/ui/card";
 import {
+  DropdownMenu,
+  DropdownMenuContent,
+  DropdownMenuItem,
+  DropdownMenuSeparator,
+  DropdownMenuTrigger,
+} from "@/components/ui/dropdown-menu";
+import {
   Empty,
   EmptyContent,
   EmptyHeader,
   EmptyTitle,
 } from "@/components/ui/empty";
-import {
-  Pagination,
-  PaginationContent,
-  PaginationItem,
-  PaginationLink,
-  PaginationNext,
-  PaginationPrevious,
-} from "@/components/ui/pagination";
-import { Separator } from "@/components/ui/separator";
 import { deletePortfolioItem } from "@/lib/actions/portfolio";
 import type { PortfolioItem } from "@/lib/portfolio-data";
-import { cn } from "@/lib/utils";
 
-const ITEMS_PER_PAGE = 6;
+const INITIAL_BATCH = 8;
+const LOAD_MORE_BATCH = 6;
 
 export default function PortfolioAdminPage() {
   const router = useRouter();
   const t = useTranslations("admin.portfolio");
+  const portfolioMenu = useTranslations("admin.portfolio.actions");
   const actions = useTranslations("admin.common.actions");
   const [items, setItems] = useState<PortfolioItem[]>([]);
   const [loading, setLoading] = useState(true);
   const [deleteItem, setDeleteItem] = useState<PortfolioItem | null>(null);
   const [_deleting, setDeleting] = useState(false);
-  const [currentPage, setCurrentPage] = useState(1);
+  const [visibleCount, setVisibleCount] = useState(INITIAL_BATCH);
+  const loadMoreRef = useRef<HTMLDivElement | null>(null);
 
   useEffect(() => {
     const fetchItems = async () => {
@@ -52,6 +59,7 @@ export default function PortfolioAdminPage() {
         const response = await fetch("/api/portfolio");
         const data = (await response.json()) as PortfolioItem[];
         setItems(data);
+        setVisibleCount(Math.min(data.length, INITIAL_BATCH));
       } catch {
         console.error("Failed to fetch portfolio items");
       } finally {
@@ -62,23 +70,39 @@ export default function PortfolioAdminPage() {
   }, []);
 
   useEffect(() => {
-    setCurrentPage((prev) => {
-      const nextTotalPages = Math.max(
-        1,
-        Math.ceil(items.length / ITEMS_PER_PAGE),
-      );
-      return Math.min(prev, nextTotalPages);
+    setVisibleCount((prev) => {
+      if (items.length === 0) {
+        return INITIAL_BATCH;
+      }
+      return Math.min(Math.max(prev, INITIAL_BATCH), items.length);
     });
   }, [items.length]);
 
-  const totalPages = Math.max(1, Math.ceil(items.length / ITEMS_PER_PAGE));
-  const startIndex = (currentPage - 1) * ITEMS_PER_PAGE;
-  const paginatedItems = items.slice(startIndex, startIndex + ITEMS_PER_PAGE);
-  const pages = Array.from({ length: totalPages }, (_, index) => index + 1);
-  const canGoPrev = currentPage > 1;
-  const canGoNext = currentPage < totalPages;
-  const paginationLinkClass =
-    "border border-transparent bg-transparent text-foreground hover:bg-secondary hover:text-foreground";
+  useEffect(() => {
+    const sentinel = loadMoreRef.current;
+    if (!sentinel) return;
+    if (visibleCount >= items.length) return;
+
+    const observer = new IntersectionObserver(
+      (entries) => {
+        const [entry] = entries;
+        if (!entry) {
+          return;
+        }
+        if (entry.isIntersecting) {
+          setVisibleCount((prev) =>
+            Math.min(items.length, prev + LOAD_MORE_BATCH),
+          );
+        }
+      },
+      { rootMargin: "200px" },
+    );
+
+    observer.observe(sentinel);
+    return () => observer.disconnect();
+  }, [items.length, visibleCount]);
+
+  const visibleItems = items.slice(0, visibleCount);
 
   async function handleDelete() {
     if (!deleteItem) return;
@@ -123,15 +147,15 @@ export default function PortfolioAdminPage() {
 
   const listContent = (
     <div className="flex flex-col gap-6">
-      <div className="grid gap-6 md:grid-cols-2 lg:grid-cols-3">
-        {paginatedItems.map((item) => (
-          <Card key={item.id} className="overflow-hidden">
-            <div className="relative aspect-square">
+      <div className="grid grid-cols-2 gap-3 sm:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5">
+        {visibleItems.map((item) => (
+          <Card key={item.id} className="overflow-hidden rounded-xl">
+            <div className="relative aspect-[3/4]">
               <Image
                 src={item.imageUrl}
                 alt={item.title}
                 fill
-                sizes="(max-width: 1024px) 100vw, 33vw"
+                sizes="(max-width: 480px) 45vw, (max-width: 768px) 30vw, 20vw"
                 className="object-cover"
                 loading="eager"
               />
@@ -142,7 +166,7 @@ export default function PortfolioAdminPage() {
               )}
             </div>
             <CardContent className="p-4">
-              <div className="flex items-start justify-between">
+              <div className="flex items-start justify-between gap-2">
                 <div>
                   <Heading as="h3" size="sm">
                     {item.title}
@@ -151,32 +175,52 @@ export default function PortfolioAdminPage() {
                     {item.category}
                   </Text>
                 </div>
-                <div className="flex gap-2">
-                  <Button asChild size="icon-borderless" variant="accent">
-                    <Link
-                      href={`/portfolio?category=${item.category}`}
-                      target="_blank"
+                <DropdownMenu>
+                  <DropdownMenuTrigger asChild>
+                    <Button
+                      size="icon-borderless"
+                      variant="ghost"
+                      aria-label={portfolioMenu("menuLabel")}
+                      className="-mt-2 -mr-2"
                     >
-                      <Eye />
-                    </Link>
-                  </Button>
-                  <Button
-                    size="icon-borderless"
-                    variant="accent"
-                    onClick={() =>
-                      router.push(`/admin/portfolio/${item.id}/edit`)
-                    }
-                  >
-                    <Pencil />
-                  </Button>
-                  <Button
-                    size="icon-borderless"
-                    variant="destructive"
-                    onClick={() => setDeleteItem(item)}
-                  >
-                    <Trash2 />
-                  </Button>
-                </div>
+                      <MoreHorizontal />
+                      <span className="sr-only">
+                        {portfolioMenu("menuLabel")}
+                      </span>
+                    </Button>
+                  </DropdownMenuTrigger>
+                  <DropdownMenuContent>
+                    <DropdownMenuItem asChild>
+                      <Link
+                        href={`/portfolio?category=${item.category}`}
+                        target="_blank"
+                      >
+                        <Eye className="h-4 w-4" />
+                        <span>{portfolioMenu("viewPublic")}</span>
+                      </Link>
+                    </DropdownMenuItem>
+                    <DropdownMenuItem
+                      onSelect={(event) => {
+                        event.preventDefault();
+                        router.push(`/admin/portfolio/${item.id}/edit`);
+                      }}
+                    >
+                      <Pencil className="h-4 w-4" />
+                      <span>{portfolioMenu("edit")}</span>
+                    </DropdownMenuItem>
+                    <DropdownMenuSeparator />
+                    <DropdownMenuItem
+                      onSelect={(event) => {
+                        event.preventDefault();
+                        setDeleteItem(item);
+                      }}
+                      className="text-destructive focus:text-primary-foreground focus:bg-destructive"
+                    >
+                      <Trash2 className="h-4 w-4" />
+                      <span>{portfolioMenu("delete")}</span>
+                    </DropdownMenuItem>
+                  </DropdownMenuContent>
+                </DropdownMenu>
               </div>
               {item.description && (
                 <Text size="sm" muted className="mt-2 line-clamp-2">
@@ -188,62 +232,11 @@ export default function PortfolioAdminPage() {
         ))}
       </div>
 
-      {totalPages > 1 && (
-        <>
-          <Separator />
-          <Pagination className="justify-end">
-            <PaginationContent>
-              <PaginationItem>
-                <PaginationPrevious
-                  href="#"
-                  aria-disabled={!canGoPrev}
-                  className={cn(
-                    paginationLinkClass,
-                    !canGoPrev && "pointer-events-none opacity-50",
-                  )}
-                  onClick={(event) => {
-                    event.preventDefault();
-                    if (canGoPrev) {
-                      setCurrentPage((prev) => prev - 1);
-                    }
-                  }}
-                />
-              </PaginationItem>
-              {pages.map((pageNumber) => (
-                <PaginationItem key={pageNumber}>
-                  <PaginationLink
-                    href="#"
-                    isActive={pageNumber === currentPage}
-                    className={paginationLinkClass}
-                    onClick={(event) => {
-                      event.preventDefault();
-                      setCurrentPage(pageNumber);
-                    }}
-                  >
-                    {pageNumber}
-                  </PaginationLink>
-                </PaginationItem>
-              ))}
-              <PaginationItem>
-                <PaginationNext
-                  href="#"
-                  aria-disabled={!canGoNext}
-                  className={cn(
-                    paginationLinkClass,
-                    !canGoNext && "pointer-events-none opacity-50",
-                  )}
-                  onClick={(event) => {
-                    event.preventDefault();
-                    if (canGoNext) {
-                      setCurrentPage((prev) => prev + 1);
-                    }
-                  }}
-                />
-              </PaginationItem>
-            </PaginationContent>
-          </Pagination>
-        </>
-      )}
+      {visibleCount < items.length ? (
+        <div className="flex items-center justify-center py-4">
+          <Loader2 className="h-6 w-6 animate-spin text-muted-foreground" />
+        </div>
+      ) : null}
     </div>
   );
 
@@ -262,7 +255,14 @@ export default function PortfolioAdminPage() {
         }
       />
 
-      {hasItems ? listContent : emptyState}
+      {hasItems ? (
+        <>
+          {listContent}
+          <div ref={loadMoreRef} aria-hidden className="h-1 w-full" />
+        </>
+      ) : (
+        emptyState
+      )}
 
       <DeleteConfirmDialog
         open={!!deleteItem}
