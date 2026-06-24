@@ -234,7 +234,9 @@ export function Lightbox({
               <div className="flex flex-col">
                 <Heading size="md">{activeItem.title}</Heading>
                 {activeItem.description && (
-                  <Text muted className="max-w-[50vw]">{activeItem.description}</Text>
+                  <Text muted className="max-w-[50vw]">
+                    {activeItem.description}
+                  </Text>
                 )}
               </div>
               {activeItem.category && <Eyebrow>{activeItem.category}</Eyebrow>}
