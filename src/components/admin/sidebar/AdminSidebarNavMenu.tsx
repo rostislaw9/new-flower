@@ -26,7 +26,11 @@ interface AdminNavMenuProps {
   pathname: string;
 }
 
-export function AdminNavMenu({ items, locale, pathname }: AdminNavMenuProps) {
+export function AdminSidebarNavMenu({
+  items,
+  locale,
+  pathname,
+}: AdminNavMenuProps) {
   const { isMobile, setOpenMobile } = useSidebar();
   const { start } = useTopLoader();
 

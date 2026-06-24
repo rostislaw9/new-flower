@@ -5,12 +5,12 @@ import type { AppointmentStatus } from "@prisma/client";
 import { ArrowLeft } from "lucide-react";
 
 import { AdminPageHeader } from "@/components/admin/AdminPageHeader";
-import { InfoField } from "@/components/admin/InfoField";
-import { SectionCard } from "@/components/admin/SectionCard";
+import { BookingInfoField } from "@/components/admin/bookings/BookingInfoField";
 import {
   type BookingReferenceItem,
   BookingReferencesGallery,
 } from "@/components/admin/bookings/BookingReferencesGallery";
+import { BookingSectionCard } from "@/components/admin/bookings/BookingSectionCard";
 import { BookingStatusControl } from "@/components/admin/bookings/BookingStatusControl";
 import { Badge } from "@/components/styled/Badge";
 import { Button } from "@/components/styled/Button";
@@ -103,7 +103,7 @@ export default async function BookingDetailPage({
         }
       />
 
-      <SectionCard
+      <BookingSectionCard
         eyebrow={detailT("sectionEyebrow.status")}
         hint={detailT("bookingCodeLabel", { code: booking.id })}
       >
@@ -124,48 +124,57 @@ export default async function BookingDetailPage({
             />
           </div>
           <div className="grid gap-4 md:grid-cols-2">
-            <InfoField label={detailT("submitted")} value={submittedFormat} />
-            <InfoField label={detailT("updated")} value={updatedFormat} />
+            <BookingInfoField
+              label={detailT("submitted")}
+              value={submittedFormat}
+            />
+            <BookingInfoField
+              label={detailT("updated")}
+              value={updatedFormat}
+            />
           </div>
         </div>
-      </SectionCard>
+      </BookingSectionCard>
 
-      <SectionCard eyebrow={detailT("sectionEyebrow.contact")}>
+      <BookingSectionCard eyebrow={detailT("sectionEyebrow.contact")}>
         <div className="grid gap-4 md:grid-cols-2">
-          <InfoField label={detailT("fullName")} value={booking.fullName} />
-          <InfoField
+          <BookingInfoField
+            label={detailT("fullName")}
+            value={booking.fullName}
+          />
+          <BookingInfoField
             label={detailT("email")}
             value={booking.email}
             valueHref={`mailto:${booking.email}`}
           />
-          <InfoField
+          <BookingInfoField
             label={detailT("contactMethod")}
             value={booking.contactMethod}
           />
-          <InfoField
+          <BookingInfoField
             label={detailT("phone")}
             value={booking.phone || detailT("notProvided")}
           />
         </div>
-      </SectionCard>
+      </BookingSectionCard>
 
-      <SectionCard eyebrow={detailT("sectionEyebrow.tattoo")}>
+      <BookingSectionCard eyebrow={detailT("sectionEyebrow.tattoo")}>
         <div className="grid gap-4 md:grid-cols-2">
           <div className="grid gap-4">
-            <InfoField
+            <BookingInfoField
               label={detailT("bodyPlacement")}
               value={booking.bodyPlacement || detailT("notProvided")}
             />
-            <InfoField
+            <BookingInfoField
               label={detailT("tattooSize")}
               value={booking.tattooSize || detailT("notProvided")}
             />
-            <InfoField
+            <BookingInfoField
               label={detailT("budget")}
               value={booking.budgetRange || detailT("noBudget")}
             />
           </div>
-          <InfoField
+          <BookingInfoField
             label={detailT("preferredDates")}
             value={
               preferredDates.length > 0 ? (
@@ -182,20 +191,20 @@ export default async function BookingDetailPage({
             }
           />
         </div>
-        <InfoField
+        <BookingInfoField
           label={detailT("description")}
           value={booking.tattooDescription || detailT("notProvided")}
         />
-      </SectionCard>
+      </BookingSectionCard>
 
-      <SectionCard eyebrow={detailT("sectionEyebrow.references")}>
+      <BookingSectionCard eyebrow={detailT("sectionEyebrow.references")}>
         <div className="border border-dashed border-border bg-background p-4">
           <BookingReferencesGallery
             items={referenceGalleryItems}
             emptyLabel={detailT("noReferences")}
           />
         </div>
-      </SectionCard>
+      </BookingSectionCard>
     </div>
   );
 }

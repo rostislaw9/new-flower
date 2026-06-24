@@ -10,15 +10,12 @@ import {
   SidebarMenuItem,
 } from "@/components/ui/sidebar";
 
-interface AdminSidebarFooterCTAProps {
+interface AdminSidebarFooterProps {
   href: string;
   label: string;
 }
 
-export function AdminSidebarFooterCTA({
-  href,
-  label,
-}: AdminSidebarFooterCTAProps) {
+export function AdminSidebarFooter({ href, label }: AdminSidebarFooterProps) {
   return (
     <SidebarMenu>
       <SidebarMenuItem>

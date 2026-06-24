@@ -4,7 +4,7 @@ import { Eyebrow, Text } from "@/components/styled/Typography";
 import { Card, CardContent } from "@/components/ui/card";
 import { cn } from "@/lib/utils";
 
-interface SectionCardProps {
+interface BookingBookingProps {
   eyebrow: string;
   children: ReactNode;
   hint?: string;
@@ -12,13 +12,13 @@ interface SectionCardProps {
   contentClassName?: string;
 }
 
-export function SectionCard({
+export function BookingSectionCard({
   eyebrow,
   hint,
   children,
   className,
   contentClassName,
-}: SectionCardProps) {
+}: BookingBookingProps) {
   return (
     <Card
       className={cn(

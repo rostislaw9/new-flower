@@ -5,19 +5,19 @@ import Link from "next/link";
 import { Text } from "@/components/styled/Typography";
 import { cn } from "@/lib/utils";
 
-interface InfoFieldProps {
+interface BookingInfoFieldProps {
   label: string;
   value: ReactNode;
   valueHref?: string;
   className?: string;
 }
 
-export function InfoField({
+export function BookingInfoField({
   label,
   value,
   valueHref,
   className,
-}: InfoFieldProps) {
+}: BookingInfoFieldProps) {
   const valueClasses = "mt-3 text-base font-semibold leading-snug";
 
   return (

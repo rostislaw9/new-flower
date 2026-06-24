@@ -7,13 +7,13 @@ import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { useTopLoader } from "nextjs-toploader";
 
-import { Calendar, Cog, Images, LayoutDashboard, Star } from "lucide-react";
+import { Calendar, Images, LayoutDashboard, Star } from "lucide-react";
 
-import { AdminNavMenu } from "@/components/admin/AdminNavMenu";
 import { AdminPageShell } from "@/components/admin/AdminPageShell";
-import { AdminSidebarFooterCTA } from "@/components/admin/AdminSidebarFooterCTA";
+import { AdminSidebarFooter } from "@/components/admin/sidebar/AdminSidebarFooter";
+import { AdminSidebarHeader } from "@/components/admin/sidebar/AdminSidebarHeader";
+import { AdminSidebarNavMenu } from "@/components/admin/sidebar/AdminSidebarNavMenu";
 import { LanguageSwitcher } from "@/components/styled/LanguageSwitcher";
-import { Eyebrow } from "@/components/styled/Typography";
 import {
   Breadcrumb,
   BreadcrumbItem,
@@ -29,9 +29,6 @@ import {
   SidebarFooter,
   SidebarHeader,
   SidebarInset,
-  SidebarMenu,
-  SidebarMenuButton,
-  SidebarMenuItem,
   SidebarProvider,
   SidebarRail,
   SidebarTrigger,
@@ -86,24 +83,17 @@ export default function AdminLayout({
       <SidebarStatePersistence />
       <Sidebar side="left" variant="sidebar" collapsible="icon">
         <SidebarHeader className="py-4">
-          <SidebarMenu>
-            <SidebarMenuItem>
-              <SidebarMenuButton asChild className="justify-start">
-                <Link href="/admin" onClick={() => start()}>
-                  <Cog size={20} className="text-accent" />
-                  <Eyebrow className="group-data-[collapsible=icon]:hidden">
-                    Console
-                  </Eyebrow>
-                </Link>
-              </SidebarMenuButton>
-            </SidebarMenuItem>
-          </SidebarMenu>
+          <AdminSidebarHeader onClick={() => start()} />
         </SidebarHeader>
         <SidebarContent className="px-2 py-4">
-          <AdminNavMenu items={navItems} locale={locale} pathname={pathname} />
+          <AdminSidebarNavMenu
+            items={navItems}
+            locale={locale}
+            pathname={pathname}
+          />
         </SidebarContent>
         <SidebarFooter className="px-2 py-4">
-          <AdminSidebarFooterCTA href={`/${locale}`} label={t("openWebsite")} />
+          <AdminSidebarFooter href={`/${locale}`} label={t("openWebsite")} />
         </SidebarFooter>
         <SidebarRail />
       </Sidebar>
