@@ -160,41 +160,41 @@ docker compose down -v
 
 Copy `.env.example` to `.env` and configure:
 
-| Variable | Description | Required | Example |
-| --- | --- | --- | --- |
-| `DATABASE_URL` | PostgreSQL connection string | ✅ | `postgresql://user:pass@localhost:5432/db` |
-| `NEXT_PUBLIC_SITE_URL` | Public site URL | ✅ | `https://newflower.studio` |
-| `CLOUDINARY_CLOUD_NAME` | Cloudinary cloud name | ✅ | `your-cloud-name` |
-| `CLOUDINARY_API_KEY` | Cloudinary API key | ✅ | `your-api-key` |
-| `CLOUDINARY_API_SECRET` | Cloudinary API secret | ✅ | `your-api-secret` |
-| `RESEND_API_KEY` | Resend email API key | ✅ | `re_xxxxx` |
-| `ARTIST_EMAIL` | Email for booking notifications | ✅ | `artist@studio.com` |
-| `EMAIL_FROM` | Sender email address | ✅ | `Studio <noreply@studio.com>` |
-| `POSTGRES_USER` | PostgreSQL username (Docker) | Docker only | `flower` |
-| `POSTGRES_PASSWORD` | PostgreSQL password (Docker) | Docker only | `secure_password` |
-| `POSTGRES_DB` | PostgreSQL database name (Docker) | Docker only | `flower_db` |
+| Variable                | Description                       | Required    | Example                                    |
+| ----------------------- | --------------------------------- | ----------- | ------------------------------------------ |
+| `DATABASE_URL`          | PostgreSQL connection string      | ✅          | `postgresql://user:pass@localhost:5432/db` |
+| `NEXT_PUBLIC_SITE_URL`  | Public site URL                   | ✅          | `https://newflower.studio`                 |
+| `CLOUDINARY_CLOUD_NAME` | Cloudinary cloud name             | ✅          | `your-cloud-name`                          |
+| `CLOUDINARY_API_KEY`    | Cloudinary API key                | ✅          | `your-api-key`                             |
+| `CLOUDINARY_API_SECRET` | Cloudinary API secret             | ✅          | `your-api-secret`                          |
+| `RESEND_API_KEY`        | Resend email API key              | ✅          | `re_xxxxx`                                 |
+| `ARTIST_EMAIL`          | Email for booking notifications   | ✅          | `artist@studio.com`                        |
+| `EMAIL_FROM`            | Sender email address              | ✅          | `Studio <noreply@studio.com>`              |
+| `POSTGRES_USER`         | PostgreSQL username (Docker)      | Docker only | `flower`                                   |
+| `POSTGRES_PASSWORD`     | PostgreSQL password (Docker)      | Docker only | `secure_password`                          |
+| `POSTGRES_DB`           | PostgreSQL database name (Docker) | Docker only | `flower_db`                                |
 
 ## 📚 Scripts
 
-| Command | Description |
-| --- | --- |
-| `yarn dev` | Start development server with hot reload |
-| `yarn build` | Build for production |
-| `yarn start` | Start production server |
-| `yarn lint` | Run ESLint (strict, no warnings) |
-| `yarn lint:fix` | Fix ESLint issues automatically |
-| `yarn format` | Format code with Prettier |
-| `yarn format:check` | Check code formatting |
-| `yarn typecheck` | Run TypeScript type checking |
-| `yarn i18n:check` | Validate translation files |
-| `yarn test` | Run tests once |
-| `yarn test:watch` | Run tests in watch mode |
-| `yarn test:coverage` | Generate coverage report |
-| `yarn db:generate` | Generate Prisma client |
-| `yarn db:migrate` | Create and run migrations (dev) |
-| `yarn db:migrate:deploy` | Run migrations (production) |
-| `yarn db:studio` | Open Prisma Studio GUI |
-| `yarn db:seed` | Seed database with sample data |
+| Command                  | Description                              |
+| ------------------------ | ---------------------------------------- |
+| `yarn dev`               | Start development server with hot reload |
+| `yarn build`             | Build for production                     |
+| `yarn start`             | Start production server                  |
+| `yarn lint`              | Run ESLint (strict, no warnings)         |
+| `yarn lint:fix`          | Fix ESLint issues automatically          |
+| `yarn format`            | Format code with Prettier                |
+| `yarn format:check`      | Check code formatting                    |
+| `yarn typecheck`         | Run TypeScript type checking             |
+| `yarn i18n:check`        | Validate translation files               |
+| `yarn test`              | Run tests once                           |
+| `yarn test:watch`        | Run tests in watch mode                  |
+| `yarn test:coverage`     | Generate coverage report                 |
+| `yarn db:generate`       | Generate Prisma client                   |
+| `yarn db:migrate`        | Create and run migrations (dev)          |
+| `yarn db:migrate:deploy` | Run migrations (production)              |
+| `yarn db:studio`         | Open Prisma Studio GUI                   |
+| `yarn db:seed`           | Seed database with sample data           |
 
 ## 🗄️ Database Schema
 
