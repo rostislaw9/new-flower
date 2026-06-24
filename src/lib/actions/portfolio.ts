@@ -9,6 +9,8 @@ import {
 } from "@/lib/portfolio-data";
 import { prisma } from "@/lib/prisma";
 
+const MAX_FEATURED_ITEMS = 8;
+
 export type PortfolioActionResult =
   | { success: true; id?: string }
   | { success: false; message: string };
@@ -39,7 +41,7 @@ export async function createPortfolioItems(
     const title = item.title?.trim() ?? "";
     const imageUrl = item.imageUrl?.trim() ?? "";
     const description = item.description?.trim() || null;
-    const featured = Boolean(item.featured);
+    const featured = false; // Don't allow featured on creation
     const displayOrder = Number.isFinite(item.displayOrder)
       ? Number(item.displayOrder)
       : index;
@@ -113,6 +115,17 @@ export async function updatePortfolioItem(
       };
     }
 
+    // Get current featured state
+    const currentItem = await prisma.portfolioItem.findUnique({
+      where: { id },
+      select: { featured: true },
+    });
+
+    if (!currentItem) {
+      return { success: false, message: "Portfolio item not found" };
+    }
+
+    // Update non-featured fields
     await prisma.portfolioItem.update({
       where: { id },
       data: {
@@ -120,10 +133,20 @@ export async function updatePortfolioItem(
         description,
         imageUrl,
         category,
-        featured,
         displayOrder,
       },
     });
+
+    // Handle featured state change separately to enforce limit
+    if (featured !== currentItem.featured) {
+      const result = await setPortfolioItemFeatured(id, featured);
+      if (!result.success) {
+        return {
+          success: false,
+          message: result.message || "Failed to update featured state",
+        };
+      }
+    }
 
     revalidatePath("/portfolio");
     revalidatePath("/admin/portfolio");
@@ -202,5 +225,68 @@ export async function deleteCloudinaryImage(
   } catch (error) {
     console.error("[deleteCloudinaryImage] Error:", error);
     return { success: false, message: "Failed to delete image" };
+  }
+}
+
+export async function setPortfolioItemFeatured(
+  id: string,
+  featured: boolean,
+): Promise<{ success: boolean; message?: string }> {
+  try {
+    await prisma.$transaction(async (tx) => {
+      if (!featured) {
+        await tx.portfolioItem.update({
+          where: { id },
+          data: { featured: false },
+        });
+        return;
+      }
+
+      const currentlyFeatured = await tx.portfolioItem.findMany({
+        where: { featured: true },
+        orderBy: { createdAt: "asc" },
+        select: { id: true },
+      });
+
+      const isAlreadyFeatured = currentlyFeatured.some(
+        (item) => item.id === id,
+      );
+
+      if (isAlreadyFeatured) {
+        return;
+      }
+
+      await tx.portfolioItem.update({
+        where: { id },
+        data: { featured: true },
+      });
+
+      const overflowCount = Math.max(
+        0,
+        currentlyFeatured.length - (MAX_FEATURED_ITEMS - 1),
+      );
+
+      if (overflowCount > 0) {
+        const toUnfeatureIds = currentlyFeatured
+          .slice(0, overflowCount)
+          .map((item) => item.id)
+          .filter((itemId) => itemId !== id);
+
+        if (toUnfeatureIds.length > 0) {
+          await tx.portfolioItem.updateMany({
+            where: { id: { in: toUnfeatureIds } },
+            data: { featured: false },
+          });
+        }
+      }
+    });
+
+    revalidatePath("/portfolio");
+    revalidatePath("/admin/portfolio");
+
+    return { success: true };
+  } catch (error) {
+    console.error("[setPortfolioItemFeatured] Error", error);
+    return { success: false, message: "Failed to update featured state" };
   }
 }
