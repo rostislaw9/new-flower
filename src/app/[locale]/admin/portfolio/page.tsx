@@ -5,6 +5,7 @@ import { useEffect, useRef, useState } from "react";
 import { useTranslations } from "next-intl";
 import Image from "next/image";
 import { useRouter } from "next/navigation";
+import { useTopLoader } from "nextjs-toploader";
 
 import {
   Eye,
@@ -42,6 +43,7 @@ const LOAD_MORE_BATCH = 6;
 
 export default function PortfolioAdminPage() {
   const router = useRouter();
+  const { start } = useTopLoader();
   const t = useTranslations("admin.portfolio");
   const portfolioMenu = useTranslations("admin.portfolio.actions");
   const actions = useTranslations("admin.common.actions");
@@ -153,10 +155,14 @@ export default function PortfolioAdminPage() {
             key={item.id}
             role="button"
             tabIndex={0}
-            onClick={() => router.push(`/admin/portfolio/${item.id}/edit`)}
+            onClick={() => {
+              start();
+              router.push(`/admin/portfolio/${item.id}/edit`);
+            }}
             onKeyDown={(event) => {
               if (event.key === "Enter" || event.key === " ") {
                 event.preventDefault();
+                start();
                 router.push(`/admin/portfolio/${item.id}/edit`);
               }
             }}
@@ -207,6 +213,7 @@ export default function PortfolioAdminPage() {
                       onSelect={(event) => {
                         event.preventDefault();
                         event.stopPropagation();
+                        start();
                         router.push(`/admin/portfolio/${item.id}/edit`);
                       }}
                     >

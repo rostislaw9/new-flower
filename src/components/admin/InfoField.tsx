@@ -12,7 +12,12 @@ interface InfoFieldProps {
   className?: string;
 }
 
-export function InfoField({ label, value, valueHref, className }: InfoFieldProps) {
+export function InfoField({
+  label,
+  value,
+  valueHref,
+  className,
+}: InfoFieldProps) {
   const valueClasses = "mt-3 text-base font-semibold leading-snug";
 
   return (

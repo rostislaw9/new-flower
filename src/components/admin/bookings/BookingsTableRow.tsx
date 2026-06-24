@@ -1,6 +1,7 @@
 "use client";
 
 import { useRouter } from "next/navigation";
+import { useTopLoader } from "nextjs-toploader";
 
 import type { AppointmentStatus } from "@prisma/client";
 
@@ -37,8 +38,10 @@ export function BookingsTableRow({
   viewLabel,
 }: BookingsTableRowProps) {
   const router = useRouter();
+  const { start } = useTopLoader();
 
   const handleNavigate = () => {
+    start();
     void router.push(detailHref);
   };
 

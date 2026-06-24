@@ -6,18 +6,13 @@ import { useLocale, useTranslations } from "next-intl";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 
-import type { LucideIcon } from "lucide-react";
-import {
-  Calendar,
-  ExternalLink,
-  Images,
-  LayoutDashboard,
-  Star,
-} from "lucide-react";
+import { Calendar, Cog, Images, LayoutDashboard, Star } from "lucide-react";
 
+import { AdminNavMenu } from "@/components/admin/AdminNavMenu";
 import { AdminPageShell } from "@/components/admin/AdminPageShell";
-import { Button } from "@/components/styled/Button";
+import { AdminSidebarFooterCTA } from "@/components/admin/AdminSidebarFooterCTA";
 import { LanguageSwitcher } from "@/components/styled/LanguageSwitcher";
+import { Eyebrow } from "@/components/styled/Typography";
 import {
   Breadcrumb,
   BreadcrumbItem,
@@ -31,10 +26,8 @@ import {
   Sidebar,
   SidebarContent,
   SidebarFooter,
+  SidebarHeader,
   SidebarInset,
-  SidebarMenu,
-  SidebarMenuButton,
-  SidebarMenuItem,
   SidebarProvider,
   SidebarRail,
   SidebarTrigger,
@@ -87,6 +80,14 @@ export default function AdminLayout({
     <SidebarProvider defaultOpen={initialSidebarOpen}>
       <SidebarStatePersistence />
       <Sidebar side="left" variant="sidebar" collapsible="icon">
+        <SidebarHeader className="flex-row items-center py-4">
+          <div className="flex aspect-square size-8 items-center justify-center text-accent">
+            <Cog />
+          </div>
+          <Eyebrow size="md" className="group-data-[collapsible=icon]:hidden">
+            Console
+          </Eyebrow>
+        </SidebarHeader>
         <SidebarContent className="px-2 py-4">
           <AdminNavMenu items={navItems} locale={locale} pathname={pathname} />
         </SidebarContent>
@@ -127,36 +128,6 @@ function SidebarStatePersistence() {
   }, [state]);
 
   return null;
-}
-
-function AdminSidebarFooterCTA({
-  href,
-  label,
-}: {
-  href: string;
-  label: string;
-}) {
-  const { isMobile } = useSidebar();
-
-  return (
-    <SidebarMenu>
-      <SidebarMenuItem>
-        <SidebarMenuButton
-          asChild
-          size={isMobile ? "lg" : "default"}
-          tooltip={label}
-          className="justify-start"
-        >
-          <Button variant="ghost" href={href} target="_blank">
-            <ExternalLink />
-            <span className="group-data-[collapsible=icon]:hidden">
-              {label}
-            </span>
-          </Button>
-        </SidebarMenuButton>
-      </SidebarMenuItem>
-    </SidebarMenu>
-  );
 }
 
 type AdminBreadcrumb = {
@@ -244,56 +215,4 @@ function formatSegment(segment: string) {
     .split("-")
     .map((part) => part.charAt(0).toUpperCase() + part.slice(1))
     .join(" ");
-}
-
-type NavItem = {
-  href: string;
-  icon: LucideIcon;
-  label: string;
-};
-
-function AdminNavMenu({
-  items,
-  locale,
-  pathname,
-}: {
-  items: NavItem[];
-  locale: string;
-  pathname: string;
-}) {
-  const { isMobile, setOpenMobile } = useSidebar();
-
-  const handleNavigate = () => {
-    if (isMobile) {
-      setOpenMobile(false);
-    }
-  };
-
-  return (
-    <SidebarMenu className="space-y-1">
-      {items.map((item) => {
-        const isActive =
-          pathname === `/${locale}${item.href}` || pathname === item.href;
-        return (
-          <SidebarMenuItem key={item.href}>
-            <SidebarMenuButton
-              asChild
-              size={isMobile ? "lg" : "default"}
-              isActive={isActive}
-              onClick={handleNavigate}
-              tooltip={item.label}
-              className="justify-start text-muted-foreground transition-colors hover:bg-accent hover:text-accent-foreground active:bg-accent active:text-accent-foreground data-[active=true]:text-accent group-data-[collapsible=icon]:justify-center group-data-[collapsible=icon]:px-2"
-            >
-              <Button variant="ghost" href={item.href}>
-                <item.icon />
-                <span className="group-data-[collapsible=icon]:hidden">
-                  {item.label}
-                </span>
-              </Button>
-            </SidebarMenuButton>
-          </SidebarMenuItem>
-        );
-      })}
-    </SidebarMenu>
-  );
 }

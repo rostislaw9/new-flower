@@ -1,6 +1,7 @@
 "use client";
 
 import { useRouter } from "next/navigation";
+import { useTopLoader } from "nextjs-toploader";
 
 import { Calendar, Images, Star } from "lucide-react";
 
@@ -32,9 +33,11 @@ export function ActionCard({
   className,
 }: ActionCardProps) {
   const router = useRouter();
+  const { start } = useTopLoader();
   const Icon = ICONS[icon];
 
   const navigate = () => {
+    start();
     router.push(href);
   };
 
