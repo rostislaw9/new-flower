@@ -1,160 +1,418 @@
 # New Flower Tattoo
 
-A modern, premium portfolio website for a tattoo artist built with Next.js 15, TypeScript, and PostgreSQL.
+> A premium, production-ready portfolio and booking platform for tattoo artists. Built with modern web technologies for performance, scalability, and exceptional user experience.
 
-## Tech Stack
+![Next.js](https://img.shields.io/badge/Next.js-16.2-black?logo=next.js)
+![TypeScript](https://img.shields.io/badge/TypeScript-5.7-blue?logo=typescript)
+![PostgreSQL](https://img.shields.io/badge/PostgreSQL-Latest-336791?logo=postgresql)
+![Tailwind CSS](https://img.shields.io/badge/Tailwind-3.4-38B2AC?logo=tailwind-css)
+![License](https://img.shields.io/badge/License-MIT-green)
 
-- **Framework**: Next.js 15 (App Router, standalone output)
-- **Language**: TypeScript (strict mode, `exactOptionalPropertyTypes`, `noUncheckedIndexedAccess`)
-- **Styling**: Tailwind CSS + shadcn/ui
-- **Database**: PostgreSQL + Prisma ORM
-- **Validation**: Zod
-- **Image CDN**: Cloudinary (reference image uploads + optimized delivery)
-- **Email**: Resend (artist notifications + customer confirmations)
-- **Animations**: Framer Motion
-- **Testing**: Vitest + React Testing Library
-- **Package Manager**: Yarn 4 (Corepack)
+## 🎯 Overview
 
-## Local Development
+New Flower Tattoo is a full-featured web application designed specifically for tattoo artists and studios. It provides:
+
+- **Portfolio Management** — Showcase tattoo work with organized galleries and featured pieces
+- **Booking System** — Accept and manage appointment requests with status tracking
+- **Client Reviews** — Display testimonials and ratings from satisfied clients
+- **Admin Dashboard** — Comprehensive management interface for all studio operations
+- **Multi-Language Support** — Built-in internationalization (English, Thai)
+- **Image Management** — Cloudinary integration for optimized image delivery
+- **Email Notifications** — Automated confirmations and status updates
+- **SEO Optimized** — Structured data, sitemaps, and meta tags for search visibility
+
+## 🛠️ Tech Stack
+
+### Core
+
+- **Framework**: [Next.js 16](https://nextjs.org/) (App Router, Standalone Output)
+- **Language**: [TypeScript 5.7](https://www.typescriptlang.org/) (Strict mode with `exactOptionalPropertyTypes`)
+- **Runtime**: Node.js 22+
+
+### Frontend
+
+- **Styling**: [Tailwind CSS 3.4](https://tailwindcss.com/) + [shadcn/ui](https://ui.shadcn.com/)
+- **UI Components**: [Radix UI](https://www.radix-ui.com/)
+- **Animations**: [Framer Motion 12](https://www.framer.com/motion/)
+- **Icons**: [Lucide React](https://lucide.dev/)
+- **Forms**: [React Hook Form](https://react-hook-form.com/) + [Zod](https://zod.dev/) validation
+- **Notifications**: [Sonner](https://sonner.emilkowal.ski/) toast library
+
+### Backend
+
+- **Database**: [PostgreSQL](https://www.postgresql.org/) with [Prisma ORM 6](https://www.prisma.io/)
+- **Image CDN**: [Cloudinary](https://cloudinary.com/) (upload, storage, optimization)
+- **Email**: [Resend](https://resend.com/) (transactional emails)
+
+### Developer Experience
+
+- **Package Manager**: [Yarn 4](https://yarnpkg.com/) (Corepack)
+- **Testing**: [Vitest](https://vitest.dev/) + [React Testing Library](https://testing-library.com/react)
+- **Linting**: [ESLint 9](https://eslint.org/)
+- **Formatting**: [Prettier](https://prettier.io/)
+- **Git Hooks**: [Husky](https://typicode.github.io/husky/)
+- **Internationalization**: [next-intl](https://next-intl-docs.vercel.app/)
+
+## 📋 Features
+
+### Public Pages
+
+- **Homepage** — Hero section, featured portfolio, testimonials, CTA
+- **Portfolio** — Gallery with filtering, detailed project views
+- **About** — Artist biography and studio information
+- **Booking** — Appointment request form with validation
+- **Reviews** — Client testimonials and ratings
+- **FAQ** — Frequently asked questions
+- **Contact** — Contact form and information
+
+### Admin Dashboard
+
+- **Dashboard** — Overview with key metrics and statistics
+- **Portfolio Management** — Create, edit, delete portfolio items with image uploads
+- **Booking Management** — View, filter, and update appointment statuses
+- **Review Management** — Moderate and feature client reviews
+- **Artist Images** — Manage artist portrait and shop logo with Cloudinary integration
+- **Responsive Sidebar** — Collapsible navigation with mobile support
+
+### Technical Features
+
+- **Multi-Language** — English and Thai with automatic locale detection
+- **Responsive Design** — Mobile-first approach, works on all devices
+- **Dark Mode** — Theme switching with next-themes
+- **SEO** — JSON-LD structured data, dynamic sitemaps, robots.txt
+- **Performance** — Image optimization, code splitting, caching strategies
+- **Type Safety** — Full TypeScript coverage with strict mode
+- **Database Indexing** — Optimized queries with strategic indexes
+- **Error Handling** — Comprehensive error boundaries and fallbacks
+
+## 🚀 Quick Start
 
 ### Prerequisites
 
-- Node.js 22+
-- Yarn 4+
-- Docker + Docker Compose
+- **Node.js** 22+ ([Download](https://nodejs.org/))
+- **Yarn** 4+ (run `corepack enable` if needed)
+- **Docker** + **Docker Compose** (for local PostgreSQL)
 
-### Setup
+### Installation
 
-1. Clone the repository
-2. Copy the environment file:
+1. **Clone the repository**
 
    ```bash
-   cp .env.example .env
+   git clone https://github.com/yourusername/new-flower.git
+   cd new-flower
    ```
 
-3. Install dependencies:
+2. **Install dependencies**
 
    ```bash
    yarn install
    ```
 
-4. Start the database:
+3. **Configure environment**
+
+   ```bash
+   cp .env.example .env
+   ```
+
+   Edit `.env` with your configuration (see [Environment Variables](#-environment-variables) below)
+
+4. **Start PostgreSQL**
 
    ```bash
    docker compose up postgres -d
    ```
 
-5. Run database migrations:
+5. **Run database migrations**
 
    ```bash
    yarn db:migrate
    ```
 
-6. Start the development server:\
+6. **Start development server**
 
    ```bash
    yarn dev
    ```
 
-The application will be available at [http://localhost:3000](http://localhost:3000).
+   Open [http://localhost:3000](http://localhost:3000) in your browser.
 
-## Docker Usage
+## 📦 Docker Setup
 
-Run the entire stack (application + database) with Docker Compose:
+### Run Full Stack
 
 ```bash
 docker compose up
 ```
 
-Stop all services:
+This starts both the Next.js application and PostgreSQL database.
+
+### Stop Services
 
 ```bash
+# Stop all services
 docker compose down
-```
 
-Stop all services and remove volumes:
-
-```bash
+# Stop and remove volumes
 docker compose down -v
 ```
 
-## Environment Variables
+## 🔧 Environment Variables
 
-Copy `.env.example` to `.env` and fill in the required values:
+Copy `.env.example` to `.env` and configure:
 
-| Variable                | Description                                       | Required                  |
-| ----------------------- | ------------------------------------------------- | ------------------------- |
-| `DATABASE_URL`          | PostgreSQL connection string                      | Yes                       |
-| `NEXT_PUBLIC_SITE_URL`  | Public site URL (e.g. `https://newflower.studio`) | Yes                       |
-| `CLOUDINARY_CLOUD_NAME` | Cloudinary cloud name                             | Yes (image uploads)       |
-| `CLOUDINARY_API_KEY`    | Cloudinary API key                                | Yes (image uploads)       |
-| `CLOUDINARY_API_SECRET` | Cloudinary API secret                             | Yes (image uploads)       |
-| `RESEND_API_KEY`        | Resend email API key                              | Yes (email notifications) |
-| `ARTIST_EMAIL`          | Email address to receive booking notifications    | Yes (email notifications) |
-| `EMAIL_FROM`            | Sender address for outgoing emails                | Yes (email notifications) |
-| `POSTGRES_USER`         | PostgreSQL username (Docker only)                 | Docker only               |
-| `POSTGRES_PASSWORD`     | PostgreSQL password (Docker only)                 | Docker only               |
-| `POSTGRES_DB`           | PostgreSQL database name (Docker only)            | Docker only               |
+| Variable | Description | Required | Example |
+| --- | --- | --- | --- |
+| `DATABASE_URL` | PostgreSQL connection string | ✅ | `postgresql://user:pass@localhost:5432/db` |
+| `NEXT_PUBLIC_SITE_URL` | Public site URL | ✅ | `https://newflower.studio` |
+| `CLOUDINARY_CLOUD_NAME` | Cloudinary cloud name | ✅ | `your-cloud-name` |
+| `CLOUDINARY_API_KEY` | Cloudinary API key | ✅ | `your-api-key` |
+| `CLOUDINARY_API_SECRET` | Cloudinary API secret | ✅ | `your-api-secret` |
+| `RESEND_API_KEY` | Resend email API key | ✅ | `re_xxxxx` |
+| `ARTIST_EMAIL` | Email for booking notifications | ✅ | `artist@studio.com` |
+| `EMAIL_FROM` | Sender email address | ✅ | `Studio <noreply@studio.com>` |
+| `POSTGRES_USER` | PostgreSQL username (Docker) | Docker only | `flower` |
+| `POSTGRES_PASSWORD` | PostgreSQL password (Docker) | Docker only | `secure_password` |
+| `POSTGRES_DB` | PostgreSQL database name (Docker) | Docker only | `flower_db` |
 
-## Scripts
+## 📚 Scripts
 
-| Command                  | Description                          |
-| ------------------------ | ------------------------------------ |
-| `yarn dev`               | Start development server             |
-| `yarn build`             | Build for production                 |
-| `yarn start`             | Start production server              |
-| `yarn lint`              | Run ESLint                           |
-| `yarn lint:fix`          | Run ESLint with auto-fix             |
-| `yarn format`            | Format code with Prettier            |
-| `yarn format:check`      | Check formatting                     |
-| `yarn typecheck`         | Run TypeScript type checking         |
-| `yarn test`              | Run tests                            |
-| `yarn test:watch`        | Run tests in watch mode              |
-| `yarn test:coverage`     | Run tests with coverage report       |
-| `yarn db:generate`       | Generate Prisma client               |
-| `yarn db:migrate`        | Run database migrations (dev)        |
-| `yarn db:migrate:deploy` | Run database migrations (production) |
-| `yarn db:studio`         | Open Prisma Studio                   |
+| Command | Description |
+| --- | --- |
+| `yarn dev` | Start development server with hot reload |
+| `yarn build` | Build for production |
+| `yarn start` | Start production server |
+| `yarn lint` | Run ESLint (strict, no warnings) |
+| `yarn lint:fix` | Fix ESLint issues automatically |
+| `yarn format` | Format code with Prettier |
+| `yarn format:check` | Check code formatting |
+| `yarn typecheck` | Run TypeScript type checking |
+| `yarn i18n:check` | Validate translation files |
+| `yarn test` | Run tests once |
+| `yarn test:watch` | Run tests in watch mode |
+| `yarn test:coverage` | Generate coverage report |
+| `yarn db:generate` | Generate Prisma client |
+| `yarn db:migrate` | Create and run migrations (dev) |
+| `yarn db:migrate:deploy` | Run migrations (production) |
+| `yarn db:studio` | Open Prisma Studio GUI |
+| `yarn db:seed` | Seed database with sample data |
 
-## Database
+## 🗄️ Database Schema
 
-This project uses PostgreSQL with Prisma ORM.
+### Appointment
 
-### Models
+Stores booking requests from clients.
 
-- **Appointment** — Booking requests from clients
-- **PortfolioItem** — Tattoo portfolio entries
-- **Testimonial** — Customer reviews
-
-### Migrations
-
-Generate a new migration after schema changes:
-
-```bash
-yarn db:migrate
+```typescript
+- id: String (CUID)
+- fullName: String
+- email: String
+- phone: String?
+- contactMethod: String
+- tattooDescription: String
+- bodyPlacement: String?
+- tattooSize: String?
+- preferredDates: String[]
+- budgetRange: String?
+- referenceImages: String[]
+- status: AppointmentStatus (pending, contacted, approved, rejected, completed)
+- createdAt: DateTime
+- updatedAt: DateTime
 ```
 
-Deploy migrations in production:
+### PortfolioItem
 
-```bash
-yarn db:migrate:deploy
+Represents a tattoo portfolio entry.
+
+```typescript
+- id: String (CUID)
+- title: String
+- description: String?
+- imageUrl: String (Cloudinary URL)
+- category: String
+- featured: Boolean
+- displayOrder: Int
+- width: Int (image dimensions)
+- height: Int
+- createdAt: DateTime
+- updatedAt: DateTime
 ```
 
-## Build Process
+### Review
+
+Client testimonials and ratings.
+
+```typescript
+- id: String (CUID)
+- clientName: String
+- clientEmail: String?
+- rating: Int (1-5)
+- text: String
+- featured: Boolean
+- createdAt: DateTime
+- updatedAt: DateTime
+```
+
+## 🏗️ Project Structure
+
+```text
+src/
+├── app/                    # Next.js App Router
+│   ├── [locale]/          # Localized routes
+│   │   ├── admin/         # Admin dashboard
+│   │   ├── booking/       # Booking form
+│   │   ├── portfolio/     # Portfolio gallery
+│   │   ├── reviews/       # Reviews page
+│   │   └── ...
+│   ├── api/               # API routes
+│   └── layout.tsx         # Root layout
+├── components/            # React components
+│   ├── admin/            # Admin-specific components
+│   ├── sections/         # Page sections
+│   ├── ui/               # shadcn/ui components
+│   └── ...
+├── lib/                  # Utilities and helpers
+│   ├── actions/          # Server actions
+│   ├── email/            # Email templates
+│   ├── schemas/          # Zod validation schemas
+│   └── ...
+├── types/                # TypeScript type definitions
+├── hooks/                # Custom React hooks
+└── i18n/                 # Internationalization config
+```
+
+## 🚢 Deployment
+
+### Deployment Prerequisites
+
+- All environment variables configured
+- PostgreSQL database provisioned
+- Cloudinary account set up
+- Resend email account configured
+
+### Supported Platforms
+
+#### Vercel (Recommended for Next.js)
 
 ```bash
+# Connect repository to Vercel dashboard
+# Set environment variables
+# Deploy automatically on push
+```
+
+#### Docker-based Platforms (Render, Railway, Fly.io)
+
+```bash
+# Set environment variables in platform dashboard
+# Connect repository
+# Platform automatically builds and deploys using Dockerfile
+```
+
+#### Self-hosted
+
+```bash
+# Build
 yarn build
+
+# Start
+yarn start
 ```
 
-The project uses Next.js standalone output for optimized Docker images.
+### Production Checklist
 
-## Deployment
+- [ ] Environment variables configured
+- [ ] Database migrations deployed
+- [ ] Cloudinary images migrated
+- [ ] Email service tested
+- [ ] DNS configured
+- [ ] SSL certificate installed
+- [ ] Backups configured
+- [ ] Monitoring set up
+- [ ] Error tracking enabled
 
-The application can be deployed to:
+## 🧪 Testing
 
-- **Render** — Connect the repository, set environment variables, use Docker deployment
-- **Railway** — Import the repository, set environment variables
-- **Fly.io** — Use `fly deploy` with the provided Dockerfile
-- **Vercel** — Connect the repository (note: PostgreSQL must be hosted separately)
+Run the test suite:
 
-All deployment targets require the environment variables defined in `.env.example`.
+```bash
+yarn test
+```
+
+Watch mode for development:
+
+```bash
+yarn test:watch
+```
+
+Generate coverage report:
+
+```bash
+yarn test:coverage
+```
+
+## 📖 Development Guide
+
+### Adding a New Page
+
+1. Create route in `src/app/[locale]/your-page/page.tsx`
+2. Add translations to `messages/en.json` and `messages/th.json`
+3. Update navigation if needed
+
+### Adding Admin Features
+
+1. Create component in `src/components/admin/`
+2. Add server action in `src/lib/actions/`
+3. Create page in `src/app/[locale]/admin/your-feature/`
+4. Add to admin sidebar in `src/app/[locale]/admin/layout.tsx`
+
+### Database Changes
+
+1. Update `prisma/schema.prisma`
+2. Run `yarn db:migrate`
+3. Name the migration descriptively
+
+### Adding Translations
+
+1. Add keys to `messages/en.json`
+2. Add translations to `messages/th.json`
+3. Use `useTranslations()` hook in components
+
+## 🔐 Security
+
+- **TypeScript Strict Mode** — Catches type errors at compile time
+- **Input Validation** — Zod schemas validate all user input
+- **CSRF Protection** — Built-in Next.js protection
+- **SQL Injection Prevention** — Prisma parameterized queries
+- **Environment Variables** — Sensitive data never committed
+- **API Routes** — Server-side validation and authentication ready
+
+## 📊 Performance
+
+- **Image Optimization** — Cloudinary handles resizing and caching
+- **Code Splitting** — Automatic with Next.js App Router
+- **Database Indexing** — Strategic indexes on frequently queried fields
+- **Caching** — Next.js built-in caching strategies
+- **Standalone Output** — Minimal Docker image size
+
+## 🤝 Contributing
+
+1. Create a feature branch
+2. Make your changes
+3. Run `yarn lint:fix` and `yarn format`
+4. Run `yarn test` to ensure tests pass
+5. Submit a pull request
+
+## 📝 License
+
+MIT License — see LICENSE file for details
+
+## 📞 Support
+
+For issues and questions:
+
+- Check existing [GitHub Issues](https://github.com/yourusername/new-flower/issues)
+- Create a new issue with detailed information
+- Include steps to reproduce and environment details
+
+## 🙏 Acknowledgments
+
+Built with [Next.js](https://nextjs.org/), [Tailwind CSS](https://tailwindcss.com/), [shadcn/ui](https://ui.shadcn.com/), and [Prisma](https://www.prisma.io/).
