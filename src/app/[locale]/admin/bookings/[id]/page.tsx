@@ -38,13 +38,13 @@ export default async function BookingDetailPage({
   const statusesT = await getTranslations("admin.bookings.statuses");
 
   if (!id) {
-    return notFoundResponse(locale, detailT);
+    return notFoundResponse(locale, detailT, actionsT);
   }
 
   const booking = await prisma.appointment.findUnique({ where: { id } });
 
   if (!booking) {
-    return notFoundResponse(locale, detailT);
+    return notFoundResponse(locale, detailT, actionsT);
   }
 
   const submittedFormat = new Intl.DateTimeFormat(locale, {
@@ -214,6 +214,7 @@ export default async function BookingDetailPage({
 function notFoundResponse(
   locale: Locale,
   detailT: Awaited<ReturnType<typeof getTranslations>>,
+  actionsT: Awaited<ReturnType<typeof getTranslations>>,
 ) {
   return (
     <div className="space-y-4">
@@ -223,7 +224,7 @@ function notFoundResponse(
         size="sm"
       >
         <ArrowLeft className="mr-2 h-4 w-4" />
-        {detailT("back")}
+        {actionsT("back")}
       </Button>
       <Text muted>{detailT("notFound")}</Text>
     </div>
