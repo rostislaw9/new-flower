@@ -23,7 +23,7 @@ export function AdminSidebarFooterCTA({
     <SidebarMenu>
       <SidebarMenuItem>
         <SidebarMenuButton asChild tooltip={label} className="justify-start">
-          <Link href={href} target="_blank" className="flex items-center gap-2">
+          <Link href={href} target="_blank">
             <ExternalLink />
             <span className="group-data-[collapsible=icon]:hidden">
               {label}

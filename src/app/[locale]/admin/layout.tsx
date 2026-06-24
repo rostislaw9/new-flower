@@ -5,6 +5,7 @@ import * as React from "react";
 import { useLocale, useTranslations } from "next-intl";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
+import { useTopLoader } from "nextjs-toploader";
 
 import { Calendar, Cog, Images, LayoutDashboard, Star } from "lucide-react";
 
@@ -28,6 +29,9 @@ import {
   SidebarFooter,
   SidebarHeader,
   SidebarInset,
+  SidebarMenu,
+  SidebarMenuButton,
+  SidebarMenuItem,
   SidebarProvider,
   SidebarRail,
   SidebarTrigger,
@@ -47,6 +51,7 @@ export default function AdminLayout({
   const locale = useLocale();
   const pathname = usePathname();
   const t = useTranslations("admin.layout");
+  const { start } = useTopLoader();
   const navItems = [
     { href: "/admin", icon: LayoutDashboard, label: t("nav.dashboard") },
     { href: "/admin/portfolio", icon: Images, label: t("nav.portfolio") },
@@ -80,13 +85,19 @@ export default function AdminLayout({
     <SidebarProvider defaultOpen={initialSidebarOpen}>
       <SidebarStatePersistence />
       <Sidebar side="left" variant="sidebar" collapsible="icon">
-        <SidebarHeader className="flex-row items-center py-4">
-          <div className="flex aspect-square size-8 items-center justify-center text-accent">
-            <Cog />
-          </div>
-          <Eyebrow size="md" className="group-data-[collapsible=icon]:hidden">
-            Console
-          </Eyebrow>
+        <SidebarHeader className="py-4">
+          <SidebarMenu>
+            <SidebarMenuItem>
+              <SidebarMenuButton asChild className="justify-start">
+                <Link href="/admin" onClick={() => start()}>
+                  <Cog size={20} className="text-accent" />
+                  <Eyebrow className="group-data-[collapsible=icon]:hidden">
+                    Console
+                  </Eyebrow>
+                </Link>
+              </SidebarMenuButton>
+            </SidebarMenuItem>
+          </SidebarMenu>
         </SidebarHeader>
         <SidebarContent className="px-2 py-4">
           <AdminNavMenu items={navItems} locale={locale} pathname={pathname} />

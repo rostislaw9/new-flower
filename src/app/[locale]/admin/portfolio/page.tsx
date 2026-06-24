@@ -261,16 +261,16 @@ export default function PortfolioAdminPage() {
           hasItems ? (
             <div className="flex flex-wrap gap-2">
               <Button
+                size="sm"
                 variant="outline"
                 href="/portfolio"
                 target="_blank"
-                className="gap-2"
               >
-                <Eye className="h-4 w-4" />
+                <Eye />
                 {portfolioMenu("viewPublic")}
               </Button>
-              <Button variant="accent" href="/admin/portfolio/new">
-                <Plus className="mr-2 h-4 w-4" />
+              <Button size="sm" variant="accent" href="/admin/portfolio/new">
+                <Plus />
                 {t("addButton")}
               </Button>
             </div>

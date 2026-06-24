@@ -57,7 +57,6 @@ export function AdminNavMenu({ items, locale, pathname }: AdminNavMenuProps) {
             >
               <Link
                 href={item.href}
-                className="flex items-center gap-2"
                 onClick={() => {
                   start();
                   handleNavigate();
