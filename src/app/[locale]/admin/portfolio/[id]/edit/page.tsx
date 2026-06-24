@@ -114,7 +114,7 @@ export default function EditPortfolioItemPage({
         <div className="flex items-center gap-4">
           <Link href={`/${locale}/admin/portfolio`}>
             <Button variant="outline" size="sm">
-              <ArrowLeft className="mr-2 h-4 w-4" />
+              <ArrowLeft />
               {actionsT("back")}
             </Button>
           </Link>
@@ -127,7 +127,7 @@ export default function EditPortfolioItemPage({
   }
 
   return (
-    <div className="flex flex-col gap-8">
+    <div className="flex flex-col gap-6">
       <AdminPageHeader
         title={t("edit.title")}
         subtitle={t("edit.subtitle")}

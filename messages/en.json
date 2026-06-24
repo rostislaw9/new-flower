@@ -714,7 +714,7 @@
       },
       "detail": {
         "title": "Booking details",
-        "subtitle": "Status, contact details, and reference material submitted by the client.",
+        "subtitle": "Status, contact details, and reference material submitted by the client",
         "bookingCodeLabel": "Booking ID · {code}",
         "sectionEyebrow": {
           "status": "Status overview",

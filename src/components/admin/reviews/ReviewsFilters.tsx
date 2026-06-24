@@ -176,7 +176,7 @@ export function ReviewsFilters({
       </div>
 
       <div className="flex gap-4">
-        <Button type="submit" variant="accent">
+        <Button type="submit" variant="accent" className="w-full md:w-auto">
           <Filter />
           {labels.apply}
         </Button>

@@ -65,7 +65,7 @@ export default async function AdminDashboard() {
   const t = await getTranslations("admin.dashboard");
 
   return (
-    <div className="flex flex-col gap-8">
+    <div className="flex flex-col gap-6">
       <AdminPageHeader title={t("title")} subtitle={t("subtitle")} />
 
       <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-4">

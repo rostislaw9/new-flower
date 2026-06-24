@@ -99,7 +99,7 @@ export const DatePicker = forwardRef<HTMLButtonElement, DatePickerProps>(
             aria-invalid={hasError || undefined}
             type="button"
           >
-            <CalendarIcon className="mr-2 h-4 w-4" />
+            <CalendarIcon />
             {selectedDate
               ? (formatDateLabel?.(selectedDate) ?? format(selectedDate, "PPP"))
               : placeholder}

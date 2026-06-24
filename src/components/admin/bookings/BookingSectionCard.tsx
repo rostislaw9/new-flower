@@ -26,7 +26,7 @@ export function BookingSectionCard({
         className,
       )}
     >
-      <CardContent className={cn("space-y-6 p-6", contentClassName)}>
+      <CardContent className={cn("space-y-4 p-6", contentClassName)}>
         <div className="flex flex-wrap items-center justify-between gap-4">
           <Eyebrow>{eyebrow}</Eyebrow>
           {hint && (

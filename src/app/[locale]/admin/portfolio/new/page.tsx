@@ -77,7 +77,7 @@ export default function NewPortfolioItemPage() {
   }
 
   return (
-    <div className="flex flex-col gap-8">
+    <div className="flex flex-col gap-6">
       <AdminPageHeader
         title={t("new.title")}
         subtitle={t("new.subtitle")}

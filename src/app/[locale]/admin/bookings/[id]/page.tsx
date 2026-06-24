@@ -88,7 +88,7 @@ export default async function BookingDetailPage({
     })) ?? [];
 
   return (
-    <div className="flex flex-col gap-8">
+    <div className="flex flex-col gap-6">
       <AdminPageHeader
         title={detailT("title")}
         subtitle={detailT("subtitle")}
@@ -109,8 +109,8 @@ export default async function BookingDetailPage({
         eyebrow={detailT("sectionEyebrow.status")}
         hint={detailT("bookingCodeLabel", { code: booking.id })}
       >
-        <div className="grid gap-6">
-          <div className="rounded-xl border border-border/60 bg-card/60 p-4 shadow-lg">
+        <div className="grid gap-4 md:grid-cols-4">
+          <div className="col-span-2 content-center rounded-xl border border-border/60 bg-card/60 p-4 shadow-lg">
             <BookingStatusControl
               bookingId={booking.id}
               currentStatus={booking.status}
@@ -125,55 +125,33 @@ export default async function BookingDetailPage({
               }}
             />
           </div>
+          <BookingInfoField
+            label={detailT("submitted")}
+            value={submittedFormat}
+          />
+          <BookingInfoField label={detailT("updated")} value={updatedFormat} />
+        </div>
+      </BookingSectionCard>
+
+      <div className="grid gap-4 md:grid-cols-3">
+        <BookingSectionCard eyebrow={detailT("sectionEyebrow.contact")}>
           <div className="grid gap-4 md:grid-cols-2">
             <BookingInfoField
-              label={detailT("submitted")}
-              value={submittedFormat}
+              label={detailT("fullName")}
+              value={booking.fullName}
             />
             <BookingInfoField
-              label={detailT("updated")}
-              value={updatedFormat}
-            />
-          </div>
-        </div>
-      </BookingSectionCard>
-
-      <BookingSectionCard eyebrow={detailT("sectionEyebrow.contact")}>
-        <div className="grid gap-4 md:grid-cols-2">
-          <BookingInfoField
-            label={detailT("fullName")}
-            value={booking.fullName}
-          />
-          <BookingInfoField
-            label={detailT("email")}
-            value={booking.email}
-            valueHref={`mailto:${booking.email}`}
-          />
-          <BookingInfoField
-            label={detailT("contactMethod")}
-            value={booking.contactMethod}
-          />
-          <BookingInfoField
-            label={detailT("phone")}
-            value={booking.phone || detailT("notProvided")}
-          />
-        </div>
-      </BookingSectionCard>
-
-      <BookingSectionCard eyebrow={detailT("sectionEyebrow.tattoo")}>
-        <div className="grid gap-4 md:grid-cols-2">
-          <div className="grid gap-4">
-            <BookingInfoField
-              label={detailT("bodyPlacement")}
-              value={booking.bodyPlacement || detailT("notProvided")}
+              label={detailT("email")}
+              value={booking.email}
+              valueHref={`mailto:${booking.email}`}
             />
             <BookingInfoField
-              label={detailT("tattooSize")}
-              value={booking.tattooSize || detailT("notProvided")}
+              label={detailT("contactMethod")}
+              value={booking.contactMethod}
             />
             <BookingInfoField
-              label={detailT("budget")}
-              value={booking.budgetRange || detailT("noBudget")}
+              label={detailT("phone")}
+              value={booking.phone || detailT("notProvided")}
             />
           </div>
           <BookingInfoField
@@ -192,12 +170,32 @@ export default async function BookingDetailPage({
               )
             }
           />
-        </div>
-        <BookingInfoField
-          label={detailT("description")}
-          value={booking.tattooDescription || detailT("notProvided")}
-        />
-      </BookingSectionCard>
+        </BookingSectionCard>
+
+        <BookingSectionCard
+          eyebrow={detailT("sectionEyebrow.tattoo")}
+          className="md:col-span-2"
+        >
+          <div className="grid gap-4 md:grid-cols-3">
+            <BookingInfoField
+              label={detailT("bodyPlacement")}
+              value={booking.bodyPlacement || detailT("notProvided")}
+            />
+            <BookingInfoField
+              label={detailT("tattooSize")}
+              value={booking.tattooSize || detailT("notProvided")}
+            />
+            <BookingInfoField
+              label={detailT("budget")}
+              value={booking.budgetRange || detailT("noBudget")}
+            />
+          </div>
+          <BookingInfoField
+            label={detailT("description")}
+            value={booking.tattooDescription || detailT("notProvided")}
+          />
+        </BookingSectionCard>
+      </div>
 
       <BookingSectionCard eyebrow={detailT("sectionEyebrow.references")}>
         <div className="border border-dashed border-border bg-background p-4">
@@ -223,7 +221,7 @@ function notFoundResponse(
         variant="outline"
         size="sm"
       >
-        <ArrowLeft className="mr-2 h-4 w-4" />
+        <ArrowLeft />
         {actionsT("back")}
       </Button>
       <Text muted>{detailT("notFound")}</Text>

@@ -94,7 +94,7 @@ export function BookingStatusControl({
             }
             disabled={isPending}
           >
-            <SelectTrigger className="h-9 w-full min-w-0 sm:w-52 lg:w-64">
+            <SelectTrigger className="h-9 w-auto">
               <SelectValue />
             </SelectTrigger>
             <SelectContent>

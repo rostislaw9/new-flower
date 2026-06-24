@@ -18,12 +18,12 @@ export function BookingInfoField({
   valueHref,
   className,
 }: BookingInfoFieldProps) {
-  const valueClasses = "mt-3 text-base font-semibold leading-snug";
+  const valueClasses = "mt-1 text-base font-semibold leading-snug";
 
   return (
     <div
       className={cn(
-        "rounded-xl border border-border/60 bg-card p-4 shadow-lg",
+        "rounded-xl border border-border/60 bg-card p-3 shadow-lg",
         className,
       )}
     >
