@@ -803,9 +803,7 @@
         "bulkDeletePartialFail": "ลบ {success} จาก {total} รายการ บางรายการลบไม่สำเร็จ"
       },
       "actions": {
-        "menuLabel": "เปิดเมนูการจัดการ",
         "viewPublic": "ดูบนเว็บไซต์",
-        "edit": "แก้ไขรายการ",
         "delete": "ลบรายการ"
       },
       "deleteTitle": "ลบรายการ",
@@ -826,20 +824,9 @@
         "featuredLabel": "ไฮไลต์",
         "orderLabel": "ลำดับการแสดง",
         "imageLabel": "รูปภาพ",
-        "replaceImageLabel": "อัปเดตรูปภาพ",
         "currentImageLabel": "รูปภาพปัจจุบัน",
         "noImage": "ยังไม่มีรูปภาพ",
         "optionalTag": "ไม่บังคับ"
-      },
-      "new": {
-        "title": "เพิ่มรายการผลงาน",
-        "subtitle": "สร้างรายการใหม่ในแกลเลอรี",
-        "alerts": {
-          "uploadRequired": "โปรดอัปโหลดรูปภาพก่อน",
-          "createFailed": "ไม่สามารถสร้างรายการผลงานได้",
-          "genericError": "เกิดข้อผิดพลาด",
-          "created": "สร้างรายการผลงานเรียบร้อยแล้ว"
-        }
       },
       "upload": {
         "title": "เผยแพร่ผลงาน",

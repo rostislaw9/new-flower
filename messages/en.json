@@ -803,9 +803,7 @@
         "bulkDeletePartialFail": "Deleted {success} of {total} items. Some deletions failed."
       },
       "actions": {
-        "menuLabel": "Open item actions",
         "viewPublic": "View on website",
-        "edit": "Edit item",
         "delete": "Delete item"
       },
       "deleteTitle": "Delete item",
@@ -826,20 +824,9 @@
         "featuredLabel": "Featured",
         "orderLabel": "Display order",
         "imageLabel": "Image",
-        "replaceImageLabel": "Replace image",
         "currentImageLabel": "Current image",
         "noImage": "No image selected",
         "optionalTag": "Optional"
-      },
-      "new": {
-        "title": "Add portfolio item",
-        "subtitle": "Create a new portfolio entry",
-        "alerts": {
-          "uploadRequired": "Please upload an image first",
-          "createFailed": "Failed to create portfolio item",
-          "genericError": "An error occurred",
-          "created": "Portfolio item created"
-        }
       },
       "upload": {
         "title": "Publish portfolio items",
