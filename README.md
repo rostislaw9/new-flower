@@ -124,7 +124,7 @@ This project uses PostgreSQL with Prisma ORM.
 
 - **Appointment** — Booking requests from clients
 - **PortfolioItem** — Tattoo portfolio entries
-- **Testimonial** — Client reviews
+- **Testimonial** — Customer reviews
 
 ### Migrations
 

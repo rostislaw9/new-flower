@@ -41,9 +41,9 @@
       "imageAlt": "New Flower Tattoo artist"
     },
     "testimonials": {
-      "eyebrow": "Client Stories",
-      "title": "What clients say",
-      "empty": "Featured reviews will appear here once clients share them",
+      "eyebrow": "Customer Stories",
+      "title": "What customers say",
+      "empty": "Featured reviews will appear here once customers share them",
       "ratingAria": "{rating} out of 5 stars"
     },
     "cta": {
@@ -552,14 +552,14 @@
   "reviews": {
     "metadata": {
       "title": "Leave a review",
-      "description": "Share your experience working with New Flower Tattoo so future clients know what to expect.",
+      "description": "Share your experience working with New Flower Tattoo so future customers know what to expect.",
       "openGraphTitle": "Leave a review | New Flower Tattoo",
       "openGraphDescription": "Share your New Flower Tattoo session experience so others can book with confidence.",
       "twitterTitle": "Leave a review | New Flower Tattoo",
       "twitterDescription": "Share your experience with New Flower Tattoo so others can book with confidence."
     },
     "hero": {
-      "eyebrow": "Client stories",
+      "eyebrow": "Customer stories",
       "title": "Share your experience",
       "subtitle": "Your words help others feel confident booking their session. It only takes a minute to leave a few thoughts."
     },
@@ -653,7 +653,7 @@
         },
         "reviews": {
           "title": "Manage reviews",
-          "description": "View and manage client reviews"
+          "description": "View and manage customer reviews"
         },
         "artistImages": {
           "title": "Manage artist images",
@@ -688,7 +688,7 @@
         "clear": "Clear"
       },
       "table": {
-        "client": "Client",
+        "client": "Customer",
         "status": "Status",
         "dates": "Preferred dates",
         "submitted": "Submitted",
@@ -723,7 +723,7 @@
         "bookingCodeLabel": "Booking ID · {code}",
         "sectionEyebrow": {
           "status": "Status overview",
-          "contact": "Client contact",
+          "contact": "Customer contact",
           "tattoo": "Tattoo brief",
           "references": "Reference material"
         },
@@ -757,7 +757,7 @@
       }
     },
     "reviews": {
-      "title": "Client reviews",
+      "title": "Customer reviews",
       "subtitle": "Moderate testimonials and choose what appears on the homepage",
       "filters": {
         "searchLabel": "Search",
@@ -773,7 +773,7 @@
         "dateClearLabel": "Clear date"
       },
       "table": {
-        "client": "Client",
+        "client": "Customer",
         "rating": "Rating",
         "review": "Review",
         "created": "Submitted",
