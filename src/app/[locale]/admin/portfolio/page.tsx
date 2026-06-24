@@ -7,7 +7,7 @@ import Image from "next/image";
 import { useRouter } from "next/navigation";
 import { useTopLoader } from "nextjs-toploader";
 
-import { Eye, Loader2, Plus, Trash2, Upload } from "lucide-react";
+import { Eye, Loader2, Trash2, Upload } from "lucide-react";
 import { toast } from "sonner";
 
 import { AdminPageHeader } from "@/components/admin/AdminPageHeader";
@@ -129,8 +129,7 @@ export default function PortfolioAdminPage() {
 
   const editHref = (id: string) =>
     getLocalizedPath(`/admin/portfolio/${id}/edit`, locale);
-  const newHref = getLocalizedPath("/admin/portfolio/new", locale);
-  const bulkHref = getLocalizedPath("/admin/portfolio/bulk", locale);
+  const uploadHref = getLocalizedPath("/admin/portfolio/upload", locale);
   const publicHref = getLocalizedPath("/portfolio", locale, {
     canonical: false,
   });
@@ -143,14 +142,10 @@ export default function PortfolioAdminPage() {
         </EmptyTitle>
       </EmptyHeader>
       <EmptyContent>
-        <div className="flex flex-col gap-3 sm:flex-row">
-          <Button variant="accent" href={newHref}>
-            {t("addFirstButton")}
-          </Button>
-          <Button variant="outline" href={bulkHref}>
-            {t("bulkButton")}
-          </Button>
-        </div>
+        <Button variant="accent" href={uploadHref}>
+          <Upload className="h-4 w-4" />
+          {t("addFirstButton")}
+        </Button>
       </EmptyContent>
     </Empty>
   );
@@ -253,7 +248,7 @@ export default function PortfolioAdminPage() {
             <div className="flex flex-wrap gap-2">
               <Button
                 size="sm"
-                variant="ghost"
+                variant="outline"
                 href={publicHref}
                 target="_blank"
               >
@@ -262,16 +257,12 @@ export default function PortfolioAdminPage() {
               </Button>
               <Button
                 size="sm"
-                variant="outline"
-                href={bulkHref}
+                variant="accent"
+                href={uploadHref}
                 className="flex items-center gap-2"
               >
                 <Upload className="h-4 w-4" />
-                {t("bulkButton")}
-              </Button>
-              <Button size="sm" variant="accent" href={newHref}>
-                <Plus />
-                {t("addButton")}
+                {t("uploadButton")}
               </Button>
             </div>
           ) : undefined

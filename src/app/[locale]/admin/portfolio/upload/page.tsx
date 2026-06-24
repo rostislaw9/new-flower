@@ -43,7 +43,7 @@ import {
 import { Textarea } from "@/components/ui/textarea";
 import { type Locale, defaultLocale } from "@/i18n/config";
 import {
-  createPortfolioItemsBulk,
+  createPortfolioItems,
   deletePortfolioItem,
 } from "@/lib/actions/portfolio";
 import { getLocalizedPath, isSupportedLocale } from "@/lib/locale-utils";
@@ -74,14 +74,14 @@ function createDraftId() {
   return `${Date.now()}-${Math.random().toString(36).slice(2, 8)}`;
 }
 
-export default function BulkPortfolioPage() {
+export default function UploadPortfolioPage() {
   const rawLocale = useLocale();
   const locale: Locale = isSupportedLocale(rawLocale)
     ? rawLocale
     : defaultLocale;
   const router = useRouter();
   const { start } = useTopLoader();
-  const bulkT = useTranslations("admin.portfolio.bulk");
+  const uploadT = useTranslations("admin.portfolio.upload");
   const formT = useTranslations("admin.portfolio.form");
   const actionsT = useTranslations("admin.common.actions");
 
@@ -148,7 +148,7 @@ export default function BulkPortfolioPage() {
         await deletePortfolioItem(draft.imageUrl);
       } catch (error) {
         console.error(
-          "[BulkPortfolioPage] Failed to delete from Cloudinary:",
+          "[UploadPortfolioPage] Failed to delete from Cloudinary:",
           error,
         );
       }
@@ -205,20 +205,20 @@ export default function BulkPortfolioPage() {
 
   async function handleSubmit() {
     if (drafts.length === 0 || hasMissingRequired) {
-      toast.error(bulkT("alerts.missingFields"));
+      toast.error(uploadT("alerts.missingFields"));
       return;
     }
 
     setSubmitting(true);
     try {
-      const result = await createPortfolioItemsBulk(normalizedPayload);
+      const result = await createPortfolioItems(normalizedPayload);
       if (!result.success) {
-        toast.error(result.message || bulkT("alerts.createFailed"));
+        toast.error(result.message || uploadT("alerts.createFailed"));
         setSubmitting(false);
         return;
       }
 
-      toast.success(bulkT("alerts.created", { count: result.count }));
+      toast.success(uploadT("alerts.created", { count: result.count }));
       setDrafts([]);
       setSelectedId(null);
       setSubmitting(false);
@@ -226,8 +226,8 @@ export default function BulkPortfolioPage() {
       router.push(backHref);
       router.refresh();
     } catch (error) {
-      console.error("[BulkPortfolioPage] create", error);
-      toast.error(bulkT("alerts.createFailed"));
+      console.error("[UploadPortfolioPage] create", error);
+      toast.error(uploadT("alerts.createFailed"));
       setSubmitting(false);
     }
   }
@@ -239,8 +239,8 @@ export default function BulkPortfolioPage() {
   return (
     <div className="flex flex-col gap-6">
       <AdminPageHeader
-        title={bulkT("title")}
-        subtitle={bulkT("subtitle")}
+        title={uploadT("title")}
+        subtitle={uploadT("subtitle")}
         actions={
           <Button
             size="sm"
@@ -260,10 +260,10 @@ export default function BulkPortfolioPage() {
             <CardContent className="flex flex-col gap-6 pt-6">
               <div>
                 <Heading size="sm" serif={false}>
-                  {bulkT("instructions.upload", { count: MAX_FILES })}
+                  {uploadT("instructions.upload", { count: MAX_FILES })}
                 </Heading>
                 <Text size="sm" muted>
-                  {bulkT("instructions.details")}
+                  {uploadT("instructions.details")}
                 </Text>
               </div>
               <ImageUploader
@@ -280,10 +280,10 @@ export default function BulkPortfolioPage() {
               <div className="flex items-center justify-between gap-2">
                 <div>
                   <Heading size="sm" serif={false}>
-                    {bulkT("labels.thumbnailsHeading")}
+                    {uploadT("labels.thumbnailsHeading")}
                   </Heading>
                   <Text size="sm" muted>
-                    {bulkT("labels.selectPrompt")}
+                    {uploadT("labels.selectPrompt")}
                   </Text>
                 </div>
                 <Text size="sm" muted>
@@ -296,12 +296,12 @@ export default function BulkPortfolioPage() {
                   <EmptyHeader>
                     <EmptyTitle>
                       <Heading size="sm" serif={false}>
-                        {bulkT("empty.title")}
+                        {uploadT("empty.title")}
                       </Heading>
                     </EmptyTitle>
                   </EmptyHeader>
                   <EmptyContent>
-                    <Text muted>{bulkT("empty.description")}</Text>
+                    <Text muted>{uploadT("empty.description")}</Text>
                   </EmptyContent>
                 </Empty>
               ) : (
@@ -345,8 +345,8 @@ export default function BulkPortfolioPage() {
                             )}
                           >
                             {isComplete
-                              ? bulkT("labels.readyBadge")
-                              : bulkT("labels.needsDetails")}
+                              ? uploadT("labels.readyBadge")
+                              : uploadT("labels.needsDetails")}
                           </span>
                         </div>
                       </button>
@@ -365,10 +365,10 @@ export default function BulkPortfolioPage() {
                 <div className="flex items-start justify-between">
                   <div>
                     <Heading size="sm" serif={false}>
-                      {bulkT("labels.detailsHeading")}
+                      {uploadT("labels.detailsHeading")}
                     </Heading>
                     <Text size="sm" muted>
-                      {bulkT("labels.detailsSubheading")}
+                      {uploadT("labels.detailsSubheading")}
                     </Text>
                   </div>
                   <Button
@@ -378,7 +378,7 @@ export default function BulkPortfolioPage() {
                     onClick={() => handleRemoveDraft(selectedDraft.id)}
                   >
                     <Trash2 />
-                    {bulkT("buttons.remove")}
+                    {uploadT("buttons.remove")}
                   </Button>
                 </div>
 
@@ -496,12 +496,12 @@ export default function BulkPortfolioPage() {
                 <EmptyHeader>
                   <EmptyTitle>
                     <Heading size="sm" serif={false}>
-                      {bulkT("placeholders.selectTitle")}
+                      {uploadT("placeholders.selectTitle")}
                     </Heading>
                   </EmptyTitle>
                 </EmptyHeader>
                 <EmptyContent>
-                  <Text muted>{bulkT("placeholders.selectDescription")}</Text>
+                  <Text muted>{uploadT("placeholders.selectDescription")}</Text>
                 </EmptyContent>
               </Empty>
             )}
@@ -524,7 +524,7 @@ export default function BulkPortfolioPage() {
           ) : (
             <>
               <SavePlus />
-              {bulkT("buttons.create")}
+              {uploadT("buttons.create")}
             </>
           )}
         </Button>

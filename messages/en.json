@@ -792,9 +792,8 @@
     "portfolio": {
       "title": "Portfolio Management",
       "description": "Manage your showcase collection",
-      "addButton": "Add New Item",
-      "bulkButton": "Bulk upload",
-      "addFirstButton": "Add your first piece",
+      "uploadButton": "Publish",
+      "addFirstButton": "Upload your first piece",
       "noItems": "No portfolio items yet",
       "featured": "Featured",
       "alerts": {
@@ -834,9 +833,9 @@
           "created": "Portfolio item created"
         }
       },
-      "bulk": {
-        "title": "Bulk upload portfolio items",
-        "subtitle": "Upload every image first, then add details to each piece before publishing",
+      "upload": {
+        "title": "Publish portfolio items",
+        "subtitle": "Upload images first, then add details to each piece before publishing",
         "instructions": {
           "upload": "Upload up to {count} images",
           "details": "Then select each preview in the Uploads section and fill in the required fields"
@@ -851,21 +850,21 @@
           "createFailed": "Failed to create portfolio items"
         },
         "buttons": {
-          "create": "Create items",
+          "create": "Publish items",
           "remove": "Remove image"
         },
         "labels": {
-          "detailsHeading": "Details",
-          "detailsSubheading": "Edit the selected image",
+          "detailsHeading": "Item details",
+          "detailsSubheading": "Fill in the information for this image",
           "dimensions": "{width} × {height}px",
-          "thumbnailsHeading": "Uploads",
-          "selectPrompt": "Select a thumbnail to edit its details",
+          "thumbnailsHeading": "Your uploads",
+          "selectPrompt": "Select an image to edit its details",
           "readyBadge": "Ready",
           "needsDetails": "Needs info"
         },
         "placeholders": {
-          "selectTitle": "Select an upload",
-          "selectDescription": "Choose a thumbnail on the left to start editing its details"
+          "selectTitle": "No image selected",
+          "selectDescription": "Choose an image on the left to start editing its information"
         }
       },
       "edit": {

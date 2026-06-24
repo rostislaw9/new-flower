@@ -13,7 +13,7 @@ export type PortfolioActionResult =
   | { success: true; id?: string }
   | { success: false; message: string };
 
-export interface PortfolioBulkCreateItem {
+export interface PortfolioUploadCreateItem {
   title: string;
   description?: string | null;
   imageUrl: string;
@@ -24,7 +24,7 @@ export interface PortfolioBulkCreateItem {
   height?: number;
 }
 
-export type PortfolioBulkActionResult =
+export type PortfolioUploadActionResult =
   | { success: true; count: number }
   | { success: false; message: string };
 
@@ -150,9 +150,9 @@ export async function deletePortfolioItem(
   }
 }
 
-export async function createPortfolioItemsBulk(
-  items: PortfolioBulkCreateItem[],
-): Promise<PortfolioBulkActionResult> {
+export async function createPortfolioItems(
+  items: PortfolioUploadCreateItem[],
+): Promise<PortfolioUploadActionResult> {
   if (!Array.isArray(items) || items.length === 0) {
     return { success: false, message: "No portfolio items provided" };
   }
@@ -195,7 +195,7 @@ export async function createPortfolioItemsBulk(
   try {
     const result = await prisma.portfolioItem.createMany({
       data: prepared as Array<
-        Omit<PortfolioBulkCreateItem, "category"> & {
+        Omit<PortfolioUploadCreateItem, "category"> & {
           category: PortfolioCategory;
           width: number;
           height: number;
@@ -208,7 +208,7 @@ export async function createPortfolioItemsBulk(
 
     return { success: true, count: result.count };
   } catch (error) {
-    console.error("[createPortfolioItemsBulk] Error:", error);
+    console.error("[createPortfolioItems] Error:", error);
     return {
       success: false,
       message: "Failed to create portfolio items",
