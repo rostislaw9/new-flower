@@ -210,17 +210,15 @@ export default function EditPortfolioItemPage({
 
           <Card className="row-span-2 rounded-2xl border border-border/60 bg-card/60 shadow-lg">
             <CardContent className="pt-6">
-              <Label className="text-sm font-medium text-muted-foreground">
-                {t("form.currentImageLabel")}
-              </Label>
-              <div className="mt-3 flex w-full flex-col items-center justify-center rounded-xl border border-dashed border-border/50 bg-muted/5 p-4">
+              <div className="flex flex-col gap-2">
+                <Label>{t("form.currentImageLabel")}</Label>
                 {imageUrl ? (
                   <Image
                     src={imageUrl}
                     alt={item.title}
                     width={item.width}
                     height={item.height}
-                    className="h-auto w-full max-w-sm rounded-lg object-cover"
+                    className="h-auto w-full rounded-lg rounded-xl object-cover"
                     loading="eager"
                   />
                 ) : (
@@ -234,16 +232,18 @@ export default function EditPortfolioItemPage({
 
           <Card className="rounded-2xl border border-border/60 bg-card/60 shadow-lg">
             <CardContent className="pt-6">
-              <Label>{t("form.imageLabel")}</Label>
-              <ImageUploader
-                folder="portfolio"
-                maxFiles={1}
-                onUploadComplete={(data) => {
-                  if (data[0]) {
-                    setImageUrl(data[0].url);
-                  }
-                }}
-              />
+              <div className="flex flex-col gap-2">
+                <Label>{t("form.imageLabel")}</Label>
+                <ImageUploader
+                  folder="portfolio"
+                  maxFiles={1}
+                  onUploadComplete={(data) => {
+                    if (data[0]) {
+                      setImageUrl(data[0].url);
+                    }
+                  }}
+                />
+              </div>
             </CardContent>
           </Card>
         </div>
