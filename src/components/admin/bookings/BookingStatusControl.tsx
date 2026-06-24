@@ -112,11 +112,7 @@ export function BookingStatusControl({
             className="w-full sm:w-auto sm:min-w-32"
             disabled={isPending || selectedStatus === currentStatus}
           >
-            {isPending ? (
-              <Loader2 className="mr-2 h-4 w-4 animate-spin" />
-            ) : (
-              labels.button
-            )}
+            {isPending ? <Loader2 className="animate-spin" /> : labels.button}
           </Button>
         </div>
       </div>

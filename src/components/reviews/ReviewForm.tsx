@@ -142,7 +142,7 @@ export function ReviewForm({ labels, success }: ReviewFormProps) {
         <Button type="submit" disabled={pending} className="w-full md:w-auto">
           {pending ? (
             <>
-              <Loader2 className="mr-2 h-4 w-4 animate-spin" />
+              <Loader2 className="animate-spin" />
               {labels.submitting}
             </>
           ) : (

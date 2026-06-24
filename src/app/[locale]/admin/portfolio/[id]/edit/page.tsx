@@ -7,7 +7,7 @@ import Image from "next/image";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
 
-import { ArrowLeft, Loader2 } from "lucide-react";
+import { ArrowLeft, Loader2, Save } from "lucide-react";
 import { toast } from "sonner";
 
 import { AdminPageHeader } from "@/components/admin/AdminPageHeader";
@@ -249,19 +249,20 @@ export default function EditPortfolioItemPage({
         </div>
 
         <div className="flex flex-col gap-3 sm:flex-row sm:justify-end">
-          <Button
-            variant="accent"
-            type="submit"
-            disabled={saving || !imageUrl}
-            className="w-full sm:w-auto"
-          >
-            {saving && <Loader2 className="mr-2 h-4 w-4 animate-spin" />}
-            {actions("save")}
+          <Button variant="accent" type="submit" disabled={saving || !imageUrl}>
+            {saving ? (
+              <>
+                <Loader2 className="animate-spin" />
+                {actions("saving")}
+              </>
+            ) : (
+              <>
+                <Save />
+                {actions("save")}
+              </>
+            )}
           </Button>
-          <Link
-            href={`/${locale}/admin/portfolio`}
-            className="w-full sm:w-auto"
-          >
+          <Link href={`/${locale}/admin/portfolio`}>
             <Button variant="outline" type="button" className="w-full">
               {actions("cancel")}
             </Button>

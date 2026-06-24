@@ -605,7 +605,8 @@
         "deleting": "Deleting...",
         "create": "Create item",
         "creating": "Creating...",
-        "save": "Save changes"
+        "save": "Save changes",
+        "saving": "Saving..."
       }
     },
     "layout": {

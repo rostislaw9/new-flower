@@ -5,6 +5,7 @@ import { useState } from "react";
 import { useLocale, useTranslations } from "next-intl";
 import { useRouter } from "next/navigation";
 
+import { Loader2, Plus } from "lucide-react";
 import { toast } from "sonner";
 
 import { AdminPageHeader } from "@/components/admin/AdminPageHeader";
@@ -32,7 +33,7 @@ export default function NewPortfolioItemPage() {
   const locale = useLocale();
   const t = useTranslations("admin.portfolio");
   const actions = useTranslations("admin.common.actions");
-  const [isSubmitting, setIsSubmitting] = useState(false);
+  const [creating, setCreating] = useState(false);
   const [category, setCategory] = useState("");
   const [uploadedImageUrl, setUploadedImageUrl] = useState<string>("");
   const [imageDimensions, setImageDimensions] = useState<{
@@ -46,7 +47,7 @@ export default function NewPortfolioItemPage() {
       return;
     }
 
-    setIsSubmitting(true);
+    setCreating(true);
     try {
       formData.append("imageUrl", uploadedImageUrl);
       if (imageDimensions) {
@@ -65,7 +66,7 @@ export default function NewPortfolioItemPage() {
     } catch {
       toast.error(t("new.alerts.genericError"));
     } finally {
-      setIsSubmitting(false);
+      setCreating(false);
     }
   }
 
@@ -175,16 +176,24 @@ export default function NewPortfolioItemPage() {
           <Button
             variant="accent"
             type="submit"
-            disabled={isSubmitting || !uploadedImageUrl}
-            className="w-full sm:w-auto"
+            disabled={creating || !uploadedImageUrl}
           >
-            {isSubmitting ? actions("creating") : actions("create")}
+            {creating ? (
+              <>
+                <Loader2 className="animate-spin" />
+                {actions("creating")}
+              </>
+            ) : (
+              <>
+                <Plus />
+                {actions("create")}
+              </>
+            )}
           </Button>
           <Button
             type="button"
             variant="outline"
             onClick={() => router.push(`/${locale}/admin/portfolio`)}
-            className="w-full sm:w-auto"
           >
             {actions("cancel")}
           </Button>

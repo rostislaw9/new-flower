@@ -93,6 +93,7 @@ export default async function BookingDetailPage({
         subtitle={detailT("subtitle")}
         actions={
           <Button
+            size="sm"
             href={getLocalizedPath("/admin/bookings", locale)}
             variant="outline"
             className="flex items-center gap-2"
