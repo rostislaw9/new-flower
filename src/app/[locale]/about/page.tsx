@@ -9,6 +9,7 @@ import { PageHeading } from "@/components/sections/PageHeading";
 import { JsonLd } from "@/components/seo/JsonLd";
 import { Eyebrow, Heading, Text } from "@/components/styled/Typography";
 import { Separator } from "@/components/ui/separator";
+import { getArtistImagesConfig } from "@/lib/artist-images-config";
 import { createBreadcrumbList } from "@/lib/breadcrumbs";
 
 export async function generateMetadata({
@@ -60,6 +61,9 @@ export default async function AboutPage() {
   const bioParagraphs = t.raw("bio.paragraphs") as string[];
   const specialisations = t.raw("specialisations.items") as Specialisation[];
   const timelineEvents = t.raw("timeline.events") as TimelineEvent[];
+  const artistImagesConfig = await getArtistImagesConfig();
+  const portraitUrl =
+    artistImagesConfig.portraitUrl || "/images/artist-portrait.jpg";
 
   return (
     <>
@@ -81,7 +85,7 @@ export default async function AboutPage() {
           <div className="grid grid-cols-1 gap-16 lg:grid-cols-2 lg:gap-24">
             <div className="relative aspect-[3/4]">
               <Image
-                src="/images/artist-portrait.jpg"
+                src={portraitUrl}
                 alt={t("bio.imageAlt")}
                 fill
                 className="object-cover"

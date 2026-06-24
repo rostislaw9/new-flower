@@ -616,7 +616,8 @@
         "dashboard": "Dashboard",
         "portfolio": "Portfolio",
         "bookings": "Bookings",
-        "reviews": "Reviews"
+        "reviews": "Reviews",
+        "artistImages": "Artist Images"
       },
       "openWebsite": "Homepage"
     },
@@ -653,6 +654,10 @@
         "reviews": {
           "title": "Manage reviews",
           "description": "View and manage client reviews"
+        },
+        "artistImages": {
+          "title": "Manage artist images",
+          "description": "Update artist portrait and shop logo"
         }
       }
     },
@@ -893,6 +898,32 @@
       },
       "previewAlt": "Upload {index}",
       "removeAria": "Remove image"
+    },
+    "artistImages": {
+      "title": "Artist Images",
+      "subtitle": "Manage artist portrait and shop logo",
+      "portrait": {
+        "title": "Artist Portrait",
+        "description": "Upload your portrait photo. This will be displayed on the homepage and about page",
+        "hint": "Drag and drop your portrait here, or click to browse"
+      },
+      "logo": {
+        "title": "Shop Logo",
+        "description": "Upload a logo for the shop. This will be used for social media and branding",
+        "hint": "Drag and drop your logo here, or click to browse"
+      },
+      "status": {
+        "uploading": "Uploading..."
+      },
+      "alerts": {
+        "portraitSaved": "Artist portrait updated successfully",
+        "logoSaved": "Shop logo updated successfully",
+        "portraitDeleted": "Artist portrait deleted",
+        "logoDeleted": "Shop logo deleted",
+        "uploadFailed": "Upload failed",
+        "saveFailed": "Failed to save image",
+        "deleteFailed": "Failed to delete image"
+      }
     }
   }
 }

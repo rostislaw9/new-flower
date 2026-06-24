@@ -7,6 +7,7 @@ import NextTopLoader from "nextjs-toploader";
 
 import { Footer } from "@/components/layout/Footer";
 import { Nav } from "@/components/layout/Nav";
+import { getArtistImagesConfig } from "@/lib/artist-images-config";
 
 const SITE_URL =
   process.env["NEXT_PUBLIC_SITE_URL"] ?? "https://newflower.studio";
@@ -18,6 +19,8 @@ export async function generateMetadata({
 }): Promise<Metadata> {
   const { locale } = await params;
   const t = await getTranslations({ locale, namespace: "metadata" });
+  const artistImagesConfig = await getArtistImagesConfig();
+  const logoUrl = artistImagesConfig.logoUrl || "/shop-logo.jpg";
 
   return {
     metadataBase: new URL(SITE_URL),
@@ -57,7 +60,7 @@ export async function generateMetadata({
       description: t("description"),
       images: [
         {
-          url: "/shop-logo.jpg",
+          url: logoUrl,
           width: 1200,
           height: 630,
           alt: "New Flower Tattoo — Portfolio",
@@ -70,7 +73,7 @@ export async function generateMetadata({
       creator: "@newflowertattoo",
       title: t("title"),
       description: t("description"),
-      images: ["/shop-logo.jpg"],
+      images: [logoUrl],
     },
     alternates: {
       canonical: SITE_URL,

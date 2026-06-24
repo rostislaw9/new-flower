@@ -15,6 +15,7 @@ import { Button } from "@/components/styled/Button";
 import { Eyebrow, Heading, Text } from "@/components/styled/Typography";
 import { Empty, EmptyHeader, EmptyTitle } from "@/components/ui/empty";
 import { Separator } from "@/components/ui/separator";
+import { getArtistImagesConfig } from "@/lib/artist-images-config";
 import { createBreadcrumbList } from "@/lib/breadcrumbs";
 import { getFeaturedItems } from "@/lib/portfolio-loader";
 import { getFeaturedReviews } from "@/lib/reviews";
@@ -52,12 +53,16 @@ export default async function HomePage() {
   const featuredItems = await getFeaturedItems();
   const featuredReviews = await getFeaturedReviews();
   const homeBreadcrumb = createBreadcrumbList([{ name: "Home", item: "/" }]);
+  const artistImagesConfig = await getArtistImagesConfig();
+  const portraitUrl =
+    artistImagesConfig.portraitUrl || "/images/artist-portrait.jpg";
+  const localBusinessSchemaData = await localBusinessSchema();
 
   return (
     <>
       <JsonLd data={homeBreadcrumb} />
       <JsonLd data={personSchema()} />
-      <JsonLd data={localBusinessSchema()} />
+      <JsonLd data={localBusinessSchemaData} />
       {/* Hero */}
       <Section size="xl" className="relative flex min-h-[90vh] items-center">
         <Container>
@@ -115,7 +120,7 @@ export default async function HomePage() {
           <div className="grid grid-cols-1 gap-16 lg:grid-cols-2 lg:gap-24">
             <div className="relative aspect-[3/4] lg:order-last">
               <Image
-                src="/images/artist-portrait.jpg"
+                src={portraitUrl}
                 alt={t("aboutPreview.imageAlt")}
                 fill
                 className="object-cover"

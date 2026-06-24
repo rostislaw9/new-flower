@@ -54,7 +54,11 @@ export function personSchema(): SchemaOrgObject {
   };
 }
 
-export function localBusinessSchema(): SchemaOrgObject {
+export async function localBusinessSchema(): Promise<SchemaOrgObject> {
+  const { getArtistImagesConfig } = await import("@/lib/artist-images-config");
+  const config = await getArtistImagesConfig();
+  const logoUrl = config.logoUrl || `${SITE_URL}/shop-logo.jpg`;
+
   return {
     "@context": "https://schema.org",
     "@type": "LocalBusiness",
@@ -86,7 +90,7 @@ export function localBusinessSchema(): SchemaOrgObject {
     currenciesAccepted: "EUR, RUB",
     paymentAccepted: "Cash, Bank Transfer",
     hasMap: "https://maps.google.com/?q=Phuket,Thailand",
-    image: `${SITE_URL}/shop-logo.jpg`,
+    image: logoUrl,
     sameAs: [
       "https://www.instagram.com/newflowertattoo",
       "https://t.me/newflowertattoo",

@@ -94,16 +94,22 @@ export default async function AdminDashboard() {
           description={t("stats.portfolio.description")}
         />
         <ActionCard
-          title={t("actions.bookings.title")}
-          description={t("actions.bookings.description")}
-          href="/admin/bookings"
-          icon="calendar"
+          title={t("actions.artistImages.title")}
+          description={t("actions.artistImages.description")}
+          href="/admin/artist-images"
+          icon="user"
         />
         <ActionCard
           title={t("actions.portfolio.title")}
           description={t("actions.portfolio.description")}
           href="/admin/portfolio"
           icon="images"
+        />
+        <ActionCard
+          title={t("actions.bookings.title")}
+          description={t("actions.bookings.description")}
+          href="/admin/bookings"
+          icon="calendar"
         />
         <ActionCard
           title={t("actions.reviews.title")}

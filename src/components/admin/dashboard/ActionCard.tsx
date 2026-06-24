@@ -3,7 +3,7 @@
 import { useRouter } from "next/navigation";
 import { useTopLoader } from "nextjs-toploader";
 
-import { Calendar, Images, Star } from "lucide-react";
+import { Calendar, Images, Star, User } from "lucide-react";
 
 import { Heading, Text } from "@/components/styled/Typography";
 import { Card } from "@/components/ui/card";
@@ -13,6 +13,7 @@ const ICONS = {
   calendar: Calendar,
   images: Images,
   star: Star,
+  user: User,
 } as const;
 
 type IconKey = keyof typeof ICONS;

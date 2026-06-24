@@ -7,7 +7,7 @@ import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { useTopLoader } from "nextjs-toploader";
 
-import { Calendar, Images, LayoutDashboard, Star } from "lucide-react";
+import { Calendar, Images, LayoutDashboard, Star, User } from "lucide-react";
 
 import { AdminPageShell } from "@/components/admin/AdminPageShell";
 import { AdminSidebarFooter } from "@/components/admin/sidebar/AdminSidebarFooter";
@@ -51,6 +51,7 @@ export default function AdminLayout({
   const { start } = useTopLoader();
   const navItems = [
     { href: "/admin", icon: LayoutDashboard, label: t("nav.dashboard") },
+    { href: "/admin/artist-images", icon: User, label: t("nav.artistImages") },
     { href: "/admin/portfolio", icon: Images, label: t("nav.portfolio") },
     { href: "/admin/bookings", icon: Calendar, label: t("nav.bookings") },
     { href: "/admin/reviews", icon: Star, label: t("nav.reviews") },
