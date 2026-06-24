@@ -14,7 +14,7 @@ import { AdminPageHeader } from "@/components/admin/AdminPageHeader";
 import { Badge } from "@/components/styled/Badge";
 import { Button } from "@/components/styled/Button";
 import { DeleteConfirmDialog } from "@/components/styled/DeleteConfirmDialog";
-import { Eyebrow, Text } from "@/components/styled/Typography";
+import { Heading, Text } from "@/components/styled/Typography";
 import { Card, CardContent } from "@/components/ui/card";
 import {
   Empty,
@@ -154,7 +154,7 @@ export default function PortfolioAdminPage() {
                 router.push(`/admin/portfolio/${item.id}/edit`);
               }
             }}
-            className="cursor-pointer overflow-hidden rounded-xl border-border/60 bg-card/60 shadow-lg transition-transform duration-200 ease-out hover:border-accent focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-accent"
+            className="group cursor-pointer overflow-hidden rounded-xl border-border/60 bg-card/60 shadow-lg transition-transform duration-200 ease-out hover:border-accent hover:bg-accent/5 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-accent"
           >
             <div className="relative aspect-[3/4] overflow-hidden bg-muted/20">
               {!loadedImages[item.id] && (
@@ -182,7 +182,13 @@ export default function PortfolioAdminPage() {
             <CardContent className="p-4">
               <div className="flex items-start justify-between gap-2">
                 <div>
-                  <Eyebrow size="sm">{item.title}</Eyebrow>
+                  <Heading
+                    serif={false}
+                    size="sm"
+                    className="transition-colors group-hover:text-accent"
+                  >
+                    {item.title}
+                  </Heading>
                   <Text size="sm" muted className="capitalize">
                     {item.category}
                   </Text>

@@ -755,7 +755,11 @@
         "ratingAll": "All ratings",
         "ratingOption": "{rating} stars",
         "apply": "Apply filters",
-        "clear": "Clear"
+        "clear": "Clear",
+        "submittedRangeLabel": "Submitted between",
+        "dateFrom": "From",
+        "dateTo": "To",
+        "dateClearLabel": "Clear date"
       },
       "table": {
         "client": "Client",

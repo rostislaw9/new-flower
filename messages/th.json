@@ -755,7 +755,11 @@
         "ratingAll": "ทุกคะแนน",
         "ratingOption": "ให้ {rating} ดาว",
         "apply": "ใช้ตัวกรอง",
-        "clear": "ล้าง"
+        "clear": "ล้าง",
+        "submittedRangeLabel": "ช่วงวันที่ส่ง",
+        "dateFrom": "ตั้งแต่",
+        "dateTo": "ถึง",
+        "dateClearLabel": "ล้างวันที่"
       },
       "table": {
         "client": "ลูกค้า",

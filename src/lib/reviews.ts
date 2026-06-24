@@ -6,6 +6,18 @@ import { prisma } from "@/lib/prisma";
 
 export const REVIEWS_PER_PAGE = 10;
 
+function toDate(value?: string, endOfDay?: boolean) {
+  if (!value) return undefined;
+  const date = new Date(value);
+  if (Number.isNaN(date.getTime())) return undefined;
+  if (endOfDay) {
+    date.setHours(23, 59, 59, 999);
+  } else {
+    date.setHours(0, 0, 0, 0);
+  }
+  return date;
+}
+
 export async function getFeaturedReviews(limit = 3) {
   noStore();
   return prisma.review.findMany({
@@ -19,9 +31,17 @@ interface GetReviewsInput {
   page: number;
   rating?: number;
   search?: string;
+  submittedFrom?: string;
+  submittedTo?: string;
 }
 
-export async function getReviews({ page, rating, search }: GetReviewsInput) {
+export async function getReviews({
+  page,
+  rating,
+  search,
+  submittedFrom,
+  submittedTo,
+}: GetReviewsInput) {
   noStore();
   const where: Prisma.ReviewWhereInput = {};
 
@@ -35,6 +55,18 @@ export async function getReviews({ page, rating, search }: GetReviewsInput) {
       { clientName: { contains: query, mode: "insensitive" } },
       { clientEmail: { contains: query, mode: "insensitive" } },
     ];
+  }
+
+  const createdFrom = toDate(submittedFrom);
+  const createdTo = toDate(submittedTo, true);
+  if (createdFrom || createdTo) {
+    where.createdAt = {};
+    if (createdFrom) {
+      where.createdAt.gte = createdFrom;
+    }
+    if (createdTo) {
+      where.createdAt.lte = createdTo;
+    }
   }
 
   const total = await prisma.review.count({ where });

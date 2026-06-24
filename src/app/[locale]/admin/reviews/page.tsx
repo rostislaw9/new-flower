@@ -30,7 +30,13 @@ import { cn } from "@/lib/utils";
 
 interface AdminReviewsPageProps {
   params: Promise<{ locale?: string }>;
-  searchParams: Promise<{ page?: string; search?: string; rating?: string }>;
+  searchParams: Promise<{
+    page?: string;
+    search?: string;
+    rating?: string;
+    submittedFrom?: string;
+    submittedTo?: string;
+  }>;
 }
 
 const ratingOptions = [1, 2, 3, 4, 5];
@@ -51,6 +57,8 @@ export default async function AdminReviewsPage({
   const search = resolvedSearchParams.search?.toString() ?? "";
   const ratingQuery = parseInt(resolvedSearchParams.rating ?? "", 10);
   const rating = ratingOptions.includes(ratingQuery) ? ratingQuery : undefined;
+  const submittedFrom = resolvedSearchParams.submittedFrom ?? "";
+  const submittedTo = resolvedSearchParams.submittedTo ?? "";
 
   const getReviewsInput: Parameters<typeof getReviews>[0] = {
     page,
@@ -60,6 +68,12 @@ export default async function AdminReviewsPage({
   }
   if (search.trim()) {
     getReviewsInput.search = search;
+  }
+  if (submittedFrom) {
+    getReviewsInput.submittedFrom = submittedFrom;
+  }
+  if (submittedTo) {
+    getReviewsInput.submittedTo = submittedTo;
   }
 
   const { reviews, total, totalPages, currentPage } =
@@ -89,6 +103,8 @@ export default async function AdminReviewsPage({
     params.set("page", String(targetPage));
     if (searchQuery) params.set("search", searchQuery);
     if (rating) params.set("rating", String(rating));
+    if (submittedFrom) params.set("submittedFrom", submittedFrom);
+    if (submittedTo) params.set("submittedTo", submittedTo);
     const query = params.toString();
     return `${basePath}${query ? `?${query}` : ""}`;
   };
@@ -103,6 +119,8 @@ export default async function AdminReviewsPage({
           <ReviewsFilters
             initialSearch={search}
             {...(rating ? { initialRating: rating } : {})}
+            initialSubmittedFrom={submittedFrom}
+            initialSubmittedTo={submittedTo}
             ratingOptions={ratingOptions.map((value) => ({
               value: String(value),
               label: t("filters.ratingOption", { rating: value }),
@@ -114,7 +132,12 @@ export default async function AdminReviewsPage({
               ratingAll: t("filters.ratingAll"),
               apply: t("filters.apply"),
               clear: t("filters.clear"),
+              submittedRangeLabel: t("filters.submittedRangeLabel"),
+              dateFrom: t("filters.dateFrom"),
+              dateTo: t("filters.dateTo"),
+              dateClearLabel: t("filters.dateClearLabel"),
             }}
+            locale={locale}
           />
         </CardContent>
       </Card>
