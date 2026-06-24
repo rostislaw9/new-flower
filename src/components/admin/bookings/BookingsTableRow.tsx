@@ -7,13 +7,13 @@ import { useTopLoader } from "nextjs-toploader";
 
 import type { AppointmentStatus } from "@prisma/client";
 import { Loader2, Trash2 } from "lucide-react";
+import { toast } from "sonner";
 
 import { Badge } from "@/components/styled/Badge";
 import { Button } from "@/components/styled/Button";
 import { DeleteConfirmDialog } from "@/components/styled/DeleteConfirmDialog";
 import { TableCell, TableRow } from "@/components/ui/table";
 import { deleteBookingAction } from "@/lib/actions/delete-booking";
-import { toast } from "sonner";
 
 interface BookingsTableRowProps {
   bookingId: string;
@@ -153,11 +153,7 @@ export function BookingsTableRow({
               event.stopPropagation()
             }
           >
-            {deletePending ? (
-              <Loader2 className="animate-spin" />
-            ) : (
-              <Trash2 />
-            )}
+            {deletePending ? <Loader2 className="animate-spin" /> : <Trash2 />}
           </Button>
         </TableCell>
       </TableRow>
