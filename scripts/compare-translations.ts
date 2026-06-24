@@ -26,7 +26,6 @@ const enOnly = enKeys.filter((key) => !thKeys.includes(key));
 const thOnly = thKeys.filter((key) => !enKeys.includes(key));
 
 if (enOnly.length === 0 && thOnly.length === 0) {
-  console.log("Both en.json and th.json have the same structure");
   process.exit(0);
 }
 

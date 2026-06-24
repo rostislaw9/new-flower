@@ -214,7 +214,7 @@ export function Lightbox({
             animate={{ opacity: 1, scale: 1 }}
             exit={{ opacity: 0, scale: 0.97 }}
             transition={{ duration: 0.25, ease: [0.16, 1, 0.3, 1] }}
-            className={`flex h-[${imageDimensions.height}px] w-[${imageDimensions.width}px] flex-col items-center gap-4`}
+            className="flex flex-col items-center gap-4"
             onClick={(e) => e.stopPropagation()}
           >
             <Image
@@ -224,7 +224,10 @@ export function Lightbox({
               height={imageDimensions.height}
               className="object-contain"
               preload
-              style={{ width: "auto", height: "auto" }}
+              style={{
+                width: `${imageDimensions.width}px`,
+                height: `${imageDimensions.height}px`,
+              }}
             />
 
             <div className="flex w-full items-baseline justify-between gap-4">
