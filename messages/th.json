@@ -805,7 +805,10 @@
         "deleteSuccess": "ลบรายการผลงานแล้ว",
         "deleteFailed": "ลบรายการผลงานไม่สำเร็จ",
         "bulkDeleteSuccess": "ลบ {count, plural, one {# รายการ} other {# รายการ}}แล้ว",
-        "bulkDeletePartialFail": "ลบ {success} จาก {total} รายการ บางรายการลบไม่สำเร็จ"
+        "bulkDeletePartialFail": "ลบ {success} จาก {total} รายการ บางรายการลบไม่สำเร็จ",
+        "markedFeatured": "ทำเครื่องหมายรายการเป็นไฮไลต์แล้ว",
+        "removedFeatured": "นำรายการออกจากไฮไลต์แล้ว",
+        "toggleFeaturedFailed": "อัปเดตสถานะไฮไลต์ไม่สำเร็จ"
       },
       "actions": {
         "viewPublic": "ดูบนเว็บไซต์",

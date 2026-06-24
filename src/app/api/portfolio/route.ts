@@ -1,12 +1,10 @@
 import { NextResponse } from "next/server";
 
-import { prisma } from "@/lib/prisma";
+import { getAdminPortfolioItems } from "@/lib/portfolio-loader";
 
 export async function GET(): Promise<NextResponse> {
   try {
-    const items = await prisma.portfolioItem.findMany({
-      orderBy: { createdAt: "desc" },
-    });
+    const items = await getAdminPortfolioItems();
 
     return NextResponse.json(items);
   } catch (error) {

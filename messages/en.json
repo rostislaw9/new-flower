@@ -805,7 +805,10 @@
         "deleteSuccess": "Portfolio item deleted",
         "deleteFailed": "Failed to delete portfolio item",
         "bulkDeleteSuccess": "{count, plural, one {# portfolio item deleted} other {# portfolio items deleted}}",
-        "bulkDeletePartialFail": "Deleted {success} of {total} items. Some deletions failed."
+        "bulkDeletePartialFail": "Deleted {success} of {total} items. Some deletions failed.",
+        "markedFeatured": "Item marked as featured",
+        "removedFeatured": "Item removed from featured",
+        "toggleFeaturedFailed": "Failed to update featured status"
       },
       "actions": {
         "viewPublic": "View on website",

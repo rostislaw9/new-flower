@@ -31,7 +31,10 @@ import {
 } from "@/components/ui/empty";
 import type { Locale } from "@/i18n/config";
 import { defaultLocale } from "@/i18n/config";
-import { deletePortfolioItem } from "@/lib/actions/portfolio";
+import {
+  deletePortfolioItem,
+  setPortfolioItemFeatured,
+} from "@/lib/actions/portfolio";
 import { getLocalizedPath, isSupportedLocale } from "@/lib/locale-utils";
 import type { PortfolioItem } from "@/lib/portfolio-data";
 
@@ -57,6 +60,10 @@ export default function PortfolioAdminPage() {
   const [selectedIds, setSelectedIds] = useState<Set<string>>(new Set());
   const [bulkDeleting, setBulkDeleting] = useState(false);
   const [confirmBulkDelete, setConfirmBulkDelete] = useState(false);
+  const [togglingFeaturedId, setTogglingFeaturedId] = useState<string | null>(
+    null,
+  );
+  const [hoveredBadgeId, setHoveredBadgeId] = useState<string | null>(null);
   const loadMoreRef = useRef<HTMLDivElement | null>(null);
 
   useEffect(() => {
@@ -177,6 +184,38 @@ export default function PortfolioAdminPage() {
     }
   };
 
+  async function handleToggleFeatured(
+    event: React.MouseEvent<HTMLButtonElement>,
+    itemId: string,
+    currentFeatured: boolean,
+  ) {
+    event.preventDefault();
+    event.stopPropagation();
+
+    setTogglingFeaturedId(itemId);
+    try {
+      const result = await setPortfolioItemFeatured(itemId, !currentFeatured);
+      if (result.success) {
+        toast.success(
+          !currentFeatured
+            ? t("alerts.markedFeatured")
+            : t("alerts.removedFeatured"),
+        );
+        // Refetch items to update grid with new sort order
+        const response = await fetch("/api/portfolio");
+        const data = (await response.json()) as PortfolioItem[];
+        setItems(data);
+      } else {
+        toast.error(result.message || t("alerts.toggleFeaturedFailed"));
+      }
+    } catch (error) {
+      console.error("[handleToggleFeatured] Error:", error);
+      toast.error(t("alerts.toggleFeaturedFailed"));
+    } finally {
+      setTogglingFeaturedId(null);
+    }
+  }
+
   if (loading) {
     return (
       <div className="flex min-h-[400px] flex-col items-center justify-center gap-3">
@@ -249,11 +288,37 @@ export default function PortfolioAdminPage() {
                   setLoadedImages((prev) => ({ ...prev, [item.id]: true }))
                 }
               />
-              {item.featured && (
-                <Badge variant="accent" className="absolute left-2 top-2">
-                  {t("featured")}
-                </Badge>
-              )}
+              <button
+                type="button"
+                onClick={(event) =>
+                  handleToggleFeatured(event, item.id, item.featured)
+                }
+                onPointerDown={(event) => event.stopPropagation()}
+                onKeyDown={(event) => event.stopPropagation()}
+                onMouseEnter={() => setHoveredBadgeId(item.id)}
+                onMouseLeave={() => setHoveredBadgeId(null)}
+                disabled={togglingFeaturedId === item.id}
+                className={`absolute left-2 top-2 z-20 transition-all ${
+                  item.featured
+                    ? hoveredBadgeId === item.id
+                      ? "opacity-80"
+                      : "opacity-100"
+                    : hoveredBadgeId === item.id
+                      ? "opacity-100"
+                      : "opacity-0"
+                }`}
+                aria-label={
+                  item.featured
+                    ? `Remove ${item.title} from featured`
+                    : `Mark ${item.title} as featured`
+                }
+              >
+                {togglingFeaturedId === item.id ? (
+                  <Loader2 className="h-5 w-5 animate-spin text-accent" />
+                ) : (
+                  <Badge variant="accent">{t("featured")}</Badge>
+                )}
+              </button>
               <button
                 type="button"
                 onClick={(event) => {
