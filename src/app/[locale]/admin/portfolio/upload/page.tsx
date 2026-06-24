@@ -44,7 +44,7 @@ import { Textarea } from "@/components/ui/textarea";
 import { type Locale, defaultLocale } from "@/i18n/config";
 import {
   createPortfolioItems,
-  deletePortfolioItem,
+  deleteCloudinaryImage,
 } from "@/lib/actions/portfolio";
 import { getLocalizedPath, isSupportedLocale } from "@/lib/locale-utils";
 import {
@@ -145,7 +145,7 @@ export default function UploadPortfolioPage() {
     const draft = drafts.find((d) => d.id === id);
     if (draft) {
       try {
-        await deletePortfolioItem(draft.imageUrl);
+        await deleteCloudinaryImage(draft.imageUrl);
       } catch (error) {
         console.error(
           "[UploadPortfolioPage] Failed to delete from Cloudinary:",

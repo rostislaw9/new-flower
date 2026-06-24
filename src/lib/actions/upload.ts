@@ -1,10 +1,6 @@
 "use server";
 
-import {
-  type UploadResult,
-  deleteFromCloudinary,
-  uploadToCloudinary,
-} from "@/lib/cloudinary";
+import { type UploadResult, uploadToCloudinary } from "@/lib/cloudinary";
 
 interface UploadActionResult {
   success: boolean;
@@ -52,21 +48,6 @@ export async function uploadToCloudinaryAction(
     return {
       success: false,
       error: error instanceof Error ? error.message : "Upload failed",
-    };
-  }
-}
-
-export async function deleteFromCloudinaryAction(
-  publicId: string,
-): Promise<{ success: boolean; error?: string }> {
-  try {
-    await deleteFromCloudinary(publicId);
-    return { success: true };
-  } catch (error) {
-    console.error("Cloudinary delete error:", error);
-    return {
-      success: false,
-      error: error instanceof Error ? error.message : "Delete failed",
     };
   }
 }

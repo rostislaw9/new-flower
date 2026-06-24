@@ -7,7 +7,14 @@ import Image from "next/image";
 import { useRouter } from "next/navigation";
 import { useTopLoader } from "nextjs-toploader";
 
-import { Eye, Loader2, Trash2, Upload } from "lucide-react";
+import {
+  CheckSquare2,
+  Eye,
+  Loader2,
+  Square,
+  Trash2,
+  Upload,
+} from "lucide-react";
 import { toast } from "sonner";
 
 import { AdminPageHeader } from "@/components/admin/AdminPageHeader";
@@ -47,6 +54,9 @@ export default function PortfolioAdminPage() {
   const [_deleting, setDeleting] = useState(false);
   const [visibleCount, setVisibleCount] = useState(INITIAL_BATCH);
   const [loadedImages, setLoadedImages] = useState<Record<string, boolean>>({});
+  const [selectedIds, setSelectedIds] = useState<Set<string>>(new Set());
+  const [bulkDeleting, setBulkDeleting] = useState(false);
+  const [confirmBulkDelete, setConfirmBulkDelete] = useState(false);
   const loadMoreRef = useRef<HTMLDivElement | null>(null);
 
   useEffect(() => {
@@ -115,6 +125,57 @@ export default function PortfolioAdminPage() {
     }
     setDeleting(false);
   }
+
+  async function handleBulkDelete() {
+    if (selectedIds.size === 0) return;
+
+    setBulkDeleting(true);
+    const idsToDelete = Array.from(selectedIds);
+    let successCount = 0;
+
+    for (const id of idsToDelete) {
+      const result = await deletePortfolioItem(id);
+      if (result.success) {
+        successCount++;
+      }
+    }
+
+    setItems((prev) => prev.filter((i) => !selectedIds.has(i.id)));
+    setSelectedIds(new Set());
+    setConfirmBulkDelete(false);
+
+    if (successCount === idsToDelete.length) {
+      toast.success(t("alerts.bulkDeleteSuccess", { count: successCount }));
+    } else {
+      toast.error(
+        t("alerts.bulkDeletePartialFail", {
+          success: successCount,
+          total: idsToDelete.length,
+        }),
+      );
+    }
+    setBulkDeleting(false);
+  }
+
+  const toggleSelectId = (id: string) => {
+    setSelectedIds((prev) => {
+      const next = new Set(prev);
+      if (next.has(id)) {
+        next.delete(id);
+      } else {
+        next.add(id);
+      }
+      return next;
+    });
+  };
+
+  const toggleSelectAll = () => {
+    if (selectedIds.size === visibleItems.length) {
+      setSelectedIds(new Set());
+    } else {
+      setSelectedIds(new Set(visibleItems.map((item) => item.id)));
+    }
+  };
 
   if (loading) {
     return (
@@ -193,6 +254,24 @@ export default function PortfolioAdminPage() {
                   {t("featured")}
                 </Badge>
               )}
+              <button
+                type="button"
+                onClick={(event) => {
+                  event.preventDefault();
+                  event.stopPropagation();
+                  toggleSelectId(item.id);
+                }}
+                onPointerDown={(event) => event.stopPropagation()}
+                onKeyDown={(event) => event.stopPropagation()}
+                className="absolute right-2 top-2 z-20 rounded-md bg-background/80 p-1 transition-colors hover:bg-background"
+                aria-label={`Select ${item.title}`}
+              >
+                {selectedIds.has(item.id) ? (
+                  <CheckSquare2 className="h-5 w-5 text-accent" />
+                ) : (
+                  <Square className="h-5 w-5 text-muted-foreground" />
+                )}
+              </button>
             </div>
             <CardContent className="p-4">
               <div className="flex items-start justify-between gap-2">
@@ -248,20 +327,33 @@ export default function PortfolioAdminPage() {
             <div className="flex flex-wrap gap-2">
               <Button
                 size="sm"
-                variant="outline"
+                variant="ghost"
                 href={publicHref}
                 target="_blank"
               >
                 <Eye />
                 {portfolioMenuT("viewPublic")}
               </Button>
-              <Button
-                size="sm"
-                variant="accent"
-                href={uploadHref}
-                className="flex items-center gap-2"
-              >
-                <Upload className="h-4 w-4" />
+              {selectedIds.size > 0 && (
+                <>
+                  <Button size="sm" variant="outline" onClick={toggleSelectAll}>
+                    {selectedIds.size === visibleItems.length
+                      ? t("bulkDelete.deselectAll")
+                      : t("bulkDelete.selectAll")}
+                  </Button>
+                  <Button
+                    size="sm"
+                    variant="destructive"
+                    onClick={() => setConfirmBulkDelete(true)}
+                    disabled={bulkDeleting}
+                  >
+                    <Trash2 />
+                    {actionsT("delete")} ({selectedIds.size})
+                  </Button>
+                </>
+              )}
+              <Button size="sm" variant="accent" href={uploadHref}>
+                <Upload />
                 {t("uploadButton")}
               </Button>
             </div>
@@ -289,6 +381,17 @@ export default function PortfolioAdminPage() {
         confirmLoadingLabel={actionsT("deleting")}
         onConfirm={handleDelete}
         onCancel={() => setDeleteItem(null)}
+      />
+
+      <DeleteConfirmDialog
+        open={confirmBulkDelete}
+        title={t("bulkDelete.title", { count: selectedIds.size })}
+        description={t("bulkDelete.description")}
+        cancelLabel={actionsT("cancel")}
+        confirmLabel={actionsT("delete")}
+        confirmLoadingLabel={actionsT("deleting")}
+        onConfirm={handleBulkDelete}
+        onCancel={() => setConfirmBulkDelete(false)}
       />
     </div>
   );
