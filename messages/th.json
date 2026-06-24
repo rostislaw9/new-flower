@@ -793,7 +793,7 @@
       "title": "การจัดการผลงาน",
       "description": "จัดการรายการผลงาน",
       "uploadButton": "เผยแพร่",
-      "addFirstButton": "อัปโหลดผลงานแรก",
+      "publishWork": "เผยแพร่ผลงานของคุณ",
       "noItems": "ยังไม่มีรายการผลงาน",
       "featured": "ไฮไลต์",
       "alerts": {

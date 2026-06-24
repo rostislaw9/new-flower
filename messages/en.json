@@ -793,7 +793,7 @@
       "title": "Portfolio Management",
       "description": "Manage your showcase collection",
       "uploadButton": "Publish",
-      "addFirstButton": "Upload your first piece",
+      "publishWork": "Publish your work",
       "noItems": "No portfolio items yet",
       "featured": "Featured",
       "alerts": {

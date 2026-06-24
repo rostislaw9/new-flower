@@ -205,7 +205,7 @@ export default function PortfolioAdminPage() {
       <EmptyContent>
         <Button variant="accent" href={uploadHref}>
           <Upload className="h-4 w-4" />
-          {t("addFirstButton")}
+          {t("publishWork")}
         </Button>
       </EmptyContent>
     </Empty>
