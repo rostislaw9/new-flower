@@ -5,7 +5,7 @@ import { useState } from "react";
 import { useLocale, useTranslations } from "next-intl";
 import { useRouter } from "next/navigation";
 
-import { ArrowLeft, Loader2, Plus } from "lucide-react";
+import { ArrowLeft, Loader2, SavePlus } from "lucide-react";
 import { toast } from "sonner";
 
 import { AdminPageHeader } from "@/components/admin/AdminPageHeader";
@@ -205,7 +205,7 @@ export default function NewPortfolioItemPage() {
               </>
             ) : (
               <>
-                <Plus />
+                <SavePlus />
                 {actionsT("create")}
               </>
             )}

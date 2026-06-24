@@ -30,15 +30,19 @@ interface ImageUploaderProps {
   onUploadComplete?: (
     data: { url: string; width: number; height: number }[],
   ) => void;
+  onUploadedUrlsChange?: (urls: Set<string>) => void;
   maxFiles?: number;
   allowedTypes?: string[];
+  showPreviewGrid?: boolean;
 }
 
 export function ImageUploader({
   folder,
   onUploadComplete,
+  onUploadedUrlsChange,
   maxFiles = 10,
   allowedTypes = ["image/jpeg", "image/png", "image/webp"],
+  showPreviewGrid = true,
 }: ImageUploaderProps) {
   const [images, setImages] = useState<ImageUpload[]>([]);
   const [isDragging, setIsDragging] = useState(false);
@@ -104,13 +108,13 @@ export function ImageUploader({
   };
 
   const uploadImages = async () => {
-    const uploadedData: { url: string; width: number; height: number }[] = [];
-
-    const uploadPromises = images.map(async (image, index) => {
+    const uploadPromises = images.map(async (image) => {
       if (image.uploaded) return;
 
       setImages((prev) =>
-        prev.map((img, i) => (i === index ? { ...img, uploading: true } : img)),
+        prev.map((img) =>
+          img.file === image.file ? { ...img, uploading: true } : img,
+        ),
       );
 
       try {
@@ -118,14 +122,15 @@ export function ImageUploader({
 
         if (result.success && result.data) {
           const data = result.data;
-          uploadedData.push({
+          const uploadedData = {
             url: data.url,
             width: data.width,
             height: data.height,
-          });
+          };
+
           setImages((prev) =>
-            prev.map((img, i) =>
-              i === index
+            prev.map((img) =>
+              img.file === image.file
                 ? {
                     ...img,
                     uploading: false,
@@ -138,10 +143,15 @@ export function ImageUploader({
                 : img,
             ),
           );
+
+          onUploadComplete?.([uploadedData]);
+          onUploadedUrlsChange?.(new Set([data.url]));
+
+          setImages((prev) => prev.filter((img) => img.file !== image.file));
         } else {
           setImages((prev) =>
-            prev.map((img, i) =>
-              i === index
+            prev.map((img) =>
+              img.file === image.file
                 ? {
                     ...img,
                     uploading: false,
@@ -153,8 +163,8 @@ export function ImageUploader({
         }
       } catch {
         setImages((prev) =>
-          prev.map((img, i) =>
-            i === index
+          prev.map((img) =>
+            img.file === image.file
               ? {
                   ...img,
                   uploading: false,
@@ -167,7 +177,6 @@ export function ImageUploader({
     });
 
     await Promise.all(uploadPromises);
-    onUploadComplete?.(uploadedData);
   };
 
   const allUploaded = images.length > 0 && images.every((img) => img.uploaded);
@@ -229,10 +238,10 @@ export function ImageUploader({
       </div>
 
       {/* Preview Grid */}
-      {images.length > 0 && (
-        <div className="flex gap-6">
+      {showPreviewGrid && images.length > 0 && (
+        <div className="flex flex-wrap gap-4 sm:gap-6">
           {images.map((image, index) => (
-            <div key={index} className="relative aspect-square h-24">
+            <div key={index} className="relative aspect-square h-20">
               <Image
                 src={image.url || image.preview}
                 width={300}

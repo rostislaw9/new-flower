@@ -208,7 +208,7 @@ export default function EditPortfolioItemPage({
                     <Checkbox
                       name="featured"
                       defaultChecked={item.featured}
-                      className="border-accent"
+                      className="border-accent data-[state=checked]:bg-accent"
                     />
                     <Badge variant="accent">{t("form.featuredLabel")}</Badge>
                   </div>

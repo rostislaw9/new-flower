@@ -2,12 +2,12 @@
 
 import { useEffect, useRef, useState } from "react";
 
-import { useTranslations } from "next-intl";
+import { useLocale, useTranslations } from "next-intl";
 import Image from "next/image";
 import { useRouter } from "next/navigation";
 import { useTopLoader } from "nextjs-toploader";
 
-import { Eye, Loader2, Plus, Trash2 } from "lucide-react";
+import { Eye, Loader2, Plus, Trash2, Upload } from "lucide-react";
 import { toast } from "sonner";
 
 import { AdminPageHeader } from "@/components/admin/AdminPageHeader";
@@ -22,7 +22,10 @@ import {
   EmptyHeader,
   EmptyTitle,
 } from "@/components/ui/empty";
+import type { Locale } from "@/i18n/config";
+import { defaultLocale } from "@/i18n/config";
 import { deletePortfolioItem } from "@/lib/actions/portfolio";
+import { getLocalizedPath, isSupportedLocale } from "@/lib/locale-utils";
 import type { PortfolioItem } from "@/lib/portfolio-data";
 
 const INITIAL_BATCH = 8;
@@ -31,6 +34,10 @@ const LOAD_MORE_BATCH = 6;
 export default function PortfolioAdminPage() {
   const router = useRouter();
   const { start } = useTopLoader();
+  const rawLocale = useLocale();
+  const locale: Locale = isSupportedLocale(rawLocale)
+    ? rawLocale
+    : defaultLocale;
   const t = useTranslations("admin.portfolio");
   const portfolioMenuT = useTranslations("admin.portfolio.actions");
   const actionsT = useTranslations("admin.common.actions");
@@ -120,6 +127,14 @@ export default function PortfolioAdminPage() {
 
   const hasItems = items.length > 0;
 
+  const editHref = (id: string) =>
+    getLocalizedPath(`/admin/portfolio/${id}/edit`, locale);
+  const newHref = getLocalizedPath("/admin/portfolio/new", locale);
+  const bulkHref = getLocalizedPath("/admin/portfolio/bulk", locale);
+  const publicHref = getLocalizedPath("/portfolio", locale, {
+    canonical: false,
+  });
+
   const emptyState = (
     <Empty className="border">
       <EmptyHeader>
@@ -128,9 +143,14 @@ export default function PortfolioAdminPage() {
         </EmptyTitle>
       </EmptyHeader>
       <EmptyContent>
-        <Button variant="accent" href="/admin/portfolio/new">
-          {t("addFirstButton")}
-        </Button>
+        <div className="flex flex-col gap-3 sm:flex-row">
+          <Button variant="accent" href={newHref}>
+            {t("addFirstButton")}
+          </Button>
+          <Button variant="outline" href={bulkHref}>
+            {t("bulkButton")}
+          </Button>
+        </div>
       </EmptyContent>
     </Empty>
   );
@@ -145,13 +165,13 @@ export default function PortfolioAdminPage() {
             tabIndex={0}
             onClick={() => {
               start();
-              router.push(`/admin/portfolio/${item.id}/edit`);
+              router.push(editHref(item.id));
             }}
             onKeyDown={(event) => {
               if (event.key === "Enter" || event.key === " ") {
                 event.preventDefault();
                 start();
-                router.push(`/admin/portfolio/${item.id}/edit`);
+                router.push(editHref(item.id));
               }
             }}
             className="group cursor-pointer overflow-hidden rounded-xl border-border/60 bg-card/60 shadow-lg transition-transform duration-200 ease-out hover:border-accent hover:bg-accent/5 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-accent"
@@ -233,14 +253,23 @@ export default function PortfolioAdminPage() {
             <div className="flex flex-wrap gap-2">
               <Button
                 size="sm"
-                variant="outline"
-                href="/portfolio"
+                variant="ghost"
+                href={publicHref}
                 target="_blank"
               >
                 <Eye />
                 {portfolioMenuT("viewPublic")}
               </Button>
-              <Button size="sm" variant="accent" href="/admin/portfolio/new">
+              <Button
+                size="sm"
+                variant="outline"
+                href={bulkHref}
+                className="flex items-center gap-2"
+              >
+                <Upload className="h-4 w-4" />
+                {t("bulkButton")}
+              </Button>
+              <Button size="sm" variant="accent" href={newHref}>
                 <Plus />
                 {t("addButton")}
               </Button>

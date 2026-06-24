@@ -1,10 +1,13 @@
 export type PortfolioCategory =
-  | "Fine Line"
   | "Blackwork"
-  | "Botanical"
-  | "Realism"
+  | "Thai Sak Yant"
   | "Neo Traditional"
+  | "Japanese"
+  | "Realism"
+  | "Botanical"
+  | "Fine Line"
   | "Geometric"
+  | "Tribe"
   | "Other";
 
 export interface PortfolioItem {
@@ -20,11 +23,14 @@ export interface PortfolioItem {
 }
 
 export const PORTFOLIO_CATEGORIES: PortfolioCategory[] = [
-  "Fine Line",
   "Blackwork",
-  "Botanical",
-  "Realism",
+  "Thai Sak Yant",
   "Neo Traditional",
+  "Japanese",
+  "Realism",
+  "Botanical",
+  "Fine Line",
   "Geometric",
+  "Tribe",
   "Other",
 ];

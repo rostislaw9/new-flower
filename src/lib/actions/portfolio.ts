@@ -3,10 +3,29 @@
 import { revalidatePath } from "next/cache";
 
 import { deleteFromCloudinary, extractPublicIdFromUrl } from "@/lib/cloudinary";
+import {
+  PORTFOLIO_CATEGORIES,
+  type PortfolioCategory,
+} from "@/lib/portfolio-data";
 import { prisma } from "@/lib/prisma";
 
 export type PortfolioActionResult =
   | { success: true; id?: string }
+  | { success: false; message: string };
+
+export interface PortfolioBulkCreateItem {
+  title: string;
+  description?: string | null;
+  imageUrl: string;
+  category: PortfolioCategory;
+  featured?: boolean;
+  displayOrder?: number;
+  width?: number;
+  height?: number;
+}
+
+export type PortfolioBulkActionResult =
+  | { success: true; count: number }
   | { success: false; message: string };
 
 export async function createPortfolioItem(
@@ -97,7 +116,6 @@ export async function deletePortfolioItem(
   id: string,
 ): Promise<PortfolioActionResult> {
   try {
-    // Get the item first to get the image URL
     const item = await prisma.portfolioItem.findUnique({
       where: { id },
     });
@@ -106,12 +124,8 @@ export async function deletePortfolioItem(
       return { success: false, message: "Item not found" };
     }
 
-    // Delete from database
-    await prisma.portfolioItem.delete({
-      where: { id },
-    });
+    await prisma.portfolioItem.delete({ where: { id } });
 
-    // Delete from Cloudinary
     if (item.imageUrl) {
       const publicId = extractPublicIdFromUrl(item.imageUrl);
       if (publicId) {
@@ -122,7 +136,6 @@ export async function deletePortfolioItem(
             "[deletePortfolioItem] Cloudinary delete error:",
             cloudinaryError,
           );
-          // Continue even if Cloudinary delete fails
         }
       }
     }
@@ -134,5 +147,71 @@ export async function deletePortfolioItem(
   } catch (error) {
     console.error("[deletePortfolioItem] Error:", error);
     return { success: false, message: "Failed to delete portfolio item" };
+  }
+}
+
+export async function createPortfolioItemsBulk(
+  items: PortfolioBulkCreateItem[],
+): Promise<PortfolioBulkActionResult> {
+  if (!Array.isArray(items) || items.length === 0) {
+    return { success: false, message: "No portfolio items provided" };
+  }
+
+  const prepared = items.map((item, index) => {
+    const title = item.title?.trim() ?? "";
+    const imageUrl = item.imageUrl?.trim() ?? "";
+    const description = item.description?.trim() || null;
+    const featured = Boolean(item.featured);
+    const displayOrder = Number.isFinite(item.displayOrder)
+      ? Number(item.displayOrder)
+      : index;
+    const width = item.width ?? 800;
+    const height = item.height ?? 600;
+    const isValidCategory = PORTFOLIO_CATEGORIES.includes(item.category);
+
+    return {
+      title,
+      description,
+      imageUrl,
+      category: isValidCategory ? item.category : undefined,
+      featured,
+      displayOrder,
+      width,
+      height,
+    };
+  });
+
+  const hasInvalid = prepared.some(
+    (item) => !item.title || !item.imageUrl || !item.category,
+  );
+
+  if (hasInvalid) {
+    return {
+      success: false,
+      message: "Each item requires a title, image URL, and category",
+    };
+  }
+
+  try {
+    const result = await prisma.portfolioItem.createMany({
+      data: prepared as Array<
+        Omit<PortfolioBulkCreateItem, "category"> & {
+          category: PortfolioCategory;
+          width: number;
+          height: number;
+        }
+      >,
+    });
+
+    revalidatePath("/portfolio");
+    revalidatePath("/admin/portfolio");
+
+    return { success: true, count: result.count };
+  } catch (error) {
+    console.error("[createPortfolioItemsBulk] Error:", error);
+    return {
+      success: false,
+      message: "Failed to create portfolio items",
+    };
   }
 }
