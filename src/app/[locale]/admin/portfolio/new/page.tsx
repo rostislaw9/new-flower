@@ -5,7 +5,7 @@ import { useState } from "react";
 import { useLocale, useTranslations } from "next-intl";
 import { useRouter } from "next/navigation";
 
-import { Loader2, Plus } from "lucide-react";
+import { ArrowLeft, Loader2, Plus } from "lucide-react";
 import { toast } from "sonner";
 
 import { AdminPageHeader } from "@/components/admin/AdminPageHeader";
@@ -25,14 +25,20 @@ import {
   SelectValue,
 } from "@/components/ui/select";
 import { Textarea } from "@/components/ui/textarea";
+import type { Locale } from "@/i18n/config";
+import { defaultLocale } from "@/i18n/config";
 import { createPortfolioItem } from "@/lib/actions/portfolio";
+import { getLocalizedPath, isSupportedLocale } from "@/lib/locale-utils";
 import { PORTFOLIO_CATEGORIES } from "@/lib/portfolio-data";
 
 export default function NewPortfolioItemPage() {
   const router = useRouter();
-  const locale = useLocale();
+  const rawLocale = useLocale();
+  const locale: Locale = isSupportedLocale(rawLocale)
+    ? rawLocale
+    : defaultLocale;
   const t = useTranslations("admin.portfolio");
-  const actions = useTranslations("admin.common.actions");
+  const actionsT = useTranslations("admin.common.actions");
   const [creating, setCreating] = useState(false);
   const [category, setCategory] = useState("");
   const [uploadedImageUrl, setUploadedImageUrl] = useState<string>("");
@@ -72,7 +78,21 @@ export default function NewPortfolioItemPage() {
 
   return (
     <div className="flex flex-col gap-8">
-      <AdminPageHeader title={t("new.title")} subtitle={t("new.subtitle")} />
+      <AdminPageHeader
+        title={t("new.title")}
+        subtitle={t("new.subtitle")}
+        actions={
+          <Button
+            size="sm"
+            href={getLocalizedPath("/admin/portfolio", locale)}
+            variant="outline"
+            className="flex items-center gap-2"
+          >
+            <ArrowLeft />
+            {actionsT("back")}
+          </Button>
+        }
+      />
 
       <form action={handleSubmit} className="flex flex-col gap-6">
         <Card className="rounded-2xl border border-border/60 bg-card/60 shadow-lg">
@@ -181,12 +201,12 @@ export default function NewPortfolioItemPage() {
             {creating ? (
               <>
                 <Loader2 className="animate-spin" />
-                {actions("creating")}
+                {actionsT("creating")}
               </>
             ) : (
               <>
                 <Plus />
-                {actions("create")}
+                {actionsT("create")}
               </>
             )}
           </Button>
@@ -195,7 +215,7 @@ export default function NewPortfolioItemPage() {
             variant="outline"
             onClick={() => router.push(`/${locale}/admin/portfolio`)}
           >
-            {actions("cancel")}
+            {actionsT("cancel")}
           </Button>
         </div>
       </form>

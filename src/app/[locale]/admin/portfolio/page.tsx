@@ -32,8 +32,8 @@ export default function PortfolioAdminPage() {
   const router = useRouter();
   const { start } = useTopLoader();
   const t = useTranslations("admin.portfolio");
-  const portfolioMenu = useTranslations("admin.portfolio.actions");
-  const actions = useTranslations("admin.common.actions");
+  const portfolioMenuT = useTranslations("admin.portfolio.actions");
+  const actionsT = useTranslations("admin.common.actions");
   const [items, setItems] = useState<PortfolioItem[]>([]);
   const [loading, setLoading] = useState(true);
   const [deleteItem, setDeleteItem] = useState<PortfolioItem | null>(null);
@@ -181,7 +181,7 @@ export default function PortfolioAdminPage() {
                 <Button
                   size="icon-borderless"
                   variant="ghost"
-                  aria-label={portfolioMenu("delete")}
+                  aria-label={portfolioMenuT("delete")}
                   className="-mr-2 -mt-2 text-destructive hover:text-destructive focus-visible:ring-destructive"
                   onClick={(event) => {
                     event.preventDefault();
@@ -192,14 +192,9 @@ export default function PortfolioAdminPage() {
                   onKeyDown={(event) => event.stopPropagation()}
                 >
                   <Trash2 className="h-4 w-4" />
-                  <span className="sr-only">{portfolioMenu("delete")}</span>
+                  <span className="sr-only">{portfolioMenuT("delete")}</span>
                 </Button>
               </div>
-              {item.description && (
-                <Text size="sm" muted className="mt-2 line-clamp-2">
-                  {item.description}
-                </Text>
-              )}
             </CardContent>
           </Card>
         ))}
@@ -228,7 +223,7 @@ export default function PortfolioAdminPage() {
                 target="_blank"
               >
                 <Eye />
-                {portfolioMenu("viewPublic")}
+                {portfolioMenuT("viewPublic")}
               </Button>
               <Button size="sm" variant="accent" href="/admin/portfolio/new">
                 <Plus />
@@ -254,9 +249,9 @@ export default function PortfolioAdminPage() {
         description={
           deleteItem ? t("deleteConfirm", { title: deleteItem.title }) : ""
         }
-        cancelLabel={actions("cancel")}
-        confirmLabel={actions("delete")}
-        confirmLoadingLabel={actions("deleting")}
+        cancelLabel={actionsT("cancel")}
+        confirmLabel={actionsT("delete")}
+        confirmLoadingLabel={actionsT("deleting")}
         onConfirm={handleDelete}
         onCancel={() => setDeleteItem(null)}
       />

@@ -719,7 +719,6 @@
           "preferredDatesCount": "{count, plural, one {# preferred date} other {# preferred dates}}",
           "referenceCount": "{count, plural, one {# reference image} other {# reference images}}"
         },
-        "back": "Back to bookings",
         "updated": "Updated",
         "submitted": "Submitted",
         "fullName": "Full name",

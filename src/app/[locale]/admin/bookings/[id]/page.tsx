@@ -33,6 +33,7 @@ export default async function BookingDetailPage({
     ? rawLocale
     : defaultLocale;
   noStore();
+  const actionsT = await getTranslations("admin.common.actions");
   const detailT = await getTranslations("admin.bookings.detail");
   const statusesT = await getTranslations("admin.bookings.statuses");
 
@@ -99,7 +100,7 @@ export default async function BookingDetailPage({
             className="flex items-center gap-2"
           >
             <ArrowLeft />
-            {detailT("back")}
+            {actionsT("back")}
           </Button>
         }
       />

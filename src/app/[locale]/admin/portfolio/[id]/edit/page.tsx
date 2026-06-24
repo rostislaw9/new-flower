@@ -28,7 +28,10 @@ import {
   SelectValue,
 } from "@/components/ui/select";
 import { Textarea } from "@/components/ui/textarea";
+import type { Locale } from "@/i18n/config";
+import { defaultLocale } from "@/i18n/config";
 import { updatePortfolioItem } from "@/lib/actions/portfolio";
+import { getLocalizedPath, isSupportedLocale } from "@/lib/locale-utils";
 import type { PortfolioItem } from "@/lib/portfolio-data";
 import { PORTFOLIO_CATEGORIES } from "@/lib/portfolio-data";
 
@@ -39,10 +42,13 @@ interface EditPortfolioItemPageProps {
 export default function EditPortfolioItemPage({
   params,
 }: EditPortfolioItemPageProps) {
-  const { id, locale } = use(params);
+  const { locale: rawLocale, id } = use(params);
+  const locale: Locale = isSupportedLocale(rawLocale)
+    ? rawLocale
+    : defaultLocale;
   const router = useRouter();
   const t = useTranslations("admin.portfolio");
-  const actions = useTranslations("admin.common.actions");
+  const actionsT = useTranslations("admin.common.actions");
   const [item, setItem] = useState<PortfolioItem | null>(null);
   const [loading, setLoading] = useState(true);
   const [saving, setSaving] = useState(false);
@@ -106,7 +112,7 @@ export default function EditPortfolioItemPage({
           <Link href={`/${locale}/admin/portfolio`}>
             <Button variant="outline" size="sm">
               <ArrowLeft className="mr-2 h-4 w-4" />
-              {actions("back")}
+              {actionsT("back")}
             </Button>
           </Link>
         </div>
@@ -119,7 +125,21 @@ export default function EditPortfolioItemPage({
 
   return (
     <div className="flex flex-col gap-8">
-      <AdminPageHeader title={t("edit.title")} subtitle={t("edit.subtitle")} />
+      <AdminPageHeader
+        title={t("edit.title")}
+        subtitle={t("edit.subtitle")}
+        actions={
+          <Button
+            size="sm"
+            href={getLocalizedPath("/admin/portfolio", locale)}
+            variant="outline"
+            className="flex items-center gap-2"
+          >
+            <ArrowLeft />
+            {actionsT("back")}
+          </Button>
+        }
+      />
 
       {error && (
         <div className="border border-red-200 bg-red-950/50 p-4 text-red-400">
@@ -253,18 +273,18 @@ export default function EditPortfolioItemPage({
             {saving ? (
               <>
                 <Loader2 className="animate-spin" />
-                {actions("saving")}
+                {actionsT("saving")}
               </>
             ) : (
               <>
                 <Save />
-                {actions("save")}
+                {actionsT("save")}
               </>
             )}
           </Button>
           <Link href={`/${locale}/admin/portfolio`}>
             <Button variant="outline" type="button" className="w-full">
-              {actions("cancel")}
+              {actionsT("cancel")}
             </Button>
           </Link>
         </div>

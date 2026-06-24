@@ -66,7 +66,7 @@ export default async function AdminReviewsPage({
     await getReviews(getReviewsInput);
 
   const t = await getTranslations("admin.reviews");
-  const actions = await getTranslations("admin.common.actions");
+  const actionsT = await getTranslations("admin.common.actions");
 
   const formatDateWithTime = (value: Date | string) =>
     formatDateTime(value, locale);
@@ -203,9 +203,9 @@ export default async function AdminReviewsPage({
                             deleteDescription: t("table.deleteDescription"),
                           }}
                           dialogLabels={{
-                            cancel: actions("cancel"),
-                            confirm: actions("delete"),
-                            confirming: actions("deleting"),
+                            cancel: actionsT("cancel"),
+                            confirm: actionsT("delete"),
+                            confirming: actionsT("deleting"),
                           }}
                           messages={{
                             toggleOn: t("messages.toggleFeaturedOn"),
