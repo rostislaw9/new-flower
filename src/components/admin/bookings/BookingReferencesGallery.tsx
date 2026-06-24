@@ -26,15 +26,16 @@ export function BookingReferencesGallery({
   emptyLabel,
 }: BookingReferencesGalleryProps) {
   const [activeIndex, setActiveIndex] = useState<number | null>(null);
+  const requiresUnoptimized = (url: string) => /^https?:\/\//i.test(url);
   const lightboxItems = useMemo<LightboxItem[]>(
     () =>
       items.map((item) => ({
         id: item.id,
         title: item.title,
         imageUrl: item.imageUrl,
-        category: "Reference",
         width: item.width,
         height: item.height,
+        unoptimized: requiresUnoptimized(item.imageUrl),
       })),
     [items],
   );
@@ -62,6 +63,7 @@ export function BookingReferencesGallery({
                 sizes="(max-width: 640px) 100vw, (max-width: 1024px) 50vw, 33vw"
                 className="object-cover transition-transform duration-500 group-hover:scale-105"
                 loading="eager"
+                unoptimized={requiresUnoptimized(item.imageUrl)}
               />
             </div>
           </button>

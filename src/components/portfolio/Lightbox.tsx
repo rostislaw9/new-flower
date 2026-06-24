@@ -43,6 +43,7 @@ export interface LightboxItem {
   category?: string | null;
   width: number;
   height: number;
+  unoptimized?: boolean;
 }
 
 interface LightboxProps {
@@ -64,6 +65,7 @@ export function Lightbox({
   const hasPrev = activeIndex !== null && activeIndex > 0;
   const hasNext = activeIndex !== null && activeIndex < items.length - 1;
   const [imageLoading, setImageLoading] = useState(true);
+  const shouldUnoptimize = activeItem?.unoptimized ?? false;
 
   const handlePrev = useCallback(() => {
     if (activeIndex !== null && hasPrev) onNavigate(activeIndex - 1);
@@ -246,6 +248,7 @@ export function Lightbox({
                   imageLoading ? "opacity-0" : "opacity-100",
                 )}
                 preload
+                unoptimized={shouldUnoptimize}
                 style={{
                   width: `${imageDimensions.width}px`,
                   height: `${imageDimensions.height}px`,
