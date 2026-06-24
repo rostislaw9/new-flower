@@ -854,7 +854,7 @@
         },
         "alerts": {
           "missingFields": "Please provide a title and category for every uploaded image.",
-          "created": "{count, plural, one {# item created} other {# items created}}",
+          "created": "{count, plural, one {# portfolio item created} other {# portfolio items created}}",
           "createFailed": "Failed to create portfolio items"
         },
         "buttons": {

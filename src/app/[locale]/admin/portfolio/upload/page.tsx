@@ -11,7 +11,6 @@ import { useTopLoader } from "nextjs-toploader";
 import {
   ArrowLeft,
   CheckCircle2,
-  CircleAlert,
   Loader2,
   SavePlus,
   Trash2,
@@ -88,6 +87,7 @@ export default function UploadPortfolioPage() {
   const [drafts, setDrafts] = useState<DraftPortfolioItem[]>([]);
   const [selectedId, setSelectedId] = useState<string | null>(null);
   const [submitting, setSubmitting] = useState(false);
+  const [removingId, setRemovingId] = useState<string | null>(null);
 
   const backHref = useMemo(
     () => getLocalizedPath("/admin/portfolio", locale),
@@ -142,6 +142,7 @@ export default function UploadPortfolioPage() {
   };
 
   const handleRemoveDraft = async (id: string) => {
+    setRemovingId(id);
     const draft = drafts.find((d) => d.id === id);
     if (draft) {
       try {
@@ -170,6 +171,7 @@ export default function UploadPortfolioPage() {
       });
       return next;
     });
+    setRemovingId(null);
   };
 
   useEffect(() => {
@@ -329,10 +331,8 @@ export default function UploadPortfolioPage() {
                           sizes="(max-width: 768px) 50vw, 20vw"
                           className="object-cover"
                         />
-                        {isComplete ? (
+                        {isComplete && (
                           <CheckCircle2 className="absolute right-2 top-2 h-5 w-5 text-emerald-600/80" />
-                        ) : (
-                          <CircleAlert className="absolute right-2 top-2 h-5 w-5 text-rose-600/80" />
                         )}
                         <div className="absolute inset-x-0 bottom-0 flex items-center justify-between bg-gradient-to-t from-black/70 to-transparent px-2 pb-2 pt-6 text-xs text-white">
                           <span>#{index + 1}</span>
@@ -341,7 +341,7 @@ export default function UploadPortfolioPage() {
                               "rounded-full px-2 py-0.5 text-[10px] font-medium",
                               isComplete
                                 ? "bg-emerald-600/80 text-white"
-                                : "bg-rose-600/80 text-white",
+                                : "bg-amber-600/80 text-white",
                             )}
                           >
                             {isComplete
@@ -376,8 +376,13 @@ export default function UploadPortfolioPage() {
                     size="sm"
                     variant="destructive"
                     onClick={() => handleRemoveDraft(selectedDraft.id)}
+                    disabled={removingId === selectedDraft.id}
                   >
-                    <Trash2 />
+                    {removingId === selectedDraft.id ? (
+                      <Loader2 className="animate-spin" />
+                    ) : (
+                      <Trash2 />
+                    )}
                     {uploadT("buttons.remove")}
                   </Button>
                 </div>
