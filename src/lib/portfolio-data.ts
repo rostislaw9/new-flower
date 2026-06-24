@@ -1,9 +1,9 @@
 export type PortfolioCategory =
+  | "Realism"
   | "Blackwork"
   | "Thai Sak Yant"
   | "Neo Traditional"
-  | "Japanese"
-  | "Realism"
+  | "Japanese Style"
   | "Botanical"
   | "Fine Line"
   | "Geometric"
@@ -23,11 +23,11 @@ export interface PortfolioItem {
 }
 
 export const PORTFOLIO_CATEGORIES: PortfolioCategory[] = [
+  "Realism",
   "Blackwork",
   "Thai Sak Yant",
   "Neo Traditional",
-  "Japanese",
-  "Realism",
+  "Japanese Style",
   "Botanical",
   "Fine Line",
   "Geometric",
