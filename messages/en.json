@@ -665,9 +665,9 @@
         "statusLabel": "Status",
         "bookingIdLabel": "Booking ID",
         "bookingIdPlaceholder": "Paste booking ID",
-        "submittedRangeLabel": "Submitted between",
-        "updatedRangeLabel": "Updated between",
-        "preferredRangeLabel": "Preferred dates between",
+        "submittedRangeLabel": "Submitted",
+        "updatedRangeLabel": "Updated",
+        "preferredRangeLabel": "Preferred dates",
         "dateClearLabel": "Clear date",
         "statusOptions": {
           "all": "All statuses",
@@ -691,6 +691,8 @@
         "bookingId": "Booking ID · {code}",
         "actions": "Actions",
         "empty": "No bookings found",
+        "deleteTitle": "Delete booking",
+        "deleteDescription": "This action cannot be undone.",
         "view": "View details →",
         "moreDates": "+{count} more"
       },
@@ -705,6 +707,10 @@
         "showing": "Page {current}/{totalPages} · {total} bookings",
         "previous": "Previous",
         "next": "Next"
+      },
+      "messages": {
+        "deleteSuccess": "Booking deleted",
+        "deleteError": "Failed to delete booking"
       },
       "detail": {
         "title": "Booking details",
@@ -756,7 +762,7 @@
         "ratingOption": "{rating} stars",
         "apply": "Apply filters",
         "clear": "Clear",
-        "submittedRangeLabel": "Submitted between",
+        "submittedRangeLabel": "Submitted",
         "dateFrom": "From",
         "dateTo": "To",
         "dateClearLabel": "Clear date"

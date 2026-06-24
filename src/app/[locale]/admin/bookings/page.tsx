@@ -221,6 +221,7 @@ export default async function BookingsAdminPage({
   } = await getBookings(filtersInput);
 
   const t = await getTranslations("admin.bookings");
+  const actionsT = await getTranslations("admin.common.actions");
   const formatDateOnly = (value: Date | string) => formatDate(value, locale);
   const formatDateWithTime = (value: Date | string) =>
     formatDateTime(value, locale);
@@ -323,13 +324,16 @@ export default async function BookingsAdminPage({
                   <TableHead>{t("table.dates")}</TableHead>
                   <TableHead>{t("table.submitted")}</TableHead>
                   <TableHead>{t("table.updated")}</TableHead>
+                  <TableHead className="text-right">
+                    {t("table.actions")}
+                  </TableHead>
                 </TableRow>
               </TableHeader>
               <TableBody>
                 {bookings.length === 0 ? (
                   <TableRow>
                     <TableCell
-                      colSpan={5}
+                      colSpan={6}
                       className="py-12 text-center text-muted-foreground"
                     >
                       {t("table.empty")}
@@ -357,6 +361,7 @@ export default async function BookingsAdminPage({
                     return (
                       <BookingsTableRow
                         key={booking.id}
+                        bookingId={booking.id}
                         detailHref={detailHref}
                         clientName={booking.fullName}
                         clientEmail={booking.email}
@@ -368,6 +373,17 @@ export default async function BookingsAdminPage({
                         submittedLabel={formatDateWithTime(booking.createdAt)}
                         updatedLabel={formatDateWithTime(booking.updatedAt)}
                         viewLabel={t("table.view")}
+                        deleteLabels={{
+                          title: t("table.deleteTitle"),
+                          description: t("table.deleteDescription"),
+                          confirm: actionsT("delete"),
+                          confirming: actionsT("deleting"),
+                          cancel: actionsT("cancel"),
+                        }}
+                        messages={{
+                          deleteSuccess: t("messages.deleteSuccess"),
+                          deleteError: t("messages.deleteError"),
+                        }}
                         {...(moreDatesLabel ? { moreDatesLabel } : {})}
                       />
                     );
@@ -379,7 +395,7 @@ export default async function BookingsAdminPage({
 
           {/* Pagination */}
           {totalPages > 1 && (
-            <div className="flex flex-col gap-4 border-t border-border px-4 py-4 md:flex-row md:items-center md:justify-between">
+            <div className="flex flex-col items-center gap-4 border-t border-border px-4 py-4 md:flex-row md:justify-between">
               <Text size="sm" muted className="whitespace-nowrap">
                 {t("pagination.showing", {
                   current: activePage,
@@ -387,7 +403,7 @@ export default async function BookingsAdminPage({
                   total,
                 })}
               </Text>
-              <Pagination className="justify-end">
+              <Pagination className="md:justify-end">
                 <PaginationContent>
                   <PaginationItem>
                     <PaginationPrevious

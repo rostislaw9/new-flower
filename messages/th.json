@@ -691,6 +691,8 @@
         "bookingId": "รหัสการจอง · {code}",
         "actions": "การจัดการ",
         "empty": "ยังไม่มีการจอง",
+        "deleteTitle": "ลบการจอง",
+        "deleteDescription": "การกระทำนี้ไม่สามารถย้อนกลับได้",
         "view": "ดูรายละเอียด →",
         "moreDates": "+{count} วัน"
       },
@@ -705,6 +707,10 @@
         "showing": "หน้า {current}/{totalPages} · ทั้งหมด {total} รายการ",
         "previous": "ก่อนหน้า",
         "next": "ถัดไป"
+      },
+      "messages": {
+        "deleteSuccess": "ลบการจองแล้ว",
+        "deleteError": "ลบการจองไม่สำเร็จ"
       },
       "detail": {
         "title": "รายละเอียดการจอง",

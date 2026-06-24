@@ -256,7 +256,7 @@ export default async function AdminReviewsPage({
                   total,
                 })}
               </Text>
-              <Pagination className="w-auto justify-end">
+              <Pagination className="md:justify-end">
                 <PaginationContent>
                   <PaginationItem>
                     <PaginationPrevious

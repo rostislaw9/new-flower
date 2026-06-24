@@ -103,7 +103,7 @@ export function ReviewActions({
           onClick={() => setConfirmOpen(true)}
           disabled={deletePending}
         >
-          <Trash2 />
+          {deletePending ? <Loader2 className="animate-spin" /> : <Trash2 />}
         </Button>
       </div>
 
