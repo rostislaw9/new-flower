@@ -94,11 +94,7 @@ export function ReviewActions({
           onClick={handleToggleFeatured}
           disabled={togglePending || deletePending}
         >
-          {togglePending ? (
-            <Loader2 className="animate-spin" />
-          ) : (
-            <Flag />
-          )}
+          {togglePending ? <Loader2 className="animate-spin" /> : <Flag />}
         </Button>
         <Button
           type="button"

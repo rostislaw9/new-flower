@@ -7,26 +7,13 @@ import Image from "next/image";
 import { useRouter } from "next/navigation";
 import { useTopLoader } from "nextjs-toploader";
 
-import {
-  Eye,
-  Loader2,
-  MoreHorizontal,
-  Pencil,
-  Plus,
-  Trash2,
-} from "lucide-react";
+import { Eye, Loader2, Plus, Trash2 } from "lucide-react";
 import { toast } from "sonner";
 
 import { AdminPageHeader } from "@/components/admin/AdminPageHeader";
 import { Badge } from "@/components/styled/Badge";
 import { Button } from "@/components/styled/Button";
 import { DeleteConfirmDialog } from "@/components/styled/DeleteConfirmDialog";
-import {
-  DropdownMenu,
-  DropdownMenuContent,
-  DropdownMenuItem,
-  DropdownMenuTrigger,
-} from "@/components/styled/DropdownMenu";
 import { Eyebrow, Text } from "@/components/styled/Typography";
 import { Card, CardContent } from "@/components/ui/card";
 import {
@@ -166,7 +153,7 @@ export default function PortfolioAdminPage() {
                 router.push(`/admin/portfolio/${item.id}/edit`);
               }
             }}
-            className="cursor-pointer overflow-hidden rounded-xl border-border/60 bg-card/60 shadow-lg transition-transform duration-200 ease-out hover:-translate-y-1 hover:shadow-xl focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-accent"
+            className="cursor-pointer overflow-hidden rounded-xl border-border/60 bg-card/60 shadow-lg transition-transform duration-200 ease-out hover:border-accent focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-accent"
           >
             <div className="relative aspect-[3/4]">
               <Image
@@ -191,48 +178,22 @@ export default function PortfolioAdminPage() {
                     {item.category}
                   </Text>
                 </div>
-                <DropdownMenu>
-                  <DropdownMenuTrigger asChild>
-                    <Button
-                      size="icon-borderless"
-                      variant="ghost"
-                      aria-label={portfolioMenu("menuLabel")}
-                      className="-mr-2 -mt-2"
-                      onClick={(event) => event.stopPropagation()}
-                      onPointerDown={(event) => event.stopPropagation()}
-                      onKeyDown={(event) => event.stopPropagation()}
-                    >
-                      <MoreHorizontal />
-                      <span className="sr-only">
-                        {portfolioMenu("menuLabel")}
-                      </span>
-                    </Button>
-                  </DropdownMenuTrigger>
-                  <DropdownMenuContent>
-                    <DropdownMenuItem
-                      onSelect={(event) => {
-                        event.preventDefault();
-                        event.stopPropagation();
-                        start();
-                        router.push(`/admin/portfolio/${item.id}/edit`);
-                      }}
-                    >
-                      <Pencil className="h-4 w-4" />
-                      <span>{portfolioMenu("edit")}</span>
-                    </DropdownMenuItem>
-                    <DropdownMenuItem
-                      onSelect={(event) => {
-                        event.preventDefault();
-                        event.stopPropagation();
-                        setDeleteItem(item);
-                      }}
-                      className="text-destructive focus:bg-destructive focus:text-primary-foreground"
-                    >
-                      <Trash2 className="h-4 w-4" />
-                      <span>{portfolioMenu("delete")}</span>
-                    </DropdownMenuItem>
-                  </DropdownMenuContent>
-                </DropdownMenu>
+                <Button
+                  size="icon-borderless"
+                  variant="ghost"
+                  aria-label={portfolioMenu("delete")}
+                  className="-mr-2 -mt-2 text-destructive hover:text-destructive focus-visible:ring-destructive"
+                  onClick={(event) => {
+                    event.preventDefault();
+                    event.stopPropagation();
+                    setDeleteItem(item);
+                  }}
+                  onPointerDown={(event) => event.stopPropagation()}
+                  onKeyDown={(event) => event.stopPropagation()}
+                >
+                  <Trash2 className="h-4 w-4" />
+                  <span className="sr-only">{portfolioMenu("delete")}</span>
+                </Button>
               </div>
               {item.description && (
                 <Text size="sm" muted className="mt-2 line-clamp-2">
