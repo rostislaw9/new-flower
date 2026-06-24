@@ -55,6 +55,7 @@ export default function EditPortfolioItemPage({
   const [error, setError] = useState<string | null>(null);
   const [imageUrl, setImageUrl] = useState<string>("");
   const [category, setCategory] = useState("");
+  const [currentImageLoading, setCurrentImageLoading] = useState(true);
 
   useEffect(() => {
     const fetchItem = async () => {
@@ -65,6 +66,7 @@ export default function EditPortfolioItemPage({
         setItem(data);
         setImageUrl(data.imageUrl);
         setCategory(data.category);
+        setCurrentImageLoading(true);
       } catch {
         const message = t("edit.alerts.loadFailed");
         setError(message);
@@ -99,8 +101,9 @@ export default function EditPortfolioItemPage({
 
   if (loading) {
     return (
-      <div className="flex min-h-[400px] items-center justify-center">
+      <div className="flex min-h-[400px] flex-col items-center justify-center gap-3">
         <Loader2 className="h-8 w-8 animate-spin" />
+        <Text muted>{actionsT("loading")}</Text>
       </div>
     );
   }
@@ -233,14 +236,22 @@ export default function EditPortfolioItemPage({
               <div className="flex flex-col gap-2">
                 <Label>{t("form.currentImageLabel")}</Label>
                 {imageUrl ? (
-                  <Image
-                    src={imageUrl}
-                    alt={item.title}
-                    width={item.width}
-                    height={item.height}
-                    className="h-auto w-full rounded-lg rounded-xl object-cover"
-                    loading="eager"
-                  />
+                  <div className="relative overflow-hidden rounded-xl border border-border/50 bg-muted/20">
+                    {currentImageLoading && (
+                      <div className="pointer-events-none absolute inset-0 z-10 flex items-center justify-center bg-background/30">
+                        <Loader2 className="h-6 w-6 animate-spin text-muted-foreground" />
+                      </div>
+                    )}
+                    <Image
+                      src={imageUrl}
+                      alt={item.title}
+                      width={item.width}
+                      height={item.height}
+                      className={`h-auto w-full object-cover transition-opacity duration-300 ${currentImageLoading ? "opacity-0" : "opacity-100"}`}
+                      loading="eager"
+                      onLoad={() => setCurrentImageLoading(false)}
+                    />
+                  </div>
                 ) : (
                   <Text className="text-sm text-muted-foreground">
                     {t("form.noImage")}
@@ -260,6 +271,7 @@ export default function EditPortfolioItemPage({
                   onUploadComplete={(data) => {
                     if (data[0]) {
                       setImageUrl(data[0].url);
+                      setCurrentImageLoading(true);
                     }
                   }}
                 />

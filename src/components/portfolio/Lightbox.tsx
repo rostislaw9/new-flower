@@ -1,11 +1,11 @@
 "use client";
 
-import { useCallback, useEffect, useMemo, useRef } from "react";
+import { useCallback, useEffect, useMemo, useRef, useState } from "react";
 
 import Image from "next/image";
 
 import { AnimatePresence, motion } from "framer-motion";
-import { ChevronLeft, ChevronRight, X } from "lucide-react";
+import { ChevronLeft, ChevronRight, Loader2, X } from "lucide-react";
 
 import { Eyebrow, Heading, Text } from "@/components/styled/Typography";
 import { cn } from "@/lib/utils";
@@ -63,6 +63,7 @@ export function Lightbox({
   const activeItem = activeIndex !== null ? (items[activeIndex] ?? null) : null;
   const hasPrev = activeIndex !== null && activeIndex > 0;
   const hasNext = activeIndex !== null && activeIndex < items.length - 1;
+  const [imageLoading, setImageLoading] = useState(true);
 
   const handlePrev = useCallback(() => {
     if (activeIndex !== null && hasPrev) onNavigate(activeIndex - 1);
@@ -147,6 +148,12 @@ export function Lightbox({
     if (isOpen) closeButtonRef.current?.focus();
   }, [isOpen]);
 
+  useEffect(() => {
+    if (activeIndex !== null) {
+      setImageLoading(true);
+    }
+  }, [activeIndex]);
+
   return (
     <AnimatePresence>
       {isOpen && activeItem && (
@@ -217,18 +224,35 @@ export function Lightbox({
             className="flex flex-col items-center gap-4"
             onClick={(e) => e.stopPropagation()}
           >
-            <Image
-              src={activeItem.imageUrl}
-              alt={activeItem.title}
-              width={imageDimensions.width}
-              height={imageDimensions.height}
-              className="object-contain"
-              preload
+            <div
+              className="relative flex items-center justify-center"
               style={{
                 width: `${imageDimensions.width}px`,
                 height: `${imageDimensions.height}px`,
               }}
-            />
+            >
+              {imageLoading && (
+                <div className="absolute inset-0 z-10 flex items-center justify-center bg-background/30">
+                  <Loader2 className="h-10 w-10 animate-spin text-muted-foreground" />
+                </div>
+              )}
+              <Image
+                src={activeItem.imageUrl}
+                alt={activeItem.title}
+                width={imageDimensions.width}
+                height={imageDimensions.height}
+                className={cn(
+                  "object-contain transition-opacity duration-300",
+                  imageLoading ? "opacity-0" : "opacity-100",
+                )}
+                preload
+                style={{
+                  width: `${imageDimensions.width}px`,
+                  height: `${imageDimensions.height}px`,
+                }}
+                onLoad={() => setImageLoading(false)}
+              />
+            </div>
 
             <div className="flex w-full items-baseline justify-between gap-4">
               <div className="flex flex-col">

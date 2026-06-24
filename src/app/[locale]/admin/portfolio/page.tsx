@@ -39,6 +39,7 @@ export default function PortfolioAdminPage() {
   const [deleteItem, setDeleteItem] = useState<PortfolioItem | null>(null);
   const [_deleting, setDeleting] = useState(false);
   const [visibleCount, setVisibleCount] = useState(INITIAL_BATCH);
+  const [loadedImages, setLoadedImages] = useState<Record<string, boolean>>({});
   const loadMoreRef = useRef<HTMLDivElement | null>(null);
 
   useEffect(() => {
@@ -112,7 +113,7 @@ export default function PortfolioAdminPage() {
     return (
       <div className="flex min-h-[400px] flex-col items-center justify-center gap-3">
         <Loader2 className="h-8 w-8 animate-spin" />
-        <Text muted>{t("loading")}</Text>
+        <Text muted>{actionsT("loading")}</Text>
       </div>
     );
   }
@@ -155,14 +156,22 @@ export default function PortfolioAdminPage() {
             }}
             className="cursor-pointer overflow-hidden rounded-xl border-border/60 bg-card/60 shadow-lg transition-transform duration-200 ease-out hover:border-accent focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-accent"
           >
-            <div className="relative aspect-[3/4]">
+            <div className="relative aspect-[3/4] overflow-hidden bg-muted/20">
+              {!loadedImages[item.id] && (
+                <div className="pointer-events-none absolute inset-0 z-10 flex items-center justify-center bg-background/30">
+                  <Loader2 className="h-6 w-6 animate-spin text-muted-foreground" />
+                </div>
+              )}
               <Image
                 src={item.imageUrl}
                 alt={item.title}
                 fill
                 sizes="(max-width: 480px) 45vw, (max-width: 768px) 30vw, 20vw"
-                className="object-cover"
+                className={`h-full w-full object-cover transition-opacity duration-300 ${loadedImages[item.id] ? "opacity-100" : "opacity-0"}`}
                 loading="eager"
+                onLoad={() =>
+                  setLoadedImages((prev) => ({ ...prev, [item.id]: true }))
+                }
               />
               {item.featured && (
                 <Badge variant="accent" className="absolute left-2 top-2">
