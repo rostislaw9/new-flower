@@ -358,186 +358,192 @@ export default function UploadPortfolioPage() {
           </Card>
         </div>
 
-        <Card className="rounded-2xl border border-border/60 bg-card/60 shadow-lg">
-          <CardContent className="flex flex-col gap-6 pt-6">
-            {selectedDraft ? (
-              <>
-                <div className="flex items-start justify-between">
-                  <div>
-                    <Heading size="sm" serif={false}>
-                      {uploadT("labels.detailsHeading")}
-                    </Heading>
-                    <Text size="sm" muted>
-                      {uploadT("labels.detailsSubheading")}
-                    </Text>
+        <div className="sticky top-20 flex h-fit flex-col gap-6">
+          <Card className="rounded-2xl border border-border/60 bg-card/60 shadow-lg">
+            <CardContent className="flex flex-col gap-6 pt-6">
+              {selectedDraft ? (
+                <>
+                  <div className="flex items-start justify-between">
+                    <div>
+                      <Heading size="sm" serif={false}>
+                        {uploadT("labels.detailsHeading")}
+                      </Heading>
+                      <Text size="sm" muted>
+                        {uploadT("labels.detailsSubheading")}
+                      </Text>
+                    </div>
+                    <Button
+                      type="button"
+                      size="sm"
+                      variant="destructive"
+                      onClick={() => handleRemoveDraft(selectedDraft.id)}
+                      disabled={removingId === selectedDraft.id}
+                    >
+                      {removingId === selectedDraft.id ? (
+                        <Loader2 className="animate-spin" />
+                      ) : (
+                        <Trash2 />
+                      )}
+                      <span className="hidden sm:block">
+                        {uploadT("buttons.remove")}
+                      </span>
+                    </Button>
                   </div>
-                  <Button
-                    type="button"
-                    size="sm"
-                    variant="destructive"
-                    onClick={() => handleRemoveDraft(selectedDraft.id)}
-                    disabled={removingId === selectedDraft.id}
-                  >
-                    {removingId === selectedDraft.id ? (
-                      <Loader2 className="animate-spin" />
-                    ) : (
-                      <Trash2 />
-                    )}
-                    {uploadT("buttons.remove")}
-                  </Button>
-                </div>
 
-                <div className="flex flex-col gap-4 lg:flex-row lg:items-end lg:gap-6">
-                  <div className="flex flex-1 flex-col gap-4">
-                    <FormField
-                      label={formT("titleLabel")}
-                      htmlFor={`title-${selectedDraft.id}`}
-                      required
-                    >
-                      <Input
-                        id={`title-${selectedDraft.id}`}
-                        value={selectedDraft.title}
-                        onChange={(event) =>
-                          handleDraftChange(selectedDraft.id, {
-                            title: event.target.value,
-                          })
-                        }
-                        placeholder={formT("titlePlaceholder")}
-                      />
-                    </FormField>
-
-                    <FormField
-                      label={formT("categoryLabel")}
-                      htmlFor={`category-${selectedDraft.id}`}
-                      required
-                    >
-                      <Select
-                        value={selectedDraft.category}
-                        onValueChange={(value) =>
-                          handleDraftChange(selectedDraft.id, {
-                            category: value,
-                          })
-                        }
+                  <div className="flex flex-col gap-4 lg:flex-row lg:items-end lg:gap-6">
+                    <div className="flex flex-1 flex-col gap-4">
+                      <FormField
+                        label={formT("titleLabel")}
+                        htmlFor={`title-${selectedDraft.id}`}
+                        required
                       >
-                        <SelectTrigger id={`category-${selectedDraft.id}`}>
-                          <SelectValue
-                            placeholder={formT("categoryPlaceholder")}
-                          />
-                        </SelectTrigger>
-                        <SelectContent>
-                          {PORTFOLIO_CATEGORIES.map((category) => (
-                            <SelectItem key={category} value={category}>
-                              {category}
-                            </SelectItem>
-                          ))}
-                        </SelectContent>
-                      </Select>
-                    </FormField>
+                        <Input
+                          id={`title-${selectedDraft.id}`}
+                          value={selectedDraft.title}
+                          onChange={(event) =>
+                            handleDraftChange(selectedDraft.id, {
+                              title: event.target.value,
+                            })
+                          }
+                          placeholder={formT("titlePlaceholder")}
+                        />
+                      </FormField>
+
+                      <FormField
+                        label={formT("categoryLabel")}
+                        htmlFor={`category-${selectedDraft.id}`}
+                        required
+                      >
+                        <Select
+                          value={selectedDraft.category}
+                          onValueChange={(value) =>
+                            handleDraftChange(selectedDraft.id, {
+                              category: value,
+                            })
+                          }
+                        >
+                          <SelectTrigger id={`category-${selectedDraft.id}`}>
+                            <SelectValue
+                              placeholder={formT("categoryPlaceholder")}
+                            />
+                          </SelectTrigger>
+                          <SelectContent>
+                            {PORTFOLIO_CATEGORIES.map((category) => (
+                              <SelectItem key={category} value={category}>
+                                {category}
+                              </SelectItem>
+                            ))}
+                          </SelectContent>
+                        </Select>
+                      </FormField>
+                    </div>
+
+                    <div className="relative hidden aspect-square w-40 shrink-0 overflow-hidden rounded-xl border border-border/60 bg-muted/20 lg:block">
+                      <Image
+                        src={selectedDraft.imageUrl}
+                        alt={selectedDraft.title || "Selected upload"}
+                        fill
+                        className="object-cover"
+                        sizes="160px"
+                      />
+                    </div>
                   </div>
 
-                  <div className="relative hidden aspect-square w-40 shrink-0 overflow-hidden rounded-xl border border-border/60 bg-muted/20 lg:block">
-                    <Image
-                      src={selectedDraft.imageUrl}
-                      alt={selectedDraft.title || "Selected upload"}
-                      fill
-                      className="object-cover"
-                      sizes="160px"
-                    />
-                  </div>
-                </div>
-
-                <FormField
-                  label={formT("descriptionLabel")}
-                  hint={formT("optionalTag")}
-                  htmlFor={`description-${selectedDraft.id}`}
-                >
-                  <Textarea
-                    id={`description-${selectedDraft.id}`}
-                    value={selectedDraft.description}
-                    onChange={(event) =>
-                      handleDraftChange(selectedDraft.id, {
-                        description: event.target.value,
-                      })
-                    }
-                    rows={4}
-                    placeholder={formT("descriptionPlaceholder")}
-                  />
-                </FormField>
-
-                <div className="flex flex-col gap-4 rounded-xl border border-dashed border-border/60 p-4 sm:flex-row sm:items-center sm:justify-between">
-                  <div className="flex items-center gap-3">
-                    <Checkbox
-                      id={`featured-${selectedDraft.id}`}
-                      checked={selectedDraft.featured}
-                      onCheckedChange={(checked) =>
+                  <FormField
+                    label={formT("descriptionLabel")}
+                    hint={formT("optionalTag")}
+                    htmlFor={`description-${selectedDraft.id}`}
+                  >
+                    <Textarea
+                      id={`description-${selectedDraft.id}`}
+                      value={selectedDraft.description}
+                      onChange={(event) =>
                         handleDraftChange(selectedDraft.id, {
-                          featured: Boolean(checked),
+                          description: event.target.value,
                         })
                       }
-                      className="border-accent data-[state=checked]:bg-accent"
-                    />
-                    <Badge variant="accent">{formT("featuredLabel")}</Badge>
-                  </div>
-                  <FormField
-                    label={formT("orderLabel")}
-                    htmlFor={`order-${selectedDraft.id}`}
-                  >
-                    <Input
-                      id={`order-${selectedDraft.id}`}
-                      type="number"
-                      value={selectedDraft.displayOrder}
-                      onChange={(event) => {
-                        const parsed = Number(event.target.value);
-                        handleDraftChange(selectedDraft.id, {
-                          displayOrder: Number.isFinite(parsed) ? parsed : 0,
-                        });
-                      }}
+                      rows={4}
+                      placeholder={formT("descriptionPlaceholder")}
                     />
                   </FormField>
-                </div>
-              </>
-            ) : (
-              <Empty className="rounded-xl border">
-                <EmptyHeader>
-                  <EmptyTitle>
-                    <Heading size="sm" serif={false}>
-                      {uploadT("placeholders.selectTitle")}
-                    </Heading>
-                  </EmptyTitle>
-                </EmptyHeader>
-                <EmptyContent>
-                  <Text muted>{uploadT("placeholders.selectDescription")}</Text>
-                </EmptyContent>
-              </Empty>
-            )}
-          </CardContent>
-        </Card>
-      </div>
 
-      <div className="flex flex-col gap-3 sm:flex-row sm:justify-end">
-        <Button
-          variant="accent"
-          type="button"
-          disabled={disableSubmit}
-          onClick={handleSubmit}
-        >
-          {submitting ? (
-            <>
-              <Loader2 className="animate-spin" />
-              {actionsT("creating")}
-            </>
-          ) : (
-            <>
-              <SavePlus />
-              {uploadT("buttons.create")}
-            </>
-          )}
-        </Button>
-        <Link href={backHref}>
-          <Button variant="outline" type="button" className="w-full">
-            {actionsT("cancel")}
-          </Button>
-        </Link>
+                  <div className="flex flex-col gap-4 rounded-xl border border-dashed border-border/60 p-4 sm:flex-row sm:items-center sm:justify-between">
+                    <div className="flex items-center gap-3">
+                      <Checkbox
+                        id={`featured-${selectedDraft.id}`}
+                        checked={selectedDraft.featured}
+                        onCheckedChange={(checked) =>
+                          handleDraftChange(selectedDraft.id, {
+                            featured: Boolean(checked),
+                          })
+                        }
+                        className="border-accent data-[state=checked]:bg-accent"
+                      />
+                      <Badge variant="accent">{formT("featuredLabel")}</Badge>
+                    </div>
+                    <FormField
+                      label={formT("orderLabel")}
+                      htmlFor={`order-${selectedDraft.id}`}
+                    >
+                      <Input
+                        id={`order-${selectedDraft.id}`}
+                        type="number"
+                        value={selectedDraft.displayOrder}
+                        onChange={(event) => {
+                          const parsed = Number(event.target.value);
+                          handleDraftChange(selectedDraft.id, {
+                            displayOrder: Number.isFinite(parsed) ? parsed : 0,
+                          });
+                        }}
+                      />
+                    </FormField>
+                  </div>
+                </>
+              ) : (
+                <Empty className="rounded-xl border">
+                  <EmptyHeader>
+                    <EmptyTitle>
+                      <Heading size="sm" serif={false}>
+                        {uploadT("placeholders.selectTitle")}
+                      </Heading>
+                    </EmptyTitle>
+                  </EmptyHeader>
+                  <EmptyContent>
+                    <Text muted>
+                      {uploadT("placeholders.selectDescription")}
+                    </Text>
+                  </EmptyContent>
+                </Empty>
+              )}
+            </CardContent>
+          </Card>
+
+          <div className="flex flex-col gap-3 sm:flex-row sm:justify-end">
+            <Button
+              variant="accent"
+              type="button"
+              disabled={disableSubmit}
+              onClick={handleSubmit}
+            >
+              {submitting ? (
+                <>
+                  <Loader2 className="animate-spin" />
+                  {actionsT("creating")}
+                </>
+              ) : (
+                <>
+                  <SavePlus />
+                  {uploadT("buttons.create")}
+                </>
+              )}
+            </Button>
+            <Link href={backHref}>
+              <Button variant="outline" type="button" className="w-full">
+                {actionsT("cancel")}
+              </Button>
+            </Link>
+          </div>
+        </div>
       </div>
     </div>
   );

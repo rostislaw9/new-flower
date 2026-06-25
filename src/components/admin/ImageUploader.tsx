@@ -283,7 +283,10 @@ export function ImageUploader({
               {/* Remove Button */}
               <button
                 onClick={() => removeImage(index)}
-                className="absolute -right-2 -top-2 rounded-full bg-destructive p-1 text-white hover:bg-destructive/80"
+                className={cn(
+                  "absolute -right-2 -top-2 rounded-full bg-destructive p-1 text-white hover:bg-destructive/80",
+                  isUploading && "hidden",
+                )}
                 disabled={image.uploading}
                 aria-label={t("removeAria")}
               >
