@@ -7,7 +7,14 @@ import Image from "next/image";
 import { useRouter } from "next/navigation";
 import { useTopLoader } from "nextjs-toploader";
 
-import { CheckSquare2, Loader2, Square, Trash2, Upload } from "lucide-react";
+import {
+  CheckSquare2,
+  ImageOff,
+  Loader2,
+  Square,
+  Trash2,
+  Upload,
+} from "lucide-react";
 import { toast } from "sonner";
 
 import { AdminPageHeader } from "@/components/admin/AdminPageHeader";
@@ -20,6 +27,7 @@ import {
   Empty,
   EmptyContent,
   EmptyHeader,
+  EmptyMedia,
   EmptyTitle,
 } from "@/components/ui/empty";
 import { Skeleton } from "@/components/ui/skeleton";
@@ -228,13 +236,18 @@ export default function PortfolioAdminPage() {
   const emptyState = (
     <Empty className="rounded-xl border">
       <EmptyHeader>
+        <EmptyMedia>
+          <ImageOff />
+        </EmptyMedia>
         <EmptyTitle>
-          <Text muted>{t("noItems")}</Text>
+          <Heading size="sm" serif={false}>
+            {t("noItems")}
+          </Heading>
         </EmptyTitle>
       </EmptyHeader>
       <EmptyContent>
         <Button variant="accent" href={uploadHref}>
-          <Upload className="h-4 w-4" />
+          <Upload />
           {t("publishWork")}
         </Button>
       </EmptyContent>
