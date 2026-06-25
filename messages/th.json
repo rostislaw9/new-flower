@@ -882,8 +882,14 @@
     },
     "imageUploader": {
       "alerts": {
-        "invalidType": "ข้าม {file}: ประเภทไฟล์ไม่ถูกต้อง",
-        "fileTooLarge": "ข้าม {file}: ไฟล์ใหญ่เกินไป (สูงสุด 10MB)",
+        "invalidType": {
+          "title": "ประเภทไฟล์ไม่ถูกต้องสำหรับ {file}",
+          "description": "เฉพาะ JPG, PNG, และ WEBP เท่านั้น"
+        },
+        "fileTooLarge": {
+          "title": "{file} มีขนาดใหญ่เกินไป",
+          "description": "ขนาดสูงสุดคือ {size}MB"
+        },
         "maxFiles": "อัปโหลดได้ไม่เกิน {count} ไฟล์",
         "uploadFailed": "อัปโหลดไม่สำเร็จ"
       },
@@ -924,7 +930,15 @@
         "logoDeleted": "ลบโลโก้ร้านค้าแล้ว",
         "uploadFailed": "อัปโหลดไม่สำเร็จ",
         "saveFailed": "บันทึกรูปภาพไม่สำเร็จ",
-        "deleteFailed": "ลบรูปภาพไม่สำเร็จ"
+        "deleteFailed": "ลบรูปภาพไม่สำเร็จ",
+        "invalidType": {
+          "title": "ประเภทไฟล์ไม่ถูกต้องสำหรับ {file}",
+          "description": "เฉพาะ JPG, PNG, และ WEBP เท่านั้น"
+        },
+        "fileTooLarge": {
+          "title": "{file} มีขนาดใหญ่เกินไป",
+          "description": "ขนาดสูงสุดคือ {size}MB"
+        }
       }
     }
   }

@@ -378,9 +378,9 @@ export default function PortfolioAdminPage() {
         subtitle={t("description")}
         actions={
           hasItems ? (
-            <div className="flex flex-wrap gap-2">
+            <div className="flex flex-row-reverse flex-wrap gap-2 sm:flex-row">
               {selectedIds.size > 0 && (
-                <>
+                <div className="flex gap-2">
                   <Button size="sm" variant="outline" onClick={toggleSelectAll}>
                     {selectedIds.size === visibleItems.length
                       ? t("bulkDelete.deselectAll")
@@ -393,9 +393,12 @@ export default function PortfolioAdminPage() {
                     disabled={bulkDeleting}
                   >
                     <Trash2 />
-                    {actionsT("delete")} ({selectedIds.size})
+                    <span className="hidden sm:block">
+                      {actionsT("delete")}
+                    </span>
+                    ({selectedIds.size})
                   </Button>
-                </>
+                </div>
               )}
               <Button size="sm" variant="accent" href={uploadHref}>
                 <Upload />

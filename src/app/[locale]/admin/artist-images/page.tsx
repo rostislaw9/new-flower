@@ -76,6 +76,32 @@ export default function ArtistImagesPage() {
       type: "portrait" | "logo",
       setState: React.Dispatch<React.SetStateAction<ImageUploadState>>,
     ) => {
+      const allowedTypes = ["image/jpeg", "image/png", "image/webp"];
+      const sizeLimitMb = 10;
+
+      // Validate file type
+      if (!allowedTypes.includes(file.type)) {
+        toast.error(t("alerts.invalidType.title", { file: file.name }), {
+          description: t("alerts.invalidType.description"),
+        });
+        return;
+      }
+
+      // Validate file size
+      if (file.size > sizeLimitMb * 1024 * 1024) {
+        toast.error(
+          t("alerts.fileTooLarge.title", {
+            file: file.name,
+          }),
+          {
+            description: t("alerts.fileTooLarge.description", {
+              size: sizeLimitMb,
+            }),
+          },
+        );
+        return;
+      }
+
       const preview = URL.createObjectURL(file);
       setState({ uploading: true, preview, url: null });
 

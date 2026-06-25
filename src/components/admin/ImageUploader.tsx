@@ -66,12 +66,21 @@ export function ImageUploader({
 
       const newFiles = Array.from(files).filter((file) => {
         if (!allowedTypes.includes(file.type)) {
-          toast.error(t("alerts.invalidType", { file: file.name }));
+          toast.error(t("alerts.invalidType.title", { file: file.name }), {
+            description: t("alerts.invalidType.description"),
+          });
           return false;
         }
         if (file.size > sizeLimitMb * 1024 * 1024) {
           toast.error(
-            t("alerts.fileTooLarge", { file: file.name, size: sizeLimitMb }),
+            t("alerts.fileTooLarge.title", {
+              file: file.name,
+            }),
+            {
+              description: t("alerts.fileTooLarge.description", {
+                size: sizeLimitMb,
+              }),
+            },
           );
           return false;
         }

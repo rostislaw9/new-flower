@@ -882,8 +882,14 @@
     },
     "imageUploader": {
       "alerts": {
-        "invalidType": "Skipping {file}: Invalid file type",
-        "fileTooLarge": "Skipping {file}: File too large (max 10MB)",
+        "invalidType": {
+          "title": "Invalid file type for {file}",
+          "description": "Only JPG, PNG, and WEBP are allowed"
+        },
+        "fileTooLarge": {
+          "title": "{file} is too large",
+          "description": "Maximum size is {size}MB"
+        },
         "maxFiles": "Maximum {count} files allowed",
         "uploadFailed": "Upload failed"
       },
@@ -924,7 +930,15 @@
         "logoDeleted": "Shop logo deleted",
         "uploadFailed": "Upload failed",
         "saveFailed": "Failed to save image",
-        "deleteFailed": "Failed to delete image"
+        "deleteFailed": "Failed to delete image",
+        "invalidType": {
+          "title": "Invalid file type for {file}",
+          "description": "Only JPG, PNG, and WEBP are allowed"
+        },
+        "fileTooLarge": {
+          "title": "{file} is too large",
+          "description": "Maximum size is {size}MB"
+        }
       }
     }
   }
