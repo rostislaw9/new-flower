@@ -41,7 +41,7 @@
       "imageAlt": "New Flower Tattoo artist"
     },
     "testimonials": {
-      "eyebrow": "Customer Stories",
+      "eyebrow": "Client Stories",
       "title": "What customers say",
       "empty": "Featured reviews will appear here once customers share them",
       "ratingAria": "{rating} out of 5 stars"
@@ -559,7 +559,7 @@
       "twitterDescription": "Share your experience with New Flower Tattoo so others can book with confidence."
     },
     "hero": {
-      "eyebrow": "Customer stories",
+      "eyebrow": "Client stories",
       "title": "Share your experience",
       "subtitle": "Your words help others feel confident booking their session. It only takes a minute to leave a few thoughts."
     },
@@ -688,7 +688,7 @@
         "clear": "Clear"
       },
       "table": {
-        "client": "Customer",
+        "client": "Client",
         "status": "Status",
         "dates": "Preferred dates",
         "submitted": "Submitted",
@@ -723,7 +723,7 @@
         "bookingCodeLabel": "Booking ID · {code}",
         "sectionEyebrow": {
           "status": "Status overview",
-          "contact": "Customer contact",
+          "contact": "Client contact",
           "tattoo": "Tattoo brief",
           "references": "Reference material"
         },
@@ -757,7 +757,7 @@
       }
     },
     "reviews": {
-      "title": "Customer reviews",
+      "title": "Client reviews",
       "subtitle": "Moderate testimonials and choose what appears on the homepage",
       "filters": {
         "searchLabel": "Search",
@@ -773,7 +773,7 @@
         "dateClearLabel": "Clear date"
       },
       "table": {
-        "client": "Customer",
+        "client": "Client",
         "rating": "Rating",
         "review": "Review",
         "created": "Submitted",
