@@ -241,6 +241,34 @@ export default function PortfolioAdminPage() {
     </Empty>
   );
 
+  const headerActions = (
+    <div className="flex flex-row-reverse flex-wrap gap-2 sm:flex-row">
+      {selectedIds.size > 0 && (
+        <div className="flex gap-2">
+          <Button size="sm" variant="outline" onClick={toggleSelectAll}>
+            {selectedIds.size === visibleItems.length
+              ? t("bulkDelete.deselectAll")
+              : t("bulkDelete.selectAll")}
+          </Button>
+          <Button
+            size="sm"
+            variant="destructive"
+            onClick={() => setConfirmBulkDelete(true)}
+            disabled={bulkDeleting}
+          >
+            <Trash2 />
+            <span className="hidden sm:block">{actionsT("delete")}</span>(
+            {selectedIds.size})
+          </Button>
+        </div>
+      )}
+      <Button size="sm" variant="accent" href={uploadHref}>
+        <Upload />
+        {t("uploadButton")}
+      </Button>
+    </div>
+  );
+
   const listContent = (
     <div className="flex flex-col gap-6">
       <div className="grid grid-cols-2 gap-3 sm:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5">
@@ -376,37 +404,7 @@ export default function PortfolioAdminPage() {
       <AdminPageHeader
         title={t("title")}
         subtitle={t("description")}
-        actions={
-          hasItems ? (
-            <div className="flex flex-row-reverse flex-wrap gap-2 sm:flex-row">
-              {selectedIds.size > 0 && (
-                <div className="flex gap-2">
-                  <Button size="sm" variant="outline" onClick={toggleSelectAll}>
-                    {selectedIds.size === visibleItems.length
-                      ? t("bulkDelete.deselectAll")
-                      : t("bulkDelete.selectAll")}
-                  </Button>
-                  <Button
-                    size="sm"
-                    variant="destructive"
-                    onClick={() => setConfirmBulkDelete(true)}
-                    disabled={bulkDeleting}
-                  >
-                    <Trash2 />
-                    <span className="hidden sm:block">
-                      {actionsT("delete")}
-                    </span>
-                    ({selectedIds.size})
-                  </Button>
-                </div>
-              )}
-              <Button size="sm" variant="accent" href={uploadHref}>
-                <Upload />
-                {t("uploadButton")}
-              </Button>
-            </div>
-          ) : undefined
-        }
+        actions={hasItems ? headerActions : undefined}
       />
 
       {hasItems ? (
