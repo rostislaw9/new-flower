@@ -29,6 +29,7 @@ import {
   EmptyHeader,
   EmptyTitle,
 } from "@/components/ui/empty";
+import { Skeleton } from "@/components/ui/skeleton";
 import type { Locale } from "@/i18n/config";
 import { defaultLocale } from "@/i18n/config";
 import {
@@ -298,12 +299,10 @@ export default function PortfolioAdminPage() {
                 onMouseEnter={() => setHoveredBadgeId(item.id)}
                 onMouseLeave={() => setHoveredBadgeId(null)}
                 disabled={togglingFeaturedId === item.id}
-                className={`absolute left-2 top-2 z-20 transition-all ${
-                  item.featured
-                    ? hoveredBadgeId === item.id
-                      ? "opacity-80"
-                      : "opacity-100"
-                    : hoveredBadgeId === item.id
+                className={`absolute left-2 top-2 transition-all ${
+                  hoveredBadgeId === item.id
+                    ? "opacity-80"
+                    : item.featured
                       ? "opacity-100"
                       : "opacity-0"
                 }`}
@@ -314,7 +313,7 @@ export default function PortfolioAdminPage() {
                 }
               >
                 {togglingFeaturedId === item.id ? (
-                  <Loader2 className="h-5 w-5 animate-spin text-accent" />
+                  <Skeleton className="mt-1 h-5 w-24" />
                 ) : (
                   <Badge variant="accent">{t("featured")}</Badge>
                 )}
@@ -328,7 +327,7 @@ export default function PortfolioAdminPage() {
                 }}
                 onPointerDown={(event) => event.stopPropagation()}
                 onKeyDown={(event) => event.stopPropagation()}
-                className="absolute right-2 top-2 z-20 rounded-md bg-background/80 p-1 transition-colors hover:bg-background"
+                className="absolute right-2 top-2 rounded-md bg-background/80 p-1 transition-colors hover:bg-background"
                 aria-label={`Select ${item.title}`}
               >
                 {selectedIds.has(item.id) ? (
