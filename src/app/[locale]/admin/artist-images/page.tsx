@@ -2,19 +2,17 @@
 
 import { useCallback, useEffect, useState } from "react";
 
-import { useLocale, useTranslations } from "next-intl";
+import { useTranslations } from "next-intl";
 import Image from "next/image";
-import Link from "next/link";
 import { useRouter } from "next/navigation";
 
-import { ArrowLeft, Loader2, Trash2 } from "lucide-react";
+import { Loader2, Trash2 } from "lucide-react";
 import { toast } from "sonner";
 
 import { AdminPageHeader } from "@/components/admin/AdminPageHeader";
 import { Button } from "@/components/styled/Button";
 import { Heading, Text } from "@/components/styled/Typography";
 import { Card, CardContent } from "@/components/ui/card";
-import { type Locale, defaultLocale } from "@/i18n/config";
 import {
   deleteArtistPortrait,
   deleteShopLogo,
@@ -23,7 +21,6 @@ import {
   saveShopLogo,
 } from "@/lib/actions/artist-images";
 import { uploadToCloudinaryAction } from "@/lib/actions/upload";
-import { getLocalizedPath, isSupportedLocale } from "@/lib/locale-utils";
 import { cn } from "@/lib/utils";
 
 interface ImageUploadState {
@@ -33,10 +30,6 @@ interface ImageUploadState {
 }
 
 export default function ArtistImagesPage() {
-  const rawLocale = useLocale();
-  const locale: Locale = isSupportedLocale(rawLocale)
-    ? rawLocale
-    : defaultLocale;
   const router = useRouter();
   const t = useTranslations("admin.artistImages");
   const actionsT = useTranslations("admin.common.actions");
@@ -204,26 +197,9 @@ export default function ArtistImagesPage() {
     }
   }, [t, router]);
 
-  const backHref = getLocalizedPath("/admin", locale);
-
   return (
     <div className="flex flex-col gap-6">
-      <AdminPageHeader
-        title={t("title")}
-        subtitle={t("subtitle")}
-        actions={
-          <Link href={backHref}>
-            <Button
-              size="sm"
-              variant="outline"
-              className="flex items-center gap-2"
-            >
-              <ArrowLeft />
-              {actionsT("back")}
-            </Button>
-          </Link>
-        }
-      />
+      <AdminPageHeader title={t("title")} subtitle={t("subtitle")} />
 
       <div className="grid gap-6 lg:grid-cols-2">
         {/* Artist Portrait */}

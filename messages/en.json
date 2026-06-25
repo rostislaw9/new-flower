@@ -797,7 +797,7 @@
     "portfolio": {
       "title": "Portfolio Management",
       "description": "Manage your showcase collection",
-      "uploadButton": "Publish",
+      "uploadButton": "Upload",
       "publishWork": "Publish your work",
       "noItems": "No portfolio items yet",
       "featured": "Featured",
@@ -811,7 +811,6 @@
         "toggleFeaturedFailed": "Failed to update featured status"
       },
       "actions": {
-        "viewPublic": "View on website",
         "delete": "Delete item"
       },
       "deleteTitle": "Delete item",

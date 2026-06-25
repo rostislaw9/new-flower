@@ -7,14 +7,7 @@ import Image from "next/image";
 import { useRouter } from "next/navigation";
 import { useTopLoader } from "nextjs-toploader";
 
-import {
-  CheckSquare2,
-  Eye,
-  Loader2,
-  Square,
-  Trash2,
-  Upload,
-} from "lucide-react";
+import { CheckSquare2, Loader2, Square, Trash2, Upload } from "lucide-react";
 import { toast } from "sonner";
 
 import { AdminPageHeader } from "@/components/admin/AdminPageHeader";
@@ -231,9 +224,6 @@ export default function PortfolioAdminPage() {
   const editHref = (id: string) =>
     getLocalizedPath(`/admin/portfolio/${id}/edit`, locale);
   const uploadHref = getLocalizedPath("/admin/portfolio/upload", locale);
-  const publicHref = getLocalizedPath("/portfolio", locale, {
-    canonical: false,
-  });
 
   const emptyState = (
     <Empty className="border">
@@ -389,15 +379,6 @@ export default function PortfolioAdminPage() {
         actions={
           hasItems ? (
             <div className="flex flex-wrap gap-2">
-              <Button
-                size="sm"
-                variant="ghost"
-                href={publicHref}
-                target="_blank"
-              >
-                <Eye />
-                {portfolioMenuT("viewPublic")}
-              </Button>
               {selectedIds.size > 0 && (
                 <>
                   <Button size="sm" variant="outline" onClick={toggleSelectAll}>
