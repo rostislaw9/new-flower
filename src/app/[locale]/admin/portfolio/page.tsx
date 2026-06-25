@@ -32,8 +32,8 @@ import {
 import { getLocalizedPath, isSupportedLocale } from "@/lib/locale-utils";
 import type { PortfolioItem } from "@/lib/portfolio-data";
 
-const INITIAL_BATCH = 8;
-const LOAD_MORE_BATCH = 6;
+const INITIAL_BATCH = 15;
+const LOAD_MORE_BATCH = 10;
 
 export default function PortfolioAdminPage() {
   const router = useRouter();
