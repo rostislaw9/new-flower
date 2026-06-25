@@ -226,7 +226,7 @@ export default function PortfolioAdminPage() {
   const uploadHref = getLocalizedPath("/admin/portfolio/upload", locale);
 
   const emptyState = (
-    <Empty className="border">
+    <Empty className="rounded-xl border">
       <EmptyHeader>
         <EmptyTitle>
           <Text muted>{t("noItems")}</Text>
