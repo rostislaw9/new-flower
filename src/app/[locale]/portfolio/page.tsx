@@ -10,6 +10,7 @@ import { Eyebrow, Heading, Text } from "@/components/styled/Typography";
 import { Separator } from "@/components/ui/separator";
 import { createBreadcrumbList } from "@/lib/breadcrumbs";
 import { loadPortfolioItems } from "@/lib/portfolio-loader";
+import { buildPageMetadata } from "@/lib/seo/buildPageMetadata";
 
 export async function generateMetadata({
   params,
@@ -19,24 +20,12 @@ export async function generateMetadata({
   const { locale } = await params;
   const t = await getTranslations({ locale, namespace: "portfolio.metadata" });
 
-  return {
+  return buildPageMetadata({
+    locale,
+    canonical: "/portfolio",
     title: t("title"),
     description: t("description"),
-    alternates: {
-      canonical: "/portfolio",
-    },
-    openGraph: {
-      title: t("openGraphTitle"),
-      description: t("openGraphDescription"),
-      type: "website",
-      url: "/portfolio",
-    },
-    twitter: {
-      card: "summary_large_image",
-      title: t("twitterTitle"),
-      description: t("twitterDescription"),
-    },
-  };
+  });
 }
 
 export default async function PortfolioPage() {

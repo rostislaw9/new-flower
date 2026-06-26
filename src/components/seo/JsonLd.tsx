@@ -25,7 +25,7 @@ export function JsonLd({ data }: JsonLdProps) {
 }
 
 const SITE_URL =
-  process.env["NEXT_PUBLIC_SITE_URL"] ?? "https://newflower.studio";
+  process.env["NEXT_PUBLIC_SITE_URL"] ?? "https://newflower.tattoo";
 
 export function personSchema(): SchemaOrgObject {
   return {
@@ -48,8 +48,9 @@ export function personSchema(): SchemaOrgObject {
       "Geometric Tattoo",
     ],
     sameAs: [
-      "https://www.instagram.com/newflowertattoo",
-      "https://t.me/newflowertattoo",
+      "https://www.instagram.com/tattoo_by_newflower",
+      "https://www.facebook.com/NewFlowerTattoo",
+      "https://www.facebook.com/new.flower.52",
     ],
   };
 }
@@ -57,7 +58,7 @@ export function personSchema(): SchemaOrgObject {
 export async function localBusinessSchema(): Promise<SchemaOrgObject> {
   const { getArtistImagesConfig } = await import("@/lib/artist-images-config");
   const config = await getArtistImagesConfig();
-  const logoUrl = config.logoUrl || `${SITE_URL}/shop-logo.jpg`;
+  const logoUrl = config.logoUrl || `${SITE_URL}/og-image.jpg`;
 
   return {
     "@context": "https://schema.org",
@@ -67,7 +68,7 @@ export async function localBusinessSchema(): Promise<SchemaOrgObject> {
     description:
       "Premium tattoo studio specialising in fine line, blackwork, botanical illustration, and realism. Custom designs only.",
     url: SITE_URL,
-    email: "booking@newflower.studio",
+    email: "flowerpowernew@gmail.com",
     address: {
       "@type": "PostalAddress",
       addressLocality: "Phuket",
@@ -81,19 +82,28 @@ export async function localBusinessSchema(): Promise<SchemaOrgObject> {
     openingHoursSpecification: [
       {
         "@type": "OpeningHoursSpecification",
-        dayOfWeek: ["Tuesday", "Wednesday", "Thursday", "Friday", "Saturday"],
-        opens: "11:00",
-        closes: "20:00",
+        dayOfWeek: [
+          "Sunday",
+          "Monday",
+          "Tuesday",
+          "Wednesday",
+          "Thursday",
+          "Friday",
+          "Saturday",
+        ],
+        opens: "14:00",
+        closes: "01:00",
       },
     ],
-    priceRange: "€€€",
-    currenciesAccepted: "EUR, RUB",
+    priceRange: "฿฿",
+    currenciesAccepted: "THB",
     paymentAccepted: "Cash, Bank Transfer",
-    hasMap: "https://maps.google.com/?q=Phuket,Thailand",
+    hasMap: "https://maps.app.goo.gl/tcPQjsngtypvbPhv8",
     image: logoUrl,
     sameAs: [
-      "https://www.instagram.com/newflowertattoo",
-      "https://t.me/newflowertattoo",
+      "https://www.instagram.com/tattoo_by_newflower",
+      "https://www.facebook.com/NewFlowerTattoo",
+      "https://www.facebook.com/new.flower.52",
     ],
     potentialAction: {
       "@type": "ReserveAction",

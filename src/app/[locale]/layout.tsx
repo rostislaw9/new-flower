@@ -10,7 +10,7 @@ import { Nav } from "@/components/layout/Nav";
 import { getArtistImagesConfig } from "@/lib/artist-images-config";
 
 const SITE_URL =
-  process.env["NEXT_PUBLIC_SITE_URL"] ?? "https://newflower.studio";
+  process.env["NEXT_PUBLIC_SITE_URL"] ?? "https://newflower.tattoo";
 
 export async function generateMetadata({
   params,
@@ -20,7 +20,11 @@ export async function generateMetadata({
   const { locale } = await params;
   const t = await getTranslations({ locale, namespace: "metadata" });
   const artistImagesConfig = await getArtistImagesConfig();
-  const logoUrl = artistImagesConfig.logoUrl || "/shop-logo.jpg";
+
+  const rawLogo = artistImagesConfig.logoUrl || "/images/og-image.jpg";
+  const logoUrl = rawLogo.startsWith("http")
+    ? rawLogo
+    : `${SITE_URL}${rawLogo}`;
 
   return {
     metadataBase: new URL(SITE_URL),
@@ -63,7 +67,7 @@ export async function generateMetadata({
           url: logoUrl,
           width: 1200,
           height: 630,
-          alt: "New Flower Tattoo — Portfolio",
+          alt: "New Flower Tattoo",
         },
       ],
     },

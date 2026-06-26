@@ -1,7 +1,6 @@
 {
   "metadata": {
     "title": "New Flower — ศิลปินรอยสัก ภูเก็ต",
-    "shortTitle": "New Flower",
     "description": "ศิลปะรอยสักระดับพรีเมียมโดยศิลปินมืออาชีพในภูเก็ต ประเทศไทย มีความเชี่ยวชาญใน ลายเส้นละเอียด, ลายเส้นสีดำ, ภาพประกอบพฤกษศาสตร์ และ สมจริงจองนัดหมายวันนี้"
   },
   "nav": {
@@ -14,11 +13,7 @@
   "home": {
     "metadata": {
       "title": "New Flower Tattoo — ศิลปะรอยสักระดับพรีเมียม",
-      "description": "งานรอยสัก ลายเส้นละเอียด, ลายเส้นสีดำ และ พฤกษศาสตร์โดยศิลปินมืออาชีพในภูเก็ต ประเทศไทย จองนัดหมายวันนี้",
-      "openGraphTitle": "New Flower Tattoo — ศิลปะรอยสักระดับพรีเมียม",
-      "openGraphDescription": "รอยสัก ลายเส้นละเอียด, ลายเส้นสีดำ และ พฤกษศาสตร์ ทุกชิ้นเริ่มจากการสนทนา",
-      "twitterTitle": "New Flower Tattoo — ศิลปะรอยสักระดับพรีเมียม",
-      "twitterDescription": "รอยสัก ลายเส้นละเอียด, ลายเส้นสีดำ และ พฤกษศาสตร์ ทุกชิ้นเริ่มจากการสนทนา"
+      "description": "งานรอยสัก ลายเส้นละเอียด, ลายเส้นสีดำ และ พฤกษศาสตร์โดยศิลปินมืออาชีพในภูเก็ต ประเทศไทย จองนัดหมายวันนี้"
     },
     "hero": {
       "eyebrow": "ศิลปินรอยสัก · ภูเก็ต",
@@ -64,11 +59,7 @@
   "portfolio": {
     "metadata": {
       "title": "ผลงาน",
-      "description": "เรียกดูผลงานรอยสักทั้งหมด — ลายเส้นละเอียด, ลายเส้นสีดำ, ภาพประกอบพฤกษศาสตร์, สมจริง, นีโอแบบดั้งเดิม และ เรขาคณิต",
-      "openGraphTitle": "Portfolio | New Flower Tattoo",
-      "openGraphDescription": "ผลงาน ลายเส้นละเอียด, ลายเส้นสีดำ, พฤกษศาสตร์, สมจริง, นีโอแบบดั้งเดิม และ เรขาคณิต",
-      "twitterTitle": "Portfolio | New Flower Tattoo",
-      "twitterDescription": "ผลงาน ลายเส้นละเอียด, ลายเส้นสีดำ, พฤกษศาสตร์, สมจริง, นีโอแบบดั้งเดิม และ เรขาคณิต"
+      "description": "เรียกดูผลงานรอยสักทั้งหมด — ลายเส้นละเอียด, ลายเส้นสีดำ, ภาพประกอบพฤกษศาสตร์, สมจริง, นีโอแบบดั้งเดิม และ เรขาคณิต"
     },
     "hero": {
       "eyebrow": "ผลงานทั้งหมด",
@@ -97,11 +88,7 @@
   "about": {
     "metadata": {
       "title": "เกี่ยวกับ",
-      "description": "พบกับศิลปินเบื้องหลัง New Flower Tattoo — แปดปีแห่งการฝึกฝนอย่างตั้งใจที่เริ่มจากภาพประกอบ",
-      "openGraphTitle": "About | New Flower Tattoo",
-      "openGraphDescription": "แปดปีแห่งความประณีต การฝึกฝนภาพประกอบ และ งานรอยสักแบบร่วมสร้าง",
-      "twitterTitle": "About | New Flower Tattoo",
-      "twitterDescription": "แปดปีแห่งความประณีต การฝึกฝนภาพประกอบ และ งานรอยสักแบบร่วมสร้าง"
+      "description": "พบกับศิลปินเบื้องหลัง New Flower Tattoo — แปดปีแห่งการฝึกฝนอย่างตั้งใจที่เริ่มจากภาพประกอบ"
     },
     "hero": {
       "eyebrow": "ศิลปิน",
@@ -199,11 +186,7 @@
   "faq": {
     "metadata": {
       "title": "คำถามที่พบบ่อย",
-      "description": "คำตอบสำหรับคำถามทั่วไปเกี่ยวกับราคา เงินมัดจำ การเตรียมตัว การรักษา การเลื่อนนัด และ สิ่งที่ควรคาดหวังจากเซสชันรอยสัก",
-      "openGraphTitle": "FAQ | New Flower Tattoo",
-      "openGraphDescription": "คำตอบสำหรับคำถามด้านราคา เงินมัดจำ การเตรียมตัว และ การดูแล",
-      "twitterTitle": "FAQ | New Flower Tattoo",
-      "twitterDescription": "คำตอบสำหรับคำถามด้านราคา เงินมัดจำ การเตรียมตัว และ การดูแล"
+      "description": "คำตอบสำหรับคำถามทั่วไปเกี่ยวกับราคา เงินมัดจำ การเตรียมตัว การรักษา การเลื่อนนัด และ สิ่งที่ควรคาดหวังจากเซสชันรอยสัก"
     },
     "hero": {
       "eyebrow": "คำถาม",
@@ -300,11 +283,7 @@
   "contact": {
     "metadata": {
       "title": "ติดต่อ",
-      "description": "ติดต่อ New Flower Tattoo ได้ผ่าน Instagram, Facebook, WhatsApp หรืออีเมล สตูดิโอตั้งอยู่ที่ภูเก็ต ประเทศไทย",
-      "openGraphTitle": "Contact | New Flower Tattoo",
-      "openGraphDescription": "ติดต่อผ่าน Instagram, Facebook, WhatsApp หรืออีเมล สตูดิโออยู่ที่ภูเก็ต ประเทศไทย",
-      "twitterTitle": "Contact | New Flower Tattoo",
-      "twitterDescription": "ติดต่อผ่าน Instagram, Facebook, WhatsApp หรืออีเมล สตูดิโออยู่ที่ภูเก็ต ประเทศไทย"
+      "description": "ติดต่อ New Flower Tattoo ได้ผ่าน Instagram, Facebook, WhatsApp หรืออีเมล สตูดิโอตั้งอยู่ที่ภูเก็ต ประเทศไทย"
     },
     "hero": {
       "eyebrow": "ติดต่อ",
@@ -357,11 +336,7 @@
   "booking": {
     "metadata": {
       "title": "จองนัดหมาย",
-      "description": "ส่งคำขอนัดหมายรอยสัก อธิบายไอเดียของคุณ วันที่ต้องการ และ วิธีการติดต่อ — ไม่ต้องมัดจำจนกว่าจะตกลงดีไซน์",
-      "openGraphTitle": "จองนัดหมาย | New Flower Tattoo",
-      "openGraphDescription": "ส่งคำขอนัดหมายรอยสัก ไม่มีการเก็บมัดจำจนกว่าจะตกลงดีไซน์",
-      "twitterTitle": "จองนัดหมาย | New Flower Tattoo",
-      "twitterDescription": "ส่งคำขอนัดหมายรอยสัก ไม่มีการเก็บมัดจำจนกว่าจะตกลงดีไซน์"
+      "description": "ส่งคำขอนัดหมายรอยสัก อธิบายไอเดียของคุณ วันที่ต้องการ และ วิธีการติดต่อ — ไม่ต้องมัดจำจนกว่าจะตกลงดีไซน์"
     },
     "hero": {
       "eyebrow": "เริ่มกระบวนการ",
@@ -552,11 +527,7 @@
   "reviews": {
     "metadata": {
       "title": "เขียนรีวิว",
-      "description": "แบ่งปันประสบการณ์กับ New Flower Tattoo เพื่อช่วยให้ลูกค้าคนอื่นตัดสินใจได้ง่ายขึ้น",
-      "openGraphTitle": "เขียนรีวิว | New Flower Tattoo",
-      "openGraphDescription": "เล่าถึงประสบการณ์การสักกับ New Flower Tattoo เพื่อสร้างความมั่นใจให้คนอื่น",
-      "twitterTitle": "เขียนรีวิว | New Flower Tattoo",
-      "twitterDescription": "แบ่งปันประสบการณ์การสักของคุณกับ New Flower Tattoo"
+      "description": "แบ่งปันประสบการณ์กับ New Flower Tattoo เพื่อช่วยให้ลูกค้าคนอื่นตัดสินใจได้ง่ายขึ้น"
     },
     "hero": {
       "eyebrow": "เสียงจากลูกค้า",

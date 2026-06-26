@@ -1,7 +1,7 @@
 import type { MetadataRoute } from "next";
 
 const SITE_URL =
-  process.env["NEXT_PUBLIC_SITE_URL"] ?? "https://newflower.studio";
+  process.env["NEXT_PUBLIC_SITE_URL"] ?? "https://newflower.tattoo";
 
 export default function sitemap(): MetadataRoute.Sitemap {
   const now = new Date();

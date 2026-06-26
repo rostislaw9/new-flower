@@ -19,6 +19,7 @@ import { getArtistImagesConfig } from "@/lib/artist-images-config";
 import { createBreadcrumbList } from "@/lib/breadcrumbs";
 import { getFeaturedItems } from "@/lib/portfolio-loader";
 import { getFeaturedReviews } from "@/lib/reviews";
+import { buildPageMetadata } from "@/lib/seo/buildPageMetadata";
 
 export async function generateMetadata({
   params,
@@ -28,24 +29,12 @@ export async function generateMetadata({
   const { locale } = await params;
   const t = await getTranslations({ locale, namespace: "home.metadata" });
 
-  return {
+  return buildPageMetadata({
+    locale,
+    canonical: "/",
     title: t("title"),
     description: t("description"),
-    alternates: {
-      canonical: "/",
-    },
-    openGraph: {
-      title: t("openGraphTitle"),
-      description: t("openGraphDescription"),
-      type: "website",
-      url: "/",
-    },
-    twitter: {
-      card: "summary_large_image",
-      title: t("twitterTitle"),
-      description: t("twitterDescription"),
-    },
-  };
+  });
 }
 
 export default async function HomePage() {

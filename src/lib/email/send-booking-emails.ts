@@ -7,9 +7,9 @@ import {
 } from "@/lib/email/templates";
 import { resend } from "@/lib/resend";
 
-const ARTIST_EMAIL = process.env["ARTIST_EMAIL"] ?? "artist@newflower.studio";
+const ARTIST_EMAIL = process.env["ARTIST_EMAIL"] ?? "artist@newflower.tattoo";
 const FROM_ADDRESS =
-  process.env["EMAIL_FROM"] ?? "New Flower Tattoo <noreply@newflower.studio>";
+  process.env["EMAIL_FROM"] ?? "New Flower Tattoo <noreply@newflower.tattoo>";
 
 export interface EmailResults {
   artistNotified: boolean;

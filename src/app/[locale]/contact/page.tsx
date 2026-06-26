@@ -11,6 +11,7 @@ import { JsonLd } from "@/components/seo/JsonLd";
 import { Eyebrow, Heading, Text } from "@/components/styled/Typography";
 import { Separator } from "@/components/ui/separator";
 import { createBreadcrumbList } from "@/lib/breadcrumbs";
+import { buildPageMetadata } from "@/lib/seo/buildPageMetadata";
 
 export async function generateMetadata({
   params,
@@ -20,24 +21,12 @@ export async function generateMetadata({
   const { locale } = await params;
   const t = await getTranslations({ locale, namespace: "contact.metadata" });
 
-  return {
+  return buildPageMetadata({
+    locale,
+    canonical: "/contact",
     title: t("title"),
     description: t("description"),
-    alternates: {
-      canonical: "/contact",
-    },
-    openGraph: {
-      title: t("openGraphTitle"),
-      description: t("openGraphDescription"),
-      type: "website",
-      url: "/contact",
-    },
-    twitter: {
-      card: "summary_large_image",
-      title: t("twitterTitle"),
-      description: t("twitterDescription"),
-    },
-  };
+  });
 }
 
 const CONTACT_METHODS = [

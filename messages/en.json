@@ -1,7 +1,6 @@
 {
   "metadata": {
     "title": "New Flower — Tattoo Artist, Phuket",
-    "shortTitle": "New Flower",
     "description": "Premium tattoo art by a professional artist based in Phuket, Thailand. Specialising in fine line, blackwork, botanical illustration, and realism. Book your appointment today."
   },
   "nav": {
@@ -14,11 +13,7 @@
   "home": {
     "metadata": {
       "title": "New Flower Tattoo — Premium Tattoo Art",
-      "description": "Fine line, blackwork, and botanical tattoo art by a professional tattoo artist based in Phuket, Thailand. Book your appointment today.",
-      "openGraphTitle": "New Flower Tattoo — Premium Tattoo Art",
-      "openGraphDescription": "Fine line, blackwork, and botanical tattoo art. Every piece begins with a conversation.",
-      "twitterTitle": "New Flower Tattoo — Premium Tattoo Art",
-      "twitterDescription": "Fine line, blackwork, and botanical tattoo art. Every piece begins with a conversation."
+      "description": "Fine line, blackwork, and botanical tattoo art by a professional tattoo artist based in Phuket, Thailand. Book your appointment today."
     },
     "hero": {
       "eyebrow": "Tattoo Artist · Phuket",
@@ -64,11 +59,7 @@
   "portfolio": {
     "metadata": {
       "title": "Portfolio",
-      "description": "Browse the full tattoo portfolio — fine line, blackwork, botanical illustration, realism, neo traditional, and geometric work.",
-      "openGraphTitle": "Portfolio | New Flower Tattoo",
-      "openGraphDescription": "Fine line, blackwork, botanical, realism, neo traditional, and geometric tattoo work.",
-      "twitterTitle": "Portfolio | New Flower Tattoo",
-      "twitterDescription": "Fine line, blackwork, botanical, realism, neo traditional, and geometric tattoo work."
+      "description": "Browse the full tattoo portfolio — fine line, blackwork, botanical illustration, realism, neo traditional, and geometric work."
     },
     "hero": {
       "eyebrow": "All Work",
@@ -97,11 +88,7 @@
   "about": {
     "metadata": {
       "title": "About",
-      "description": "Meet the artist behind New Flower Tattoo — eight years of intentional practice rooted in classical illustration.",
-      "openGraphTitle": "About | New Flower Tattoo",
-      "openGraphDescription": "Eight years of precision, illustration training, and collaborative tattoo work.",
-      "twitterTitle": "About | New Flower Tattoo",
-      "twitterDescription": "Eight years of precision, illustration training, and collaborative tattoo work."
+      "description": "Meet the artist behind New Flower Tattoo — eight years of intentional practice rooted in classical illustration."
     },
     "hero": {
       "eyebrow": "The Artist",
@@ -199,11 +186,7 @@
   "faq": {
     "metadata": {
       "title": "FAQ",
-      "description": "Answers to common questions about pricing, deposits, preparation, healing, rescheduling, and what to expect from a tattoo session.",
-      "openGraphTitle": "FAQ | New Flower Tattoo",
-      "openGraphDescription": "Answers to common questions about pricing, deposits, preparation, and healing.",
-      "twitterTitle": "FAQ | New Flower Tattoo",
-      "twitterDescription": "Answers to common questions about pricing, deposits, preparation, and healing."
+      "description": "Answers to common questions about pricing, deposits, preparation, healing, rescheduling, and what to expect from a tattoo session."
     },
     "hero": {
       "eyebrow": "Questions",
@@ -300,11 +283,7 @@
   "contact": {
     "metadata": {
       "title": "Contact",
-      "description": "Get in touch with New Flower Tattoo. Reach out via Instagram, Facebook, WhatsApp, or email. Studio located in Phuket, Thailand.",
-      "openGraphTitle": "Contact | New Flower Tattoo",
-      "openGraphDescription": "Get in touch via Instagram, Facebook, WhatsApp, or email. Studio located in Phuket, Thailand.",
-      "twitterTitle": "Contact | New Flower Tattoo",
-      "twitterDescription": "Get in touch via Instagram, Facebook, WhatsApp, or email. Studio located in Phuket, Thailand."
+      "description": "Get in touch with New Flower Tattoo. Reach out via Instagram, Facebook, WhatsApp, or email. Studio located in Phuket, Thailand."
     },
     "hero": {
       "eyebrow": "Get in touch",
@@ -357,11 +336,7 @@
   "booking": {
     "metadata": {
       "title": "Book an Appointment",
-      "description": "Submit a tattoo appointment request. Describe your idea, preferred dates, and contact method — no deposit required until a design is agreed.",
-      "openGraphTitle": "Book an Appointment | New Flower Tattoo",
-      "openGraphDescription": "Submit a tattoo appointment request. No deposit until a design is agreed.",
-      "twitterTitle": "Book an Appointment | New Flower Tattoo",
-      "twitterDescription": "Submit a tattoo appointment request. No deposit until a design is agreed."
+      "description": "Submit a tattoo appointment request. Describe your idea, preferred dates, and contact method — no deposit required until a design is agreed."
     },
     "hero": {
       "eyebrow": "Start the process",
@@ -552,11 +527,7 @@
   "reviews": {
     "metadata": {
       "title": "Leave a review",
-      "description": "Share your experience working with New Flower Tattoo so future customers know what to expect.",
-      "openGraphTitle": "Leave a review | New Flower Tattoo",
-      "openGraphDescription": "Share your New Flower Tattoo session experience so others can book with confidence.",
-      "twitterTitle": "Leave a review | New Flower Tattoo",
-      "twitterDescription": "Share your experience with New Flower Tattoo so others can book with confidence."
+      "description": "Share your experience working with New Flower Tattoo so future customers know what to expect."
     },
     "hero": {
       "eyebrow": "Client stories",

@@ -7,6 +7,7 @@ import { ReviewForm } from "@/components/reviews/ReviewForm";
 import { PageHeading } from "@/components/sections/PageHeading";
 import { JsonLd } from "@/components/seo/JsonLd";
 import { createBreadcrumbList } from "@/lib/breadcrumbs";
+import { buildPageMetadata } from "@/lib/seo/buildPageMetadata";
 
 export async function generateMetadata({
   params,
@@ -16,24 +17,12 @@ export async function generateMetadata({
   const { locale } = await params;
   const t = await getTranslations({ locale, namespace: "reviews.metadata" });
 
-  return {
+  return buildPageMetadata({
+    locale,
+    canonical: "/reviews/new",
     title: t("title"),
     description: t("description"),
-    alternates: {
-      canonical: "/reviews/new",
-    },
-    openGraph: {
-      title: t("openGraphTitle"),
-      description: t("openGraphDescription"),
-      url: "/reviews/new",
-      type: "website",
-    },
-    twitter: {
-      card: "summary_large_image",
-      title: t("twitterTitle"),
-      description: t("twitterDescription"),
-    },
-  };
+  });
 }
 
 export default async function NewReviewPage() {

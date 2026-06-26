@@ -9,6 +9,7 @@ import { JsonLd } from "@/components/seo/JsonLd";
 import { Eyebrow, Text } from "@/components/styled/Typography";
 import { Separator } from "@/components/ui/separator";
 import { createBreadcrumbList } from "@/lib/breadcrumbs";
+import { buildPageMetadata } from "@/lib/seo/buildPageMetadata";
 
 export async function generateMetadata({
   params,
@@ -18,24 +19,12 @@ export async function generateMetadata({
   const { locale } = await params;
   const t = await getTranslations({ locale, namespace: "booking.metadata" });
 
-  return {
+  return buildPageMetadata({
+    locale,
+    canonical: "/booking",
     title: t("title"),
     description: t("description"),
-    alternates: {
-      canonical: "/booking",
-    },
-    openGraph: {
-      title: t("openGraphTitle"),
-      description: t("openGraphDescription"),
-      type: "website",
-      url: "/booking",
-    },
-    twitter: {
-      card: "summary_large_image",
-      title: t("twitterTitle"),
-      description: t("twitterDescription"),
-    },
-  };
+  });
 }
 
 type ProcessStep = {
