@@ -1,19 +1,19 @@
 "use client";
 
-import { use, useEffect, useState } from "react";
+import { use, useEffect, useMemo, useState } from "react";
 
 import { useTranslations } from "next-intl";
 import Image from "next/image";
-import Link from "next/link";
 import { useRouter } from "next/navigation";
 
-import { ArrowLeft, Loader2, Save } from "lucide-react";
+import { ArrowLeft, Loader2, Save, Trash2 } from "lucide-react";
 import { toast } from "sonner";
 
 import { AdminPageHeader } from "@/components/admin/AdminPageHeader";
 import { ImageUploader } from "@/components/admin/ImageUploader";
 import { Badge } from "@/components/styled/Badge";
 import { Button } from "@/components/styled/Button";
+import { DeleteConfirmDialog } from "@/components/styled/DeleteConfirmDialog";
 import { FormField } from "@/components/styled/FormField";
 import { Text } from "@/components/styled/Typography";
 import { Card, CardContent } from "@/components/ui/card";
@@ -30,7 +30,10 @@ import {
 import { Textarea } from "@/components/ui/textarea";
 import type { Locale } from "@/i18n/config";
 import { defaultLocale } from "@/i18n/config";
-import { updatePortfolioItem } from "@/lib/actions/portfolio";
+import {
+  deletePortfolioItem,
+  updatePortfolioItem,
+} from "@/lib/actions/portfolio";
 import { getLocalizedPath, isSupportedLocale } from "@/lib/locale-utils";
 import type { PortfolioItem } from "@/lib/portfolio-data";
 import { PORTFOLIO_CATEGORIES } from "@/lib/portfolio-data";
@@ -50,12 +53,18 @@ export default function EditPortfolioItemPage({
   const t = useTranslations("admin.portfolio");
   const actionsT = useTranslations("admin.common.actions");
   const [item, setItem] = useState<PortfolioItem | null>(null);
+  const [deleteItem, setDeleteItem] = useState<PortfolioItem | null>(null);
   const [loading, setLoading] = useState(true);
   const [saving, setSaving] = useState(false);
   const [error, setError] = useState<string | null>(null);
   const [imageUrl, setImageUrl] = useState<string>("");
   const [category, setCategory] = useState("");
   const [currentImageLoading, setCurrentImageLoading] = useState(true);
+
+  const backHref = useMemo(
+    () => getLocalizedPath("/admin/portfolio", locale),
+    [locale],
+  );
 
   useEffect(() => {
     const fetchItem = async () => {
@@ -78,7 +87,7 @@ export default function EditPortfolioItemPage({
     void fetchItem();
   }, [id, t]);
 
-  async function handleSubmit(e: React.FormEvent<HTMLFormElement>) {
+  async function handleSubmit(e: React.SubmitEvent<HTMLFormElement>) {
     e.preventDefault();
     setSaving(true);
     setError(null);
@@ -90,12 +99,25 @@ export default function EditPortfolioItemPage({
 
     if (result.success) {
       toast.success(t("edit.alerts.updated"));
-      router.push(`/${locale}/admin/portfolio`);
+      router.push(backHref);
     } else {
       const message = result.message || t("edit.alerts.updateFailed");
       toast.error(message);
       setError(message);
       setSaving(false);
+    }
+  }
+
+  async function handleDelete() {
+    if (!deleteItem) return;
+
+    const result = await deletePortfolioItem(deleteItem.id);
+
+    if (result.success) {
+      toast.success(t("alerts.deleteSuccess"));
+      router.push(backHref);
+    } else {
+      toast.error(result.message || t("alerts.deleteFailed"));
     }
   }
 
@@ -112,12 +134,14 @@ export default function EditPortfolioItemPage({
     return (
       <div className="space-y-4">
         <div className="flex items-center gap-4">
-          <Link href={`/${locale}/admin/portfolio`}>
-            <Button variant="outline" size="sm">
-              <ArrowLeft />
-              {actionsT("back")}
-            </Button>
-          </Link>
+          <Button
+            size="sm"
+            variant="outline"
+            href={getLocalizedPath("/admin/portfolio", locale)}
+          >
+            <ArrowLeft />
+            {actionsT("back")}
+          </Button>
         </div>
         <Text className="text-muted-foreground">
           {t("edit.alerts.notFound")}
@@ -236,7 +260,7 @@ export default function EditPortfolioItemPage({
               <div className="flex flex-col gap-2">
                 <Label>{t("form.currentImageLabel")}</Label>
                 {imageUrl ? (
-                  <div className="relative overflow-hidden rounded-xl border border-border/50 bg-muted/20">
+                  <div className="relative overflow-hidden rounded-xl border border-border/60 bg-muted/20">
                     {currentImageLoading && (
                       <div className="pointer-events-none absolute inset-0 z-10 flex items-center justify-center bg-background/30">
                         <Loader2 className="h-6 w-6 animate-spin text-muted-foreground" />
@@ -294,13 +318,33 @@ export default function EditPortfolioItemPage({
               </>
             )}
           </Button>
-          <Link href={`/${locale}/admin/portfolio`}>
-            <Button variant="outline" type="button" className="w-full">
-              {actionsT("cancel")}
-            </Button>
-          </Link>
+          <Button type="button" variant="outline" href={backHref}>
+            {actionsT("cancel")}
+          </Button>
+          <Button
+            type="button"
+            variant="destructive"
+            aria-label={actionsT("delete")}
+            onClick={() => setDeleteItem(item)}
+          >
+            <Trash2 />
+            {actionsT("delete")}
+          </Button>
         </div>
       </form>
+
+      <DeleteConfirmDialog
+        open={!!deleteItem}
+        title={t("deleteTitle")}
+        description={
+          deleteItem ? t("deleteConfirm", { title: deleteItem.title }) : ""
+        }
+        cancelLabel={actionsT("cancel")}
+        confirmLabel={actionsT("delete")}
+        confirmLoadingLabel={actionsT("deleting")}
+        onConfirm={handleDelete}
+        onCancel={() => setDeleteItem(null)}
+      />
     </div>
   );
 }

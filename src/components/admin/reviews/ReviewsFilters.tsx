@@ -100,7 +100,7 @@ export function ReviewsFilters({
     return params.toString();
   }
 
-  function handleSubmit(event: React.FormEvent<HTMLFormElement>) {
+  function handleSubmit(event: React.SubmitEvent<HTMLFormElement>) {
     event.preventDefault();
     const query = buildQueryString();
     router.push(query ? `${pathname}?${query}` : pathname);

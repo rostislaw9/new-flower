@@ -99,7 +99,7 @@ export default function AdminLayout({
         <SidebarRail />
       </Sidebar>
       <SidebarInset>
-        <header className="sticky top-0 z-20 flex h-16 shrink-0 items-center gap-2 border-b border-border/70 bg-background/95 px-4 backdrop-blur supports-[backdrop-filter]:bg-background/80">
+        <header className="sticky top-0 z-20 flex h-16 shrink-0 items-center gap-2 border-b border-border bg-background/90 px-4 backdrop-blur-sm">
           <div className="flex min-w-0 flex-1 items-center gap-2">
             <SidebarTrigger />
             <Separator orientation="vertical" className="h-4" />

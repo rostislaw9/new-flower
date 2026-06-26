@@ -810,9 +810,6 @@
         "removedFeatured": "Item removed from featured",
         "toggleFeaturedFailed": "Failed to update featured status"
       },
-      "actions": {
-        "delete": "Delete item"
-      },
       "deleteTitle": "Delete item",
       "deleteConfirm": "Are you sure you want to delete \"{title}\"? This action cannot be undone.",
       "bulkDelete": {

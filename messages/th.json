@@ -810,9 +810,6 @@
         "removedFeatured": "นำรายการออกจากไฮไลต์แล้ว",
         "toggleFeaturedFailed": "อัปเดตสถานะไฮไลต์ไม่สำเร็จ"
       },
-      "actions": {
-        "delete": "ลบรายการ"
-      },
       "deleteTitle": "ลบรายการ",
       "deleteConfirm": "คุณแน่ใจหรือไม่ว่าต้องการลบ \"{title}\"? การกระทำนี้ไม่สามารถย้อนกลับได้",
       "bulkDelete": {

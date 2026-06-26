@@ -4,7 +4,6 @@ import { useEffect, useMemo, useState } from "react";
 
 import { useLocale, useTranslations } from "next-intl";
 import Image from "next/image";
-import Link from "next/link";
 import { useRouter } from "next/navigation";
 import { useTopLoader } from "nextjs-toploader";
 
@@ -317,10 +316,10 @@ export default function UploadPortfolioPage() {
                         type="button"
                         onClick={() => setSelectedId(draft.id)}
                         className={cn(
-                          "relative aspect-square overflow-hidden rounded-xl border bg-muted/20",
+                          "relative aspect-square overflow-hidden rounded-xl border bg-muted/20 hover:border-accent",
                           isSelected
                             ? "border-accent ring-2 ring-accent"
-                            : "border-border/70",
+                            : "border-border/60",
                           isComplete && !isSelected && "border-emerald-500/60",
                         )}
                       >
@@ -537,11 +536,9 @@ export default function UploadPortfolioPage() {
                 </>
               )}
             </Button>
-            <Link href={backHref}>
-              <Button variant="outline" type="button" className="w-full">
-                {actionsT("cancel")}
-              </Button>
-            </Link>
+            <Button type="button" variant="outline" href={backHref}>
+              {actionsT("cancel")}
+            </Button>
           </div>
         </div>
       </div>

@@ -53,7 +53,7 @@ export function BookingStatusControl({
     setSelectedStatus(currentStatus);
   }, [currentStatus]);
 
-  const handleSubmit = (event: React.FormEvent<HTMLFormElement>) => {
+  const handleSubmit = (event: React.SubmitEvent<HTMLFormElement>) => {
     event.preventDefault();
     if (selectedStatus === currentStatus) {
       return;

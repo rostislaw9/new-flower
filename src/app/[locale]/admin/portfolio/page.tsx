@@ -51,16 +51,12 @@ export default function PortfolioAdminPage() {
     ? rawLocale
     : defaultLocale;
   const t = useTranslations("admin.portfolio");
-  const portfolioMenuT = useTranslations("admin.portfolio.actions");
   const actionsT = useTranslations("admin.common.actions");
   const [items, setItems] = useState<PortfolioItem[]>([]);
   const [loading, setLoading] = useState(true);
-  const [deleteItem, setDeleteItem] = useState<PortfolioItem | null>(null);
-  const [_deleting, setDeleting] = useState(false);
   const [visibleCount, setVisibleCount] = useState(INITIAL_BATCH);
   const [loadedImages, setLoadedImages] = useState<Record<string, boolean>>({});
   const [selectedIds, setSelectedIds] = useState<Set<string>>(new Set());
-  const [bulkDeleting, setBulkDeleting] = useState(false);
   const [confirmBulkDelete, setConfirmBulkDelete] = useState(false);
   const [togglingFeaturedId, setTogglingFeaturedId] = useState<string | null>(
     null,
@@ -119,26 +115,9 @@ export default function PortfolioAdminPage() {
 
   const visibleItems = items.slice(0, visibleCount);
 
-  async function handleDelete() {
-    if (!deleteItem) return;
-
-    setDeleting(true);
-    const result = await deletePortfolioItem(deleteItem.id);
-
-    if (result.success) {
-      setItems((prev) => prev.filter((i) => i.id !== deleteItem.id));
-      setDeleteItem(null);
-      toast.success(t("alerts.deleteSuccess"));
-    } else {
-      toast.error(result.message || t("alerts.deleteFailed"));
-    }
-    setDeleting(false);
-  }
-
   async function handleBulkDelete() {
     if (selectedIds.size === 0) return;
 
-    setBulkDeleting(true);
     const idsToDelete = Array.from(selectedIds);
     let successCount = 0;
 
@@ -163,7 +142,6 @@ export default function PortfolioAdminPage() {
         }),
       );
     }
-    setBulkDeleting(false);
   }
 
   const toggleSelectId = (id: string) => {
@@ -267,7 +245,6 @@ export default function PortfolioAdminPage() {
             size="sm"
             variant="destructive"
             onClick={() => setConfirmBulkDelete(true)}
-            disabled={bulkDeleting}
           >
             <Trash2 />
             <span className="hidden sm:block">{actionsT("delete")}</span>(
@@ -364,7 +341,7 @@ export default function PortfolioAdminPage() {
                 {selectedIds.has(item.id) ? (
                   <CheckSquare2 className="h-5 w-5 text-accent" />
                 ) : (
-                  <Square className="h-5 w-5 text-muted-foreground" />
+                  <Square className="h-5 w-5 text-muted-foreground hover:text-accent" />
                 )}
               </button>
             </div>
@@ -382,22 +359,6 @@ export default function PortfolioAdminPage() {
                     {item.category}
                   </Text>
                 </div>
-                <Button
-                  size="icon-borderless"
-                  variant="ghost"
-                  aria-label={portfolioMenuT("delete")}
-                  className="-mr-2 -mt-2 text-destructive hover:text-destructive focus-visible:ring-destructive"
-                  onClick={(event) => {
-                    event.preventDefault();
-                    event.stopPropagation();
-                    setDeleteItem(item);
-                  }}
-                  onPointerDown={(event) => event.stopPropagation()}
-                  onKeyDown={(event) => event.stopPropagation()}
-                >
-                  <Trash2 className="h-4 w-4" />
-                  <span className="sr-only">{portfolioMenuT("delete")}</span>
-                </Button>
               </div>
             </CardContent>
           </Card>
@@ -428,19 +389,6 @@ export default function PortfolioAdminPage() {
       ) : (
         emptyState
       )}
-
-      <DeleteConfirmDialog
-        open={!!deleteItem}
-        title={t("deleteTitle")}
-        description={
-          deleteItem ? t("deleteConfirm", { title: deleteItem.title }) : ""
-        }
-        cancelLabel={actionsT("cancel")}
-        confirmLabel={actionsT("delete")}
-        confirmLoadingLabel={actionsT("deleting")}
-        onConfirm={handleDelete}
-        onCancel={() => setDeleteItem(null)}
-      />
 
       <DeleteConfirmDialog
         open={confirmBulkDelete}
