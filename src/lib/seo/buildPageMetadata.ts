@@ -34,8 +34,7 @@ export async function buildPageMetadata({
   return {
     metadataBase: new URL(SITE_URL),
 
-    title: `${title} | New Flower Tattoo`,
-
+    title,
     description,
 
     alternates: {

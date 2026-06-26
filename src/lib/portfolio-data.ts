@@ -8,7 +8,7 @@ export type PortfolioCategory =
   | "Botanical"
   | "Fine Line"
   | "Geometric"
-  | "Tribe"
+  | "Tribal"
   | "Other";
 
 export interface PortfolioItem {
@@ -33,6 +33,6 @@ export const PORTFOLIO_CATEGORIES: PortfolioCategory[] = [
   "Botanical",
   "Fine Line",
   "Geometric",
-  "Tribe",
+  "Tribal",
   "Other",
 ];

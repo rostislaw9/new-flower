@@ -39,12 +39,16 @@ export function personSchema(): SchemaOrgObject {
       url: SITE_URL,
     },
     knowsAbout: [
-      "Fine Line Tattoo",
-      "Blackwork Tattoo",
-      "Botanical Illustration Tattoo",
       "Realism Tattoo",
+      "Dotwork Tattoo",
+      "Blackwork Tattoo",
+      "Thai Sak Yant Tattoo",
       "Neo Traditional Tattoo",
+      "Japanese Style Tattoo",
+      "Botanical Tattoo",
+      "Fine Line Tattoo",
       "Geometric Tattoo",
+      "Tribal Tattoo",
     ],
     sameAs: [
       "https://www.instagram.com/tattoo_by_newflower",
@@ -65,7 +69,7 @@ export async function localBusinessSchema(): Promise<SchemaOrgObject> {
     "@id": `${SITE_URL}/#business`,
     name: "New Flower Tattoo",
     description:
-      "Premium tattoo studio specialising in fine line, blackwork, botanical illustration, and realism. Custom designs only.",
+      "Premium tattoo studio specialising in Thai Sak Yant tattooing, Japanese style compositions, blackwork, and realism. Custom designs only.",
     url: SITE_URL,
     email: "flowerpowernew@gmail.com",
     address: {

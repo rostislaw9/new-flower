@@ -1,10 +1,10 @@
 import type { MetadataRoute } from "next";
 
 const MANIFEST_METADATA = {
-  name: "New Flower — Tattoo Artist, Phuket",
+  name: "New Flower Tattoo, Phuket",
   shortName: "New Flower",
   description:
-    "Premium tattoo art by a professional artist based in Phuket, Thailand. Specialising in fine line, blackwork, botanical illustration, and realism. Book your appointment today.",
+    "Premium tattoo art by a professional artist based in Phuket, Thailand. Specialising in Thai Sak Yant tattooing, Japanese style compositions, blackwork, and realism. Book your appointment today.",
 };
 
 export default function manifest(): MetadataRoute.Manifest {

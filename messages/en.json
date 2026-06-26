@@ -1,7 +1,7 @@
 {
   "metadata": {
     "title": "New Flower — Tattoo Artist, Phuket",
-    "description": "Premium tattoo art by a professional artist based in Phuket, Thailand. Specialising in fine line, blackwork, botanical illustration, and realism. Book your appointment today."
+    "description": "Premium tattoo art by a professional artist based in Phuket, Thailand. Specialising in Thai Sak Yant tattooing, Japanese style compositions, blackwork, and realism. Book your appointment today."
   },
   "nav": {
     "portfolio": "Portfolio",
@@ -13,12 +13,12 @@
   "home": {
     "metadata": {
       "title": "New Flower Tattoo — Premium Tattoo Art",
-      "description": "Fine line, blackwork, and botanical tattoo art by a professional tattoo artist based in Phuket, Thailand. Book your appointment today."
+      "description": "Thai Sak Yant tattooing, Japanese style compositions, blackwork, and realism tattoo art by a professional tattoo artist based in Phuket, Thailand. Book your appointment today."
     },
     "hero": {
       "eyebrow": "Tattoo Artist · Phuket",
       "title": "Art that lives on skin",
-      "subtitle": "Specialising in fine line, blackwork, and botanical illustration. Every piece begins with a conversation and ends with something permanent.",
+      "subtitle": "Specialising in Thai Sak Yant tattooing, Japanese style compositions, blackwork, and realism. Every piece begins with a conversation and ends with something permanent.",
       "bookButton": "Book Appointment",
       "portfolioButton": "View Portfolio"
     },
@@ -59,7 +59,7 @@
   "portfolio": {
     "metadata": {
       "title": "Portfolio",
-      "description": "Browse the full tattoo portfolio — fine line, blackwork, botanical illustration, realism, neo traditional, and geometric work."
+      "description": "Browse the full tattoo portfolio — Thai Sak Yant tattooing, Japanese style compositions, blackwork, and realism work."
     },
     "hero": {
       "eyebrow": "All Work",
@@ -110,20 +110,20 @@
       "title": "Specialisations",
       "items": [
         {
-          "title": "Fine Line",
-          "description": "Delicate, precise linework that ages beautifully. Ideal for botanical motifs, portraits, and geometric patterns."
+          "title": "Thai Sak Yant Tattoo",
+          "description": "Sacred traditional Thai tattooing rooted in ancient spiritual designs, yantras, and protective symbolism."
         },
         {
-          "title": "Blackwork",
-          "description": "Bold negative space and solid black forms — from minimalist icons to intricate illustrative pieces."
+          "title": "Japanese Style Tattoo",
+          "description": "Traditional Japanese-inspired compositions featuring flowing layouts, mythological elements, and bold storytelling imagery."
         },
         {
-          "title": "Botanical Illustration",
-          "description": "Rooted in scientific drawing. Plants, flowers, and organic forms rendered with accuracy and interpretation."
+          "title": "Blackwork Tattoo",
+          "description": "Bold black ink compositions using strong contrast, solid fills, and graphic or ornamental structures."
         },
         {
-          "title": "Realism",
-          "description": "Photorealistic portraits, animals, or objects planned across multiple sessions with meticulous placement."
+          "title": "Realism Tattoo",
+          "description": "Highly detailed, lifelike tattoos of portraits, animals, or objects with strong attention to light, shadow, and depth."
         }
       ]
     },
@@ -133,28 +133,28 @@
       "events": [
         {
           "year": "2016",
-          "title": "First tattoo apprenticeship",
-          "description": "Began a two-year apprenticeship in Saint Petersburg under master tattooist Dmitri Volkov, focusing on traditional techniques and skin theory."
+          "title": "Tattoo apprenticeship begins",
+          "description": "Started a professional apprenticeship in Saint Petersburg under master tattooist Dmitri Volkov, focusing on foundational technique, blackwork fundamentals, and skin theory."
         },
         {
           "year": "2018",
-          "title": "Moved to fine line specialisation",
-          "description": "Travelled to Berlin to study under contemporary fine-line artists, developing a style rooted in botanical illustration and negative space."
+          "title": "Exploration of Japanese and blackwork styles",
+          "description": "Traveled across Europe and Japan to study traditional Japanese tattoo composition and modern blackwork approaches, shaping a bold, structured style."
         },
         {
           "year": "2020",
-          "title": "Opened independent studio",
-          "description": "Established New Flower Studio in Phuket — a private, appointment-only space for focused, collaborative sessions."
+          "title": "Studio established in Thailand",
+          "description": "Opened a private appointment-only studio in Phuket, focusing on custom tattoo work including Thai Sak Yant-inspired pieces and large-scale compositions."
         },
         {
           "year": "2022",
-          "title": "International guest spots",
-          "description": "Residencies in Amsterdam, Copenhagen, and Tokyo brought global perspectives back to Phuket."
+          "title": "International guest artist work",
+          "description": "Worked as a guest artist in studios across Asia and Europe, expanding expertise in realism, Japanese style, and sacred tattoo traditions."
         },
         {
           "year": "2024",
-          "title": "500+ pieces completed",
-          "description": "Surpassed 500 completed tattoos with work featured in Tattooist Art Magazine and European exhibitions."
+          "title": "Established signature style",
+          "description": "Completed 500+ tattoos and refined a signature blend of Thai Sak Yant, Japanese composition, blackwork, and realism techniques."
         }
       ]
     },
