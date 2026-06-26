@@ -1,4 +1,4 @@
-import * as React from "react";
+import type { ComponentProps } from "react";
 
 import Link from "next/link";
 
@@ -40,7 +40,7 @@ const customButtonVariants = cva(["tracking-wider", "uppercase"], {
 });
 
 type ButtonProps = Omit<
-  React.ComponentProps<typeof ShadcnButton>,
+  ComponentProps<typeof ShadcnButton>,
   "variant" | "size"
 > &
   VariantProps<typeof customButtonVariants> & {

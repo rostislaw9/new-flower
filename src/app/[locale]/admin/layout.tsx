@@ -1,11 +1,11 @@
 "use client";
 
-import * as React from "react";
+import type { ReactNode } from "react";
+import { Fragment, useEffect, useMemo, useState } from "react";
 
 import { useLocale, useTranslations } from "next-intl";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
-import { useTopLoader } from "nextjs-toploader";
 
 import { Calendar, Images, LayoutDashboard, Star, User } from "lucide-react";
 
@@ -37,18 +37,15 @@ import {
 
 const SIDEBAR_STORAGE_KEY = "admin-sidebar-open";
 
-export default function AdminLayout({
-  children,
-}: {
-  children: React.ReactNode;
-}) {
-  const [initialSidebarOpen, setInitialSidebarOpen] = React.useState<
-    boolean | null
-  >(null);
+export default function AdminLayout({ children }: { children: ReactNode }) {
   const locale = useLocale();
   const pathname = usePathname();
   const t = useTranslations("admin.layout");
-  const { start } = useTopLoader();
+
+  const [initialSidebarOpen, setInitialSidebarOpen] = useState<boolean | null>(
+    null,
+  );
+
   const navItems = [
     { href: "/admin", icon: LayoutDashboard, label: t("nav.dashboard") },
     { href: "/admin/artist-images", icon: User, label: t("nav.artistImages") },
@@ -56,12 +53,13 @@ export default function AdminLayout({
     { href: "/admin/bookings", icon: Calendar, label: t("nav.bookings") },
     { href: "/admin/reviews", icon: Star, label: t("nav.reviews") },
   ];
-  const breadcrumbItems = React.useMemo(
+
+  const breadcrumbItems = useMemo(
     () => buildAdminBreadcrumbs(pathname, locale),
     [locale, pathname],
   );
 
-  React.useEffect(() => {
+  useEffect(() => {
     if (typeof window === "undefined") {
       return;
     }
@@ -84,7 +82,7 @@ export default function AdminLayout({
       <SidebarStatePersistence />
       <Sidebar side="left" variant="sidebar" collapsible="icon">
         <SidebarHeader className="py-4">
-          <AdminSidebarHeader onClick={() => start()} />
+          <AdminSidebarHeader />
         </SidebarHeader>
         <SidebarContent className="px-2 py-4">
           <AdminSidebarNavMenu
@@ -118,7 +116,7 @@ export default function AdminLayout({
 function SidebarStatePersistence() {
   const { state } = useSidebar();
 
-  React.useEffect(() => {
+  useEffect(() => {
     if (typeof window === "undefined") {
       return;
     }
@@ -148,7 +146,7 @@ function AdminBreadcrumbsTrail({ items }: { items: AdminBreadcrumb[] }) {
         {items.map((item, index) => {
           const isLast = index === items.length - 1;
           return (
-            <React.Fragment key={`${item.label}-${item.href ?? index}`}>
+            <Fragment key={`${item.label}-${item.href ?? index}`}>
               <BreadcrumbItem className="max-w-[180px] flex-shrink">
                 {isLast || !item.href ? (
                   <BreadcrumbPage className="truncate font-medium">
@@ -161,7 +159,7 @@ function AdminBreadcrumbsTrail({ items }: { items: AdminBreadcrumb[] }) {
                 )}
               </BreadcrumbItem>
               {!isLast ? <BreadcrumbSeparator /> : null}
-            </React.Fragment>
+            </Fragment>
           );
         })}
       </BreadcrumbList>

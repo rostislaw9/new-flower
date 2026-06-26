@@ -1,6 +1,4 @@
-"use client";
-
-import * as React from "react";
+import { useCallback } from "react";
 
 import Link from "next/link";
 import { useTopLoader } from "nextjs-toploader";
@@ -34,11 +32,12 @@ export function AdminSidebarNavMenu({
   const { isMobile, setOpenMobile } = useSidebar();
   const { start } = useTopLoader();
 
-  const handleNavigate = React.useCallback(() => {
+  const handleNavigate = useCallback(() => {
+    start();
     if (isMobile) {
       setOpenMobile(false);
     }
-  }, [isMobile, setOpenMobile]);
+  }, [start, isMobile, setOpenMobile]);
 
   return (
     <SidebarMenu className="space-y-1">
@@ -52,20 +51,11 @@ export function AdminSidebarNavMenu({
             <SidebarMenuButton
               asChild
               isActive={isActive}
-              onClick={() => {
-                start();
-                handleNavigate();
-              }}
+              onClick={handleNavigate}
               tooltip={item.label}
               className="justify-start text-muted-foreground transition-colors hover:bg-accent hover:text-accent-foreground active:bg-accent active:text-accent-foreground data-[active=true]:text-accent group-data-[collapsible=icon]:justify-center group-data-[collapsible=icon]:px-2"
             >
-              <Link
-                href={item.href}
-                onClick={() => {
-                  start();
-                  handleNavigate();
-                }}
-              >
+              <Link href={item.href} onClick={handleNavigate}>
                 <Icon />
                 <span className="group-data-[collapsible=icon]:hidden">
                   {item.label}

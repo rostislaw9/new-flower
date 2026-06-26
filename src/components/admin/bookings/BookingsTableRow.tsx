@@ -1,6 +1,6 @@
 "use client";
 
-import * as React from "react";
+import { useState } from "react";
 
 import { useRouter } from "next/navigation";
 import { useTopLoader } from "nextjs-toploader";
@@ -61,8 +61,8 @@ export function BookingsTableRow({
 }: BookingsTableRowProps) {
   const router = useRouter();
   const { start } = useTopLoader();
-  const [confirmOpen, setConfirmOpen] = React.useState(false);
-  const [deletePending, setDeletePending] = React.useState(false);
+  const [confirmOpen, setConfirmOpen] = useState(false);
+  const [deletePending, setDeletePending] = useState(false);
 
   const handleNavigate = () => {
     start();
