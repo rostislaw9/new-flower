@@ -41,7 +41,7 @@ export async function createPortfolioItems(
     const title = item.title?.trim() ?? "";
     const imageUrl = item.imageUrl?.trim() ?? "";
     const description = item.description?.trim() || null;
-    const featured = false; // Don't allow featured on creation
+    const featured = false;
     const displayOrder = Number.isFinite(item.displayOrder)
       ? Number(item.displayOrder)
       : index;
@@ -105,7 +105,7 @@ export async function updatePortfolioItem(
     const description = formData.get("description") as string | null;
     const imageUrl = formData.get("imageUrl") as string;
     const category = formData.get("category") as string;
-    const featured = formData.get("featured") === "on";
+    const featured = formData.get("featured") === "true";
     const displayOrder = parseInt(formData.get("displayOrder") as string) || 0;
 
     if (!title || !imageUrl || !category) {

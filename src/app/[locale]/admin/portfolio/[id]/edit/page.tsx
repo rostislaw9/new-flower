@@ -70,13 +70,12 @@ export default function EditPortfolioItemPage({
     setValue,
     formState: { isDirty },
   } = useForm<PortfolioFormValues>();
+  const imageUrl = watch("imageUrl");
   const [item, setItem] = useState<PortfolioItem | null>(null);
   const [deleteItem, setDeleteItem] = useState<PortfolioItem | null>(null);
   const [loading, setLoading] = useState(true);
   const [saving, setSaving] = useState(false);
   const [error, setError] = useState<string | null>(null);
-  const imageUrl = watch("imageUrl");
-  // const [category, setCategory] = useState("");
   const [currentImageLoading, setCurrentImageLoading] = useState(true);
 
   const backHref = useMemo(

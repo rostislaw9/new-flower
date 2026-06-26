@@ -38,7 +38,7 @@ export async function uploadToCloudinary(
         transformation: [{ quality: "auto:good" }, { fetch_format: "auto" }],
         ...(useOverwrite
           ? {
-              public_id: file.name,
+              public_id: file.name.replace(/\.[^/.]+$/, ""),
               overwrite: true,
               invalidate: true,
             }
