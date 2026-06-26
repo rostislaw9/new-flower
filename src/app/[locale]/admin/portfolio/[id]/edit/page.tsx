@@ -35,8 +35,7 @@ import {
   SelectValue,
 } from "@/components/ui/select";
 import { Textarea } from "@/components/ui/textarea";
-import type { Locale } from "@/i18n/config";
-import { defaultLocale } from "@/i18n/config";
+import { type Locale, defaultLocale } from "@/i18n/config";
 import {
   deletePortfolioItem,
   updatePortfolioItem,

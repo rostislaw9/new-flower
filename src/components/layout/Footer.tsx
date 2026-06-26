@@ -8,6 +8,8 @@ import { Button } from "@/components/styled/Button";
 import { Logo } from "@/components/styled/Logo";
 import { Eyebrow, Text } from "@/components/styled/Typography";
 import { Separator } from "@/components/ui/separator";
+import { type Locale, defaultLocale } from "@/i18n/config";
+import { isSupportedLocale } from "@/lib/locale-utils";
 
 const FOOTER_LINKS = [
   { href: "/portfolio", labelKey: "links.portfolio" },
@@ -24,9 +26,14 @@ const SOCIAL_LINKS = [
 ] as const;
 
 export function Footer() {
+  const rawLocale = useLocale();
+  const locale: Locale = isSupportedLocale(rawLocale)
+    ? rawLocale
+    : defaultLocale;
+
   const t = useTranslations("footer");
-  const locale = useLocale();
   const pathname = usePathname();
+
   const year = new Date().getFullYear();
 
   return pathname.includes("/admin") ? null : (

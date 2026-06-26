@@ -5,8 +5,12 @@ import { useCallback, useMemo } from "react";
 import { useLocale } from "next-intl";
 import { usePathname, useRouter, useSearchParams } from "next/navigation";
 
-import { type Locale, locales } from "@/i18n/config";
-import { getLocalizedPath, persistPreferredLocale } from "@/lib/locale-utils";
+import { type Locale, defaultLocale, locales } from "@/i18n/config";
+import {
+  getLocalizedPath,
+  isSupportedLocale,
+  persistPreferredLocale,
+} from "@/lib/locale-utils";
 import { cn } from "@/lib/utils";
 
 import { Button } from "./Button";
@@ -20,7 +24,11 @@ export function LanguageSwitcher({
   className,
   linkClassName,
 }: LanguageSwitcherProps) {
-  const locale = useLocale();
+  const rawLocale = useLocale();
+  const locale: Locale = isSupportedLocale(rawLocale)
+    ? rawLocale
+    : defaultLocale;
+
   const pathname = usePathname();
   const router = useRouter();
   const searchParams = useSearchParams();

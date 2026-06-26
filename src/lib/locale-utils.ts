@@ -59,14 +59,6 @@ export function getLocalizedPath(
   return buildLocalizedPath(pathWithoutLocale, newLocale, canonical);
 }
 
-export function getLocaleFromPath(pathname: string): Locale | null {
-  return splitPathname(pathname).locale;
-}
-
-export function getPathWithoutLocale(pathname: string): string {
-  return splitPathname(pathname).pathWithoutLocale;
-}
-
 export function persistPreferredLocale(locale: Locale) {
   if (typeof window === "undefined") {
     return;
@@ -81,13 +73,4 @@ export function persistPreferredLocale(locale: Locale) {
   window.dispatchEvent(
     new CustomEvent<Locale>(PREFERRED_LOCALE_EVENT, { detail: locale }),
   );
-}
-
-export function readPreferredLocale(): Locale | null {
-  if (typeof window === "undefined") {
-    return null;
-  }
-
-  const stored = window.localStorage.getItem(LOCALE_STORAGE_KEY);
-  return isSupportedLocale(stored) ? stored : null;
 }

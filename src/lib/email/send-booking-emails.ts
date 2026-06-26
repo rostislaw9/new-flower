@@ -7,9 +7,8 @@ import {
 } from "@/lib/email/templates";
 import { resend } from "@/lib/resend";
 
-const ARTIST_EMAIL = process.env["ARTIST_EMAIL"] ?? "artist@newflower.tattoo";
-const FROM_ADDRESS =
-  process.env["EMAIL_FROM"] ?? "New Flower Tattoo <noreply@newflower.tattoo>";
+const ARTIST_EMAIL = process.env["ARTIST_EMAIL"];
+const FROM_ADDRESS = process.env["EMAIL_FROM"];
 
 export interface EmailResults {
   artistNotified: boolean;
@@ -24,9 +23,9 @@ export async function sendBookingEmails(
   let artistNotified = false;
   let customerConfirmed = false;
 
-  if (resend === null) {
+  if (resend === null || !ARTIST_EMAIL || !FROM_ADDRESS) {
     console.warn(
-      "[sendBookingEmails] Resend not configured — skipping email notifications. Set RESEND_API_KEY to enable emails.",
+      "[sendBookingEmails] Resend not configured — skipping email notifications. Set RESEND_API_KEY, ARTIST_EMAIL and FROM_ADDRESS to enable emails.",
     );
     return {
       artistNotified: false,

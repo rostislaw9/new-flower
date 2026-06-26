@@ -36,9 +36,11 @@ import {
 } from "@/components/ui/select";
 import { Separator } from "@/components/ui/separator";
 import { Textarea } from "@/components/ui/textarea";
+import { type Locale, defaultLocale } from "@/i18n/config";
 import type { ActionResult } from "@/lib/actions/create-appointment";
 import { createAppointment } from "@/lib/actions/create-appointment";
 import { createDateLabelFormatter } from "@/lib/date-utils";
+import { isSupportedLocale } from "@/lib/locale-utils";
 import type {
   BodyPlacement,
   BudgetRange,
@@ -120,20 +122,24 @@ const budgetTranslationKeys: Record<BudgetRange, BudgetOptionKey> = {
 };
 
 export function BookingForm() {
+  const rawLocale = useLocale();
+  const locale: Locale = isSupportedLocale(rawLocale)
+    ? rawLocale
+    : defaultLocale;
+
+  const formT = useTranslations("booking.form");
+  const successT = useTranslations("booking.success");
+
   const [state, formAction, isPending] = useActionState(
     createAppointment,
     INITIAL_STATE,
   );
-  const formT = useTranslations("booking.form");
-  const successT = useTranslations("booking.success");
-  const locale = useLocale();
 
   const dateLabelFormatter = useMemo(
     () => createDateLabelFormatter(locale),
     [locale],
   );
 
-  const [preferredDates, setPreferredDates] = useState<string[]>([""]);
   const [formData, setFormData] = useState({
     fullName: "",
     email: "",
@@ -146,8 +152,11 @@ export function BookingForm() {
     budget: "",
     contactMethod: "",
   });
+  const [preferredDates, setPreferredDates] = useState<string[]>([""]);
   const [referenceImageUrls, setReferenceImageUrls] = useState<string[]>([]);
   const [imageInputMode, setImageInputMode] = useState<"url" | "upload">("url");
+  const [copied, setCopied] = useState(false);
+
   const fullNameRef = useRef<HTMLInputElement>(null);
   const emailRef = useRef<HTMLInputElement>(null);
   const contactMethodRef = useRef<HTMLButtonElement>(null);
@@ -155,7 +164,6 @@ export function BookingForm() {
   const tattooDescriptionRef = useRef<HTMLTextAreaElement>(null);
   const preferredDateRef = useRef<HTMLButtonElement>(null);
   const successRef = useRef<HTMLDivElement>(null);
-  const [copied, setCopied] = useState(false);
 
   const handleInputChange = (field: keyof typeof formData, value: string) => {
     setFormData((prev) => ({ ...prev, [field]: value }));

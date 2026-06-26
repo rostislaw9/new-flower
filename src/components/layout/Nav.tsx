@@ -9,6 +9,8 @@ import { Button } from "@/components/styled/Button";
 import { LanguageSwitcher } from "@/components/styled/LanguageSwitcher";
 import { Logo } from "@/components/styled/Logo";
 import { Heading } from "@/components/styled/Typography";
+import { type Locale, defaultLocale } from "@/i18n/config";
+import { isSupportedLocale } from "@/lib/locale-utils";
 import { cn } from "@/lib/utils";
 
 const NAV_LINKS = [
@@ -19,10 +21,15 @@ const NAV_LINKS = [
 ] as const;
 
 export function Nav() {
+  const rawLocale = useLocale();
+  const locale: Locale = isSupportedLocale(rawLocale)
+    ? rawLocale
+    : defaultLocale;
+
   const t = useTranslations("nav");
-  const locale = useLocale();
   const pathname = usePathname();
   const router = useRouter();
+
   const [scrolled, setScrolled] = useState(false);
   const [menuOpen, setMenuOpen] = useState(false);
 

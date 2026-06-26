@@ -77,6 +77,7 @@ export default function UploadPortfolioPage() {
   const locale: Locale = isSupportedLocale(rawLocale)
     ? rawLocale
     : defaultLocale;
+
   const router = useRouter();
   const { start } = useTopLoader();
   const uploadT = useTranslations("admin.portfolio.upload");

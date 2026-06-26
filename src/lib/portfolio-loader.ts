@@ -47,14 +47,6 @@ export async function getPortfolioItemById(
   return mapPrismaItem(item);
 }
 
-export async function getPortfolioItems(
-  category?: PortfolioCategory,
-): Promise<PortfolioItem[]> {
-  const items = await loadPortfolioItems();
-  if (category === undefined) return items;
-  return items.filter((item) => item.category === category);
-}
-
 export async function getFeaturedItems(limit = 8): Promise<PortfolioItem[]> {
   const items = await prisma.portfolioItem.findMany({
     where: { featured: true },

@@ -31,8 +31,7 @@ import {
   EmptyTitle,
 } from "@/components/ui/empty";
 import { Skeleton } from "@/components/ui/skeleton";
-import type { Locale } from "@/i18n/config";
-import { defaultLocale } from "@/i18n/config";
+import { type Locale, defaultLocale } from "@/i18n/config";
 import {
   deletePortfolioItem,
   setPortfolioItemFeatured,
@@ -44,14 +43,16 @@ const INITIAL_BATCH = 15;
 const LOAD_MORE_BATCH = 10;
 
 export default function PortfolioAdminPage() {
-  const router = useRouter();
-  const { start } = useTopLoader();
   const rawLocale = useLocale();
   const locale: Locale = isSupportedLocale(rawLocale)
     ? rawLocale
     : defaultLocale;
+
+  const router = useRouter();
+  const { start } = useTopLoader();
   const t = useTranslations("admin.portfolio");
   const actionsT = useTranslations("admin.common.actions");
+
   const [items, setItems] = useState<PortfolioItem[]>([]);
   const [loading, setLoading] = useState(true);
   const [visibleCount, setVisibleCount] = useState(INITIAL_BATCH);

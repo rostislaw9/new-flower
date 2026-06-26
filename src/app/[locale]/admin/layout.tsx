@@ -34,11 +34,17 @@ import {
   SidebarTrigger,
   useSidebar,
 } from "@/components/ui/sidebar";
+import { type Locale, defaultLocale } from "@/i18n/config";
+import { isSupportedLocale } from "@/lib/locale-utils";
 
 const SIDEBAR_STORAGE_KEY = "admin-sidebar-open";
 
 export default function AdminLayout({ children }: { children: ReactNode }) {
-  const locale = useLocale();
+  const rawLocale = useLocale();
+  const locale: Locale = isSupportedLocale(rawLocale)
+    ? rawLocale
+    : defaultLocale;
+
   const pathname = usePathname();
   const t = useTranslations("admin.layout");
 
