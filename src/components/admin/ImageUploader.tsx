@@ -118,7 +118,7 @@ export function ImageUploader({
     });
   };
 
-  const uploadImages = async () => {
+  const uploadImages = useCallback(async () => {
     const uploadPromises = images.map(async (image) => {
       if (image.uploaded) return;
 
@@ -192,7 +192,7 @@ export function ImageUploader({
     });
 
     await Promise.all(uploadPromises);
-  };
+  }, [images, folder, useOverwrite, t, onUploadComplete, onUploadedUrlsChange]);
 
   const allUploaded = images.length > 0 && images.every((img) => img.uploaded);
   const isUploading = images.some((img) => img.uploading);
@@ -206,14 +206,19 @@ export function ImageUploader({
               type="file"
               multiple
               accept={allowedTypes.join(",")}
-              onChange={(e) => handleFiles(e.target.files)}
+              onChange={(e) => {
+                handleFiles(e.target.files);
+                if (!showPreviewGrid) {
+                  uploadImages();
+                }
+              }}
               className="hidden"
             />
             {chunks}
           </label>
         ),
       }),
-    [allowedTypes, handleFiles, t],
+    [allowedTypes, handleFiles, t, showPreviewGrid, uploadImages],
   );
 
   const dropSpecs = useMemo(() => {
@@ -237,19 +242,34 @@ export function ImageUploader({
           e.preventDefault();
           setIsDragging(false);
           handleFiles(e.dataTransfer.files);
+          if (!showPreviewGrid) {
+            uploadImages();
+          }
         }}
         className={cn(
-          "rounded-lg border-2 border-dashed p-8 text-center transition-colors",
+          "rounded-xl border-2 border-dashed p-8 text-center transition-colors",
           isDragging
             ? "border-foreground bg-foreground/5"
             : "border-border hover:border-foreground/30",
         )}
       >
-        <Upload className="mx-auto mb-2 h-8 w-8 text-muted-foreground" />
-        <Text muted>{dropHintContent}</Text>
-        <Text size="sm" muted>
-          {dropSpecs}
-        </Text>
+        {isUploading && !showPreviewGrid ? (
+          <>
+            <Loader2 className="mx-auto mb-2 animate-spin text-muted-foreground" />
+            <Text muted>{t("actions.uploading.title")}</Text>
+            <Text size="xs" muted>
+              {t("actions.uploading.hint")}
+            </Text>
+          </>
+        ) : (
+          <>
+            <Upload className="mx-auto mb-2 text-muted-foreground" />
+            <Text muted>{dropHintContent}</Text>
+            <Text size="xs" muted>
+              {dropSpecs}
+            </Text>
+          </>
+        )}
       </div>
 
       {/* Preview Grid */}
@@ -304,7 +324,7 @@ export function ImageUploader({
       )}
 
       {/* Upload Button */}
-      {images.length > 0 && !allUploaded && (
+      {showPreviewGrid && images.length > 0 && !allUploaded && (
         <Button
           onClick={uploadImages}
           disabled={isUploading}
@@ -313,10 +333,13 @@ export function ImageUploader({
           {isUploading ? (
             <>
               <Loader2 className="animate-spin" />
-              {t("buttons.uploading")}
+              {t("actions.uploading.title")}
             </>
           ) : (
-            t("buttons.upload")
+            <>
+              <Upload />
+              {t("actions.upload")}
+            </>
           )}
         </Button>
       )}

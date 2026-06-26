@@ -850,7 +850,8 @@
         },
         "buttons": {
           "create": "Publish items",
-          "remove": "Remove image"
+          "remove": "Remove image",
+          "removing": "Removing..."
         },
         "labels": {
           "detailsHeading": "Item details",
@@ -894,9 +895,12 @@
         "hint": "Drag and drop images here, or <action>browse</action>",
         "specs": "Max {count} files · {size}MB each · {types}"
       },
-      "buttons": {
+      "actions": {
         "upload": "Upload images",
-        "uploading": "Uploading..."
+        "uploading": {
+          "title": "Uploading...",
+          "hint": "Getting your images ready..."
+        }
       },
       "status": {
         "allUploaded": "All images uploaded successfully"

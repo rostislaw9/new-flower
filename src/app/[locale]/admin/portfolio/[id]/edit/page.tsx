@@ -7,7 +7,7 @@ import { useTranslations } from "next-intl";
 import Image from "next/image";
 import { useRouter } from "next/navigation";
 
-import { ArrowLeft, Loader2, Save, Trash2 } from "lucide-react";
+import { ImageOff, Loader2, MoveLeft, Save, Trash2 } from "lucide-react";
 import { toast } from "sonner";
 
 import { AdminPageHeader } from "@/components/admin/AdminPageHeader";
@@ -16,9 +16,15 @@ import { Badge } from "@/components/styled/Badge";
 import { Button } from "@/components/styled/Button";
 import { DeleteConfirmDialog } from "@/components/styled/DeleteConfirmDialog";
 import { FormField } from "@/components/styled/FormField";
-import { Text } from "@/components/styled/Typography";
+import { Heading, Text } from "@/components/styled/Typography";
 import { Card, CardContent } from "@/components/ui/card";
 import { Checkbox } from "@/components/ui/checkbox";
+import {
+  Empty,
+  EmptyHeader,
+  EmptyMedia,
+  EmptyTitle,
+} from "@/components/ui/empty";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import {
@@ -158,19 +164,22 @@ export default function EditPortfolioItemPage({
   if (!item) {
     return (
       <div className="space-y-4">
-        <div className="flex items-center gap-4">
-          <Button
-            size="sm"
-            variant="outline"
-            href={getLocalizedPath("/admin/portfolio", locale)}
-          >
-            <ArrowLeft />
-            {actionsT("back")}
-          </Button>
-        </div>
-        <Text className="text-muted-foreground">
-          {t("edit.alerts.notFound")}
-        </Text>
+        <Button size="sm" variant="outline" href={backHref}>
+          <MoveLeft />
+          {actionsT("back")}
+        </Button>
+        <Empty className="rounded-xl border">
+          <EmptyHeader>
+            <EmptyMedia>
+              <ImageOff />
+            </EmptyMedia>
+            <EmptyTitle>
+              <Heading size="sm" serif={false}>
+                {t("edit.alerts.notFound")}
+              </Heading>
+            </EmptyTitle>
+          </EmptyHeader>
+        </Empty>
       </div>
     );
   }
@@ -183,11 +192,11 @@ export default function EditPortfolioItemPage({
         actions={
           <Button
             size="sm"
-            href={getLocalizedPath("/admin/portfolio", locale)}
+            href={backHref}
             variant="outline"
             className="flex items-center gap-2"
           >
-            <ArrowLeft />
+            <MoveLeft />
             {actionsT("back")}
           </Button>
         }

@@ -8,10 +8,10 @@ import { useRouter } from "next/navigation";
 import { useTopLoader } from "nextjs-toploader";
 
 import {
-  ArrowLeft,
   CheckCircle2,
   Loader2,
-  SavePlus,
+  MoveLeft,
+  SaveCheck,
   Trash2,
 } from "lucide-react";
 import { toast } from "sonner";
@@ -245,11 +245,11 @@ export default function UploadPortfolioPage() {
         actions={
           <Button
             size="sm"
-            href={getLocalizedPath("/admin/portfolio", locale)}
+            href={backHref}
             variant="outline"
             className="flex items-center gap-2"
           >
-            <ArrowLeft />
+            <MoveLeft />
             {actionsT("back")}
           </Button>
         }
@@ -272,7 +272,6 @@ export default function UploadPortfolioPage() {
                 maxFiles={MAX_FILES}
                 useOverwrite={true}
                 onUploadComplete={handleUploadComplete}
-                showPreviewGrid={true}
               />
             </CardContent>
           </Card>
@@ -385,7 +384,9 @@ export default function UploadPortfolioPage() {
                         <Trash2 />
                       )}
                       <span className="hidden sm:block">
-                        {uploadT("buttons.remove")}
+                        {removingId === selectedDraft.id
+                          ? uploadT("buttons.removing")
+                          : uploadT("buttons.remove")}
                       </span>
                     </Button>
                   </div>
@@ -532,7 +533,7 @@ export default function UploadPortfolioPage() {
                 </>
               ) : (
                 <>
-                  <SavePlus />
+                  <SaveCheck />
                   {uploadT("buttons.create")}
                 </>
               )}

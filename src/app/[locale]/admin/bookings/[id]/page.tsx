@@ -2,7 +2,7 @@ import { getTranslations } from "next-intl/server";
 import { unstable_noStore as noStore } from "next/cache";
 
 import type { AppointmentStatus } from "@prisma/client";
-import { ArrowLeft } from "lucide-react";
+import { CalendarOff, MoveLeft } from "lucide-react";
 
 import { AdminPageHeader } from "@/components/admin/AdminPageHeader";
 import { BookingInfoField } from "@/components/admin/bookings/BookingInfoField";
@@ -14,7 +14,13 @@ import { BookingSectionCard } from "@/components/admin/bookings/BookingSectionCa
 import { BookingStatusControl } from "@/components/admin/bookings/BookingStatusControl";
 import { Badge } from "@/components/styled/Badge";
 import { Button } from "@/components/styled/Button";
-import { Text } from "@/components/styled/Typography";
+import { Heading } from "@/components/styled/Typography";
+import {
+  Empty,
+  EmptyHeader,
+  EmptyMedia,
+  EmptyTitle,
+} from "@/components/ui/empty";
 import { type Locale, defaultLocale } from "@/i18n/config";
 import { getLocalizedPath, isSupportedLocale } from "@/lib/locale-utils";
 import { prisma } from "@/lib/prisma";
@@ -37,14 +43,16 @@ export default async function BookingDetailPage({
   const detailT = await getTranslations("admin.bookings.detail");
   const statusesT = await getTranslations("admin.bookings.statuses");
 
+  const backHref = getLocalizedPath("/admin/bookings", locale);
+
   if (!id) {
-    return notFoundResponse(locale, detailT, actionsT);
+    return notFoundResponse(backHref, detailT, actionsT);
   }
 
   const booking = await prisma.appointment.findUnique({ where: { id } });
 
   if (!booking) {
-    return notFoundResponse(locale, detailT, actionsT);
+    return notFoundResponse(backHref, detailT, actionsT);
   }
 
   const submittedFormat = new Intl.DateTimeFormat(locale, {
@@ -95,11 +103,11 @@ export default async function BookingDetailPage({
         actions={
           <Button
             size="sm"
-            href={getLocalizedPath("/admin/bookings", locale)}
+            href={backHref}
             variant="outline"
             className="flex items-center gap-2"
           >
-            <ArrowLeft />
+            <MoveLeft />
             {actionsT("back")}
           </Button>
         }
@@ -210,21 +218,28 @@ export default async function BookingDetailPage({
 }
 
 function notFoundResponse(
-  locale: Locale,
+  backHref: string,
   detailT: Awaited<ReturnType<typeof getTranslations>>,
   actionsT: Awaited<ReturnType<typeof getTranslations>>,
 ) {
   return (
     <div className="space-y-4">
-      <Button
-        href={getLocalizedPath("/admin/bookings", locale)}
-        variant="outline"
-        size="sm"
-      >
-        <ArrowLeft />
+      <Button size="sm" variant="outline" href={backHref}>
+        <MoveLeft />
         {actionsT("back")}
       </Button>
-      <Text muted>{detailT("notFound")}</Text>
+      <Empty className="rounded-xl border">
+        <EmptyHeader>
+          <EmptyMedia>
+            <CalendarOff />
+          </EmptyMedia>
+          <EmptyTitle>
+            <Heading size="sm" serif={false}>
+              {detailT("notFound")}
+            </Heading>
+          </EmptyTitle>
+        </EmptyHeader>
+      </Empty>
     </div>
   );
 }
