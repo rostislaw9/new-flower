@@ -35,20 +35,31 @@ function checkBasicAuth(request: NextRequest) {
 }
 
 export function middleware(request: NextRequest) {
-  const pathname = request.nextUrl.pathname;
+  const { pathname } = request.nextUrl;
 
-  const isAdmin =
-    pathname.includes("/admin") || pathname.includes("/api/admin");
-
-  if (isAdmin) {
-    if (!checkBasicAuth(request)) {
+  // Skip i18n middleware for all API routes.
+  // Protect only admin APIs.
+  if (pathname.startsWith("/api")) {
+    if (pathname.startsWith("/api/admin") && !checkBasicAuth(request)) {
       return unauthorized();
     }
+
+    return NextResponse.next();
+  }
+
+  // Protect localized and non-localized admin pages.
+  const isAdminPage =
+    pathname.startsWith("/admin") ||
+    pathname.startsWith("/en/admin") ||
+    pathname.startsWith("/th/admin");
+
+  if (isAdminPage && !checkBasicAuth(request)) {
+    return unauthorized();
   }
 
   return intlMiddleware(request);
 }
 
 export const config = {
-  matcher: ["/((?!_next|.*\\..*).*)"],
+  matcher: ["/((?!api|_next|.*\\..*).*)"],
 };
