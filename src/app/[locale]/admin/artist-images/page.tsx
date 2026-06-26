@@ -106,7 +106,11 @@ export default function ArtistImagesPage() {
       setState({ uploading: true, preview, url: null });
 
       try {
-        const result = await uploadToCloudinaryAction(file, "artist-images");
+        const result = await uploadToCloudinaryAction(
+          file,
+          "artist-images",
+          true,
+        );
 
         if (result.success && result.data) {
           const url = result.data.url;

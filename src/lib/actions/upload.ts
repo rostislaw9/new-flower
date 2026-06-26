@@ -11,6 +11,7 @@ interface UploadActionResult {
 export async function uploadToCloudinaryAction(
   file: File,
   folder: string = "portfolio",
+  useOverwrite = false,
 ): Promise<UploadActionResult> {
   try {
     if (!file || file.size === 0) {
@@ -27,7 +28,7 @@ export async function uploadToCloudinaryAction(
     if (!allowedTypes.includes(file.type)) {
       return {
         success: false,
-        error: "Invalid file type. Allowed: JPG, PNG, WebP, HEIC",
+        error: "Invalid file type. Allowed: JPG, PNG, WEBP, HEIC",
       };
     }
 
@@ -37,7 +38,7 @@ export async function uploadToCloudinaryAction(
       return { success: false, error: "File too large (max 10MB)" };
     }
 
-    const result = await uploadToCloudinary(file, folder);
+    const result = await uploadToCloudinary(file, folder, useOverwrite);
 
     return {
       success: true,

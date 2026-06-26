@@ -270,6 +270,7 @@ export default function UploadPortfolioPage() {
               <ImageUploader
                 folder="portfolio"
                 maxFiles={MAX_FILES}
+                useOverwrite={true}
                 onUploadComplete={handleUploadComplete}
                 showPreviewGrid={true}
               />

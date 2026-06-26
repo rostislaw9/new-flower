@@ -23,6 +23,7 @@ export interface UploadResult {
 export async function uploadToCloudinary(
   file: File,
   folder: string = "portfolio",
+  useOverwrite = false,
 ): Promise<UploadResult> {
   const buffer = Buffer.from(await file.arrayBuffer());
   const base64 = `data:${file.type};base64,${buffer.toString("base64")}`;
@@ -35,6 +36,13 @@ export async function uploadToCloudinary(
         resource_type: "image",
         allowed_formats: ["jpg", "jpeg", "png", "webp", "heic"],
         transformation: [{ quality: "auto:good" }, { fetch_format: "auto" }],
+        ...(useOverwrite
+          ? {
+              public_id: file.name,
+              overwrite: true,
+              invalidate: true,
+            }
+          : {}),
       },
       (
         error: UploadApiErrorResponse | undefined,

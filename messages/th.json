@@ -881,7 +881,7 @@
       "alerts": {
         "invalidType": {
           "title": "ประเภทไฟล์ไม่ถูกต้องสำหรับ {file}",
-          "description": "เฉพาะ JPG, PNG, และ WEBP เท่านั้น"
+          "description": "เฉพาะ JPG, PNG, WEBP และ HEIC เท่านั้น"
         },
         "fileTooLarge": {
           "title": "{file} มีขนาดใหญ่เกินไป",
@@ -930,7 +930,7 @@
         "deleteFailed": "ลบรูปภาพไม่สำเร็จ",
         "invalidType": {
           "title": "ประเภทไฟล์ไม่ถูกต้องสำหรับ {file}",
-          "description": "เฉพาะ JPG, PNG, และ WEBP เท่านั้น"
+          "description": "เฉพาะ JPG, PNG, WEBP และ HEIC เท่านั้น"
         },
         "fileTooLarge": {
           "title": "{file} มีขนาดใหญ่เกินไป",

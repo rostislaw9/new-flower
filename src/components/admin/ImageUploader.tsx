@@ -34,6 +34,7 @@ interface ImageUploaderProps {
   maxFiles?: number;
   allowedTypes?: string[];
   showPreviewGrid?: boolean;
+  useOverwrite?: boolean;
 }
 
 export function ImageUploader({
@@ -41,8 +42,9 @@ export function ImageUploader({
   onUploadComplete,
   onUploadedUrlsChange,
   maxFiles = 10,
-  allowedTypes = ["image/jpeg", "image/png", "image/webp"],
+  allowedTypes = ["image/jpeg", "image/png", "image/webp", "image/heic"],
   showPreviewGrid = true,
+  useOverwrite = false,
 }: ImageUploaderProps) {
   const [images, setImages] = useState<ImageUpload[]>([]);
   const [isDragging, setIsDragging] = useState(false);
@@ -127,7 +129,11 @@ export function ImageUploader({
       );
 
       try {
-        const result = await uploadToCloudinaryAction(image.file, folder);
+        const result = await uploadToCloudinaryAction(
+          image.file,
+          folder,
+          useOverwrite,
+        );
 
         if (result.success && result.data) {
           const data = result.data;

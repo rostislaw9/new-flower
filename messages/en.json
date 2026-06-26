@@ -881,7 +881,7 @@
       "alerts": {
         "invalidType": {
           "title": "Invalid file type for {file}",
-          "description": "Only JPG, PNG, and WEBP are allowed"
+          "description": "Only JPG, PNG, WEBP and HEIC are allowed"
         },
         "fileTooLarge": {
           "title": "{file} is too large",
@@ -930,7 +930,7 @@
         "deleteFailed": "Failed to delete image",
         "invalidType": {
           "title": "Invalid file type for {file}",
-          "description": "Only JPG, PNG, and WEBP are allowed"
+          "description": "Only JPG, PNG, WEBP and HEIC are allowed"
         },
         "fileTooLarge": {
           "title": "{file} is too large",

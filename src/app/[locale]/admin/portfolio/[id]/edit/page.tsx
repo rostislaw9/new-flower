@@ -334,6 +334,7 @@ export default function EditPortfolioItemPage({
                 <ImageUploader
                   folder="portfolio"
                   maxFiles={1}
+                  useOverwrite={true}
                   onUploadComplete={(data) => {
                     if (data[0]) {
                       setValue("imageUrl", data[0].url, {
