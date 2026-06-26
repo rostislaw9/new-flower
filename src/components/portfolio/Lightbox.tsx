@@ -165,7 +165,7 @@ export function Lightbox({
           animate={{ opacity: 1 }}
           exit={{ opacity: 0 }}
           transition={{ duration: 0.3, ease: [0.16, 1, 0.3, 1] }}
-          className="fixed inset-0 z-50 flex items-center justify-center bg-background/95 backdrop-blur-sm"
+          className="fixed inset-0 z-[500] flex items-center justify-center bg-background/95 backdrop-blur-sm"
           role="dialog"
           aria-modal="true"
           aria-label={activeItem.title}
@@ -177,7 +177,7 @@ export function Lightbox({
             type="button"
             aria-label="Close lightbox"
             onClick={onClose}
-            className="absolute right-4 top-4 z-10 flex h-10 w-10 items-center justify-center text-muted-foreground transition-colors duration-300 hover:text-foreground sm:right-6 sm:top-6"
+            className="absolute right-4 top-4 z-[500] flex h-10 w-10 items-center justify-center text-muted-foreground transition-colors duration-300 hover:text-foreground sm:right-6 sm:top-6"
           >
             <X />
           </button>
@@ -192,7 +192,7 @@ export function Lightbox({
               handlePrev();
             }}
             className={cn(
-              "absolute left-2 top-1/2 z-10 flex h-10 w-10 -translate-y-1/2 items-center justify-center text-muted-foreground transition-all duration-300 hover:text-foreground sm:left-6",
+              "absolute left-2 top-1/2 z-[500] flex h-10 w-10 -translate-y-1/2 items-center justify-center text-muted-foreground transition-all duration-300 hover:text-foreground sm:left-6",
               !hasPrev && "pointer-events-none opacity-20",
             )}
           >
@@ -234,7 +234,7 @@ export function Lightbox({
               }}
             >
               {imageLoading && (
-                <div className="absolute inset-0 z-10 flex items-center justify-center bg-background/30">
+                <div className="absolute inset-0 z-[500] flex items-center justify-center bg-background/30">
                   <Loader2 className="h-10 w-10 animate-spin text-muted-foreground" />
                 </div>
               )}
