@@ -103,18 +103,19 @@ const bodyPlacementTranslationKeys: Record<
 };
 
 type BudgetOptionKey =
-  | "under200"
-  | "200to500"
-  | "500to1000"
-  | "1000to2000"
-  | "over2000"
+  | "under10000"
+  | "10000to20000"
+  | "20000to40000"
+  | "40000to80000"
+  | "over80000"
   | "toDiscuss";
+
 const budgetTranslationKeys: Record<BudgetRange, BudgetOptionKey> = {
-  "Under €200": "under200",
-  "€200 – €500": "200to500",
-  "€500 – €1,000": "500to1000",
-  "€1,000 – €2,000": "1000to2000",
-  "€2,000+": "over2000",
+  "Under ฿10,000": "under10000",
+  "฿10,000 – ฿20,000": "10000to20000",
+  "฿20,000 – ฿40,000": "20000to40000",
+  "฿40,000 – ฿80,000": "40000to80000",
+  "฿80,000+": "over80000",
   "To discuss": "toDiscuss",
 };
 

@@ -24,7 +24,7 @@ describe("appointmentSchema", () => {
         phone: "+66 999 123 45 67",
         bodyPlacement: "Forearm",
         tattooSize: "palm-sized",
-        budgetRange: "€500 – €1,000",
+        budgetRange: "฿20,000 – ฿40,000",
       });
       expect(result.success).toBe(true);
     });

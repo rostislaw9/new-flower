@@ -10,11 +10,11 @@ export const CONTACT_METHODS = [
 export type ContactMethod = (typeof CONTACT_METHODS)[number];
 
 export const BUDGET_RANGES = [
-  "Under €200",
-  "€200 – €500",
-  "€500 – €1,000",
-  "€1,000 – €2,000",
-  "€2,000+",
+  "Under ฿10,000",
+  "฿10,000 – ฿20,000",
+  "฿20,000 – ฿40,000",
+  "฿40,000 – ฿80,000",
+  "฿80,000+",
   "To discuss",
 ] as const;
 
