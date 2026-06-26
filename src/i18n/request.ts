@@ -1,20 +1,17 @@
 import { getRequestConfig } from "next-intl/server";
-import { notFound } from "next/navigation";
 
-import { type Locale, locales } from "./config";
+import type { Locale } from "./config";
+import { routing } from "./routing";
 
 export default getRequestConfig(async ({ requestLocale }) => {
-  const locale = await requestLocale;
+  let locale = await requestLocale;
 
-  // Validate that the incoming `locale` parameter is valid
-  if (!locale || !locales.includes(locale as Locale)) {
-    notFound();
+  if (!locale || !routing.locales.includes(locale as Locale)) {
+    locale = routing.defaultLocale;
   }
 
   return {
     locale,
     messages: (await import(`../../messages/${locale}.json`)).default,
-    timeZone: "Asia/Bangkok",
-    now: new Date(),
   };
 });
