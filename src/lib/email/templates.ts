@@ -66,7 +66,7 @@ export function artistNotificationHtml(data: BookingEmailData): string {
               <p style="margin:0 0 8px;font-size:11px;font-weight:600;letter-spacing:2px;text-transform:uppercase;color:#888">Reference images</p>
               ${imageLinks}
               <hr style="border:none;border-top:1px solid #222;margin:24px 0">
-              <p style="margin:0;font-size:12px;color:#555">Request ID: <span style="font-family:monospace;color:#888">${data.id}</span></p>
+              <p style="margin:0;font-size:12px;color:#555">Booking ID: <span style="font-family:monospace;color:#888">${data.id}</span></p>
             </td>
           </tr>
         </table>
@@ -107,7 +107,7 @@ export function customerConfirmationHtml(data: BookingEmailData): string {
                   <p style="margin:0 0 4px;font-size:13px;color:#aaa">Preferred dates: <span style="color:#f0f0f0">${data.preferredDates.join(", ")}</span></p>
                   ${data.bodyPlacement !== undefined ? `<p style="margin:0 0 4px;font-size:13px;color:#aaa">Placement: <span style="color:#f0f0f0">${data.bodyPlacement}</span></p>` : ""}
                   ${data.budgetRange !== undefined ? `<p style="margin:0 0 4px;font-size:13px;color:#aaa">Budget: <span style="color:#f0f0f0">${data.budgetRange}</span></p>` : ""}
-                  <p style="margin:8px 0 0;font-size:12px;color:#555">Ref: <span style="font-family:monospace;color:#888">${data.id}</span></p>
+                  <p style="margin:8px 0 0;font-size:12px;color:#555">Booking ID: <span style="font-family:monospace;color:#888">${data.id}</span></p>
                 </td></tr>
               </table>
               <p style="margin:0;font-size:13px;color:#555;line-height:1.6">
@@ -154,7 +154,7 @@ export function artistNotificationText(data: BookingEmailData): string {
       ? `Reference images:\n${data.referenceImageUrls.join("\n")}`
       : "Reference images: none",
     "",
-    `Request ID: ${data.id}`,
+    `Booking ID: ${data.id}`,
   ]
     .filter((line) => line !== "")
     .join("\n");
@@ -179,7 +179,7 @@ export function customerConfirmationText(data: BookingEmailData): string {
     data.budgetRange !== undefined
       ? `Budget:          ${data.budgetRange}`
       : "",
-    `Reference:       ${data.id}`,
+    `Booking ID:       ${data.id}`,
     "",
     "New Flower Tattoo — Phuket",
   ]
