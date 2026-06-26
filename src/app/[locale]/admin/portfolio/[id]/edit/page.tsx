@@ -1,6 +1,7 @@
 "use client";
 
 import { use, useEffect, useMemo, useState } from "react";
+import { Controller, useForm } from "react-hook-form";
 
 import { useTranslations } from "next-intl";
 import Image from "next/image";
@@ -41,6 +42,14 @@ import { PORTFOLIO_CATEGORIES } from "@/lib/portfolio-data";
 interface EditPortfolioItemPageProps {
   params: Promise<{ id: string; locale: string }>;
 }
+interface PortfolioFormValues {
+  title: string;
+  category: string;
+  description: string;
+  featured: boolean;
+  displayOrder: number;
+  imageUrl: string;
+}
 
 export default function EditPortfolioItemPage({
   params,
@@ -52,13 +61,22 @@ export default function EditPortfolioItemPage({
   const router = useRouter();
   const t = useTranslations("admin.portfolio");
   const actionsT = useTranslations("admin.common.actions");
+  const {
+    register,
+    handleSubmit,
+    control,
+    reset,
+    watch,
+    setValue,
+    formState: { isDirty },
+  } = useForm<PortfolioFormValues>();
   const [item, setItem] = useState<PortfolioItem | null>(null);
   const [deleteItem, setDeleteItem] = useState<PortfolioItem | null>(null);
   const [loading, setLoading] = useState(true);
   const [saving, setSaving] = useState(false);
   const [error, setError] = useState<string | null>(null);
-  const [imageUrl, setImageUrl] = useState<string>("");
-  const [category, setCategory] = useState("");
+  const imageUrl = watch("imageUrl");
+  // const [category, setCategory] = useState("");
   const [currentImageLoading, setCurrentImageLoading] = useState(true);
 
   const backHref = useMemo(
@@ -73,9 +91,15 @@ export default function EditPortfolioItemPage({
         if (!response.ok) throw new Error(t("edit.alerts.notFound"));
         const data = (await response.json()) as PortfolioItem;
         setItem(data);
-        setImageUrl(data.imageUrl);
-        setCategory(data.category);
         setCurrentImageLoading(true);
+        reset({
+          title: data.title,
+          category: data.category,
+          description: data.description ?? "",
+          featured: data.featured,
+          displayOrder: data.displayOrder,
+          imageUrl: data.imageUrl,
+        });
       } catch {
         const message = t("edit.alerts.loadFailed");
         setError(message);
@@ -85,15 +109,17 @@ export default function EditPortfolioItemPage({
       }
     };
     void fetchItem();
-  }, [id, t]);
+  }, [id, t, reset]);
 
-  async function handleSubmit(e: React.SubmitEvent<HTMLFormElement>) {
-    e.preventDefault();
+  async function onSubmit(values: PortfolioFormValues) {
     setSaving(true);
     setError(null);
 
-    const formData = new FormData(e.currentTarget);
-    formData.set("imageUrl", imageUrl);
+    const formData = new FormData();
+
+    Object.entries(values).forEach(([key, value]) => {
+      formData.set(key, String(value));
+    });
 
     const result = await updatePortfolioItem(id, formData);
 
@@ -174,7 +200,7 @@ export default function EditPortfolioItemPage({
         </div>
       )}
 
-      <form onSubmit={handleSubmit} className="flex flex-col gap-6">
+      <form onSubmit={handleSubmit(onSubmit)} className="flex flex-col gap-6">
         <div className="grid gap-6 lg:grid-cols-[3fr,2fr]">
           <Card className="rounded-2xl border border-border/60 bg-card/60 shadow-lg">
             <CardContent className="pt-6">
@@ -182,33 +208,40 @@ export default function EditPortfolioItemPage({
                 <FormField label={t("form.titleLabel")} htmlFor="title">
                   <Input
                     id="title"
-                    name="title"
                     type="text"
                     required
                     placeholder={t("form.titlePlaceholder")}
-                    defaultValue={item.title}
+                    {...register("title", {
+                      required: true,
+                    })}
                   />
                 </FormField>
 
                 <FormField label={t("form.categoryLabel")} htmlFor="category">
-                  <input type="hidden" name="category" value={category} />
-
-                  <Select value={category} onValueChange={setCategory}>
-                    <SelectTrigger id="category">
-                      <SelectValue
-                        placeholder={t("form.categoryPlaceholder")}
-                      />
-                    </SelectTrigger>
-
-                    <SelectContent>
-                      {PORTFOLIO_CATEGORIES.map((cat) => (
-                        <SelectItem key={cat} value={cat}>
-                          {cat.charAt(0).toUpperCase() +
-                            cat.slice(1).replace("-", " ")}
-                        </SelectItem>
-                      ))}
-                    </SelectContent>
-                  </Select>
+                  <Controller
+                    control={control}
+                    name="category"
+                    render={({ field }) => (
+                      <Select
+                        value={field.value}
+                        onValueChange={field.onChange}
+                      >
+                        <SelectTrigger id="category">
+                          <SelectValue
+                            placeholder={t("form.categoryPlaceholder")}
+                          />
+                        </SelectTrigger>
+                        <SelectContent>
+                          {PORTFOLIO_CATEGORIES.map((cat) => (
+                            <SelectItem key={cat} value={cat}>
+                              {cat.charAt(0).toUpperCase() +
+                                cat.slice(1).replace("-", " ")}
+                            </SelectItem>
+                          ))}
+                        </SelectContent>
+                      </Select>
+                    )}
+                  />
                 </FormField>
               </div>
 
@@ -220,19 +253,26 @@ export default function EditPortfolioItemPage({
                 >
                   <Textarea
                     id="description"
-                    name="description"
                     rows={3}
-                    defaultValue={item.description ?? ""}
+                    {...register("description", {
+                      required: false,
+                    })}
                     placeholder={t("form.descriptionPlaceholder")}
                   />
                 </FormField>
 
                 <div className="flex flex-col gap-4 rounded-xl border border-dashed border-border/60 p-4 sm:flex-row sm:items-center sm:justify-between">
                   <div className="flex items-center gap-3">
-                    <Checkbox
+                    <Controller
+                      control={control}
                       name="featured"
-                      defaultChecked={item.featured}
-                      className="border-accent data-[state=checked]:bg-accent"
+                      render={({ field }) => (
+                        <Checkbox
+                          checked={field.value}
+                          onCheckedChange={field.onChange}
+                          className="border-accent data-[state=checked]:bg-accent"
+                        />
+                      )}
                     />
                     <Badge variant="accent">{t("form.featuredLabel")}</Badge>
                   </div>
@@ -243,10 +283,12 @@ export default function EditPortfolioItemPage({
                     >
                       <Input
                         type="number"
-                        name="displayOrder"
-                        defaultValue={item.displayOrder}
                         min={0}
                         inputMode="numeric"
+                        {...register("displayOrder", {
+                          required: false,
+                          valueAsNumber: true,
+                        })}
                       />
                     </FormField>
                   </div>
@@ -294,7 +336,9 @@ export default function EditPortfolioItemPage({
                   maxFiles={1}
                   onUploadComplete={(data) => {
                     if (data[0]) {
-                      setImageUrl(data[0].url);
+                      setValue("imageUrl", data[0].url, {
+                        shouldDirty: true,
+                      });
                       setCurrentImageLoading(true);
                     }
                   }}
@@ -305,7 +349,11 @@ export default function EditPortfolioItemPage({
         </div>
 
         <div className="flex flex-col gap-3 sm:flex-row sm:justify-end">
-          <Button variant="accent" type="submit" disabled={saving || !imageUrl}>
+          <Button
+            variant="accent"
+            type="submit"
+            disabled={!isDirty || saving || !imageUrl}
+          >
             {saving ? (
               <>
                 <Loader2 className="animate-spin" />
