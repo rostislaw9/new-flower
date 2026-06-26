@@ -62,6 +62,85 @@ export function ImageUploader({
     return allowedTypes.map(formatType).join(", ");
   }, [allowedTypes]);
 
+  const uploadImages = useCallback(
+    async (images: ImageUpload[]) => {
+      const uploadPromises = images.map(async (image) => {
+        if (image.uploaded) return;
+
+        setImages((prev) =>
+          prev.map((img) =>
+            img.file === image.file ? { ...img, uploading: true } : img,
+          ),
+        );
+
+        try {
+          const result = await uploadToCloudinaryAction(
+            image.file,
+            folder,
+            useOverwrite,
+          );
+
+          if (result.success && result.data) {
+            const data = result.data;
+            const uploadedData = {
+              url: data.url,
+              width: data.width,
+              height: data.height,
+            };
+
+            setImages((prev) =>
+              prev.map((img) =>
+                img.file === image.file
+                  ? {
+                      ...img,
+                      uploading: false,
+                      uploaded: true,
+                      url: data.url,
+                      publicId: data.publicId,
+                      width: data.width,
+                      height: data.height,
+                    }
+                  : img,
+              ),
+            );
+
+            onUploadComplete?.([uploadedData]);
+            onUploadedUrlsChange?.(new Set([data.url]));
+
+            setImages((prev) => prev.filter((img) => img.file !== image.file));
+          } else {
+            setImages((prev) =>
+              prev.map((img) =>
+                img.file === image.file
+                  ? {
+                      ...img,
+                      uploading: false,
+                      error: result.error || t("alerts.uploadFailed"),
+                    }
+                  : img,
+              ),
+            );
+          }
+        } catch {
+          setImages((prev) =>
+            prev.map((img) =>
+              img.file === image.file
+                ? {
+                    ...img,
+                    uploading: false,
+                    error: t("alerts.uploadFailed"),
+                  }
+                : img,
+            ),
+          );
+        }
+      });
+
+      await Promise.all(uploadPromises);
+    },
+    [folder, useOverwrite, t, onUploadComplete, onUploadedUrlsChange],
+  );
+
   const handleFiles = useCallback(
     (files: FileList | null) => {
       if (!files) return;
@@ -104,8 +183,20 @@ export function ImageUploader({
       }));
 
       setImages((prev) => [...prev, ...newImages]);
+
+      if (!showPreviewGrid) {
+        uploadImages(newImages);
+      }
     },
-    [images.length, maxFiles, allowedTypes, sizeLimitMb, t],
+    [
+      images.length,
+      maxFiles,
+      allowedTypes,
+      sizeLimitMb,
+      t,
+      showPreviewGrid,
+      uploadImages,
+    ],
   );
 
   const removeImage = (index: number) => {
@@ -117,82 +208,6 @@ export function ImageUploader({
       return prev.filter((_, i) => i !== index);
     });
   };
-
-  const uploadImages = useCallback(async () => {
-    const uploadPromises = images.map(async (image) => {
-      if (image.uploaded) return;
-
-      setImages((prev) =>
-        prev.map((img) =>
-          img.file === image.file ? { ...img, uploading: true } : img,
-        ),
-      );
-
-      try {
-        const result = await uploadToCloudinaryAction(
-          image.file,
-          folder,
-          useOverwrite,
-        );
-
-        if (result.success && result.data) {
-          const data = result.data;
-          const uploadedData = {
-            url: data.url,
-            width: data.width,
-            height: data.height,
-          };
-
-          setImages((prev) =>
-            prev.map((img) =>
-              img.file === image.file
-                ? {
-                    ...img,
-                    uploading: false,
-                    uploaded: true,
-                    url: data.url,
-                    publicId: data.publicId,
-                    width: data.width,
-                    height: data.height,
-                  }
-                : img,
-            ),
-          );
-
-          onUploadComplete?.([uploadedData]);
-          onUploadedUrlsChange?.(new Set([data.url]));
-
-          setImages((prev) => prev.filter((img) => img.file !== image.file));
-        } else {
-          setImages((prev) =>
-            prev.map((img) =>
-              img.file === image.file
-                ? {
-                    ...img,
-                    uploading: false,
-                    error: result.error || t("alerts.uploadFailed"),
-                  }
-                : img,
-            ),
-          );
-        }
-      } catch {
-        setImages((prev) =>
-          prev.map((img) =>
-            img.file === image.file
-              ? {
-                  ...img,
-                  uploading: false,
-                  error: t("alerts.uploadFailed"),
-                }
-              : img,
-          ),
-        );
-      }
-    });
-
-    await Promise.all(uploadPromises);
-  }, [images, folder, useOverwrite, t, onUploadComplete, onUploadedUrlsChange]);
 
   const allUploaded = images.length > 0 && images.every((img) => img.uploaded);
   const isUploading = images.some((img) => img.uploading);
@@ -206,19 +221,14 @@ export function ImageUploader({
               type="file"
               multiple
               accept={allowedTypes.join(",")}
-              onChange={(e) => {
-                handleFiles(e.target.files);
-                if (!showPreviewGrid) {
-                  uploadImages();
-                }
-              }}
+              onChange={(e) => handleFiles(e.target.files)}
               className="hidden"
             />
             {chunks}
           </label>
         ),
       }),
-    [allowedTypes, handleFiles, t, showPreviewGrid, uploadImages],
+    [allowedTypes, handleFiles, t],
   );
 
   const dropSpecs = useMemo(() => {
@@ -242,9 +252,6 @@ export function ImageUploader({
           e.preventDefault();
           setIsDragging(false);
           handleFiles(e.dataTransfer.files);
-          if (!showPreviewGrid) {
-            uploadImages();
-          }
         }}
         className={cn(
           "rounded-xl border-2 border-dashed p-8 text-center transition-colors",
@@ -326,7 +333,7 @@ export function ImageUploader({
       {/* Upload Button */}
       {showPreviewGrid && images.length > 0 && !allUploaded && (
         <Button
-          onClick={uploadImages}
+          onClick={() => uploadImages(images)}
           disabled={isUploading}
           className="w-full"
         >
@@ -342,13 +349,6 @@ export function ImageUploader({
             </>
           )}
         </Button>
-      )}
-
-      {allUploaded && (
-        <div className="flex items-center gap-2 text-green-600">
-          <Check className="h-4 w-4" />
-          <Text>{t("status.allUploaded")}</Text>
-        </div>
       )}
     </div>
   );

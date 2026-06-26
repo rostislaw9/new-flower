@@ -209,184 +209,189 @@ export default function EditPortfolioItemPage({
       )}
 
       <form onSubmit={handleSubmit(onSubmit)} className="flex flex-col gap-6">
-        <div className="grid gap-6 lg:grid-cols-[3fr,2fr]">
-          <Card className="rounded-2xl border border-border/60 bg-card/60 shadow-lg">
-            <CardContent className="pt-6">
-              <div className="grid gap-4 sm:grid-cols-2">
-                <FormField label={t("form.titleLabel")} htmlFor="title">
-                  <Input
-                    id="title"
-                    type="text"
-                    required
-                    placeholder={t("form.titlePlaceholder")}
-                    {...register("title", {
-                      required: true,
-                    })}
-                  />
-                </FormField>
+        <div className="grid items-start gap-6 lg:grid-cols-[3fr,2fr]">
+          <div className="flex flex-col gap-6">
+            <Card className="rounded-2xl border border-border/60 bg-card/60 shadow-lg">
+              <CardContent className="pt-6">
+                <div className="grid gap-4 sm:grid-cols-2">
+                  <FormField label={t("form.titleLabel")} htmlFor="title">
+                    <Input
+                      id="title"
+                      type="text"
+                      required
+                      placeholder={t("form.titlePlaceholder")}
+                      {...register("title", {
+                        required: true,
+                      })}
+                    />
+                  </FormField>
 
-                <FormField label={t("form.categoryLabel")} htmlFor="category">
-                  <Controller
-                    control={control}
-                    name="category"
-                    render={({ field }) => (
-                      <Select
-                        value={field.value}
-                        onValueChange={field.onChange}
-                      >
-                        <SelectTrigger id="category">
-                          <SelectValue
-                            placeholder={t("form.categoryPlaceholder")}
-                          />
-                        </SelectTrigger>
-                        <SelectContent>
-                          {PORTFOLIO_CATEGORIES.map((cat) => (
-                            <SelectItem key={cat} value={cat}>
-                              {cat.charAt(0).toUpperCase() +
-                                cat.slice(1).replace("-", " ")}
-                            </SelectItem>
-                          ))}
-                        </SelectContent>
-                      </Select>
-                    )}
-                  />
-                </FormField>
-              </div>
-
-              <div className="mt-6 space-y-6">
-                <FormField
-                  label={t("form.descriptionLabel")}
-                  htmlFor="description"
-                  hint={t("form.optionalTag")}
-                >
-                  <Textarea
-                    id="description"
-                    rows={3}
-                    {...register("description", {
-                      required: false,
-                    })}
-                    placeholder={t("form.descriptionPlaceholder")}
-                  />
-                </FormField>
-
-                <div className="flex flex-col gap-4 rounded-xl border border-dashed border-border/60 p-4 sm:flex-row sm:items-center sm:justify-between">
-                  <div className="flex items-center gap-3">
+                  <FormField label={t("form.categoryLabel")} htmlFor="category">
                     <Controller
                       control={control}
-                      name="featured"
+                      name="category"
                       render={({ field }) => (
-                        <Checkbox
-                          checked={field.value}
-                          onCheckedChange={field.onChange}
-                          className="border-accent data-[state=checked]:bg-accent"
-                        />
+                        <Select
+                          value={field.value}
+                          onValueChange={field.onChange}
+                        >
+                          <SelectTrigger id="category">
+                            <SelectValue
+                              placeholder={t("form.categoryPlaceholder")}
+                            />
+                          </SelectTrigger>
+                          <SelectContent>
+                            {PORTFOLIO_CATEGORIES.map((cat) => (
+                              <SelectItem key={cat} value={cat}>
+                                {cat.charAt(0).toUpperCase() +
+                                  cat.slice(1).replace("-", " ")}
+                              </SelectItem>
+                            ))}
+                          </SelectContent>
+                        </Select>
                       )}
                     />
-                    <Badge variant="accent">{t("form.featuredLabel")}</Badge>
-                  </div>
-                  <div className="w-full sm:w-auto">
-                    <FormField
-                      label={t("form.orderLabel")}
-                      htmlFor="displayOrder"
-                    >
-                      <Input
-                        type="number"
-                        min={0}
-                        inputMode="numeric"
-                        {...register("displayOrder", {
-                          required: false,
-                          valueAsNumber: true,
-                        })}
+                  </FormField>
+                </div>
+
+                <div className="mt-6 space-y-6">
+                  <FormField
+                    label={t("form.descriptionLabel")}
+                    htmlFor="description"
+                    hint={t("form.optionalTag")}
+                  >
+                    <Textarea
+                      id="description"
+                      rows={3}
+                      {...register("description", {
+                        required: false,
+                      })}
+                      placeholder={t("form.descriptionPlaceholder")}
+                    />
+                  </FormField>
+
+                  <div className="flex flex-col gap-4 rounded-xl border border-dashed border-border/60 p-4 sm:flex-row sm:items-center sm:justify-between">
+                    <div className="flex items-center gap-3">
+                      <Controller
+                        control={control}
+                        name="featured"
+                        render={({ field }) => (
+                          <Checkbox
+                            checked={field.value}
+                            onCheckedChange={field.onChange}
+                            className="border-accent data-[state=checked]:bg-accent"
+                          />
+                        )}
                       />
-                    </FormField>
+                      <Badge variant="accent">{t("form.featuredLabel")}</Badge>
+                    </div>
+                    <div className="w-full sm:w-auto">
+                      <FormField
+                        label={t("form.orderLabel")}
+                        htmlFor="displayOrder"
+                      >
+                        <Input
+                          type="number"
+                          min={0}
+                          inputMode="numeric"
+                          {...register("displayOrder", {
+                            required: false,
+                            valueAsNumber: true,
+                          })}
+                        />
+                      </FormField>
+                    </div>
                   </div>
                 </div>
-              </div>
-            </CardContent>
-          </Card>
+              </CardContent>
+            </Card>
 
-          <Card className="row-span-2 rounded-2xl border border-border/60 bg-card/60 shadow-lg">
-            <CardContent className="pt-6">
-              <div className="flex flex-col gap-2">
-                <Label>{t("form.currentImageLabel")}</Label>
-                {imageUrl ? (
-                  <div className="relative overflow-hidden rounded-xl border border-border/60 bg-muted/20">
-                    {currentImageLoading && (
-                      <div className="pointer-events-none absolute inset-0 z-10 flex items-center justify-center bg-background/30">
-                        <Loader2 className="h-6 w-6 animate-spin text-muted-foreground" />
-                      </div>
-                    )}
-                    <Image
-                      src={imageUrl}
-                      alt={item.title}
-                      width={item.width}
-                      height={item.height}
-                      className={`h-auto w-full object-cover transition-opacity duration-300 ${currentImageLoading ? "opacity-0" : "opacity-100"}`}
-                      loading="eager"
-                      onLoad={() => setCurrentImageLoading(false)}
-                    />
-                  </div>
+            <Card className="rounded-2xl border border-border/60 bg-card/60 shadow-lg">
+              <CardContent className="pt-6">
+                <div className="flex flex-col gap-2">
+                  <Label>{t("form.imageLabel")}</Label>
+                  <ImageUploader
+                    folder="portfolio"
+                    maxFiles={1}
+                    useOverwrite={true}
+                    showPreviewGrid={false}
+                    onUploadComplete={(data) => {
+                      if (data[0]) {
+                        setValue("imageUrl", data[0].url, {
+                          shouldDirty: true,
+                        });
+                        setCurrentImageLoading(true);
+                      }
+                    }}
+                  />
+                </div>
+              </CardContent>
+            </Card>
+          </div>
+
+          <div className="flex flex-col gap-6">
+            <Card className="row-span-2 rounded-2xl border border-border/60 bg-card/60 shadow-lg">
+              <CardContent className="pt-6">
+                <div className="flex flex-col gap-2">
+                  <Label>{t("form.currentImageLabel")}</Label>
+                  {imageUrl ? (
+                    <div className="relative overflow-hidden rounded-xl border border-border/60 bg-muted/20">
+                      {currentImageLoading && (
+                        <div className="pointer-events-none absolute inset-0 z-10 flex items-center justify-center bg-background/30">
+                          <Loader2 className="h-6 w-6 animate-spin text-muted-foreground" />
+                        </div>
+                      )}
+                      <Image
+                        src={imageUrl}
+                        alt={item.title}
+                        width={item.width}
+                        height={item.height}
+                        className={`h-auto w-full object-cover transition-opacity duration-300 ${currentImageLoading ? "opacity-0" : "opacity-100"}`}
+                        loading="eager"
+                        onLoad={() => setCurrentImageLoading(false)}
+                      />
+                    </div>
+                  ) : (
+                    <Text className="text-sm text-muted-foreground">
+                      {t("form.noImage")}
+                    </Text>
+                  )}
+                </div>
+              </CardContent>
+            </Card>
+
+            <div className="flex flex-col gap-3 sm:flex-row sm:justify-end">
+              <Button
+                variant="accent"
+                type="submit"
+                disabled={!isDirty || saving || !imageUrl}
+              >
+                {saving ? (
+                  <>
+                    <Loader2 className="animate-spin" />
+                    {actionsT("saving")}
+                  </>
                 ) : (
-                  <Text className="text-sm text-muted-foreground">
-                    {t("form.noImage")}
-                  </Text>
+                  <>
+                    <Save />
+                    {actionsT("save")}
+                  </>
                 )}
-              </div>
-            </CardContent>
-          </Card>
-
-          <Card className="rounded-2xl border border-border/60 bg-card/60 shadow-lg">
-            <CardContent className="pt-6">
-              <div className="flex flex-col gap-2">
-                <Label>{t("form.imageLabel")}</Label>
-                <ImageUploader
-                  folder="portfolio"
-                  maxFiles={1}
-                  useOverwrite={true}
-                  onUploadComplete={(data) => {
-                    if (data[0]) {
-                      setValue("imageUrl", data[0].url, {
-                        shouldDirty: true,
-                      });
-                      setCurrentImageLoading(true);
-                    }
-                  }}
-                />
-              </div>
-            </CardContent>
-          </Card>
-        </div>
-
-        <div className="flex flex-col gap-3 sm:flex-row sm:justify-end">
-          <Button
-            variant="accent"
-            type="submit"
-            disabled={!isDirty || saving || !imageUrl}
-          >
-            {saving ? (
-              <>
-                <Loader2 className="animate-spin" />
-                {actionsT("saving")}
-              </>
-            ) : (
-              <>
-                <Save />
-                {actionsT("save")}
-              </>
-            )}
-          </Button>
-          <Button type="button" variant="outline" href={backHref}>
-            {actionsT("cancel")}
-          </Button>
-          <Button
-            type="button"
-            variant="destructive"
-            aria-label={actionsT("delete")}
-            onClick={() => setDeleteItem(item)}
-          >
-            <Trash2 />
-            {actionsT("delete")}
-          </Button>
+              </Button>
+              <Button type="button" variant="outline" href={backHref}>
+                {actionsT("cancel")}
+              </Button>
+              <Button
+                type="button"
+                variant="destructive"
+                aria-label={actionsT("delete")}
+                onClick={() => setDeleteItem(item)}
+              >
+                <Trash2 />
+                {actionsT("delete")}
+              </Button>
+            </div>
+          </div>
         </div>
       </form>
 

@@ -6,10 +6,11 @@ import { useTranslations } from "next-intl";
 import Image from "next/image";
 import { useRouter } from "next/navigation";
 
-import { Loader2, Trash2 } from "lucide-react";
+import { Trash2 } from "lucide-react";
 import { toast } from "sonner";
 
 import { AdminPageHeader } from "@/components/admin/AdminPageHeader";
+import { ImageUploader } from "@/components/admin/ImageUploader";
 import { Button } from "@/components/styled/Button";
 import { Heading, Text } from "@/components/styled/Typography";
 import { Card, CardContent } from "@/components/ui/card";
@@ -20,181 +21,35 @@ import {
   saveArtistPortrait,
   saveShopLogo,
 } from "@/lib/actions/artist-images";
-import { uploadToCloudinaryAction } from "@/lib/actions/upload";
-import { cn } from "@/lib/utils";
-
-interface ImageUploadState {
-  uploading: boolean;
-  preview: string | null;
-  url: string | null;
-}
 
 export default function ArtistImagesPage() {
   const router = useRouter();
   const t = useTranslations("admin.artistImages");
   const actionsT = useTranslations("admin.common.actions");
 
-  const [portraitState, setPortraitState] = useState<ImageUploadState>({
-    uploading: false,
-    preview: null,
-    url: null,
-  });
-
-  const [logoState, setLogoState] = useState<ImageUploadState>({
-    uploading: false,
-    preview: null,
-    url: null,
-  });
-
+  const [portraitUrl, setPortraitUrl] = useState<string | null>(null);
+  const [logoUrl, setLogoUrl] = useState<string | null>(null);
   const [deleting, setDeleting] = useState<"portrait" | "logo" | null>(null);
 
-  // Load current images on mount
   useEffect(() => {
     const loadImages = async () => {
       const images = await getArtistImages();
       if (images.portraitUrl) {
-        setPortraitState({
-          uploading: false,
-          preview: images.portraitUrl,
-          url: images.portraitUrl,
-        });
+        setPortraitUrl(images.portraitUrl);
       }
       if (images.logoUrl) {
-        setLogoState({
-          uploading: false,
-          preview: images.logoUrl,
-          url: images.logoUrl,
-        });
+        setLogoUrl(images.logoUrl);
       }
     };
     void loadImages();
   }, []);
-
-  const handleFileSelect = useCallback(
-    async (
-      file: File,
-      type: "portrait" | "logo",
-      setState: React.Dispatch<React.SetStateAction<ImageUploadState>>,
-    ) => {
-      const allowedTypes = ["image/jpeg", "image/png", "image/webp"];
-      const sizeLimitMb = 10;
-
-      // Validate file type
-      if (!allowedTypes.includes(file.type)) {
-        toast.error(t("alerts.invalidType.title", { file: file.name }), {
-          description: t("alerts.invalidType.description"),
-        });
-        return;
-      }
-
-      // Validate file size
-      if (file.size > sizeLimitMb * 1024 * 1024) {
-        toast.error(
-          t("alerts.fileTooLarge.title", {
-            file: file.name,
-          }),
-          {
-            description: t("alerts.fileTooLarge.description", {
-              size: sizeLimitMb,
-            }),
-          },
-        );
-        return;
-      }
-
-      const preview = URL.createObjectURL(file);
-      setState({ uploading: true, preview, url: null });
-
-      try {
-        const result = await uploadToCloudinaryAction(
-          file,
-          "artist-images",
-          true,
-        );
-
-        if (result.success && result.data) {
-          const url = result.data.url;
-          setState({ uploading: false, preview, url });
-
-          // Save to public folder
-          const saveResult =
-            type === "portrait"
-              ? await saveArtistPortrait(url)
-              : await saveShopLogo(url);
-
-          if (saveResult.success) {
-            toast.success(
-              type === "portrait"
-                ? t("alerts.portraitSaved")
-                : t("alerts.logoSaved"),
-            );
-            // Revalidate the page to show updated images
-            router.refresh();
-          } else {
-            toast.error(saveResult.error || t("alerts.saveFailed"));
-            setState({ uploading: false, preview: null, url: null });
-          }
-        } else {
-          toast.error(result.error || t("alerts.uploadFailed"));
-          setState({ uploading: false, preview: null, url: null });
-        }
-      } catch (error) {
-        console.error(`[ArtistImagesPage] Error uploading ${type}:`, error);
-        toast.error(t("alerts.uploadFailed"));
-        setState({ uploading: false, preview: null, url: null });
-      }
-    },
-    [t, router],
-  );
-
-  const handlePortraitDrop = useCallback(
-    (e: React.DragEvent<HTMLLabelElement>) => {
-      e.preventDefault();
-      const files = e.dataTransfer.files;
-      if (files.length > 0) {
-        handleFileSelect(files[0]!, "portrait", setPortraitState);
-      }
-    },
-    [handleFileSelect],
-  );
-
-  const handleLogoDrop = useCallback(
-    (e: React.DragEvent<HTMLLabelElement>) => {
-      e.preventDefault();
-      const files = e.dataTransfer.files;
-      if (files.length > 0) {
-        handleFileSelect(files[0]!, "logo", setLogoState);
-      }
-    },
-    [handleFileSelect],
-  );
-
-  const handlePortraitInput = useCallback(
-    (e: React.ChangeEvent<HTMLInputElement>) => {
-      const files = e.currentTarget.files;
-      if (files && files.length > 0) {
-        handleFileSelect(files[0]!, "portrait", setPortraitState);
-      }
-    },
-    [handleFileSelect],
-  );
-
-  const handleLogoInput = useCallback(
-    (e: React.ChangeEvent<HTMLInputElement>) => {
-      const files = e.currentTarget.files;
-      if (files && files.length > 0) {
-        handleFileSelect(files[0]!, "logo", setLogoState);
-      }
-    },
-    [handleFileSelect],
-  );
 
   const handleDeletePortrait = useCallback(async () => {
     setDeleting("portrait");
     try {
       const result = await deleteArtistPortrait();
       if (result.success) {
-        setPortraitState({ uploading: false, preview: null, url: null });
+        setPortraitUrl(null);
         toast.success(t("alerts.portraitDeleted"));
         router.refresh();
       } else {
@@ -213,7 +68,7 @@ export default function ArtistImagesPage() {
     try {
       const result = await deleteShopLogo();
       if (result.success) {
-        setLogoState({ uploading: false, preview: null, url: null });
+        setLogoUrl(null);
         toast.success(t("alerts.logoDeleted"));
         router.refresh();
       } else {
@@ -231,7 +86,7 @@ export default function ArtistImagesPage() {
     <div className="flex flex-col gap-6">
       <AdminPageHeader title={t("title")} subtitle={t("subtitle")} />
 
-      <div className="grid gap-6 lg:grid-cols-2">
+      <div className="grid items-start gap-6 lg:grid-cols-2">
         {/* Artist Portrait */}
         <Card className="rounded-2xl border border-border/60 bg-card/60 shadow-lg">
           <CardContent className="flex flex-col gap-6 pt-6">
@@ -245,55 +100,33 @@ export default function ArtistImagesPage() {
             </div>
 
             {/* Upload Area */}
-            <label
-              onDragOver={(e) => e.preventDefault()}
-              onDrop={handlePortraitDrop}
-              className={cn(
-                "flex cursor-pointer flex-col items-center justify-center gap-3 rounded-xl border-2 border-dashed p-8 transition-colors",
-                portraitState.uploading
-                  ? "border-border bg-muted/20"
-                  : "border-border hover:border-foreground/30",
-              )}
-            >
-              <input
-                type="file"
-                accept="image/jpeg,image/png,image/webp"
-                onChange={handlePortraitInput}
-                disabled={portraitState.uploading}
-                className="hidden"
-              />
-              {portraitState.uploading ? (
-                <>
-                  <Loader2 className="h-8 w-8 animate-spin text-muted-foreground" />
-                  <Text size="sm" muted>
-                    {t("status.uploading")}
-                  </Text>
-                </>
-              ) : (
-                <>
-                  <Text size="sm" muted>
-                    {t("portrait.hint")}
-                  </Text>
-                </>
-              )}
-            </label>
+            <ImageUploader
+              folder="artist-images"
+              maxFiles={1}
+              useOverwrite={true}
+              showPreviewGrid={false}
+              onUploadComplete={async (data) => {
+                if (data[0]) {
+                  const url = data[0].url;
+                  setPortraitUrl(url);
+                  // Save to public folder
+                  const saveResult = await saveArtistPortrait(url);
+
+                  if (saveResult.success) {
+                    toast.success(t("alerts.portraitSaved"));
+                    // Revalidate the page to show updated images
+                    router.refresh();
+                  } else {
+                    toast.error(saveResult.error || t("alerts.saveFailed"));
+                    setPortraitUrl(null);
+                  }
+                }
+              }}
+            />
 
             {/* Preview */}
-            {portraitState.preview && (
+            {portraitUrl && (
               <div className="flex flex-col gap-3">
-                <div className="relative aspect-[3/4] overflow-hidden rounded-xl border border-border/60 bg-muted/20">
-                  <Image
-                    src={portraitState.preview}
-                    alt="Portrait preview"
-                    fill
-                    className="object-cover"
-                  />
-                  {(portraitState.uploading || deleting === "portrait") && (
-                    <div className="absolute inset-0 flex items-center justify-center bg-black/50">
-                      <Loader2 className="h-8 w-8 animate-spin text-white" />
-                    </div>
-                  )}
-                </div>
                 <Button
                   size="sm"
                   variant="destructive"
@@ -306,6 +139,16 @@ export default function ArtistImagesPage() {
                     ? actionsT("deleting")
                     : actionsT("delete")}
                 </Button>
+                <div className="relative aspect-[3/4] overflow-hidden rounded-xl border border-border/60 bg-muted/20">
+                  <Image
+                    src={portraitUrl}
+                    alt="Portrait preview"
+                    fill
+                    sizes="(max-width: 640px) 100vw, (max-width: 1024px) 50vw, 33vw"
+                    className="object-cover"
+                    loading="eager"
+                  />
+                </div>
               </div>
             )}
           </CardContent>
@@ -324,55 +167,33 @@ export default function ArtistImagesPage() {
             </div>
 
             {/* Upload Area */}
-            <label
-              onDragOver={(e) => e.preventDefault()}
-              onDrop={handleLogoDrop}
-              className={cn(
-                "flex cursor-pointer flex-col items-center justify-center gap-3 rounded-xl border-2 border-dashed p-8 transition-colors",
-                logoState.uploading
-                  ? "border-border bg-muted/20"
-                  : "border-border hover:border-foreground/30",
-              )}
-            >
-              <input
-                type="file"
-                accept="image/jpeg,image/png,image/webp"
-                onChange={handleLogoInput}
-                disabled={logoState.uploading}
-                className="hidden"
-              />
-              {logoState.uploading ? (
-                <>
-                  <Loader2 className="h-8 w-8 animate-spin text-muted-foreground" />
-                  <Text size="sm" muted>
-                    {t("status.uploading")}
-                  </Text>
-                </>
-              ) : (
-                <>
-                  <Text size="sm" muted>
-                    {t("logo.hint")}
-                  </Text>
-                </>
-              )}
-            </label>
+            <ImageUploader
+              folder="artist-images"
+              maxFiles={1}
+              useOverwrite={true}
+              showPreviewGrid={false}
+              onUploadComplete={async (data) => {
+                if (data[0]) {
+                  const url = data[0].url;
+                  setLogoUrl(url);
+                  // Save to public folder
+                  const saveResult = await saveShopLogo(url);
+
+                  if (saveResult.success) {
+                    toast.success(t("alerts.logoSaved"));
+                    // Revalidate the page to show updated images
+                    router.refresh();
+                  } else {
+                    toast.error(saveResult.error || t("alerts.saveFailed"));
+                    setLogoUrl(null);
+                  }
+                }
+              }}
+            />
 
             {/* Preview */}
-            {logoState.preview && (
+            {logoUrl && (
               <div className="flex flex-col gap-3">
-                <div className="relative aspect-square overflow-hidden rounded-xl border border-border/60 bg-muted/20">
-                  <Image
-                    src={logoState.preview}
-                    alt="Logo preview"
-                    fill
-                    className="object-cover"
-                  />
-                  {(logoState.uploading || deleting === "logo") && (
-                    <div className="absolute inset-0 flex items-center justify-center bg-black/50">
-                      <Loader2 className="h-8 w-8 animate-spin text-white" />
-                    </div>
-                  )}
-                </div>
                 <Button
                   size="sm"
                   variant="destructive"
@@ -385,6 +206,16 @@ export default function ArtistImagesPage() {
                     ? actionsT("deleting")
                     : actionsT("delete")}
                 </Button>
+                <div className="relative aspect-square overflow-hidden rounded-xl border border-border/60 bg-muted/20">
+                  <Image
+                    src={logoUrl}
+                    alt="Logo preview"
+                    fill
+                    sizes="(max-width: 640px) 100vw, (max-width: 1024px) 50vw, 33vw"
+                    className="object-cover"
+                    loading="eager"
+                  />
+                </div>
               </div>
             )}
           </CardContent>
