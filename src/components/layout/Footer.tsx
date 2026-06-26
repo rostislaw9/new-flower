@@ -95,7 +95,7 @@ export function Footer({ locale }: FooterProps) {
             <Text muted size="xs">
               {t("copyright", { year })}
             </Text>
-            <Text className="text-muted-foreground/50" size="xs">
+            <Text muted size="xs">
               {t("crafted")}
             </Text>
           </div>
