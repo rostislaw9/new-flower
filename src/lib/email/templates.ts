@@ -112,8 +112,8 @@ export function customerConfirmationHtml(data: BookingEmailData): string {
               </table>
               <p style="margin:0;font-size:13px;color:#555;line-height:1.6">
                 If you have any questions in the meantime, visit the
-                <a href="${process.env["NEXT_PUBLIC_SITE_URL"] ?? ""}/contact" style="color:#c9a96e;text-decoration:none">contact page</a>
-                or check the <a href="${process.env["NEXT_PUBLIC_SITE_URL"] ?? ""}/faq" style="color:#c9a96e;text-decoration:none">FAQ</a>.
+                <a href="${process.env.NEXT_PUBLIC_SITE_URL}/contact" style="color:#c9a96e;text-decoration:none">contact page</a>
+                or check the <a href="${process.env.NEXT_PUBLIC_SITE_URL}/faq" style="color:#c9a96e;text-decoration:none">FAQ</a>.
               </p>
             </td>
           </tr>

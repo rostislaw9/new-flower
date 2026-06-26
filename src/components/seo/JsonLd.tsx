@@ -24,8 +24,7 @@ export function JsonLd({ data }: JsonLdProps) {
   );
 }
 
-const SITE_URL =
-  process.env["NEXT_PUBLIC_SITE_URL"] ?? "https://newflower.tattoo";
+const SITE_URL = process.env.NEXT_PUBLIC_SITE_URL;
 
 export function personSchema(): SchemaOrgObject {
   return {

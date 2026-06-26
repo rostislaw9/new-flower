@@ -163,7 +163,7 @@ Copy `.env.example` to `.env` and configure:
 | Variable                | Description                       | Required    | Example                                    |
 | ----------------------- | --------------------------------- | ----------- | ------------------------------------------ |
 | `DATABASE_URL`          | PostgreSQL connection string      | ✅          | `postgresql://user:pass@localhost:5432/db` |
-| `NEXT_PUBLIC_SITE_URL`  | Public site URL                   | ✅          | `https://newflower.tattoo`                 |
+| `NEXT_PUBLIC_SITE_URL`  | Public site URL                   | ✅          | `https://studio.com`                       |
 | `CLOUDINARY_CLOUD_NAME` | Cloudinary cloud name             | ✅          | `your-cloud-name`                          |
 | `CLOUDINARY_API_KEY`    | Cloudinary API key                | ✅          | `your-api-key`                             |
 | `CLOUDINARY_API_SECRET` | Cloudinary API secret             | ✅          | `your-api-secret`                          |

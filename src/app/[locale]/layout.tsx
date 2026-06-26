@@ -9,8 +9,7 @@ import { Footer } from "@/components/layout/Footer";
 import { Nav } from "@/components/layout/Nav";
 import { getArtistImagesConfig } from "@/lib/artist-images-config";
 
-const SITE_URL =
-  process.env["NEXT_PUBLIC_SITE_URL"] ?? "https://newflower.tattoo";
+const SITE_URL = process.env.NEXT_PUBLIC_SITE_URL!;
 
 export async function generateMetadata({
   params,
