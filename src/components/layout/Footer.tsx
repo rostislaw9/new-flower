@@ -1,6 +1,6 @@
 "use client";
 
-import { useLocale, useTranslations } from "next-intl";
+import { useTranslations } from "next-intl";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 
@@ -8,8 +8,6 @@ import { Button } from "@/components/styled/Button";
 import { Logo } from "@/components/styled/Logo";
 import { Eyebrow, Text } from "@/components/styled/Typography";
 import { Separator } from "@/components/ui/separator";
-import { type Locale, defaultLocale } from "@/i18n/config";
-import { isSupportedLocale } from "@/lib/locale-utils";
 
 const FOOTER_LINKS = [
   { href: "/portfolio", labelKey: "links.portfolio" },
@@ -25,12 +23,11 @@ const SOCIAL_LINKS = [
   { href: "https://wa.me/66968076646", label: "WhatsApp" },
 ] as const;
 
-export function Footer() {
-  const rawLocale = useLocale();
-  const locale: Locale = isSupportedLocale(rawLocale)
-    ? rawLocale
-    : defaultLocale;
+interface FooterProps {
+  locale: string;
+}
 
+export function Footer({ locale }: FooterProps) {
   const t = useTranslations("footer");
   const pathname = usePathname();
 

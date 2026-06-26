@@ -350,6 +350,13 @@ export function ImageUploader({
           )}
         </Button>
       )}
+
+      {allUploaded && (
+        <div className="flex items-center gap-2 text-green-600">
+          <Check className="h-4 w-4" />
+          <Text>{t("status.allUploaded")}</Text>
+        </div>
+      )}
     </div>
   );
 }

@@ -111,7 +111,7 @@ export default async function LocaleLayout({
       <NextTopLoader color="hsl(var(--accent))" showSpinner={false} />
       <Nav />
       <main id="main-content">{children}</main>
-      <Footer />
+      <Footer locale={locale} />
     </NextIntlClientProvider>
   );
 }
