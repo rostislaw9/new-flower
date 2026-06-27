@@ -9,8 +9,10 @@ import { PageHeading } from "@/components/sections/PageHeading";
 import { JsonLd } from "@/components/seo/JsonLd";
 import { Eyebrow, Heading, Text } from "@/components/styled/Typography";
 import { Separator } from "@/components/ui/separator";
+import { type Locale, defaultLocale } from "@/i18n/config";
 import { getArtistImagesConfig } from "@/lib/artist-images-config";
 import { createBreadcrumbList } from "@/lib/breadcrumbs";
+import { isSupportedLocale } from "@/lib/locale-utils";
 import { buildPageMetadata } from "@/lib/seo/buildPageMetadata";
 
 export async function generateMetadata({
@@ -40,7 +42,16 @@ type TimelineEvent = {
   description: string;
 };
 
-export default async function AboutPage() {
+interface AboutReviewsPageProps {
+  params: Promise<{ locale?: string }>;
+}
+
+export default async function AboutPage({ params }: AboutReviewsPageProps) {
+  const { locale: rawLocale } = await params;
+  const locale: Locale = isSupportedLocale(rawLocale)
+    ? rawLocale
+    : defaultLocale;
+
   const t = await getTranslations("about");
   const breadcrumb = createBreadcrumbList([
     { name: "Home", item: "/" },
@@ -152,7 +163,9 @@ export default async function AboutPage() {
                   <div className="flex flex-col items-center gap-0">
                     <div className="flex h-8 items-center">
                       <Text size="sm" className="font-medium text-accent">
-                        {year}
+                        {locale === "th"
+                          ? (parseInt(year) + 543).toString()
+                          : year}
                       </Text>
                     </div>
                     {index < timelineEvents.length - 1 && (
