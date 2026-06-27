@@ -56,7 +56,7 @@ export default async function HomePage() {
       {/* Hero */}
       <Section
         size="xl"
-        className="relative flex h-[100vh] items-center overflow-hidden"
+        className="relative flex min-h-[100vh] items-center overflow-hidden"
       >
         {/* Pattern */}
         <div
