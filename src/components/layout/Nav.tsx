@@ -162,7 +162,7 @@ export function Nav() {
       >
         <nav
           aria-label="Mobile navigation"
-          className="absolute left-1/2 top-1/2 grid -translate-x-1/2 -translate-y-1/2 grid-cols-1 items-center justify-center gap-8 landscape:grid-cols-2"
+          className="absolute left-1/2 top-1/2 grid w-max -translate-x-1/2 -translate-y-1/2 grid-cols-1 items-center justify-center gap-8 landscape:grid-cols-2"
         >
           {NAV_LINKS.map(({ href, key }) => (
             <Button
