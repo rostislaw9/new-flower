@@ -104,15 +104,24 @@ export default async function HomePage() {
                   {t("featured.title")}
                 </Heading>
               </div>
-              <Button href="/portfolio" variant="ghost" size="sm">
+              <Button
+                href="/portfolio"
+                variant="ghost"
+                size="sm"
+                className="hidden md:block"
+              >
                 {t("featured.viewAll")}
               </Button>
             </div>
-
-            <PortfolioGallery
-              items={featuredItems}
-              showCategoryFilter={false}
-            />
+            <div className="flex flex-1 flex-col gap-8">
+              <PortfolioGallery
+                items={featuredItems}
+                showCategoryFilter={false}
+              />
+              <Button href="/portfolio" variant="outline" className="md:hidden">
+                {t("featured.viewAll")}
+              </Button>
+            </div>
           </div>
         </Container>
       </Section>
