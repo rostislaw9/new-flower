@@ -53,7 +53,7 @@ export function LanguageSwitcher({
   );
 
   return (
-    <div className={cn("flex items-center gap-2", className)}>
+    <div className={cn("flex items-center justify-center gap-2", className)}>
       {locales.map((l) => (
         <Button
           variant="link"

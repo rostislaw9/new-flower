@@ -162,7 +162,7 @@ export function Nav() {
       >
         <nav
           aria-label="Mobile navigation"
-          className="flex flex-1 flex-col items-center justify-center gap-8"
+          className="absolute left-1/2 top-1/2 grid -translate-x-1/2 -translate-y-1/2 grid-cols-1 items-center justify-center gap-8 landscape:grid-cols-2"
         >
           {NAV_LINKS.map(({ href, key }) => (
             <Button
@@ -179,7 +179,7 @@ export function Nav() {
             href={`/${locale}/booking`}
             variant="accent"
             size="lg"
-            className={cn(locale === "th" && "text-2xl", "my-8")}
+            className={cn(locale === "th" && "text-2xl", "portrait:my-8")}
             onClick={() => setMenuOpen(false)}
           >
             {t("bookNow")}
