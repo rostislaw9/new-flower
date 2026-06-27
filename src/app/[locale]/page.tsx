@@ -52,9 +52,25 @@ export default async function HomePage() {
       <JsonLd data={homeBreadcrumb} />
       <JsonLd data={personSchema()} />
       <JsonLd data={localBusinessSchemaData} />
+
       {/* Hero */}
-      <Section size="xl" className="relative flex min-h-[90vh] items-center">
-        <Container>
+      <Section
+        size="xl"
+        className="relative flex h-[100vh] items-center overflow-hidden"
+      >
+        {/* Pattern */}
+        <div
+          className="absolute inset-0 bg-repeat opacity-20"
+          style={{
+            backgroundImage: "url('/patterns/vintage-pattern-2.png')",
+            backgroundSize: "1000px",
+          }}
+        />
+
+        {/* Diagonal shadow */}
+        <div className="pointer-events-none absolute inset-0 bg-gradient-to-br from-black via-black/80 to-transparent" />
+
+        <Container className="relative z-10">
           <div className="flex max-w-3xl flex-col gap-8">
             <Eyebrow>{t("hero.eyebrow")}</Eyebrow>
             <Heading as="h1" size="display">
