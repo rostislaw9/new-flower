@@ -142,7 +142,11 @@ export function ImageUploader({
   );
 
   const handleFiles = useCallback(
-    (files: FileList | null) => {
+    (filesOrInput: FileList | HTMLInputElement | null) => {
+      const files =
+        filesOrInput instanceof FileList ? filesOrInput : filesOrInput?.files;
+      const inputElement =
+        filesOrInput instanceof HTMLInputElement ? filesOrInput : undefined;
       if (!files) return;
 
       const newFiles = Array.from(files).filter((file) => {
@@ -183,6 +187,11 @@ export function ImageUploader({
       }));
 
       setImages((prev) => [...prev, ...newImages]);
+
+      // Clear input value so same file can be selected again
+      if (inputElement) {
+        inputElement.value = "";
+      }
 
       if (!showPreviewGrid) {
         uploadImages(newImages);
@@ -248,7 +257,7 @@ export function ImageUploader({
           type="file"
           multiple
           accept={allowedTypes.join(",")}
-          onChange={(e) => handleFiles(e.target.files)}
+          onChange={(e) => handleFiles(e.target)}
           className="hidden"
         />
         {isUploading && !showPreviewGrid ? (
@@ -314,7 +323,7 @@ export function ImageUploader({
                 disabled={image.uploading}
                 aria-label={t("removeAria")}
               >
-                <X className="h-3 w-3" />
+                <X className="h-4 w-4" />
               </button>
             </div>
           ))}
