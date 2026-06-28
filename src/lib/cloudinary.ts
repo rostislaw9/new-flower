@@ -3,6 +3,7 @@ import {
   type UploadApiResponse,
   v2 as cloudinary,
 } from "cloudinary";
+import { randomUUID } from "node:crypto";
 
 cloudinary.config({
   cloud_name: process.env.CLOUDINARY_CLOUD_NAME!,
@@ -27,6 +28,7 @@ export async function uploadToCloudinary(
 ): Promise<UploadResult> {
   const buffer = Buffer.from(await file.arrayBuffer());
   const base64 = `data:${file.type};base64,${buffer.toString("base64")}`;
+  const uniqueId = randomUUID();
 
   return new Promise((resolve, reject) => {
     cloudinary.uploader.upload(
@@ -38,7 +40,7 @@ export async function uploadToCloudinary(
         transformation: [{ quality: "auto:good" }, { fetch_format: "auto" }],
         ...(useOverwrite
           ? {
-              public_id: file.name.replace(/\.[^/.]+$/, ""),
+              public_id: uniqueId,
               overwrite: true,
               invalidate: true,
             }
