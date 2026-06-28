@@ -63,7 +63,7 @@ export default async function BookingPage() {
             <BookingForm />
 
             {/* Sidebar info */}
-            <aside className="flex flex-col gap-10">
+            <aside className="sticky top-24 flex h-fit flex-col gap-10">
               <div className="flex flex-col gap-6 border border-border p-6">
                 <Eyebrow>{t("process.title")}</Eyebrow>
                 <ol
