@@ -1,11 +1,8 @@
 import { getTranslations } from "next-intl/server";
 
-import { Calendar, CheckCircle, Clock, Images } from "lucide-react";
-
 import { AdminPageHeader } from "@/components/admin/AdminPageHeader";
 import { ActionCard } from "@/components/admin/dashboard/ActionCard";
-import { Eyebrow, Heading, Text } from "@/components/styled/Typography";
-import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
+import { StatCard } from "@/components/admin/dashboard/StatCard";
 import { prisma } from "@/lib/prisma";
 
 async function getStats() {
@@ -29,37 +26,6 @@ async function getStats() {
   };
 }
 
-const StatCard = ({
-  title,
-  value,
-  icon: Icon,
-  description,
-}: {
-  title: string;
-  value: number;
-  icon: React.ElementType;
-  description: string;
-}) => {
-  return (
-    <Card className="rounded-2xl border border-border/60 bg-card/60 shadow-lg">
-      <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
-        <CardTitle>
-          <Eyebrow size="xs">{title}</Eyebrow>
-        </CardTitle>
-        <Icon size={16} className="text-muted-foreground" />
-      </CardHeader>
-      <CardContent>
-        <Heading serif={false} size="lg">
-          {value}
-        </Heading>
-        <Text muted size="xs">
-          {description}
-        </Text>
-      </CardContent>
-    </Card>
-  );
-};
-
 export default async function AdminDashboard() {
   const stats = await getStats();
   const t = await getTranslations("admin.dashboard");
@@ -72,26 +38,30 @@ export default async function AdminDashboard() {
         <StatCard
           title={t("stats.totalBookings.title")}
           value={stats.totalBookings}
-          icon={Calendar}
+          icon="calendar"
           description={t("stats.totalBookings.description")}
+          href="/admin/bookings"
         />
         <StatCard
           title={t("stats.pending.title")}
           value={stats.pendingBookings}
-          icon={Clock}
+          icon="clock"
           description={t("stats.pending.description")}
+          href="/admin/bookings?status=pending"
         />
         <StatCard
           title={t("stats.completed.title")}
           value={stats.completedBookings}
-          icon={CheckCircle}
+          icon="checkCircle"
           description={t("stats.completed.description")}
+          href="/admin/bookings?status=completed"
         />
         <StatCard
           title={t("stats.portfolio.title")}
           value={stats.totalPortfolioItems}
-          icon={Images}
+          icon="images"
           description={t("stats.portfolio.description")}
+          href="/admin/portfolio"
         />
         <ActionCard
           title={t("actions.artistImages.title")}
