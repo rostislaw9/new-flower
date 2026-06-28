@@ -16,6 +16,7 @@ import { AdminSidebarNavMenu } from "@/components/admin/sidebar/AdminSidebarNavM
 import { LanguageSwitcher } from "@/components/styled/LanguageSwitcher";
 import {
   Breadcrumb,
+  BreadcrumbEllipsis,
   BreadcrumbItem,
   BreadcrumbLink,
   BreadcrumbList,
@@ -146,21 +147,31 @@ function AdminBreadcrumbsTrail({ items }: { items: AdminBreadcrumb[] }) {
     return null;
   }
 
+  const shouldCollapse = items.length > 2;
+  const displayItems: (AdminBreadcrumb | { label: string })[] = shouldCollapse
+    ? [items[0]!, { label: "..." }, items[items.length - 1]!]
+    : items;
+
   return (
-    <Breadcrumb className="hidden min-w-0 flex-1 items-center gap-1 text-sm md:flex">
+    <Breadcrumb className="min-w-0 flex-1 items-center gap-1 text-sm">
       <BreadcrumbList className="flex-nowrap">
-        {items.map((item, index) => {
-          const isLast = index === items.length - 1;
+        {displayItems.map((item, index) => {
+          const isLast = index === displayItems.length - 1;
+          const isEllipsis = item.label === "...";
+          const itemWithHref = item as AdminBreadcrumb;
+
           return (
-            <Fragment key={`${item.label}-${item.href ?? index}`}>
-              <BreadcrumbItem className="max-w-[180px] flex-shrink">
-                {isLast || !item.href ? (
+            <Fragment key={`${item.label}-${itemWithHref.href ?? index}`}>
+              <BreadcrumbItem className="max-w-[180px] flex-shrink md:max-w-none">
+                {isEllipsis ? (
+                  <BreadcrumbEllipsis />
+                ) : isLast || !itemWithHref.href ? (
                   <BreadcrumbPage className="truncate font-medium">
                     {item.label}
                   </BreadcrumbPage>
                 ) : (
                   <BreadcrumbLink asChild className="truncate">
-                    <Link href={item.href}>{item.label}</Link>
+                    <Link href={itemWithHref.href}>{item.label}</Link>
                   </BreadcrumbLink>
                 )}
               </BreadcrumbItem>
