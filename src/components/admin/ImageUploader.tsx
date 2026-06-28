@@ -35,6 +35,7 @@ interface ImageUploaderProps {
   allowedTypes?: string[];
   showPreviewGrid?: boolean;
   useOverwrite?: boolean;
+  keepUploadedImages?: boolean;
 }
 
 export function ImageUploader({
@@ -45,6 +46,7 @@ export function ImageUploader({
   allowedTypes = ["image/jpeg", "image/png", "image/webp", "image/heic"],
   showPreviewGrid = true,
   useOverwrite = false,
+  keepUploadedImages = false,
 }: ImageUploaderProps) {
   const [images, setImages] = useState<ImageUpload[]>([]);
   const [isDragging, setIsDragging] = useState(false);
@@ -107,7 +109,11 @@ export function ImageUploader({
             onUploadComplete?.([uploadedData]);
             onUploadedUrlsChange?.(new Set([data.url]));
 
-            setImages((prev) => prev.filter((img) => img.file !== image.file));
+            if (!keepUploadedImages) {
+              setImages((prev) =>
+                prev.filter((img) => img.file !== image.file),
+              );
+            }
           } else {
             setImages((prev) =>
               prev.map((img) =>
@@ -138,7 +144,14 @@ export function ImageUploader({
 
       await Promise.all(uploadPromises);
     },
-    [folder, useOverwrite, t, onUploadComplete, onUploadedUrlsChange],
+    [
+      folder,
+      useOverwrite,
+      t,
+      onUploadComplete,
+      onUploadedUrlsChange,
+      keepUploadedImages,
+    ],
   );
 
   const handleFiles = useCallback(
@@ -318,7 +331,7 @@ export function ImageUploader({
                 onClick={() => removeImage(index)}
                 className={cn(
                   "absolute -right-2 -top-2 rounded-full bg-destructive p-1 text-white hover:bg-destructive/80",
-                  isUploading && "hidden",
+                  (isUploading || image.uploaded) && "hidden",
                 )}
                 disabled={image.uploading}
                 aria-label={t("removeAria")}

@@ -812,6 +812,7 @@ export function BookingForm() {
             <ImageUploader
               folder="bookings"
               maxFiles={5 - referenceImageUrls.filter(Boolean).length}
+              keepUploadedImages={true}
               onUploadComplete={(data) => {
                 data.forEach((item) => {
                   setReferenceImageUrls((prev) => {
