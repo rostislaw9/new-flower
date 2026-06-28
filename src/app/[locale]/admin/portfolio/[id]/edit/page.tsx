@@ -12,13 +12,11 @@ import { toast } from "sonner";
 
 import { AdminPageHeader } from "@/components/admin/AdminPageHeader";
 import { ImageUploader } from "@/components/admin/ImageUploader";
-import { Badge } from "@/components/styled/Badge";
 import { Button } from "@/components/styled/Button";
 import { DeleteConfirmDialog } from "@/components/styled/DeleteConfirmDialog";
 import { FormField } from "@/components/styled/FormField";
 import { Heading, Text } from "@/components/styled/Typography";
 import { Card, CardContent } from "@/components/ui/card";
-import { Checkbox } from "@/components/ui/checkbox";
 import {
   Empty,
   EmptyHeader,
@@ -51,8 +49,6 @@ interface PortfolioFormValues {
   title: string;
   category: string;
   description: string;
-  featured: boolean;
-  displayOrder: number;
   imageUrl: string;
 }
 
@@ -100,8 +96,6 @@ export default function EditPortfolioItemPage({
           title: data.title,
           category: data.category,
           description: data.description ?? "",
-          featured: data.featured,
-          displayOrder: data.displayOrder,
           imageUrl: data.imageUrl,
         });
       } catch {
@@ -268,39 +262,6 @@ export default function EditPortfolioItemPage({
                       placeholder={t("form.descriptionPlaceholder")}
                     />
                   </FormField>
-
-                  <div className="flex flex-col gap-4 rounded-xl border border-dashed border-border/60 p-4 sm:flex-row sm:items-center sm:justify-between">
-                    <div className="flex items-center gap-3">
-                      <Controller
-                        control={control}
-                        name="featured"
-                        render={({ field }) => (
-                          <Checkbox
-                            checked={field.value}
-                            onCheckedChange={field.onChange}
-                            className="border-accent data-[state=checked]:bg-accent"
-                          />
-                        )}
-                      />
-                      <Badge variant="accent">{t("form.featuredLabel")}</Badge>
-                    </div>
-                    <div className="w-full sm:w-auto">
-                      <FormField
-                        label={t("form.orderLabel")}
-                        htmlFor="displayOrder"
-                      >
-                        <Input
-                          type="number"
-                          min={0}
-                          inputMode="numeric"
-                          {...register("displayOrder", {
-                            required: false,
-                            valueAsNumber: true,
-                          })}
-                        />
-                      </FormField>
-                    </div>
-                  </div>
                 </div>
               </CardContent>
             </Card>

@@ -18,12 +18,10 @@ import { toast } from "sonner";
 
 import { AdminPageHeader } from "@/components/admin/AdminPageHeader";
 import { ImageUploader } from "@/components/admin/ImageUploader";
-import { Badge } from "@/components/styled/Badge";
 import { Button } from "@/components/styled/Button";
 import { FormField } from "@/components/styled/FormField";
 import { Heading, Text } from "@/components/styled/Typography";
 import { Card, CardContent } from "@/components/ui/card";
-import { Checkbox } from "@/components/ui/checkbox";
 import {
   Empty,
   EmptyContent,
@@ -59,8 +57,6 @@ interface DraftPortfolioItem {
   title: string;
   description: string;
   category: string;
-  featured: boolean;
-  displayOrder: number;
 }
 
 const MAX_FILES = 20;
@@ -102,13 +98,11 @@ export default function UploadPortfolioPage() {
     const appended: DraftPortfolioItem[] = [];
     setDrafts((prev) => {
       const existingUrls = new Set(prev.map((draft) => draft.imageUrl));
-      const baseLength = prev.length;
 
       uploads.forEach((upload) => {
         if (existingUrls.has(upload.url)) {
           return;
         }
-        const nextIndex = baseLength + appended.length;
         appended.push({
           id: createDraftId(),
           imageUrl: upload.url,
@@ -117,8 +111,6 @@ export default function UploadPortfolioPage() {
           title: "",
           description: "",
           category: "",
-          featured: false,
-          displayOrder: nextIndex,
         });
       });
 
@@ -192,15 +184,11 @@ export default function UploadPortfolioPage() {
 
   const hasMissingRequired = drafts.some((draft) => !isDraftComplete(draft));
 
-  const normalizedPayload = drafts.map((draft, index) => ({
+  const normalizedPayload = drafts.map((draft) => ({
     title: draft.title.trim(),
     description: draft.description.trim() || null,
     imageUrl: draft.imageUrl,
     category: draft.category as PortfolioCategory,
-    featured: draft.featured,
-    displayOrder: Number.isFinite(draft.displayOrder)
-      ? draft.displayOrder
-      : index,
     width: draft.width,
     height: draft.height,
   }));
@@ -468,38 +456,6 @@ export default function UploadPortfolioPage() {
                       placeholder={formT("descriptionPlaceholder")}
                     />
                   </FormField>
-
-                  <div className="flex flex-col gap-4 rounded-xl border border-dashed border-border/60 p-4 sm:flex-row sm:items-center sm:justify-between">
-                    <div className="flex items-center gap-3">
-                      <Checkbox
-                        id={`featured-${selectedDraft.id}`}
-                        checked={selectedDraft.featured}
-                        onCheckedChange={(checked) =>
-                          handleDraftChange(selectedDraft.id, {
-                            featured: Boolean(checked),
-                          })
-                        }
-                        className="border-accent data-[state=checked]:bg-accent"
-                      />
-                      <Badge variant="accent">{formT("featuredLabel")}</Badge>
-                    </div>
-                    <FormField
-                      label={formT("orderLabel")}
-                      htmlFor={`order-${selectedDraft.id}`}
-                    >
-                      <Input
-                        id={`order-${selectedDraft.id}`}
-                        type="number"
-                        value={selectedDraft.displayOrder}
-                        onChange={(event) => {
-                          const parsed = Number(event.target.value);
-                          handleDraftChange(selectedDraft.id, {
-                            displayOrder: Number.isFinite(parsed) ? parsed : 0,
-                          });
-                        }}
-                      />
-                    </FormField>
-                  </div>
                 </>
               ) : (
                 <Empty className="rounded-xl border">
