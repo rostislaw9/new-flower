@@ -212,24 +212,7 @@ export function ImageUploader({
   const allUploaded = images.length > 0 && images.every((img) => img.uploaded);
   const isUploading = images.some((img) => img.uploading);
 
-  const dropHintContent = useMemo(
-    () =>
-      t.rich("dropzone.hint", {
-        action: (chunks) => (
-          <label className="cursor-pointer text-foreground hover:underline">
-            <input
-              type="file"
-              multiple
-              accept={allowedTypes.join(",")}
-              onChange={(e) => handleFiles(e.target.files)}
-              className="hidden"
-            />
-            {chunks}
-          </label>
-        ),
-      }),
-    [allowedTypes, handleFiles, t],
-  );
+  const fileInputId = useMemo(() => `file-input-${Math.random()}`, []);
 
   const dropSpecs = useMemo(() => {
     return t("dropzone.specs", {
@@ -242,7 +225,7 @@ export function ImageUploader({
   return (
     <div className="flex flex-col gap-4">
       {/* Drop Zone */}
-      <div
+      <label
         onDragOver={(e) => {
           e.preventDefault();
           setIsDragging(true);
@@ -254,12 +237,20 @@ export function ImageUploader({
           handleFiles(e.dataTransfer.files);
         }}
         className={cn(
-          "rounded-xl border-2 border-dashed p-8 text-center transition-colors",
+          "cursor-pointer rounded-xl border-2 border-dashed p-8 text-center transition-colors",
           isDragging
             ? "border-foreground bg-foreground/5"
-            : "border-border hover:border-foreground/30",
+            : "hover:bg-foreground/2 border-border hover:border-foreground/30",
         )}
       >
+        <input
+          id={fileInputId}
+          type="file"
+          multiple
+          accept={allowedTypes.join(",")}
+          onChange={(e) => handleFiles(e.target.files)}
+          className="hidden"
+        />
         {isUploading && !showPreviewGrid ? (
           <>
             <Loader2 className="mx-auto mb-2 animate-spin text-muted-foreground" />
@@ -271,13 +262,13 @@ export function ImageUploader({
         ) : (
           <>
             <Upload className="mx-auto mb-2 text-muted-foreground" />
-            <Text muted>{dropHintContent}</Text>
+            <Text muted>{t("dropzone.hint.action")}</Text>
             <Text size="xs" muted>
               {dropSpecs}
             </Text>
           </>
         )}
-      </div>
+      </label>
 
       {/* Preview Grid */}
       {showPreviewGrid && images.length > 0 && (

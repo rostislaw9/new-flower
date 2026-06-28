@@ -861,7 +861,9 @@
         "uploadFailed": "Upload failed"
       },
       "dropzone": {
-        "hint": "Drag and drop images here, or <action>browse</action>",
+        "hint": {
+          "action": "Drag and drop images here, or click to browse"
+        },
         "specs": "Max {count} files · {size}MB each · {types}"
       },
       "actions": {
