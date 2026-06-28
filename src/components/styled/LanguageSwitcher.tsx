@@ -47,7 +47,7 @@ export function LanguageSwitcher({
         canonical: false,
       });
       const url = searchString ? `${nextPath}?${searchString}` : nextPath;
-      router.push(url);
+      router.push(url, { scroll: false });
     },
     [locale, pathname, router, searchString],
   );
