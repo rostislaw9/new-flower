@@ -173,8 +173,6 @@ export function BookingForm() {
 
   useEffect(() => {
     if (state?.success) {
-      successRef.current?.focus();
-      // Reset form data on success
       setFormData({
         fullName: "",
         email: "",
@@ -189,6 +187,19 @@ export function BookingForm() {
       });
       setPreferredDates([]);
       setReferenceImageUrls([""]);
+
+      // Delay scroll to allow conditional render to complete
+      setTimeout(() => {
+        const element = successRef.current;
+        if (element) {
+          const top = element.getBoundingClientRect().top + window.scrollY;
+          window.scrollTo({
+            top,
+            behavior: "smooth",
+          });
+          element.focus();
+        }
+      }, 0);
     }
   }, [state]);
 

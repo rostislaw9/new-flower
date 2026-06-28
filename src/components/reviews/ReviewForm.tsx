@@ -1,6 +1,6 @@
 "use client";
 
-import { useActionState, useTransition } from "react";
+import { useActionState, useEffect, useRef, useTransition } from "react";
 
 import { Loader2 } from "lucide-react";
 
@@ -48,8 +48,27 @@ const initialState: ReviewFormState = { status: "idle" };
 export function ReviewForm({ labels, success }: ReviewFormProps) {
   const [state, formAction] = useActionState(submitReview, initialState);
   const [pending, startTransition] = useTransition();
+  const successRef = useRef<HTMLDivElement>(null);
 
   const isSuccess = state.status === "success";
+
+  useEffect(() => {
+    if (isSuccess) {
+      // Delay scroll to allow conditional render to complete
+      setTimeout(() => {
+        const element = successRef.current;
+        if (element) {
+          const top = element.getBoundingClientRect().top + window.scrollY;
+          window.scrollTo({
+            top,
+            behavior: "smooth",
+          });
+          element.focus();
+        }
+      }, 0);
+    }
+  }, [isSuccess]);
+
   const fieldErrors =
     state.status === "error"
       ? (state.fieldErrors ?? ({} as ReviewFormErrors))
@@ -60,7 +79,7 @@ export function ReviewForm({ labels, success }: ReviewFormProps) {
 
   if (isSuccess) {
     return (
-      <Card className="text-center">
+      <Card ref={successRef} tabIndex={-1} className="text-center outline-none">
         <CardHeader>
           <CardTitle>
             <Eyebrow>{success.eyebrow}</Eyebrow>
