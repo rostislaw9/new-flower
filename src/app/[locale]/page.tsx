@@ -116,7 +116,7 @@ export default async function HomePage() {
             <div className="flex flex-1 flex-col gap-8">
               <PortfolioGallery
                 items={featuredItems}
-                showCategoryFilter={false}
+                scrollableClassName="h-[60vh] sm:h-full"
               />
               <Button href="/portfolio" variant="outline" className="md:hidden">
                 {t("featured.viewAll")}

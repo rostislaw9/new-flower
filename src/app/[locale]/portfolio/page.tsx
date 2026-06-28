@@ -9,7 +9,11 @@ import { JsonLd } from "@/components/seo/JsonLd";
 import { Eyebrow, Heading, Text } from "@/components/styled/Typography";
 import { Separator } from "@/components/ui/separator";
 import { createBreadcrumbList } from "@/lib/breadcrumbs";
-import { loadPortfolioItems } from "@/lib/portfolio-loader";
+import {
+  countPortfolioItems,
+  getPortfolioCategoryCounts,
+  loadPortfolioItems,
+} from "@/lib/portfolio-loader";
 import { buildPageMetadata } from "@/lib/seo/buildPageMetadata";
 
 export async function generateMetadata({
@@ -28,13 +32,19 @@ export async function generateMetadata({
   });
 }
 
+const INITIAL_GALLERY_PAGE_SIZE = 12;
+
 export default async function PortfolioPage() {
   const t = await getTranslations("portfolio");
   const breadcrumb = createBreadcrumbList([
     { name: "Home", item: "/" },
     { name: "Portfolio", item: "/portfolio" },
   ]);
-  const items = await loadPortfolioItems();
+  const [initialItems, totalCount, categoryCounts] = await Promise.all([
+    loadPortfolioItems({ take: INITIAL_GALLERY_PAGE_SIZE }),
+    countPortfolioItems(),
+    getPortfolioCategoryCounts(),
+  ]);
 
   return (
     <>
@@ -53,7 +63,13 @@ export default async function PortfolioPage() {
       {/* Gallery */}
       <Section size="md">
         <Container>
-          <PortfolioGallery items={items} />
+          <PortfolioGallery
+            items={initialItems}
+            pageSize={INITIAL_GALLERY_PAGE_SIZE}
+            totalCount={totalCount}
+            categoryCounts={categoryCounts}
+            scrollableClassName="h-[60vh] sm:h-[75vh]"
+          />
         </Container>
       </Section>
 

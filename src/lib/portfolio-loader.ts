@@ -1,6 +1,10 @@
 "use server";
 
-import type { PortfolioCategory, PortfolioItem } from "./portfolio-data";
+import {
+  PORTFOLIO_CATEGORIES,
+  type PortfolioCategory,
+  type PortfolioItem,
+} from "./portfolio-data";
 import { prisma } from "./prisma";
 
 function mapPrismaItem(item: {
@@ -27,12 +31,62 @@ function mapPrismaItem(item: {
   };
 }
 
-export async function loadPortfolioItems(): Promise<PortfolioItem[]> {
-  const items = await prisma.portfolioItem.findMany({
+interface LoadPortfolioOptions {
+  skip?: number;
+  take?: number;
+  category?: PortfolioCategory | undefined;
+}
+
+export async function loadPortfolioItems(
+  options?: LoadPortfolioOptions,
+): Promise<PortfolioItem[]> {
+  const where = options?.category ? { category: options.category } : undefined;
+  const query: Parameters<typeof prisma.portfolioItem.findMany>[0] = {
     orderBy: { createdAt: "desc" },
-  });
+  };
+
+  if (where) {
+    query.where = where;
+  }
+  if (typeof options?.skip === "number") {
+    query.skip = options.skip;
+  }
+  if (typeof options?.take === "number") {
+    query.take = options.take;
+  }
+
+  const items = await prisma.portfolioItem.findMany(query);
 
   return items.map(mapPrismaItem);
+}
+
+export async function countPortfolioItems(
+  category?: PortfolioCategory | undefined,
+): Promise<number> {
+  const where = category ? { category } : undefined;
+  const query: Parameters<typeof prisma.portfolioItem.count>[0] = {};
+  if (where) {
+    query.where = where;
+  }
+  return prisma.portfolioItem.count(query);
+}
+
+export async function getPortfolioCategoryCounts(): Promise<
+  Record<PortfolioCategory, number>
+> {
+  const grouped = await prisma.portfolioItem.groupBy({
+    by: ["category"],
+    _count: { category: true },
+  });
+
+  return PORTFOLIO_CATEGORIES.reduce<Record<PortfolioCategory, number>>(
+    (acc, category) => {
+      const match = grouped.find((item) => item.category === category);
+      acc[category] = match?._count.category ?? 0;
+      return acc;
+    },
+    {} as Record<PortfolioCategory, number>,
+  );
 }
 
 export async function getPortfolioItemById(
