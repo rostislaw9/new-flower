@@ -25,7 +25,8 @@
     "featured": {
       "eyebrow": "Selected Work",
       "title": "Masterpieces",
-      "viewAll": "View All Work"
+      "viewAll": "View All Work",
+      "scrollHint": "Scroll to see more →"
     },
     "aboutPreview": {
       "eyebrow": "The Artist",
@@ -67,7 +68,7 @@
       "subtitle": "A selection of pieces across styles. Each tattoo is custom-designed for the client. No templates, no stock — just original art."
     },
     "noItems": "No portfolio items yet",
-    "scrollHint": "Swipe to see more →",
+    "scrollHint": "Scroll to see more →",
     "processCards": {
       "process": {
         "eyebrow": "Process",

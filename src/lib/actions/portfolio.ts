@@ -4,12 +4,11 @@ import { revalidatePath } from "next/cache";
 
 import { deleteFromCloudinary, extractPublicIdFromUrl } from "@/lib/cloudinary";
 import {
+  MAX_FEATURED_ITEMS,
   PORTFOLIO_CATEGORIES,
   type PortfolioCategory,
 } from "@/lib/portfolio-data";
 import { prisma } from "@/lib/prisma";
-
-const MAX_FEATURED_ITEMS = 8;
 
 export type PortfolioActionResult =
   | { success: true; id?: string }

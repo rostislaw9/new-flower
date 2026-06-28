@@ -1,6 +1,7 @@
 "use server";
 
 import {
+  MAX_FEATURED_ITEMS,
   PORTFOLIO_CATEGORIES,
   type PortfolioCategory,
   type PortfolioItem,
@@ -109,7 +110,9 @@ export async function getPortfolioItems(
   return items.filter((item) => item.category === category);
 }
 
-export async function getFeaturedItems(limit = 8): Promise<PortfolioItem[]> {
+export async function getFeaturedItems(
+  limit = MAX_FEATURED_ITEMS,
+): Promise<PortfolioItem[]> {
   const items = await prisma.portfolioItem.findMany({
     where: { featured: true },
     orderBy: { displayOrder: "asc" },

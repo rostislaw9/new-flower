@@ -25,7 +25,8 @@
     "featured": {
       "eyebrow": "ผลงานที่เลือก",
       "title": "ผลงาน",
-      "viewAll": "ดูผลงานทั้งหมด"
+      "viewAll": "ดูผลงานทั้งหมด",
+      "scrollHint": "เลื่อนเพื่อดูเพิ่มเติม →"
     },
     "aboutPreview": {
       "eyebrow": "ศิลปิน",

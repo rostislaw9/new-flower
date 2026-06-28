@@ -2,9 +2,12 @@
 
 import { useCallback, useEffect, useRef, useState } from "react";
 
+import { useTranslations } from "next-intl";
+
 import { CategoryFilter } from "@/components/portfolio/CategoryFilter";
 import { Lightbox } from "@/components/portfolio/Lightbox";
 import { PortfolioGrid } from "@/components/portfolio/PortfolioGrid";
+import { Text } from "@/components/styled/Typography";
 import type { PortfolioCategory, PortfolioItem } from "@/lib/portfolio-data";
 import { PORTFOLIO_CATEGORIES } from "@/lib/portfolio-data";
 
@@ -32,6 +35,8 @@ export function PortfolioGallery({
   totalCount,
   categoryCounts,
 }: PortfolioGalleryProps) {
+  const t = useTranslations("portfolio");
+
   const initialHasMore = (totalCount ?? items.length) > items.length;
   const [hasMore, setHasMore] = useState(initialHasMore);
   const [offset, setOffset] = useState(items.length);
@@ -180,15 +185,20 @@ export function PortfolioGallery({
     <>
       <div className="flex flex-col gap-1">
         {categoryCounts && (
-          <CategoryFilter
-            categories={PORTFOLIO_CATEGORIES}
-            active={activeCategory}
-            counts={categoryCounts}
-            onSelect={(category) => {
-              setActiveCategory(category);
-              setLightboxIndex(null);
-            }}
-          />
+          <>
+            <CategoryFilter
+              categories={PORTFOLIO_CATEGORIES}
+              active={activeCategory}
+              counts={categoryCounts}
+              onSelect={(category) => {
+                setActiveCategory(category);
+                setLightboxIndex(null);
+              }}
+            />
+            <Text muted size="xs" className="mb-2 hidden justify-end md:flex">
+              {t("scrollHint")}
+            </Text>
+          </>
         )}
         <PortfolioGrid
           items={filteredItems}

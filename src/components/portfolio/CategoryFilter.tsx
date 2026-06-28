@@ -1,9 +1,6 @@
 "use client";
 
-import { useTranslations } from "next-intl";
-
 import { Button } from "@/components/styled/Button";
-import { Text } from "@/components/styled/Typography";
 import { ScrollArea, ScrollBar } from "@/components/ui/scroll-area";
 import type { PortfolioCategory } from "@/lib/portfolio-data";
 import { cn } from "@/lib/utils";
@@ -21,13 +18,8 @@ export function CategoryFilter({
   counts,
   onSelect,
 }: CategoryFilterProps) {
-  const t = useTranslations("portfolio");
-
   return (
     <nav aria-label="Filter portfolio by category">
-      <Text muted size="xs" className="mb-2 flex justify-end md:hidden">
-        {t("scrollHint")}
-      </Text>
       <ScrollArea className="w-full whitespace-nowrap">
         <CategoryFilterList
           categories={categories}

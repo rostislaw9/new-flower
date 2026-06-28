@@ -177,7 +177,7 @@ export function Lightbox({
             type="button"
             aria-label="Close lightbox"
             onClick={onClose}
-            className="absolute right-4 top-4 z-[500] flex h-10 w-10 items-center justify-center text-muted-foreground transition-colors duration-300 hover:text-foreground sm:right-6 sm:top-6"
+            className="absolute right-4 top-4 z-[500] flex h-10 w-10 items-center justify-center text-muted-foreground outline-none transition-colors duration-300 hover:text-foreground sm:right-6 sm:top-6"
           >
             <X />
           </button>

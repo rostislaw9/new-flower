@@ -35,6 +35,7 @@ import {
   SidebarTrigger,
   useSidebar,
 } from "@/components/ui/sidebar";
+import { useIsMobile } from "@/hooks/use-mobile";
 import { type Locale, defaultLocale } from "@/i18n/config";
 import { isSupportedLocale } from "@/lib/locale-utils";
 
@@ -48,6 +49,7 @@ export default function AdminLayout({ children }: { children: ReactNode }) {
 
   const pathname = usePathname();
   const t = useTranslations("admin.layout");
+  const isMobile = useIsMobile();
 
   const [initialSidebarOpen, setInitialSidebarOpen] = useState<boolean | null>(
     null,
@@ -108,7 +110,10 @@ export default function AdminLayout({ children }: { children: ReactNode }) {
           <div className="flex min-w-0 flex-1 items-center gap-2">
             <SidebarTrigger />
             <Separator orientation="vertical" className="h-4" />
-            <AdminBreadcrumbsTrail items={breadcrumbItems} />
+            <AdminBreadcrumbsTrail
+              items={breadcrumbItems}
+              isMobile={isMobile}
+            />
           </div>
           <div className="ml-auto">
             <LanguageSwitcher linkClassName="text-xs" />
@@ -142,12 +147,18 @@ type AdminBreadcrumb = {
   href?: string;
 };
 
-function AdminBreadcrumbsTrail({ items }: { items: AdminBreadcrumb[] }) {
+function AdminBreadcrumbsTrail({
+  items,
+  isMobile,
+}: {
+  items: AdminBreadcrumb[];
+  isMobile: boolean;
+}) {
   if (!items.length) {
     return null;
   }
 
-  const shouldCollapse = items.length > 2;
+  const shouldCollapse = isMobile && items.length > 2;
   const displayItems: (AdminBreadcrumb | { label: string })[] = shouldCollapse
     ? [items[0]!, { label: "..." }, items[items.length - 1]!]
     : items;
