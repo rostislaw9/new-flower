@@ -163,12 +163,15 @@
       "location": {
         "eyebrow": "Studio",
         "title": "Location",
-        "description": "Private studio in Phuket. The address is shared once a booking is confirmed."
+        "description": {
+          "prefix": "Private studio located in Phuket, Thailand. Intimate space designed for comfort and focus during your session. ",
+          "linkLabel": "View on map"
+        }
       },
       "process": {
         "eyebrow": "Process",
-        "title": "By appointment only",
-        "description": "No walk-ins. Every session begins with a detailed consultation before any deposit is taken."
+        "title": "Appointments & walk-ins",
+        "description": "Walk-ins welcome. Every session begins with a detailed consultation before any deposit is taken."
       },
       "standards": {
         "eyebrow": "Standards",

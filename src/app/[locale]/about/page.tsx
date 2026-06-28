@@ -195,7 +195,15 @@ export default async function AboutPage({ params }: AboutReviewsPageProps) {
               <Heading as="h3" size="md">
                 {t("studio.location.title")}
               </Heading>
-              <Text muted>{t("studio.location.description")}</Text>
+              <Text muted>
+                {t("studio.location.description.prefix")}
+                <a
+                  href={`/${locale}/contact#studio-location`}
+                  className="text-foreground underline underline-offset-2 transition-colors duration-300 hover:text-accent"
+                >
+                  {t("studio.location.description.linkLabel")}
+                </a>
+              </Text>
             </div>
             <div className="flex flex-col gap-3">
               <Eyebrow>{t("studio.process.eyebrow")}</Eyebrow>

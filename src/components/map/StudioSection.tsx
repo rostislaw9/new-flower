@@ -75,7 +75,7 @@ export function StudioSection({ locations }: StudioSectionProps) {
   const activeLocation = locations[activeShop];
 
   return (
-    <Section size="lg">
+    <Section size="lg" id="studio-location">
       <Container>
         <div className="flex flex-col gap-12">
           <div className="flex flex-col gap-3">
