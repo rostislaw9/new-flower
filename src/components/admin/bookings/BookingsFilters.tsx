@@ -46,9 +46,8 @@ interface BookingsFiltersProps {
     submittedRangeLabel: string;
     updatedRangeLabel: string;
     preferredRangeLabel: string;
-    dateFrom: string;
-    dateTo: string;
-    dateClearLabel: string;
+    datePickerPlaceholder: string;
+    datePickerClearLabel: string;
     filter: string;
     clear: string;
   };
@@ -69,40 +68,56 @@ export function BookingsFilters({
   const [bookingIdValue, setBookingIdValue] = useState(
     initialValues.bookingId ?? "",
   );
-  const [submittedFromValue, setSubmittedFromValue] = useState(
-    initialValues.submittedFrom ?? "",
-  );
-  const [submittedToValue, setSubmittedToValue] = useState(
-    initialValues.submittedTo ?? "",
-  );
-  const [updatedFromValue, setUpdatedFromValue] = useState(
-    initialValues.updatedFrom ?? "",
-  );
-  const [updatedToValue, setUpdatedToValue] = useState(
-    initialValues.updatedTo ?? "",
-  );
-  const [preferredFromValue, setPreferredFromValue] = useState(
-    initialValues.preferredFrom ?? "",
-  );
-  const [preferredToValue, setPreferredToValue] = useState(
-    initialValues.preferredTo ?? "",
-  );
+  const [submittedRange, setSubmittedRange] = useState<{
+    from?: string;
+    to?: string;
+  }>({
+    ...(initialValues.submittedFrom && { from: initialValues.submittedFrom }),
+    ...(initialValues.submittedTo && { to: initialValues.submittedTo }),
+  });
+  const [updatedRange, setUpdatedRange] = useState<{
+    from?: string;
+    to?: string;
+  }>({
+    ...(initialValues.updatedFrom && { from: initialValues.updatedFrom }),
+    ...(initialValues.updatedTo && { to: initialValues.updatedTo }),
+  });
+  const [preferredRange, setPreferredRange] = useState<{
+    from?: string;
+    to?: string;
+  }>({
+    ...(initialValues.preferredFrom && { from: initialValues.preferredFrom }),
+    ...(initialValues.preferredTo && { to: initialValues.preferredTo }),
+  });
 
   const formatDateLabel = useMemo(
     () => createDateLabelFormatter(locale),
     [locale],
   );
 
+  const formatRangeLabel = (range: { from?: Date; to?: Date }) => {
+    if (!range.from) return "";
+    return range.to
+      ? `${formatDateLabel(range.from)} - ${formatDateLabel(range.to)}`
+      : formatDateLabel(range.from);
+  };
+
   useEffect(() => {
     setSearchValue(initialValues.search ?? "");
     setStatusValue(initialValues.status ?? "all");
     setBookingIdValue(initialValues.bookingId ?? "");
-    setSubmittedFromValue(initialValues.submittedFrom ?? "");
-    setSubmittedToValue(initialValues.submittedTo ?? "");
-    setUpdatedFromValue(initialValues.updatedFrom ?? "");
-    setUpdatedToValue(initialValues.updatedTo ?? "");
-    setPreferredFromValue(initialValues.preferredFrom ?? "");
-    setPreferredToValue(initialValues.preferredTo ?? "");
+    setSubmittedRange({
+      ...(initialValues.submittedFrom && { from: initialValues.submittedFrom }),
+      ...(initialValues.submittedTo && { to: initialValues.submittedTo }),
+    });
+    setUpdatedRange({
+      ...(initialValues.updatedFrom && { from: initialValues.updatedFrom }),
+      ...(initialValues.updatedTo && { to: initialValues.updatedTo }),
+    });
+    setPreferredRange({
+      ...(initialValues.preferredFrom && { from: initialValues.preferredFrom }),
+      ...(initialValues.preferredTo && { to: initialValues.preferredTo }),
+    });
   }, [
     initialValues.search,
     initialValues.status,
@@ -121,12 +136,12 @@ export function BookingsFilters({
     if (searchValue.trim()) params.set("search", searchValue.trim());
     if (statusValue !== "all") params.set("status", statusValue);
     if (bookingIdValue.trim()) params.set("bookingId", bookingIdValue.trim());
-    if (submittedFromValue) params.set("submittedFrom", submittedFromValue);
-    if (submittedToValue) params.set("submittedTo", submittedToValue);
-    if (updatedFromValue) params.set("updatedFrom", updatedFromValue);
-    if (updatedToValue) params.set("updatedTo", updatedToValue);
-    if (preferredFromValue) params.set("preferredFrom", preferredFromValue);
-    if (preferredToValue) params.set("preferredTo", preferredToValue);
+    if (submittedRange.from) params.set("submittedFrom", submittedRange.from);
+    if (submittedRange.to) params.set("submittedTo", submittedRange.to);
+    if (updatedRange.from) params.set("updatedFrom", updatedRange.from);
+    if (updatedRange.to) params.set("updatedTo", updatedRange.to);
+    if (preferredRange.from) params.set("preferredFrom", preferredRange.from);
+    if (preferredRange.to) params.set("preferredTo", preferredRange.to);
     return params.toString();
   }
 
@@ -141,12 +156,9 @@ export function BookingsFilters({
     setSearchValue("");
     setStatusValue("all");
     setBookingIdValue("");
-    setSubmittedFromValue("");
-    setSubmittedToValue("");
-    setUpdatedFromValue("");
-    setUpdatedToValue("");
-    setPreferredFromValue("");
-    setPreferredToValue("");
+    setSubmittedRange({});
+    setUpdatedRange({});
+    setPreferredRange({});
     router.push(pathname);
     router.refresh();
   }
@@ -195,42 +207,33 @@ export function BookingsFilters({
         </div>
         <DateRangeField
           label={labels.preferredRangeLabel}
-          fromId="preferred-from"
-          toId="preferred-to"
-          fromPlaceholder={labels.dateFrom}
-          toPlaceholder={labels.dateTo}
-          fromValue={preferredFromValue}
-          toValue={preferredToValue}
-          onFromChange={setPreferredFromValue}
-          onToChange={setPreferredToValue}
-          clearLabel={labels.dateClearLabel}
-          formatDateLabel={formatDateLabel}
+          id="preferred-range"
+          value={preferredRange}
+          onChange={setPreferredRange}
+          placeholder={labels.datePickerPlaceholder}
+          clearLabel={labels.datePickerClearLabel}
+          formatDateLabel={formatRangeLabel}
+          locale={locale}
         />
         <DateRangeField
           label={labels.submittedRangeLabel}
-          fromId="submitted-from"
-          toId="submitted-to"
-          fromPlaceholder={labels.dateFrom}
-          toPlaceholder={labels.dateTo}
-          fromValue={submittedFromValue}
-          toValue={submittedToValue}
-          onFromChange={setSubmittedFromValue}
-          onToChange={setSubmittedToValue}
-          clearLabel={labels.dateClearLabel}
-          formatDateLabel={formatDateLabel}
+          id="submitted-range"
+          value={submittedRange}
+          onChange={setSubmittedRange}
+          placeholder={labels.datePickerPlaceholder}
+          clearLabel={labels.datePickerClearLabel}
+          formatDateLabel={formatRangeLabel}
+          locale={locale}
         />
         <DateRangeField
           label={labels.updatedRangeLabel}
-          fromId="updated-from"
-          toId="updated-to"
-          fromPlaceholder={labels.dateFrom}
-          toPlaceholder={labels.dateTo}
-          fromValue={updatedFromValue}
-          toValue={updatedToValue}
-          onFromChange={setUpdatedFromValue}
-          onToChange={setUpdatedToValue}
-          clearLabel={labels.dateClearLabel}
-          formatDateLabel={formatDateLabel}
+          id="updated-range"
+          value={updatedRange}
+          onChange={setUpdatedRange}
+          placeholder={labels.datePickerPlaceholder}
+          clearLabel={labels.datePickerClearLabel}
+          formatDateLabel={formatRangeLabel}
+          locale={locale}
         />
       </div>
 
@@ -249,54 +252,39 @@ export function BookingsFilters({
 
 interface DateRangeFieldProps {
   label: string;
-  fromId: string;
-  toId: string;
-  fromPlaceholder: string;
-  toPlaceholder: string;
-  fromValue: string;
-  toValue: string;
-  onFromChange: (value: string) => void;
-  onToChange: (value: string) => void;
+  id: string;
+  value?: { from?: string; to?: string };
+  onChange: (value: { from?: string; to?: string }) => void;
+  placeholder: string;
   clearLabel: string;
-  formatDateLabel: (date: Date) => string;
+  formatDateLabel: (range: { from?: Date; to?: Date }) => string;
+  locale: string;
 }
 
 function DateRangeField({
   label,
-  fromId,
-  toId,
-  fromPlaceholder,
-  toPlaceholder,
-  fromValue,
-  toValue,
-  onFromChange,
-  onToChange,
+  id,
+  value,
+  onChange,
+  placeholder,
   clearLabel,
   formatDateLabel,
+  locale,
 }: DateRangeFieldProps) {
   return (
     <div className="flex flex-col gap-2">
       <Label>{label}</Label>
-      <div className="grid grid-cols-2 gap-2">
-        <DatePicker
-          id={fromId}
-          value={fromValue}
-          placeholder={fromPlaceholder}
-          onChange={onFromChange}
-          clearLabel={clearLabel}
-          ariaLabel={`${label} ${fromPlaceholder}`}
-          formatDateLabel={formatDateLabel}
-        />
-        <DatePicker
-          id={toId}
-          value={toValue}
-          placeholder={toPlaceholder}
-          onChange={onToChange}
-          clearLabel={clearLabel}
-          ariaLabel={`${label} ${toPlaceholder}`}
-          formatDateLabel={formatDateLabel}
-        />
-      </div>
+      <DatePicker
+        id={id}
+        mode="range"
+        value={value}
+        onChange={onChange}
+        placeholder={placeholder}
+        clearLabel={clearLabel}
+        ariaLabel={label}
+        locale={locale}
+        formatDateLabel={formatDateLabel}
+      />
     </div>
   );
 }

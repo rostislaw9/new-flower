@@ -475,12 +475,11 @@
       "preferredDates": {
         "label": "วันที่สะดวก",
         "hint": "ไม่เกิน 5 วัน",
-        "placeholder": "เลือกวันที่",
-        "clear": "ล้างวันที่",
-        "add": "+ เพิ่มวัน",
-        "addAnother": "+ เพิ่มอีกวัน",
-        "dateAria": "วันที่สะดวก {number}",
-        "removeAria": "ลบวันที่ {number}",
+        "datePicker": {
+          "placeholder": "เลือกวันที่",
+          "clearLabel": "ล้างการเลือก",
+          "selectedCount": "{count} วันที่สะดวก"
+        },
         "errors": {
           "required": "กรุณาระบุอย่างน้อย 1 วัน"
         }
@@ -645,7 +644,10 @@
         "submittedRangeLabel": "ส่งระหว่าง",
         "updatedRangeLabel": "อัปเดตระหว่าง",
         "preferredRangeLabel": "วันที่สะดวกระหว่าง",
-        "dateClearLabel": "ล้างวันที่",
+        "datePicker": {
+          "placeholder": "เลือกช่วงวันที่",
+          "clearLabel": "ล้างการเลือก"
+        },
         "statusOptions": {
           "all": "ทุกสถานะ",
           "pending": "รอดำเนินการ",
@@ -654,8 +656,6 @@
           "rejected": "ปฏิเสธ",
           "completed": "เสร็จสิ้น"
         },
-        "dateFrom": "จาก",
-        "dateTo": "ถึง",
         "filter": "นำไปใช้ตัวกรอง",
         "clear": "ล้างตัวกรอง"
       },
@@ -699,10 +699,6 @@
           "tattoo": "รายละเอียดงาน",
           "references": "รูปอ้างอิง"
         },
-        "meta": {
-          "preferredDatesCount": "{count} วันที่สะดวก",
-          "referenceCount": "{count} รูปอ้างอิง"
-        },
         "updated": "อัปเดตเมื่อ",
         "submitted": "ส่งเมื่อ",
         "fullName": "ชื่อเต็ม",
@@ -740,9 +736,10 @@
         "apply": "ใช้ตัวกรอง",
         "clear": "ล้าง",
         "submittedRangeLabel": "ช่วงวันที่ส่ง",
-        "dateFrom": "ตั้งแต่",
-        "dateTo": "ถึง",
-        "dateClearLabel": "ล้างวันที่"
+        "datePicker": {
+          "placeholder": "เลือกช่วงวันที่",
+          "clearLabel": "ล้างการเลือก"
+        }
       },
       "table": {
         "client": "ลูกค้า",

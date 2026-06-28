@@ -39,7 +39,6 @@ import { Textarea } from "@/components/ui/textarea";
 import { type Locale, defaultLocale } from "@/i18n/config";
 import type { ActionResult } from "@/lib/actions/create-appointment";
 import { createAppointment } from "@/lib/actions/create-appointment";
-import { createDateLabelFormatter } from "@/lib/date-utils";
 import { isSupportedLocale } from "@/lib/locale-utils";
 import type {
   BodyPlacement,
@@ -135,11 +134,6 @@ export function BookingForm() {
     INITIAL_STATE,
   );
 
-  const dateLabelFormatter = useMemo(
-    () => createDateLabelFormatter(locale),
-    [locale],
-  );
-
   const [formData, setFormData] = useState({
     fullName: "",
     email: "",
@@ -152,7 +146,7 @@ export function BookingForm() {
     budget: "",
     contactMethod: "",
   });
-  const [preferredDates, setPreferredDates] = useState<string[]>([""]);
+  const [preferredDates, setPreferredDates] = useState<string[]>([]);
   const [referenceImageUrls, setReferenceImageUrls] = useState<string[]>([]);
   const [imageInputMode, setImageInputMode] = useState<"url" | "upload">("url");
   const [copied, setCopied] = useState(false);
@@ -162,7 +156,7 @@ export function BookingForm() {
   const contactMethodRef = useRef<HTMLButtonElement>(null);
   const phoneRef = useRef<HTMLInputElement>(null);
   const tattooDescriptionRef = useRef<HTMLTextAreaElement>(null);
-  const preferredDateRef = useRef<HTMLButtonElement>(null);
+  const preferredDatesRef = useRef<HTMLButtonElement>(null);
   const successRef = useRef<HTMLDivElement>(null);
 
   const handleInputChange = (field: keyof typeof formData, value: string) => {
@@ -193,7 +187,7 @@ export function BookingForm() {
         budget: "",
         contactMethod: "",
       });
-      setPreferredDates([""]);
+      setPreferredDates([]);
       setReferenceImageUrls([""]);
     }
   }, [state]);
@@ -208,35 +202,6 @@ export function BookingForm() {
     setReferenceImageUrls((prev) => prev.filter((_, i) => i !== index));
   };
 
-  const addDate = () => {
-    if (preferredDates.length < 5) {
-      setPreferredDates((prev) => [...prev, ""]);
-      if (clientErrors.preferredDates) {
-        setClientErrors((prev) => {
-          const next = { ...prev };
-          delete next.preferredDates;
-          return next;
-        });
-      }
-    }
-  };
-
-  const removeDate = (index: number) => {
-    setPreferredDates((prev) => prev.filter((_, i) => i !== index));
-  };
-
-  const updateDate = (index: number, value: string) => {
-    setPreferredDates((prev) => prev.map((d, i) => (i === index ? value : d)));
-    // Clear preferred date error when user updates
-    if (clientErrors.preferredDates) {
-      setClientErrors((prev) => {
-        const next = { ...prev };
-        delete next.preferredDates;
-        return next;
-      });
-    }
-  };
-
   const [clientErrors, setClientErrors] = useState<Record<string, string[]>>(
     {},
   );
@@ -247,7 +212,7 @@ export function BookingForm() {
     contactMethod: contactMethodRef,
     phone: phoneRef,
     tattooDescription: tattooDescriptionRef,
-    preferredDates: preferredDateRef,
+    preferredDates: preferredDatesRef,
   } as const;
 
   const scrollToFirstError = (errors: Record<string, string[]>) => {
@@ -349,8 +314,10 @@ export function BookingForm() {
       : clientErrors;
 
   const preferredDatesError = Boolean(fieldErrors["preferredDates"]?.length);
-  const preferredDatePlaceholder = formT("preferredDates.placeholder");
-  const preferredDateClearLabel = formT("preferredDates.clear");
+  const preferredDatePlaceholder = formT(
+    "preferredDates.datePicker.placeholder",
+  );
+  const preferredDateClearLabel = formT("preferredDates.datePicker.clearLabel");
   const minPreferredDate = useMemo(() => {
     const today = new Date();
     today.setHours(0, 0, 0, 0);
@@ -691,59 +658,48 @@ export function BookingForm() {
 
         <FormField
           label={formT("preferredDates.label")}
-          htmlFor="preferredDates-0"
+          htmlFor="preferredDates"
           required
           error={fieldErrors["preferredDates"]}
           hint={formT("preferredDates.hint")}
         >
           <div className="flex flex-col gap-3">
-            {preferredDates.map((date, index) => (
-              <div key={index} className="flex gap-2">
-                <div className="relative flex-1">
-                  <input type="hidden" name="preferredDates" value={date} />
-                  <DatePicker
-                    ref={index === 0 ? preferredDateRef : undefined}
-                    value={date}
-                    onChange={(selected) => updateDate(index, selected)}
-                    placeholder={preferredDatePlaceholder}
-                    clearLabel={preferredDateClearLabel}
-                    ariaLabel={formT("preferredDates.dateAria", {
-                      number: index + 1,
-                    })}
-                    hasError={preferredDatesError && index === 0}
-                    minDate={minPreferredDate}
-                    formatDateLabel={dateLabelFormatter}
-                  />
-                </div>
-                {preferredDates.length > 1 && (
-                  <Button
-                    type="button"
-                    size="icon"
-                    variant="outline"
-                    onClick={() => removeDate(index)}
-                    aria-label={formT("preferredDates.removeAria", {
-                      number: index + 1,
-                    })}
-                    className="hover:border-destructive/40 hover:text-destructive"
-                  >
-                    <X />
-                  </Button>
-                )}
-              </div>
+            {preferredDates.map((date) => (
+              <input
+                key={date}
+                type="hidden"
+                name="preferredDates"
+                value={date}
+              />
             ))}
-            {preferredDates.length < 5 && (
-              <Button
-                type="button"
-                variant="link"
-                size="link"
-                onClick={addDate}
-                className="self-start"
-              >
-                {preferredDates.length === 0
-                  ? formT("preferredDates.add")
-                  : formT("preferredDates.addAnother")}
-              </Button>
-            )}
+            <DatePicker
+              ref={preferredDatesRef}
+              mode="multiple"
+              value={preferredDates}
+              onChange={(dates) => {
+                if (dates.length <= 5) {
+                  setPreferredDates(dates);
+                  if (clientErrors.preferredDates) {
+                    setClientErrors((prev) => {
+                      const next = { ...prev };
+                      delete next.preferredDates;
+                      return next;
+                    });
+                  }
+                }
+              }}
+              placeholder={preferredDatePlaceholder}
+              clearLabel={preferredDateClearLabel}
+              ariaLabel={formT("preferredDates.label")}
+              hasError={preferredDatesError}
+              minDate={minPreferredDate}
+              locale={locale}
+              formatDateLabel={(dates) =>
+                formT("preferredDates.datePicker.selectedCount", {
+                  count: dates.length,
+                })
+              }
+            />
           </div>
         </FormField>
       </fieldset>

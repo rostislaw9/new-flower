@@ -133,9 +133,8 @@ export default async function AdminReviewsPage({
               apply: t("filters.apply"),
               clear: t("filters.clear"),
               submittedRangeLabel: t("filters.submittedRangeLabel"),
-              dateFrom: t("filters.dateFrom"),
-              dateTo: t("filters.dateTo"),
-              dateClearLabel: t("filters.dateClearLabel"),
+              datePickerPlaceholder: t("filters.datePicker.placeholder"),
+              datePickerClearLabel: t("filters.datePicker.clearLabel"),
             }}
             locale={locale}
           />

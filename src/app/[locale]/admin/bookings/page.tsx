@@ -301,9 +301,8 @@ export default async function BookingsAdminPage({
               submittedRangeLabel: t("filters.submittedRangeLabel"),
               updatedRangeLabel: t("filters.updatedRangeLabel"),
               preferredRangeLabel: t("filters.preferredRangeLabel"),
-              dateFrom: t("filters.dateFrom"),
-              dateTo: t("filters.dateTo"),
-              dateClearLabel: t("filters.dateClearLabel"),
+              datePickerPlaceholder: t("filters.datePicker.placeholder"),
+              datePickerClearLabel: t("filters.datePicker.clearLabel"),
               filter: t("filters.filter"),
               clear: t("filters.clear"),
             }}

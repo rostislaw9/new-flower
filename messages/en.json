@@ -475,12 +475,11 @@
       "preferredDates": {
         "label": "Preferred Dates",
         "hint": "Up to 5 dates",
-        "placeholder": "Select a date",
-        "clear": "Clear date",
-        "add": "+ Add a date",
-        "addAnother": "+ Add another date",
-        "dateAria": "Preferred date {number}",
-        "removeAria": "Remove date {number}",
+        "datePicker": {
+          "placeholder": "Select dates",
+          "clearLabel": "Clear selection",
+          "selectedCount": "{count, plural, one {# date selected} other {# dates selected}}"
+        },
         "errors": {
           "required": "Provide at least one preferred date"
         }
@@ -645,7 +644,10 @@
         "submittedRangeLabel": "Submitted",
         "updatedRangeLabel": "Updated",
         "preferredRangeLabel": "Preferred dates",
-        "dateClearLabel": "Clear date",
+        "datePicker": {
+          "placeholder": "Select date range",
+          "clearLabel": "Clear selection"
+        },
         "statusOptions": {
           "all": "All statuses",
           "pending": "Pending",
@@ -654,8 +656,6 @@
           "rejected": "Rejected",
           "completed": "Completed"
         },
-        "dateFrom": "From",
-        "dateTo": "To",
         "filter": "Apply Filters",
         "clear": "Clear"
       },
@@ -699,10 +699,6 @@
           "tattoo": "Tattoo brief",
           "references": "Reference material"
         },
-        "meta": {
-          "preferredDatesCount": "{count, plural, one {# preferred date} other {# preferred dates}}",
-          "referenceCount": "{count, plural, one {# reference image} other {# reference images}}"
-        },
         "updated": "Updated",
         "submitted": "Submitted",
         "fullName": "Full name",
@@ -740,9 +736,10 @@
         "apply": "Apply filters",
         "clear": "Clear",
         "submittedRangeLabel": "Submitted",
-        "dateFrom": "From",
-        "dateTo": "To",
-        "dateClearLabel": "Clear date"
+        "datePicker": {
+          "placeholder": "Select date range",
+          "clearLabel": "Clear selection"
+        }
       },
       "table": {
         "client": "Client",

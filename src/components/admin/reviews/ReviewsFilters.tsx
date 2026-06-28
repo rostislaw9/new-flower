@@ -40,9 +40,8 @@ interface ReviewsFiltersProps {
     apply: string;
     clear: string;
     submittedRangeLabel: string;
-    dateFrom: string;
-    dateTo: string;
-    dateClearLabel: string;
+    datePickerPlaceholder: string;
+    datePickerClearLabel: string;
   };
   locale: string;
 }
@@ -63,23 +62,33 @@ export function ReviewsFilters({
   const [ratingValue, setRatingValue] = useState(
     initialRating ? String(initialRating) : ALL_OPTION_VALUE,
   );
-  const [submittedFromValue, setSubmittedFromValue] = useState(
-    initialSubmittedFrom ?? "",
-  );
-  const [submittedToValue, setSubmittedToValue] = useState(
-    initialSubmittedTo ?? "",
-  );
+  const [submittedRange, setSubmittedRange] = useState<{
+    from?: string;
+    to?: string;
+  }>({
+    ...(initialSubmittedFrom && { from: initialSubmittedFrom }),
+    ...(initialSubmittedTo && { to: initialSubmittedTo }),
+  });
 
   const formatDateLabel = useMemo(
     () => createDateLabelFormatter(locale),
     [locale],
   );
 
+  const formatRangeLabel = (range: { from?: Date; to?: Date }) => {
+    if (!range.from) return "";
+    return range.to
+      ? `${formatDateLabel(range.from)} - ${formatDateLabel(range.to)}`
+      : formatDateLabel(range.from);
+  };
+
   useEffect(() => {
     setSearchValue(initialSearch);
     setRatingValue(initialRating ? String(initialRating) : ALL_OPTION_VALUE);
-    setSubmittedFromValue(initialSubmittedFrom ?? "");
-    setSubmittedToValue(initialSubmittedTo ?? "");
+    setSubmittedRange({
+      ...(initialSubmittedFrom && { from: initialSubmittedFrom }),
+      ...(initialSubmittedTo && { to: initialSubmittedTo }),
+    });
   }, [initialSearch, initialRating, initialSubmittedFrom, initialSubmittedTo]);
 
   const selectOptions = useMemo(
@@ -95,8 +104,8 @@ export function ReviewsFilters({
     params.set("page", "1");
     if (searchValue.trim()) params.set("search", searchValue.trim());
     if (ratingValue !== ALL_OPTION_VALUE) params.set("rating", ratingValue);
-    if (submittedFromValue) params.set("submittedFrom", submittedFromValue);
-    if (submittedToValue) params.set("submittedTo", submittedToValue);
+    if (submittedRange.from) params.set("submittedFrom", submittedRange.from);
+    if (submittedRange.to) params.set("submittedTo", submittedRange.to);
     return params.toString();
   }
 
@@ -110,8 +119,7 @@ export function ReviewsFilters({
   function handleClear() {
     setSearchValue("");
     setRatingValue(ALL_OPTION_VALUE);
-    setSubmittedFromValue("");
-    setSubmittedToValue("");
+    setSubmittedRange({});
     router.push(pathname);
     router.refresh();
   }
@@ -152,26 +160,17 @@ export function ReviewsFilters({
 
         <div className="flex flex-col gap-2">
           <Label>{labels.submittedRangeLabel}</Label>
-          <div className="grid grid-cols-2 gap-2">
-            <DatePicker
-              id="reviews-submitted-from"
-              value={submittedFromValue}
-              placeholder={labels.dateFrom}
-              onChange={setSubmittedFromValue}
-              clearLabel={labels.dateClearLabel}
-              ariaLabel={`${labels.submittedRangeLabel} ${labels.dateFrom}`}
-              formatDateLabel={formatDateLabel}
-            />
-            <DatePicker
-              id="reviews-submitted-to"
-              value={submittedToValue}
-              placeholder={labels.dateTo}
-              onChange={setSubmittedToValue}
-              clearLabel={labels.dateClearLabel}
-              ariaLabel={`${labels.submittedRangeLabel} ${labels.dateTo}`}
-              formatDateLabel={formatDateLabel}
-            />
-          </div>
+          <DatePicker
+            id="reviews-submitted-range"
+            mode="range"
+            value={submittedRange}
+            onChange={setSubmittedRange}
+            placeholder={labels.datePickerPlaceholder}
+            clearLabel={labels.datePickerClearLabel}
+            ariaLabel={labels.submittedRangeLabel}
+            locale={locale}
+            formatDateLabel={formatRangeLabel}
+          />
         </div>
       </div>
 
