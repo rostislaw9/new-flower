@@ -125,7 +125,7 @@ export function PortfolioGrid({
       variants={containerVariants}
       initial="hidden"
       animate="visible"
-      className="grid auto-cols-[50%] grid-flow-col grid-rows-2 gap-px bg-border sm:auto-cols-[40%] md:auto-cols-[30%] lg:auto-cols-[20%] max-md:landscape:auto-cols-[20%] max-md:landscape:grid-rows-1"
+      className="grid auto-cols-[50%] grid-flow-col grid-rows-2 bg-border sm:auto-cols-[40%] md:auto-cols-[30%] lg:auto-cols-[20%] max-md:landscape:auto-cols-[20%] max-md:landscape:grid-rows-1"
       role="list"
       aria-label="Portfolio gallery"
     >
@@ -133,7 +133,7 @@ export function PortfolioGrid({
         <motion.li
           key={item.id}
           variants={itemVariants}
-          className="bg-background"
+          className="bg-background p-px"
           role="listitem"
         >
           <button
@@ -210,7 +210,7 @@ export function PortfolioGrid({
 
       <ScrollArea ref={scrollAreaRef} className={scrollableClassName}>
         {gridContent}
-        <ScrollBar orientation="horizontal" />
+        <ScrollBar orientation="horizontal" className="hidden" />
       </ScrollArea>
 
       <div

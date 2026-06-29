@@ -82,10 +82,10 @@ export function CategoryFilter({
         <button
           type="button"
           onClick={() => scrollByViewport("left")}
-          className="absolute -left-4 top-1/2 z-20 -translate-y-[65%] p-2 text-muted-foreground transition hover:text-accent"
+          className="absolute -left-4 top-1/2 z-20 -translate-y-1/2 p-2 text-muted-foreground transition hover:text-accent"
           aria-label="Scroll gallery categories left"
         >
-          <ChevronLeft muted-foreground />
+          <ChevronLeft />
         </button>
       )}
 
@@ -93,7 +93,7 @@ export function CategoryFilter({
         <button
           type="button"
           onClick={() => scrollByViewport("right")}
-          className="absolute -right-4 top-1/2 z-20 -translate-y-[65%] p-2 text-muted-foreground transition hover:text-accent"
+          className="absolute -right-4 top-1/2 z-20 -translate-y-1/2 p-2 text-muted-foreground transition hover:text-accent"
           aria-label="Scroll gallery categories right"
         >
           <ChevronRight />
@@ -107,7 +107,7 @@ export function CategoryFilter({
           counts={counts}
           onSelect={onSelect}
         />
-        <ScrollBar orientation="horizontal" />
+        <ScrollBar orientation="horizontal" className="hidden" />
       </ScrollArea>
 
       <div
@@ -130,7 +130,7 @@ function CategoryFilterList({
   onSelect,
 }: CategoryFilterProps) {
   return (
-    <ul className="flex gap-2 pb-3 md:flex-wrap" role="list">
+    <ul className="flex gap-2 md:flex-wrap" role="list">
       <li>
         <Button
           type="button"

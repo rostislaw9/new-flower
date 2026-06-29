@@ -178,7 +178,7 @@ export function PortfolioGallery({
 
   return (
     <>
-      <div className="flex flex-col gap-1">
+      <div className="flex flex-col gap-2">
         {categoryCounts && (
           <CategoryFilter
             categories={PORTFOLIO_CATEGORIES}
