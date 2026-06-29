@@ -114,19 +114,10 @@ export default async function HomePage() {
               </Button>
             </div>
             <div className="flex flex-1 flex-col gap-8">
-              <div>
-                <Text
-                  muted
-                  size="xs"
-                  className="mb-2 flex justify-end md:hidden"
-                >
-                  {t("featured.scrollHint")}
-                </Text>
-                <PortfolioGallery
-                  items={featuredItems}
-                  scrollableClassName="h-full w-full"
-                />
-              </div>
+              <PortfolioGallery
+                items={featuredItems}
+                scrollableClassName="h-full w-full"
+              />
               <Button href="/portfolio" variant="outline" className="md:hidden">
                 {t("featured.viewAll")}
               </Button>

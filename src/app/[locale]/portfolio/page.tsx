@@ -32,7 +32,7 @@ export async function generateMetadata({
   });
 }
 
-const INITIAL_GALLERY_PAGE_SIZE = 10;
+const INITIAL_GALLERY_PAGE_SIZE = 12;
 
 export default async function PortfolioPage() {
   const t = await getTranslations("portfolio");
@@ -63,9 +63,6 @@ export default async function PortfolioPage() {
       {/* Gallery */}
       <Section size="md">
         <Container>
-          <Text muted size="xs" className="mb-2 flex justify-end md:hidden">
-            {t("scrollHint")}
-          </Text>
           <PortfolioGallery
             items={initialItems}
             pageSize={INITIAL_GALLERY_PAGE_SIZE}
