@@ -121,9 +121,16 @@ export async function getFeaturedItems(
 }
 
 export async function getAdminPortfolioItems(): Promise<PortfolioItem[]> {
-  const items = await prisma.portfolioItem.findMany({
-    orderBy: [{ featured: "desc" }, { createdAt: "desc" }],
-  });
+  const [featured, regular] = await Promise.all([
+    prisma.portfolioItem.findMany({
+      where: { featured: true },
+      orderBy: { displayOrder: "asc" },
+    }),
+    prisma.portfolioItem.findMany({
+      where: { featured: false },
+      orderBy: { createdAt: "desc" },
+    }),
+  ]);
 
-  return items.map(mapPrismaItem);
+  return [...featured, ...regular].map(mapPrismaItem);
 }

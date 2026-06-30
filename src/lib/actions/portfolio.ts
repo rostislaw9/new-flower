@@ -14,6 +14,62 @@ export type PortfolioActionResult =
   | { success: true; id?: string }
   | { success: false; message: string };
 
+export async function reorderFeaturedItems(
+  orderedIds: string[],
+): Promise<PortfolioActionResult> {
+  if (!Array.isArray(orderedIds) || orderedIds.length === 0) {
+    return { success: false, message: "No featured items provided" };
+  }
+
+  const uniqueIds = orderedIds.filter(
+    (id, index) => id && orderedIds.indexOf(id) === index,
+  );
+
+  try {
+    const currentFeatured = await prisma.portfolioItem.findMany({
+      where: { featured: true },
+      select: { id: true },
+      orderBy: { displayOrder: "asc" },
+    });
+
+    if (currentFeatured.length === 0) {
+      return { success: false, message: "No featured items to reorder" };
+    }
+
+    const currentIds = currentFeatured.map((item) => item.id);
+    const currentIdSet = new Set(currentIds);
+
+    if (!uniqueIds.every((id) => currentIdSet.has(id))) {
+      return { success: false, message: "Invalid featured item selection" };
+    }
+
+    const normalizedOrder = [
+      ...uniqueIds,
+      ...currentIds.filter((id) => !uniqueIds.includes(id)),
+    ];
+
+    await prisma.$transaction(async (tx) => {
+      await Promise.all(
+        normalizedOrder.map((id, index) =>
+          tx.portfolioItem.update({
+            where: { id },
+            data: { displayOrder: index, featured: true },
+          }),
+        ),
+      );
+    });
+
+    revalidatePath("/portfolio");
+    revalidatePath("/admin/portfolio");
+    revalidatePath("/admin/portfolio/featured-order");
+
+    return { success: true };
+  } catch (error) {
+    console.error("[reorderFeaturedItems] Error", error);
+    return { success: false, message: "Failed to reorder featured items" };
+  }
+}
+
 export interface PortfolioUploadCreateItem {
   title: string;
   description?: string | null;
@@ -236,7 +292,7 @@ export async function setPortfolioItemFeatured(
       if (!featured) {
         await tx.portfolioItem.update({
           where: { id },
-          data: { featured: false },
+          data: { featured: false, displayOrder: 0 },
         });
         return;
       }
@@ -274,7 +330,7 @@ export async function setPortfolioItemFeatured(
         if (toUnfeatureIds.length > 0) {
           await tx.portfolioItem.updateMany({
             where: { id: { in: toUnfeatureIds } },
-            data: { featured: false },
+            data: { featured: false, displayOrder: 0 },
           });
         }
       }

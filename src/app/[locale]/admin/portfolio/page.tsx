@@ -11,7 +11,7 @@ import {
   CheckSquare2,
   Flag,
   FlagOff,
-  ImageOff,
+  GripVertical,
   Loader2,
   MoveLeft,
   Square,
@@ -30,9 +30,9 @@ import {
   Empty,
   EmptyContent,
   EmptyHeader,
-  EmptyMedia,
   EmptyTitle,
 } from "@/components/ui/empty";
+import { useIsMobile } from "@/hooks/use-mobile";
 import { type Locale, defaultLocale } from "@/i18n/config";
 import {
   deletePortfolioItem,
@@ -50,6 +50,7 @@ export default function PortfolioAdminPage() {
     ? rawLocale
     : defaultLocale;
 
+  const isMobile = useIsMobile();
   const router = useRouter();
   const { start } = useTopLoader();
   const t = useTranslations("admin.portfolio");
@@ -65,8 +66,6 @@ export default function PortfolioAdminPage() {
     "feature" | "unfeature" | null
   >(null);
   const loadMoreRef = useRef<HTMLDivElement | null>(null);
-
-  const backHref = useMemo(() => getLocalizedPath("/admin", locale), [locale]);
 
   useEffect(() => {
     const fetchItems = async () => {
@@ -246,16 +245,18 @@ export default function PortfolioAdminPage() {
 
   const hasItems = items.length > 0;
 
+  const backHref = getLocalizedPath("/admin", locale);
   const editHref = (id: string) =>
     getLocalizedPath(`/admin/portfolio/${id}/edit`, locale);
   const uploadHref = getLocalizedPath("/admin/portfolio/upload", locale);
+  const reorderHref = getLocalizedPath(
+    "/admin/portfolio/featured-order",
+    locale,
+  );
 
   const emptyState = (
     <Empty className="rounded-xl border">
       <EmptyHeader>
-        <EmptyMedia>
-          <ImageOff />
-        </EmptyMedia>
         <EmptyTitle>
           <Heading size="sm" serif={false}>
             {t("noItems")}
@@ -273,64 +274,70 @@ export default function PortfolioAdminPage() {
 
   const bulkActions = (
     <div className="flex flex-row flex-wrap justify-between gap-2 border-b border-border/70 bg-background/70 p-2 shadow-sm backdrop-blur-sm">
-      {selectedIds.size > 0 && (
-        <Button
-          size="sm"
-          variant="outline"
-          onClick={toggleSelectAll}
-          className="bg-background/70"
-        >
-          {selectedIds.size === visibleItems.length
-            ? t("bulk.deselectAll")
-            : t("bulk.selectAll")}
-        </Button>
-      )}
-      {selectedIds.size > 0 && (
-        <div className="flex flex-wrap gap-2">
-          {canFlagFeatured && (
-            <Button
-              size="sm"
-              variant="outline"
-              onClick={() => handleBulkFeatureUpdate(true)}
-              disabled={bulkFlagLoading !== null}
-              className="bg-background/70"
-            >
-              {bulkFlagLoading === "feature" ? (
-                <Loader2 className="h-4 w-4 animate-spin" />
-              ) : (
-                <Flag className="h-4 w-4" />
-              )}
-              <span className="hidden sm:block">{t("bulk.flagFeatured")}</span>
-            </Button>
-          )}
-          {canFlagNotFeatured && (
-            <Button
-              size="sm"
-              variant="outline"
-              onClick={() => handleBulkFeatureUpdate(false)}
-              disabled={bulkFlagLoading !== null}
-              className="bg-background/70"
-            >
-              {bulkFlagLoading === "unfeature" ? (
-                <Loader2 className="h-4 w-4 animate-spin" />
-              ) : (
-                <FlagOff className="h-4 w-4" />
-              )}
-              <span className="hidden sm:block">
-                {t("bulk.flagNotFeatured")}
-              </span>
-            </Button>
-          )}
+      {selectedIds.size > 0 ? (
+        <>
           <Button
             size="sm"
-            variant="destructive"
-            onClick={() => setConfirmBulkDelete(true)}
+            variant="outline"
+            onClick={toggleSelectAll}
             className="bg-background/70"
           >
-            <Trash2 />
-            <span className="hidden sm:block">{actionsT("delete")}</span>(
-            {selectedIds.size})
+            {selectedIds.size === visibleItems.length
+              ? t("bulk.deselectAll")
+              : t("bulk.selectAll")}
           </Button>
+          <div className="flex flex-wrap gap-2">
+            {canFlagFeatured && (
+              <Button
+                size="sm"
+                variant="outline"
+                onClick={() => handleBulkFeatureUpdate(true)}
+                disabled={bulkFlagLoading !== null}
+                className="bg-background/70"
+              >
+                {bulkFlagLoading === "feature" ? (
+                  <Loader2 className="h-4 w-4 animate-spin" />
+                ) : (
+                  <Flag className="h-4 w-4" />
+                )}
+                <span className="hidden sm:block">
+                  {t("bulk.flagFeatured")}
+                </span>
+              </Button>
+            )}
+            {canFlagNotFeatured && (
+              <Button
+                size="sm"
+                variant="outline"
+                onClick={() => handleBulkFeatureUpdate(false)}
+                disabled={bulkFlagLoading !== null}
+                className="bg-background/70"
+              >
+                {bulkFlagLoading === "unfeature" ? (
+                  <Loader2 className="h-4 w-4 animate-spin" />
+                ) : (
+                  <FlagOff className="h-4 w-4" />
+                )}
+                <span className="hidden sm:block">
+                  {t("bulk.flagNotFeatured")}
+                </span>
+              </Button>
+            )}
+            <Button
+              size="sm"
+              variant="destructive"
+              onClick={() => setConfirmBulkDelete(true)}
+              className="bg-background/70"
+            >
+              <Trash2 />
+              <span className="hidden sm:block">{actionsT("delete")}</span>(
+              {selectedIds.size})
+            </Button>
+          </div>
+        </>
+      ) : (
+        <div className="flex h-8 items-center">
+          <Text muted>{t("bulk.hint")}</Text>
         </div>
       )}
     </div>
@@ -399,20 +406,16 @@ export default function PortfolioAdminPage() {
               </button>
             </div>
             <CardContent className="p-4">
-              <div className="flex items-start justify-between gap-2">
-                <div>
-                  <Heading
-                    serif={false}
-                    size="sm"
-                    className="transition-colors group-hover:text-accent"
-                  >
-                    {item.title}
-                  </Heading>
-                  <Text size="sm" muted className="capitalize">
-                    {item.category}
-                  </Text>
-                </div>
-              </div>
+              <Heading
+                serif={false}
+                size="sm"
+                className="text-foreground transition-colors group-hover:text-accent"
+              >
+                {item.title}
+              </Heading>
+              <Text size="sm" muted className="capitalize">
+                {item.category}
+              </Text>
             </CardContent>
           </Card>
         ))}
@@ -426,22 +429,37 @@ export default function PortfolioAdminPage() {
     </div>
   );
 
+  const reorderBtnText = isMobile
+    ? t("reorder.button").split(/\s+/)[0]
+    : t("reorder.button");
+
   return (
     <div className="flex flex-col gap-6">
       <AdminPageHeader
         title={t("title")}
         subtitle={t("description")}
         actions={
-          <div className="flex gap-2">
-            <Button
-              size="sm"
-              href={backHref}
-              variant="outline"
-              className="flex items-center gap-2"
-            >
-              <MoveLeft />
-              {actionsT("back")}
-            </Button>
+          <div className="flex w-full flex-wrap justify-between gap-2 md:w-fit">
+            <div className="flex gap-2">
+              <Button
+                size="sm"
+                href={backHref}
+                variant="outline"
+                className="flex items-center gap-2"
+              >
+                <MoveLeft />
+                {actionsT("back")}
+              </Button>
+              <Button
+                size="sm"
+                variant="outline"
+                href={reorderHref}
+                className="flex items-center gap-2 bg-background/70"
+              >
+                <GripVertical className="h-4 w-4" />
+                {reorderBtnText}
+              </Button>
+            </div>
             <Button
               size="sm"
               variant="accent"
@@ -449,7 +467,7 @@ export default function PortfolioAdminPage() {
               className="bg-background/70"
             >
               <Upload />
-              {t("uploadButton")}
+              {!isMobile && t("uploadButton")}
             </Button>
           </div>
         }

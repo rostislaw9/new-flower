@@ -792,7 +792,19 @@
         "deselectAll": "Deselect all",
         "flagFeatured": "Featured",
         "flagNotFeatured": "Not featured",
-        "noSlots": "Only {count} featured {count, plural, one {slot} other {slots}} remaining"
+        "noSlots": "Only {count} featured {count, plural, one {slot} other {slots}} remaining",
+        "hint": "Select items for bulk actions"
+      },
+      "reorder": {
+        "title": "Reorder featured items",
+        "description": "Drag featured pieces to control how they appear on the site",
+        "button": "Reorder featured",
+        "save": "Save order",
+        "saving": "Saving...",
+        "success": "Featured order updated",
+        "error": "Failed to update featured order",
+        "emptyTitle": "No featured items",
+        "emptyDescription": "Flag portfolio items as featured in the main grid to manage their order here."
       },
       "form": {
         "titleLabel": "Title",
