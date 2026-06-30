@@ -1,6 +1,6 @@
 "use client";
 
-import { useEffect, useRef, useState } from "react";
+import { useEffect, useMemo, useRef, useState } from "react";
 
 import { useLocale, useTranslations } from "next-intl";
 import Image from "next/image";
@@ -9,8 +9,11 @@ import { useTopLoader } from "nextjs-toploader";
 
 import {
   CheckSquare2,
+  Flag,
+  FlagOff,
   ImageOff,
   Loader2,
+  MoveLeft,
   Square,
   Trash2,
   Upload,
@@ -30,14 +33,13 @@ import {
   EmptyMedia,
   EmptyTitle,
 } from "@/components/ui/empty";
-import { Skeleton } from "@/components/ui/skeleton";
 import { type Locale, defaultLocale } from "@/i18n/config";
 import {
   deletePortfolioItem,
   setPortfolioItemFeatured,
 } from "@/lib/actions/portfolio";
 import { getLocalizedPath, isSupportedLocale } from "@/lib/locale-utils";
-import type { PortfolioItem } from "@/lib/portfolio-data";
+import { MAX_FEATURED_ITEMS, type PortfolioItem } from "@/lib/portfolio-data";
 
 const INITIAL_BATCH = 15;
 const LOAD_MORE_BATCH = 10;
@@ -59,11 +61,12 @@ export default function PortfolioAdminPage() {
   const [loadedImages, setLoadedImages] = useState<Record<string, boolean>>({});
   const [selectedIds, setSelectedIds] = useState<Set<string>>(new Set());
   const [confirmBulkDelete, setConfirmBulkDelete] = useState(false);
-  const [togglingFeaturedId, setTogglingFeaturedId] = useState<string | null>(
-    null,
-  );
-  const [hoveredBadgeId, setHoveredBadgeId] = useState<string | null>(null);
+  const [bulkFlagLoading, setBulkFlagLoading] = useState<
+    "feature" | "unfeature" | null
+  >(null);
   const loadMoreRef = useRef<HTMLDivElement | null>(null);
+
+  const backHref = useMemo(() => getLocalizedPath("/admin", locale), [locale]);
 
   useEffect(() => {
     const fetchItems = async () => {
@@ -116,6 +119,73 @@ export default function PortfolioAdminPage() {
 
   const visibleItems = items.slice(0, visibleCount);
 
+  const selectedItems = useMemo(
+    () => items.filter((item) => selectedIds.has(item.id)),
+    [items, selectedIds],
+  );
+
+  const featuredItemsCount = useMemo(
+    () => items.filter((item) => item.featured).length,
+    [items],
+  );
+
+  const selectedFeaturedCount = selectedItems.filter(
+    (item) => item.featured,
+  ).length;
+  const selectedNonFeaturedCount = selectedItems.length - selectedFeaturedCount;
+  const availableFeaturedSlots = Math.max(
+    0,
+    MAX_FEATURED_ITEMS - featuredItemsCount,
+  );
+
+  const canFlagFeatured =
+    selectedNonFeaturedCount > 0 &&
+    selectedFeaturedCount === 0 &&
+    selectedNonFeaturedCount <= availableFeaturedSlots;
+
+  const canFlagNotFeatured = selectedFeaturedCount > 0;
+
+  const refreshItems = async () => {
+    const response = await fetch("/api/portfolio");
+    const data = (await response.json()) as PortfolioItem[];
+    setItems(data);
+  };
+
+  async function handleBulkFeatureUpdate(featured: boolean) {
+    if (selectedIds.size === 0) {
+      return;
+    }
+
+    if (featured && !canFlagFeatured) {
+      toast.error(
+        t("bulk.noSlots", {
+          count: availableFeaturedSlots,
+        }),
+      );
+      return;
+    }
+
+    setBulkFlagLoading(featured ? "feature" : "unfeature");
+    try {
+      for (const id of selectedIds) {
+        const result = await setPortfolioItemFeatured(id, featured);
+        if (!result.success) {
+          throw new Error(result.message ?? "Failed to update");
+        }
+      }
+
+      await refreshItems();
+      toast.success(
+        featured ? t("alerts.markedFeatured") : t("alerts.removedFeatured"),
+      );
+    } catch (error) {
+      console.error("[handleBulkFeatureUpdate] Error:", error);
+      toast.error(t("alerts.toggleFeaturedFailed"));
+    } finally {
+      setBulkFlagLoading(null);
+    }
+  }
+
   async function handleBulkDelete() {
     if (selectedIds.size === 0) return;
 
@@ -165,38 +235,6 @@ export default function PortfolioAdminPage() {
     }
   };
 
-  async function handleToggleFeatured(
-    event: React.MouseEvent<HTMLButtonElement>,
-    itemId: string,
-    currentFeatured: boolean,
-  ) {
-    event.preventDefault();
-    event.stopPropagation();
-
-    setTogglingFeaturedId(itemId);
-    try {
-      const result = await setPortfolioItemFeatured(itemId, !currentFeatured);
-      if (result.success) {
-        toast.success(
-          !currentFeatured
-            ? t("alerts.markedFeatured")
-            : t("alerts.removedFeatured"),
-        );
-        // Refetch items to update grid with new sort order
-        const response = await fetch("/api/portfolio");
-        const data = (await response.json()) as PortfolioItem[];
-        setItems(data);
-      } else {
-        toast.error(result.message || t("alerts.toggleFeaturedFailed"));
-      }
-    } catch (error) {
-      console.error("[handleToggleFeatured] Error:", error);
-      toast.error(t("alerts.toggleFeaturedFailed"));
-    } finally {
-      setTogglingFeaturedId(null);
-    }
-  }
-
   if (loading) {
     return (
       <div className="flex min-h-[400px] flex-col items-center justify-center gap-3">
@@ -233,19 +271,61 @@ export default function PortfolioAdminPage() {
     </Empty>
   );
 
-  const headerActions = (
-    <div className="flex flex-row-reverse flex-wrap gap-2 sm:flex-row">
+  const bulkActions = (
+    <div className="flex flex-row flex-wrap justify-between gap-2 border-b border-border/70 bg-background/70 p-2 shadow-sm backdrop-blur-sm">
       {selectedIds.size > 0 && (
-        <div className="flex gap-2">
-          <Button size="sm" variant="outline" onClick={toggleSelectAll}>
-            {selectedIds.size === visibleItems.length
-              ? t("bulkDelete.deselectAll")
-              : t("bulkDelete.selectAll")}
-          </Button>
+        <Button
+          size="sm"
+          variant="outline"
+          onClick={toggleSelectAll}
+          className="bg-background/70"
+        >
+          {selectedIds.size === visibleItems.length
+            ? t("bulk.deselectAll")
+            : t("bulk.selectAll")}
+        </Button>
+      )}
+      {selectedIds.size > 0 && (
+        <div className="flex flex-wrap gap-2">
+          {canFlagFeatured && (
+            <Button
+              size="sm"
+              variant="outline"
+              onClick={() => handleBulkFeatureUpdate(true)}
+              disabled={bulkFlagLoading !== null}
+              className="bg-background/70"
+            >
+              {bulkFlagLoading === "feature" ? (
+                <Loader2 className="h-4 w-4 animate-spin" />
+              ) : (
+                <Flag className="h-4 w-4" />
+              )}
+              <span className="hidden sm:block">{t("bulk.flagFeatured")}</span>
+            </Button>
+          )}
+          {canFlagNotFeatured && (
+            <Button
+              size="sm"
+              variant="outline"
+              onClick={() => handleBulkFeatureUpdate(false)}
+              disabled={bulkFlagLoading !== null}
+              className="bg-background/70"
+            >
+              {bulkFlagLoading === "unfeature" ? (
+                <Loader2 className="h-4 w-4 animate-spin" />
+              ) : (
+                <FlagOff className="h-4 w-4" />
+              )}
+              <span className="hidden sm:block">
+                {t("bulk.flagNotFeatured")}
+              </span>
+            </Button>
+          )}
           <Button
             size="sm"
             variant="destructive"
             onClick={() => setConfirmBulkDelete(true)}
+            className="bg-background/70"
           >
             <Trash2 />
             <span className="hidden sm:block">{actionsT("delete")}</span>(
@@ -253,10 +333,6 @@ export default function PortfolioAdminPage() {
           </Button>
         </div>
       )}
-      <Button size="sm" variant="accent" href={uploadHref}>
-        <Upload />
-        {t("uploadButton")}
-      </Button>
     </div>
   );
 
@@ -298,35 +374,11 @@ export default function PortfolioAdminPage() {
                   setLoadedImages((prev) => ({ ...prev, [item.id]: true }))
                 }
               />
-              <button
-                type="button"
-                onClick={(event) =>
-                  handleToggleFeatured(event, item.id, item.featured)
-                }
-                onPointerDown={(event) => event.stopPropagation()}
-                onKeyDown={(event) => event.stopPropagation()}
-                onMouseEnter={() => setHoveredBadgeId(item.id)}
-                onMouseLeave={() => setHoveredBadgeId(null)}
-                disabled={togglingFeaturedId === item.id}
-                className={`absolute left-2 top-2 transition-all ${
-                  hoveredBadgeId === item.id
-                    ? "opacity-80"
-                    : item.featured
-                      ? "opacity-100"
-                      : "opacity-0"
-                }`}
-                aria-label={
-                  item.featured
-                    ? `Remove ${item.title} from featured`
-                    : `Mark ${item.title} as featured`
-                }
-              >
-                {togglingFeaturedId === item.id ? (
-                  <Skeleton className="mt-1 h-5 w-24" />
-                ) : (
+              {item.featured ? (
+                <div className="absolute left-2 top-2">
                   <Badge variant="accent">{t("featured")}</Badge>
-                )}
-              </button>
+                </div>
+              ) : null}
               <button
                 type="button"
                 onClick={(event) => {
@@ -379,8 +431,33 @@ export default function PortfolioAdminPage() {
       <AdminPageHeader
         title={t("title")}
         subtitle={t("description")}
-        actions={hasItems ? headerActions : undefined}
+        actions={
+          <div className="flex gap-2">
+            <Button
+              size="sm"
+              href={backHref}
+              variant="outline"
+              className="flex items-center gap-2"
+            >
+              <MoveLeft />
+              {actionsT("back")}
+            </Button>
+            <Button
+              size="sm"
+              variant="accent"
+              href={uploadHref}
+              className="bg-background/70"
+            >
+              <Upload />
+              {t("uploadButton")}
+            </Button>
+          </div>
+        }
       />
+
+      {hasItems && (
+        <div className="sticky top-16 z-30 w-full">{bulkActions}</div>
+      )}
 
       {hasItems ? (
         <>
@@ -393,8 +470,8 @@ export default function PortfolioAdminPage() {
 
       <DeleteConfirmDialog
         open={confirmBulkDelete}
-        title={t("bulkDelete.title", { count: selectedIds.size })}
-        description={t("bulkDelete.description")}
+        title={t("bulk.delete.title", { count: selectedIds.size })}
+        description={t("bulk.delete.description")}
         cancelLabel={actionsT("cancel")}
         confirmLabel={actionsT("delete")}
         confirmLoadingLabel={actionsT("deleting")}

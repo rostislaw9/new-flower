@@ -2,10 +2,12 @@ import { getTranslations } from "next-intl/server";
 import { unstable_noStore as noStore } from "next/cache";
 
 import type { AppointmentStatus, Prisma } from "@prisma/client";
+import { MoveLeft } from "lucide-react";
 
 import { AdminPageHeader } from "@/components/admin/AdminPageHeader";
 import { BookingsFilters } from "@/components/admin/bookings/BookingsFilters";
 import { BookingsTableRow } from "@/components/admin/bookings/BookingsTableRow";
+import { Button } from "@/components/styled/Button";
 import { Text } from "@/components/styled/Typography";
 import { Card, CardContent } from "@/components/ui/card";
 import {
@@ -271,10 +273,25 @@ export default async function BookingsAdminPage({
   }
 
   const basePath = getLocalizedPath("/admin/bookings", locale);
+  const backHref = getLocalizedPath("/admin", locale);
 
   return (
     <div className="flex flex-col gap-6">
-      <AdminPageHeader title={t("title")} subtitle={t("subtitle")} />
+      <AdminPageHeader
+        title={t("title")}
+        subtitle={t("subtitle")}
+        actions={
+          <Button
+            size="sm"
+            href={backHref}
+            variant="outline"
+            className="flex items-center gap-2"
+          >
+            <MoveLeft />
+            {actionsT("back")}
+          </Button>
+        }
+      />
 
       {/* Filters */}
       <Card className="rounded-2xl border border-border/60 bg-card/60 shadow-lg">

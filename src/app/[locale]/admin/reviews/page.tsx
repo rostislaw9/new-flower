@@ -1,9 +1,12 @@
 import { getTranslations } from "next-intl/server";
 
+import { MoveLeft } from "lucide-react";
+
 import { AdminPageHeader } from "@/components/admin/AdminPageHeader";
 import { ReviewActions } from "@/components/admin/reviews/ReviewActions";
 import { ReviewsFilters } from "@/components/admin/reviews/ReviewsFilters";
 import { Badge } from "@/components/styled/Badge";
+import { Button } from "@/components/styled/Button";
 import { Text } from "@/components/styled/Typography";
 import { Card, CardContent } from "@/components/ui/card";
 import {
@@ -86,6 +89,7 @@ export default async function AdminReviewsPage({
     formatDateTime(value, locale);
 
   const basePath = getLocalizedPath("/admin/reviews", locale);
+  const backHref = getLocalizedPath("/admin", locale);
 
   const pageNumbers = Array.from(
     { length: totalPages },
@@ -111,7 +115,21 @@ export default async function AdminReviewsPage({
 
   return (
     <div className="flex flex-col gap-6">
-      <AdminPageHeader title={t("title")} subtitle={t("subtitle")} />
+      <AdminPageHeader
+        title={t("title")}
+        subtitle={t("subtitle")}
+        actions={
+          <Button
+            size="sm"
+            href={backHref}
+            variant="outline"
+            className="flex items-center gap-2"
+          >
+            <MoveLeft />
+            {actionsT("back")}
+          </Button>
+        }
+      />
 
       {/* Filters */}
       <Card className="rounded-2xl border border-border/60 bg-card/60 shadow-lg">

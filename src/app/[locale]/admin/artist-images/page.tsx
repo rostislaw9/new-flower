@@ -1,12 +1,12 @@
 "use client";
 
-import { useCallback, useEffect, useState } from "react";
+import { useCallback, useEffect, useMemo, useState } from "react";
 
-import { useTranslations } from "next-intl";
+import { useLocale, useTranslations } from "next-intl";
 import Image from "next/image";
 import { useRouter } from "next/navigation";
 
-import { Trash2 } from "lucide-react";
+import { MoveLeft, Trash2 } from "lucide-react";
 import { toast } from "sonner";
 
 import { AdminPageHeader } from "@/components/admin/AdminPageHeader";
@@ -14,6 +14,8 @@ import { ImageUploader } from "@/components/admin/ImageUploader";
 import { Button } from "@/components/styled/Button";
 import { Heading, Text } from "@/components/styled/Typography";
 import { Card, CardContent } from "@/components/ui/card";
+import type { Locale } from "@/i18n/config";
+import { defaultLocale } from "@/i18n/config";
 import {
   deleteArtistPortrait,
   deleteShopLogo,
@@ -21,8 +23,14 @@ import {
   saveArtistPortrait,
   saveShopLogo,
 } from "@/lib/actions/artist-images";
+import { getLocalizedPath, isSupportedLocale } from "@/lib/locale-utils";
 
 export default function ArtistImagesPage() {
+  const rawLocale = useLocale();
+  const locale: Locale = isSupportedLocale(rawLocale)
+    ? rawLocale
+    : defaultLocale;
+
   const router = useRouter();
   const t = useTranslations("admin.artistImages");
   const actionsT = useTranslations("admin.common.actions");
@@ -30,6 +38,8 @@ export default function ArtistImagesPage() {
   const [portraitUrl, setPortraitUrl] = useState<string | null>(null);
   const [logoUrl, setLogoUrl] = useState<string | null>(null);
   const [deleting, setDeleting] = useState<"portrait" | "logo" | null>(null);
+
+  const backHref = useMemo(() => getLocalizedPath("/admin", locale), [locale]);
 
   useEffect(() => {
     const loadImages = async () => {
@@ -84,7 +94,21 @@ export default function ArtistImagesPage() {
 
   return (
     <div className="flex flex-col gap-6">
-      <AdminPageHeader title={t("title")} subtitle={t("subtitle")} />
+      <AdminPageHeader
+        title={t("title")}
+        subtitle={t("subtitle")}
+        actions={
+          <Button
+            size="sm"
+            href={backHref}
+            variant="outline"
+            className="flex items-center gap-2"
+          >
+            <MoveLeft />
+            {actionsT("back")}
+          </Button>
+        }
+      />
 
       <div className="grid items-start gap-6 lg:grid-cols-2">
         {/* Artist Portrait */}

@@ -783,11 +783,16 @@
       },
       "deleteTitle": "Delete item",
       "deleteConfirm": "Are you sure you want to delete \"{title}\"? This action cannot be undone.",
-      "bulkDelete": {
-        "title": "Delete {count, plural, one {# item} other {# items}}?",
-        "description": "This action cannot be undone. All selected portfolio items will be permanently deleted.",
+      "bulk": {
+        "delete": {
+          "title": "Delete {count, plural, one {# item} other {# items}}?",
+          "description": "This action cannot be undone. All selected portfolio items will be permanently deleted."
+        },
         "selectAll": "Select all",
-        "deselectAll": "Deselect all"
+        "deselectAll": "Deselect all",
+        "flagFeatured": "Featured",
+        "flagNotFeatured": "Not featured",
+        "noSlots": "Only {count} featured {count, plural, one {slot} other {slots}} remaining"
       },
       "form": {
         "titleLabel": "Title",
