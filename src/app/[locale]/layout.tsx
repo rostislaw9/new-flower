@@ -3,12 +3,12 @@ import type { ReactNode } from "react";
 import type { Metadata } from "next";
 import { NextIntlClientProvider } from "next-intl";
 import { getMessages, getTranslations } from "next-intl/server";
-import { Geist, New_Rocker } from "next/font/google";
 import NextTopLoader from "nextjs-toploader";
 
 import { Footer } from "@/components/layout/Footer";
 import { Nav } from "@/components/layout/Nav";
 import { getArtistImagesConfig } from "@/lib/artist-images-config";
+import { themeFontClass } from "@/lib/fonts";
 
 const SITE_URL = process.env.NEXT_PUBLIC_SITE_URL!;
 
@@ -93,20 +93,6 @@ export async function generateMetadata({
   };
 }
 
-const fontDisplay = New_Rocker({
-  subsets: ["latin"],
-  weight: "400",
-  variable: "--font-display",
-  display: "swap",
-});
-
-const fontSans = Geist({
-  subsets: ["latin"],
-  weight: ["300", "400", "500", "600"],
-  variable: "--font-sans",
-  display: "swap",
-});
-
 interface LocaleLayoutProps {
   children: ReactNode;
   params: Promise<{ locale: string }>;
@@ -120,34 +106,25 @@ export default async function LocaleLayout({
   const messages = await getMessages();
 
   return (
-    <html
-      lang={locale}
-      className={`dark ${fontDisplay.variable} ${fontSans.variable}`}
-      data-scroll-behavior="smooth"
-    >
-      <head>
-        <link rel="preconnect" href="https://fonts.googleapis.com" />
-        <link
-          rel="preconnect"
-          href="https://fonts.gstatic.com"
-          crossOrigin="anonymous"
-        />
-        <link rel="preconnect" href="https://res.cloudinary.com" />
-      </head>
-      <body>
-        <NextIntlClientProvider messages={messages} locale={locale}>
-          <a
-            href="#main-content"
-            className="sr-only focus:not-sr-only focus:fixed focus:left-4 focus:top-4 focus:z-[100] focus:bg-accent focus:px-4 focus:py-2 focus:text-xs focus:font-semibold focus:uppercase focus:tracking-[0.2em] focus:text-accent-foreground"
-          >
-            Skip to content
-          </a>
-          <NextTopLoader color="hsl(var(--accent))" showSpinner={false} />
-          <Nav />
-          <main id="main-content">{children}</main>
-          <Footer locale={locale} />
-        </NextIntlClientProvider>
-      </body>
-    </html>
+    <NextIntlClientProvider messages={messages} locale={locale}>
+      <div className={themeFontClass} data-scroll-behavior="smooth">
+        <a
+          href="#main-content"
+          className="sr-only focus:not-sr-only focus:fixed focus:left-4 focus:top-4 focus:z-[100] focus:bg-accent focus:px-4 focus:py-2 focus:text-xs focus:font-semibold focus:uppercase focus:tracking-[0.2em] focus:text-accent-foreground"
+        >
+          Skip to content
+        </a>
+        <NextTopLoader color="hsl(var(--accent))" showSpinner={false} />
+        <Nav />
+        <main
+          id="main-content"
+          className={themeFontClass}
+          data-scroll-behavior="smooth"
+        >
+          {children}
+        </main>
+        <Footer locale={locale} />
+      </div>
+    </NextIntlClientProvider>
   );
 }
