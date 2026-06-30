@@ -2,6 +2,7 @@ import { getTranslations } from "next-intl/server";
 
 import { MoveLeft } from "lucide-react";
 
+import { AdminFiltersShell } from "@/components/admin/AdminFiltersShell";
 import { AdminPageHeader } from "@/components/admin/AdminPageHeader";
 import { ReviewActions } from "@/components/admin/reviews/ReviewActions";
 import { ReviewsFilters } from "@/components/admin/reviews/ReviewsFilters";
@@ -132,32 +133,36 @@ export default async function AdminReviewsPage({
       />
 
       {/* Filters */}
-      <Card className="rounded-2xl border border-border/60 bg-card/60 shadow-lg">
-        <CardContent className="pt-6">
-          <ReviewsFilters
-            initialSearch={search}
-            {...(rating ? { initialRating: rating } : {})}
-            initialSubmittedFrom={submittedFrom}
-            initialSubmittedTo={submittedTo}
-            ratingOptions={ratingOptions.map((value) => ({
-              value: String(value),
-              label: t("filters.ratingOption", { rating: value }),
-            }))}
-            labels={{
-              searchLabel: t("filters.searchLabel"),
-              searchPlaceholder: t("filters.searchPlaceholder"),
-              ratingLabel: t("filters.ratingLabel"),
-              ratingAll: t("filters.ratingAll"),
-              apply: t("filters.apply"),
-              clear: t("filters.clear"),
-              submittedRangeLabel: t("filters.submittedRangeLabel"),
-              datePickerPlaceholder: t("filters.datePicker.placeholder"),
-              datePickerClearLabel: t("filters.datePicker.clearLabel"),
-            }}
-            locale={locale}
-          />
-        </CardContent>
-      </Card>
+      <AdminFiltersShell
+        title={t("filters.panelTitle")}
+        description={t("filters.panelDescription")}
+        drawerTriggerLabel={t("filters.drawerTrigger")}
+        collapseOpenLabel={t("filters.collapseOpen")}
+        collapseClosedLabel={t("filters.collapseClosed")}
+      >
+        <ReviewsFilters
+          initialSearch={search}
+          {...(rating ? { initialRating: rating } : {})}
+          initialSubmittedFrom={submittedFrom}
+          initialSubmittedTo={submittedTo}
+          ratingOptions={ratingOptions.map((value) => ({
+            value: String(value),
+            label: t("filters.ratingOption", { rating: value }),
+          }))}
+          labels={{
+            searchLabel: t("filters.searchLabel"),
+            searchPlaceholder: t("filters.searchPlaceholder"),
+            ratingLabel: t("filters.ratingLabel"),
+            ratingAll: t("filters.ratingAll"),
+            apply: t("filters.apply"),
+            clear: t("filters.clear"),
+            submittedRangeLabel: t("filters.submittedRangeLabel"),
+            datePickerPlaceholder: t("filters.datePicker.placeholder"),
+            datePickerClearLabel: t("filters.datePicker.clearLabel"),
+          }}
+          locale={locale}
+        />
+      </AdminFiltersShell>
 
       {/* Reviews Table */}
       <Card className="rounded-2xl border border-border/60 bg-card/60 shadow-lg">

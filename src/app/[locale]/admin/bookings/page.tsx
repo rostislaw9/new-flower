@@ -4,6 +4,7 @@ import { unstable_noStore as noStore } from "next/cache";
 import type { AppointmentStatus, Prisma } from "@prisma/client";
 import { MoveLeft } from "lucide-react";
 
+import { AdminFiltersShell } from "@/components/admin/AdminFiltersShell";
 import { AdminPageHeader } from "@/components/admin/AdminPageHeader";
 import { BookingsFilters } from "@/components/admin/bookings/BookingsFilters";
 import { BookingsTableRow } from "@/components/admin/bookings/BookingsTableRow";
@@ -294,39 +295,43 @@ export default async function BookingsAdminPage({
       />
 
       {/* Filters */}
-      <Card className="rounded-2xl border border-border/60 bg-card/60 shadow-lg">
-        <CardContent className="pt-6">
-          <BookingsFilters
-            initialValues={{
-              search: search ?? "",
-              status: status ?? "all",
-              bookingId,
-              submittedFrom: submittedFrom ?? "",
-              submittedTo: submittedTo ?? "",
-              updatedFrom: updatedFrom ?? "",
-              updatedTo: updatedTo ?? "",
-              preferredFrom: preferredFrom ?? "",
-              preferredTo: preferredTo ?? "",
-            }}
-            statusOptions={STATUS_OPTIONS}
-            labels={{
-              searchLabel: t("filters.searchLabel"),
-              searchPlaceholder: t("filters.searchPlaceholder"),
-              statusLabel: t("filters.statusLabel"),
-              bookingIdLabel: t("filters.bookingIdLabel"),
-              bookingIdPlaceholder: t("filters.bookingIdPlaceholder"),
-              submittedRangeLabel: t("filters.submittedRangeLabel"),
-              updatedRangeLabel: t("filters.updatedRangeLabel"),
-              preferredRangeLabel: t("filters.preferredRangeLabel"),
-              datePickerPlaceholder: t("filters.datePicker.placeholder"),
-              datePickerClearLabel: t("filters.datePicker.clearLabel"),
-              filter: t("filters.filter"),
-              clear: t("filters.clear"),
-            }}
-            locale={locale}
-          />
-        </CardContent>
-      </Card>
+      <AdminFiltersShell
+        title={t("filters.panelTitle")}
+        description={t("filters.panelDescription")}
+        drawerTriggerLabel={t("filters.drawerTrigger")}
+        collapseOpenLabel={t("filters.collapseOpen")}
+        collapseClosedLabel={t("filters.collapseClosed")}
+      >
+        <BookingsFilters
+          initialValues={{
+            search: search ?? "",
+            status: status ?? "all",
+            bookingId,
+            submittedFrom: submittedFrom ?? "",
+            submittedTo: submittedTo ?? "",
+            updatedFrom: updatedFrom ?? "",
+            updatedTo: updatedTo ?? "",
+            preferredFrom: preferredFrom ?? "",
+            preferredTo: preferredTo ?? "",
+          }}
+          statusOptions={STATUS_OPTIONS}
+          labels={{
+            searchLabel: t("filters.searchLabel"),
+            searchPlaceholder: t("filters.searchPlaceholder"),
+            statusLabel: t("filters.statusLabel"),
+            bookingIdLabel: t("filters.bookingIdLabel"),
+            bookingIdPlaceholder: t("filters.bookingIdPlaceholder"),
+            submittedRangeLabel: t("filters.submittedRangeLabel"),
+            updatedRangeLabel: t("filters.updatedRangeLabel"),
+            preferredRangeLabel: t("filters.preferredRangeLabel"),
+            datePickerPlaceholder: t("filters.datePicker.placeholder"),
+            datePickerClearLabel: t("filters.datePicker.clearLabel"),
+            filter: t("filters.filter"),
+            clear: t("filters.clear"),
+          }}
+          locale={locale}
+        />
+      </AdminFiltersShell>
 
       {/* Bookings Table */}
       <Card className="rounded-2xl border border-border/60 bg-card/60 shadow-lg">

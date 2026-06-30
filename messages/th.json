@@ -638,6 +638,11 @@
       "title": "จัดการการจอง",
       "subtitle": "ดูและจัดการคำขอจองทั้งหมด",
       "filters": {
+        "panelTitle": "ตัวกรอง",
+        "panelDescription": "ปรับผลลัพธ์ในตาราง",
+        "drawerTrigger": "ตัวกรอง",
+        "collapseOpen": "ซ่อนตัวกรอง",
+        "collapseClosed": "แสดงตัวกรอง",
         "searchLabel": "ค้นหา",
         "searchPlaceholder": "ค้นหาด้วยชื่อหรืออีเมล...",
         "statusLabel": "สถานะ",
@@ -730,6 +735,11 @@
       "title": "รีวิวลูกค้า",
       "subtitle": "จัดการคำชมและเลือกสิ่งที่จะโชว์บนโฮมเพจ",
       "filters": {
+        "panelTitle": "ตัวกรอง",
+        "panelDescription": "ปรับผลลัพธ์ในตาราง",
+        "drawerTrigger": "ตัวกรอง",
+        "collapseOpen": "ซ่อนตัวกรอง",
+        "collapseClosed": "แสดงตัวกรอง",
         "searchLabel": "ค้นหา",
         "searchPlaceholder": "ค้นหาด้วยชื่อหรืออีเมล…",
         "ratingLabel": "คะแนน",

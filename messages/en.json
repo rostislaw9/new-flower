@@ -638,6 +638,11 @@
       "title": "Bookings management",
       "subtitle": "View and manage all appointment requests",
       "filters": {
+        "panelTitle": "Filters",
+        "panelDescription": "Refine the table results",
+        "drawerTrigger": "Filters",
+        "collapseOpen": "Hide filters",
+        "collapseClosed": "Show filters",
         "searchLabel": "Search",
         "searchPlaceholder": "Search by name or email...",
         "statusLabel": "Status",
@@ -730,6 +735,11 @@
       "title": "Client reviews",
       "subtitle": "Moderate testimonials and choose what appears on the homepage",
       "filters": {
+        "panelTitle": "Filters",
+        "panelDescription": "Refine the table results",
+        "drawerTrigger": "Filters",
+        "collapseOpen": "Hide filters",
+        "collapseClosed": "Show filters",
         "searchLabel": "Search",
         "searchPlaceholder": "Search by name or email…",
         "ratingLabel": "Rating",
