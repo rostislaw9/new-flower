@@ -1,6 +1,7 @@
 "use client";
 
-import { useEffect, useState, useTransition } from "react";
+import { useEffect, useTransition } from "react";
+import { Controller, useForm } from "react-hook-form";
 
 import { useRouter } from "next/navigation";
 
@@ -10,6 +11,12 @@ import { toast } from "sonner";
 
 import { Badge } from "@/components/styled/Badge";
 import { Button } from "@/components/styled/Button";
+import {
+  Field,
+  FieldContent,
+  FieldError,
+  FieldLabel,
+} from "@/components/ui/field";
 import {
   Select,
   SelectContent,
@@ -46,23 +53,24 @@ export function BookingStatusControl({
   messages,
 }: BookingStatusControlProps) {
   const router = useRouter();
-  const [selectedStatus, setSelectedStatus] = useState(currentStatus);
   const [isPending, startTransition] = useTransition();
+  const form = useForm<{ status: AppointmentStatus }>({
+    defaultValues: { status: currentStatus },
+  });
 
   useEffect(() => {
-    setSelectedStatus(currentStatus);
-  }, [currentStatus]);
+    form.reset({ status: currentStatus });
+  }, [currentStatus, form]);
 
-  const handleSubmit = (event: React.SubmitEvent<HTMLFormElement>) => {
-    event.preventDefault();
-    if (selectedStatus === currentStatus) {
+  const handleSubmit = form.handleSubmit(({ status }) => {
+    if (status === currentStatus) {
       return;
     }
 
     startTransition(async () => {
       const result = await updateBookingStatusAction({
         bookingId,
-        status: selectedStatus,
+        status,
       });
 
       if (!result.success) {
@@ -77,7 +85,7 @@ export function BookingStatusControl({
       toast.success(messages.success);
       router.refresh();
     });
-  };
+  });
 
   return (
     <form onSubmit={handleSubmit}>
@@ -87,30 +95,50 @@ export function BookingStatusControl({
         </Badge>
 
         <div className="flex w-full flex-col gap-3 sm:flex-row sm:flex-wrap sm:items-center sm:justify-end">
-          <Select
-            value={selectedStatus}
-            onValueChange={(value) =>
-              setSelectedStatus(value as AppointmentStatus)
-            }
-            disabled={isPending}
-          >
-            <SelectTrigger className="h-9 w-auto">
-              <SelectValue />
-            </SelectTrigger>
-            <SelectContent>
-              {statusOptions.map((option) => (
-                <SelectItem key={option.value} value={option.value}>
-                  {option.label}
-                </SelectItem>
-              ))}
-            </SelectContent>
-          </Select>
+          <Controller
+            control={form.control}
+            name="status"
+            render={({ field, fieldState }) => (
+              <Field
+                data-invalid={fieldState.invalid}
+                className="w-full sm:w-auto"
+              >
+                <FieldContent className="w-full">
+                  <FieldLabel className="sr-only">
+                    {labels.currentStatus}
+                  </FieldLabel>
+                  <Select
+                    value={field.value}
+                    onValueChange={field.onChange}
+                    disabled={isPending}
+                  >
+                    <SelectTrigger
+                      className="h-9 w-full sm:w-auto"
+                      aria-invalid={fieldState.invalid}
+                    >
+                      <SelectValue />
+                    </SelectTrigger>
+                    <SelectContent>
+                      {statusOptions.map((option) => (
+                        <SelectItem key={option.value} value={option.value}>
+                          {option.label}
+                        </SelectItem>
+                      ))}
+                    </SelectContent>
+                  </Select>
+                  {fieldState.error && (
+                    <FieldError errors={[fieldState.error]} />
+                  )}
+                </FieldContent>
+              </Field>
+            )}
+          />
 
           <Button
             type="submit"
             size="sm"
             className="w-full sm:w-auto sm:min-w-32"
-            disabled={isPending || selectedStatus === currentStatus}
+            disabled={isPending || form.watch("status") === currentStatus}
           >
             {isPending ? <Loader2 className="animate-spin" /> : labels.button}
           </Button>

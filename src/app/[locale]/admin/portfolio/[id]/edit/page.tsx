@@ -14,7 +14,6 @@ import { AdminPageHeader } from "@/components/admin/AdminPageHeader";
 import { ImageUploader } from "@/components/admin/ImageUploader";
 import { Button } from "@/components/styled/Button";
 import { DeleteConfirmDialog } from "@/components/styled/DeleteConfirmDialog";
-import { FormField } from "@/components/styled/FormField";
 import { Heading, Text } from "@/components/styled/Typography";
 import { Card, CardContent } from "@/components/ui/card";
 import {
@@ -23,6 +22,12 @@ import {
   EmptyMedia,
   EmptyTitle,
 } from "@/components/ui/empty";
+import {
+  Field,
+  FieldContent,
+  FieldDescription,
+  FieldLabel,
+} from "@/components/ui/field";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import {
@@ -69,7 +74,7 @@ export default function EditPortfolioItemPage({
     reset,
     watch,
     setValue,
-    formState: { isDirty },
+    formState: { errors, isDirty },
   } = useForm<PortfolioFormValues>();
   const imageUrl = watch("imageUrl");
   const [item, setItem] = useState<PortfolioItem | null>(null);
@@ -201,94 +206,12 @@ export default function EditPortfolioItemPage({
         </div>
       )}
 
-      <form onSubmit={handleSubmit(onSubmit)} className="flex flex-col gap-6">
-        <div className="grid items-start gap-6 lg:grid-cols-[3fr,2fr]">
-          <div className="flex flex-col gap-6">
-            <Card className="rounded-2xl border border-border/60 bg-card/60 shadow-lg">
-              <CardContent className="pt-6">
-                <div className="grid gap-4 sm:grid-cols-2">
-                  <FormField label={t("form.titleLabel")} htmlFor="title">
-                    <Input
-                      id="title"
-                      type="text"
-                      required
-                      placeholder={t("form.titlePlaceholder")}
-                      {...register("title", {
-                        required: true,
-                      })}
-                    />
-                  </FormField>
-
-                  <FormField label={t("form.categoryLabel")} htmlFor="category">
-                    <Controller
-                      control={control}
-                      name="category"
-                      render={({ field }) => (
-                        <Select
-                          value={field.value}
-                          onValueChange={field.onChange}
-                        >
-                          <SelectTrigger id="category">
-                            <SelectValue
-                              placeholder={t("form.categoryPlaceholder")}
-                            />
-                          </SelectTrigger>
-                          <SelectContent>
-                            {PORTFOLIO_CATEGORIES.map((cat) => (
-                              <SelectItem key={cat} value={cat}>
-                                {cat.charAt(0).toUpperCase() +
-                                  cat.slice(1).replace("-", " ")}
-                              </SelectItem>
-                            ))}
-                          </SelectContent>
-                        </Select>
-                      )}
-                    />
-                  </FormField>
-                </div>
-
-                <div className="mt-6 space-y-6">
-                  <FormField
-                    label={t("form.descriptionLabel")}
-                    htmlFor="description"
-                    hint={t("form.optionalTag")}
-                  >
-                    <Textarea
-                      id="description"
-                      rows={3}
-                      {...register("description", {
-                        required: false,
-                      })}
-                      placeholder={t("form.descriptionPlaceholder")}
-                    />
-                  </FormField>
-                </div>
-              </CardContent>
-            </Card>
-
-            <Card className="rounded-2xl border border-border/60 bg-card/60 shadow-lg">
-              <CardContent className="pt-6">
-                <div className="flex flex-col gap-2">
-                  <Label>{t("form.imageLabel")}</Label>
-                  <ImageUploader
-                    folder="portfolio"
-                    maxFiles={1}
-                    useOverwrite={true}
-                    showPreviewGrid={false}
-                    onUploadComplete={(data) => {
-                      if (data[0]) {
-                        setValue("imageUrl", data[0].url, {
-                          shouldDirty: true,
-                        });
-                        setCurrentImageLoading(true);
-                      }
-                    }}
-                  />
-                </div>
-              </CardContent>
-            </Card>
-          </div>
-
+      <form
+        onSubmit={handleSubmit(onSubmit)}
+        className="flex flex-col gap-6"
+        noValidate
+      >
+        <div className="grid items-start gap-6 lg:grid-cols-[2fr,3fr]">
           <div className="flex flex-col gap-6">
             <Card className="row-span-2 rounded-2xl border border-border/60 bg-card/60 shadow-lg">
               <CardContent className="pt-6">
@@ -316,6 +239,145 @@ export default function EditPortfolioItemPage({
                       {t("form.noImage")}
                     </Text>
                   )}
+                </div>
+              </CardContent>
+            </Card>
+          </div>
+
+          <div className="flex flex-col gap-6">
+            <Card className="rounded-2xl border border-border/60 bg-card/60 shadow-lg">
+              <CardContent className="pt-6">
+                <div className="grid gap-4 sm:grid-cols-2">
+                  <Field>
+                    <FieldContent>
+                      <div className="flex items-baseline justify-between gap-2">
+                        <FieldLabel htmlFor="title">
+                          {t("form.titleLabel")}
+                        </FieldLabel>
+                        {errors.title ? (
+                          <span
+                            role="alert"
+                            className="text-xs text-destructive"
+                          >
+                            {t("form.titleRequired")}
+                          </span>
+                        ) : null}
+                      </div>
+                      <Input
+                        id="title"
+                        type="text"
+                        aria-invalid={!!errors.title || undefined}
+                        className={
+                          errors.title ? "border-destructive/60" : undefined
+                        }
+                        placeholder={t("form.titlePlaceholder")}
+                        {...register("title", {
+                          required: t("form.titleRequired"),
+                        })}
+                      />
+                    </FieldContent>
+                  </Field>
+
+                  <Field>
+                    <FieldContent>
+                      <div className="flex items-baseline justify-between gap-2">
+                        <FieldLabel htmlFor="category">
+                          {t("form.categoryLabel")}
+                        </FieldLabel>
+                        {errors.category ? (
+                          <span
+                            role="alert"
+                            className="text-xs text-destructive"
+                          >
+                            {errors.category.message}
+                          </span>
+                        ) : null}
+                      </div>
+                      <Controller
+                        control={control}
+                        name="category"
+                        render={({ field }) => (
+                          <Select
+                            value={field.value}
+                            onValueChange={field.onChange}
+                          >
+                            <SelectTrigger
+                              id="category"
+                              aria-invalid={!!errors.category || undefined}
+                              className={
+                                errors.category
+                                  ? "border-destructive/60"
+                                  : undefined
+                              }
+                            >
+                              <SelectValue
+                                placeholder={t("form.categoryPlaceholder")}
+                              />
+                            </SelectTrigger>
+                            <SelectContent>
+                              {PORTFOLIO_CATEGORIES.map((cat) => (
+                                <SelectItem key={cat} value={cat}>
+                                  {cat.charAt(0).toUpperCase() +
+                                    cat.slice(1).replace("-", " ")}
+                                </SelectItem>
+                              ))}
+                            </SelectContent>
+                          </Select>
+                        )}
+                      />
+                    </FieldContent>
+                  </Field>
+                </div>
+
+                <div className="mt-6 space-y-6">
+                  <Field>
+                    <FieldContent>
+                      <div className="flex items-baseline justify-between gap-2">
+                        <FieldLabel htmlFor="description">
+                          {t("form.descriptionLabel")}
+                        </FieldLabel>
+                        <FieldDescription>
+                          {t("form.optionalTag")}
+                        </FieldDescription>
+                      </div>
+                      <Textarea
+                        id="description"
+                        rows={3}
+                        aria-invalid={!!errors.description || undefined}
+                        className={
+                          errors.description
+                            ? "border-destructive/60"
+                            : undefined
+                        }
+                        {...register("description", {
+                          required: false,
+                        })}
+                        placeholder={t("form.descriptionPlaceholder")}
+                      />
+                    </FieldContent>
+                  </Field>
+                </div>
+              </CardContent>
+            </Card>
+
+            <Card className="rounded-2xl border border-border/60 bg-card/60 shadow-lg">
+              <CardContent className="pt-6">
+                <div className="flex flex-col gap-2">
+                  <Label>{t("form.imageLabel")}</Label>
+                  <ImageUploader
+                    folder="portfolio"
+                    maxFiles={1}
+                    useOverwrite={true}
+                    showPreviewGrid={false}
+                    onUploadComplete={(data) => {
+                      if (data[0]) {
+                        setValue("imageUrl", data[0].url, {
+                          shouldDirty: true,
+                        });
+                        setCurrentImageLoading(true);
+                      }
+                    }}
+                  />
                 </div>
               </CardContent>
             </Card>

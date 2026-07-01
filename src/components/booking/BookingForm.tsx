@@ -8,6 +8,7 @@ import {
   useRef,
   useState,
 } from "react";
+import { Controller, useForm } from "react-hook-form";
 
 import { useLocale, useTranslations } from "next-intl";
 
@@ -19,12 +20,18 @@ import {
   Upload,
   X,
 } from "lucide-react";
+import { toast } from "sonner";
 
 import { ImageUploader } from "@/components/admin/ImageUploader";
 import { Button } from "@/components/styled/Button";
 import { DatePicker } from "@/components/styled/DatePicker";
-import { FormField } from "@/components/styled/FormField";
 import { Eyebrow, Heading, Text } from "@/components/styled/Typography";
+import {
+  Field,
+  FieldContent,
+  FieldDescription,
+  FieldLabel,
+} from "@/components/ui/field";
 import { Input } from "@/components/ui/input";
 import {
   Select,
@@ -50,6 +57,8 @@ import {
   BUDGET_RANGES,
   CONTACT_METHODS,
 } from "@/lib/schemas/appointment";
+
+const EMAIL_REGEX = /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/;
 
 const INITIAL_STATE: ActionResult | null = null;
 
@@ -120,6 +129,53 @@ const budgetTranslationKeys: Record<BudgetRange, BudgetOptionKey> = {
   "To discuss": "toDiscuss",
 };
 
+const MAX_REFERENCE_IMAGES = 5;
+
+const bookingFieldNames = [
+  "fullName",
+  "email",
+  "contactMethod",
+  "phone",
+  "tattooDescription",
+  "bodyPlacement",
+  "tattooSize",
+  "preferredDates",
+  "budgetRange",
+  "referenceImageUrls",
+] as const;
+
+type BookingFieldName = (typeof bookingFieldNames)[number];
+
+function isBookingFieldName(value: string): value is BookingFieldName {
+  return (bookingFieldNames as readonly string[]).includes(value);
+}
+
+interface BookingFormValues {
+  fullName: string;
+  email: string;
+  contactMethod: ContactMethod | "";
+  phone: string;
+  tattooDescription: string;
+  bodyPlacement: BodyPlacement | "";
+  tattooSize: string;
+  preferredDates: string[];
+  budgetRange: BudgetRange | "";
+  referenceImageUrls: string[];
+}
+
+const BOOKING_FORM_DEFAULTS: BookingFormValues = {
+  fullName: "",
+  email: "",
+  contactMethod: "",
+  phone: "",
+  tattooDescription: "",
+  bodyPlacement: "",
+  tattooSize: "",
+  preferredDates: [],
+  budgetRange: "",
+  referenceImageUrls: [""],
+};
+
 export function BookingForm() {
   const rawLocale = useLocale();
   const locale: Locale = isSupportedLocale(rawLocale)
@@ -134,61 +190,79 @@ export function BookingForm() {
     INITIAL_STATE,
   );
 
-  const [formData, setFormData] = useState({
-    fullName: "",
-    email: "",
-    phone: "",
-    instagram: "",
-    placement: "",
-    sizeApprox: "",
-    tattooDescription: "",
-    referenceLinks: "",
-    budget: "",
-    contactMethod: "",
-  });
-  const [preferredDates, setPreferredDates] = useState<string[]>([]);
-  const [referenceImageUrls, setReferenceImageUrls] = useState<string[]>([]);
   const [imageInputMode, setImageInputMode] = useState<"url" | "upload">("url");
   const [copied, setCopied] = useState(false);
 
-  const fullNameRef = useRef<HTMLInputElement>(null);
-  const emailRef = useRef<HTMLInputElement>(null);
-  const contactMethodRef = useRef<HTMLButtonElement>(null);
-  const phoneRef = useRef<HTMLInputElement>(null);
-  const tattooDescriptionRef = useRef<HTMLTextAreaElement>(null);
-  const preferredDatesRef = useRef<HTMLButtonElement>(null);
   const successRef = useRef<HTMLDivElement>(null);
 
-  const handleInputChange = (field: keyof typeof formData, value: string) => {
-    setFormData((prev) => ({ ...prev, [field]: value }));
-    // Clear client error for this field when user types
-    if (clientErrors[field]) {
-      setClientErrors((prev) => {
-        const next = { ...prev };
-        delete next[field];
-        return next;
+  const {
+    control,
+    register,
+    handleSubmit,
+    reset,
+    setError,
+    setValue,
+    watch,
+    trigger,
+    formState: { errors },
+  } = useForm<BookingFormValues>({
+    defaultValues: BOOKING_FORM_DEFAULTS,
+  });
+
+  const contactMethodValue = watch("contactMethod");
+  const referenceUrlsValue = watch("referenceImageUrls") ?? [""];
+  const referenceUrlsRef = useRef<string[]>(referenceUrlsValue);
+  referenceUrlsRef.current = referenceUrlsValue;
+
+  const fullNameRegistration = register("fullName", {
+    required: formT("fullName.errors.required"),
+    minLength: { value: 2, message: formT("fullName.errors.min") },
+  });
+
+  const emailRegistration = register("email", {
+    required: formT("email.errors.required"),
+    pattern: { value: EMAIL_REGEX, message: formT("email.errors.invalid") },
+  });
+
+  const phoneRegistration = register("phone", {
+    validate: (value) => {
+      if (
+        contactMethodValue &&
+        contactMethodValue !== "Email" &&
+        !value.trim()
+      ) {
+        return formT("phone.errors.required");
+      }
+      return true;
+    },
+  });
+
+  const tattooDescriptionRegistration = register("tattooDescription", {
+    required: formT("description.errors.required"),
+    minLength: { value: 20, message: formT("description.errors.min") },
+  });
+
+  const scrollToField = (field: BookingFieldName) => {
+    const target = document.getElementById(field);
+    if (target) {
+      requestAnimationFrame(() => {
+        target.scrollIntoView({ behavior: "smooth", block: "center" });
+        target.focus({ preventScroll: true });
       });
     }
   };
 
   useEffect(() => {
-    if (state?.success) {
-      setFormData({
-        fullName: "",
-        email: "",
-        phone: "",
-        instagram: "",
-        placement: "",
-        sizeApprox: "",
-        tattooDescription: "",
-        referenceLinks: "",
-        budget: "",
-        contactMethod: "",
-      });
-      setPreferredDates([]);
-      setReferenceImageUrls([""]);
+    void trigger("phone");
+  }, [contactMethodValue, trigger]);
 
-      // Delay scroll to allow conditional render to complete
+  useEffect(() => {
+    if (state?.success) {
+      reset(BOOKING_FORM_DEFAULTS);
+      setValue("referenceImageUrls", BOOKING_FORM_DEFAULTS.referenceImageUrls);
+      setImageInputMode("url");
+      setCopied(false);
+
       setTimeout(() => {
         const element = successRef.current;
         if (element) {
@@ -199,132 +273,81 @@ export function BookingForm() {
           });
           element.focus();
         }
-      }, 0);
+      }, 500);
+    }
+  }, [reset, setValue, state]);
+
+  useEffect(() => {
+    if (state && !state.success && state.message) {
+      toast.error(state.message);
     }
   }, [state]);
 
+  useEffect(() => {
+    if (state && !state.success && state.fieldErrors) {
+      Object.entries(state.fieldErrors).forEach(([key, messages]) => {
+        if (!messages || messages.length === 0) return;
+        if (isBookingFieldName(key)) {
+          const message = messages[0];
+          if (message) {
+            setError(key as keyof BookingFormValues, {
+              type: "server",
+              message,
+            });
+          }
+        }
+      });
+
+      const firstField = bookingFieldNames.find(
+        (name) => state.fieldErrors?.[name]?.length,
+      );
+      if (firstField) {
+        scrollToField(firstField);
+      }
+    }
+  }, [setError, state]);
+
   const addReferenceUrl = () => {
-    if (referenceImageUrls.length < 5) {
-      setReferenceImageUrls((prev) => [...prev, ""]);
-    }
+    if (referenceUrlsValue.length >= MAX_REFERENCE_IMAGES) return;
+    setValue("referenceImageUrls", [...referenceUrlsValue, ""]);
   };
 
-  const removeReferenceUrl = (index: number) => {
-    setReferenceImageUrls((prev) => prev.filter((_, i) => i !== index));
-  };
-
-  const [clientErrors, setClientErrors] = useState<Record<string, string[]>>(
-    {},
-  );
-
-  const fieldRefs = {
-    fullName: fullNameRef,
-    email: emailRef,
-    contactMethod: contactMethodRef,
-    phone: phoneRef,
-    tattooDescription: tattooDescriptionRef,
-    preferredDates: preferredDatesRef,
-  } as const;
-
-  const scrollToFirstError = (errors: Record<string, string[]>) => {
-    const fieldOrder: (keyof typeof fieldRefs)[] = [
-      "fullName",
-      "email",
-      "contactMethod",
-      "phone",
-      "tattooDescription",
-      "preferredDates",
-    ];
-
-    const firstErrorField = fieldOrder.find(
-      (field) => (errors[field]?.length ?? 0) > 0,
-    );
-
-    if (!firstErrorField) return;
-
-    const target = fieldRefs[firstErrorField].current;
-
-    if (!target) return;
-
-    requestAnimationFrame(() => {
-      target.scrollIntoView({ behavior: "smooth", block: "center" });
-      target.focus({ preventScroll: true });
-    });
-  };
-
-  // Email regex matching Zod's email validation
-  const EMAIL_REGEX = /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/;
-
-  const validateForm = (): boolean => {
-    const errors: Record<string, string[]> = {};
-
-    // Full name validation (matches server: min 2 chars)
-    if (!formData.fullName.trim()) {
-      errors.fullName = [formT("fullName.errors.required")];
-    } else if (formData.fullName.trim().length < 2) {
-      errors.fullName = [formT("fullName.errors.min")];
-    }
-
-    // Email validation (matches server: required, valid format)
-    if (!formData.email.trim()) {
-      errors.email = [formT("email.errors.required")];
-    } else if (!EMAIL_REGEX.test(formData.email.trim())) {
-      errors.email = [formT("email.errors.invalid")];
-    }
-
-    // Contact method validation (matches server: required enum)
-    if (!formData.contactMethod) {
-      errors.contactMethod = [formT("contactMethod.errors.required")];
-    }
-
-    // Phone/Handle validation (matches server: optional but required by us)
-    if (
-      !formData.phone.trim() &&
-      formData.contactMethod &&
-      formData.contactMethod !== "Email"
-    ) {
-      errors.phone = [formT("phone.errors.required")];
-    }
-
-    // Description validation (matches server: min 20 chars)
-    if (!formData.tattooDescription.trim()) {
-      errors.tattooDescription = [formT("description.errors.required")];
-    } else if (formData.tattooDescription.trim().length < 20) {
-      errors.tattooDescription = [formT("description.errors.min")];
-    }
-
-    // Preferred dates validation (matches server: min 1 date required)
-    const validDates = preferredDates.filter((d) => d.trim() !== "");
-    if (validDates.length === 0) {
-      errors.preferredDates = [formT("preferredDates.errors.required")];
-    }
-
-    setClientErrors(errors);
-    const isValid = Object.keys(errors).length === 0;
-
-    if (!isValid) {
-      scrollToFirstError(errors);
-    }
-
-    return isValid;
-  };
-
-  const handleSubmit = (formData: FormData) => {
-    if (!validateForm()) {
-      // Prevent submission if validation fails
+  const onSubmit = handleSubmit((values) => {
+    const filteredPreferredDates = values.preferredDates.filter((date) => date);
+    if (filteredPreferredDates.length === 0) {
+      setError("preferredDates", {
+        type: "manual",
+        message: formT("preferredDates.errors.required"),
+      });
+      scrollToField("preferredDates");
       return;
     }
+
+    const filteredReferenceUrls = values.referenceImageUrls
+      .map((url) => url.trim())
+      .filter((url) => url.length > 0)
+      .slice(0, MAX_REFERENCE_IMAGES);
+
+    const formData = new FormData();
+    formData.set("fullName", values.fullName.trim());
+    formData.set("email", values.email.trim());
+    formData.set("contactMethod", values.contactMethod);
+    formData.set("phone", values.phone.trim());
+    formData.set("tattooDescription", values.tattooDescription.trim());
+    formData.set("bodyPlacement", values.bodyPlacement);
+    formData.set("tattooSize", values.tattooSize.trim());
+    formData.set("budgetRange", values.budgetRange);
+    filteredPreferredDates.forEach((date) => {
+      formData.append("preferredDates", date);
+    });
+    filteredReferenceUrls.forEach((url) => {
+      formData.append("referenceImageUrls", url);
+    });
+
     startTransition(() => {
       formAction(formData);
     });
-  };
-
-  const fieldErrors =
-    state !== null && !state.success && state.fieldErrors !== undefined
-      ? state.fieldErrors
-      : clientErrors;
-
-  const preferredDatesError = Boolean(fieldErrors["preferredDates"]?.length);
+  });
   const preferredDatePlaceholder = formT(
     "preferredDates.datePicker.placeholder",
   );
@@ -390,26 +413,7 @@ export function BookingForm() {
   }
 
   return (
-    <form
-      onSubmit={(e) => {
-        e.preventDefault();
-        handleSubmit(new FormData(e.currentTarget));
-      }}
-      noValidate
-      className="flex flex-col gap-10"
-    >
-      {/* Server error */}
-      {state !== null && !state.success && state.message !== undefined && (
-        <div
-          role="alert"
-          className="border border-destructive/40 bg-destructive/10 px-4 py-3"
-        >
-          <Text size="sm" className="text-destructive">
-            {state.message}
-          </Text>
-        </div>
-      )}
-
+    <form onSubmit={onSubmit} noValidate className="flex flex-col gap-10">
       {/* Section: Contact */}
       <fieldset className="flex flex-col gap-6">
         <legend className="sr-only">{formT("sections.contact")}</legend>
@@ -419,116 +423,126 @@ export function BookingForm() {
         </div>
 
         <div className="grid grid-cols-1 gap-6 sm:grid-cols-2">
-          <FormField
-            label={formT("fullName.label")}
-            htmlFor="fullName"
-            required
-            error={fieldErrors["fullName"]}
-          >
-            <Input
-              id="fullName"
-              name="fullName"
-              type="text"
-              autoComplete="name"
-              placeholder={formT("fullName.placeholder")}
-              value={formData.fullName}
-              onChange={(e) => handleInputChange("fullName", e.target.value)}
-              ref={fullNameRef}
-              aria-describedby={
-                (fieldErrors["fullName"]?.length ?? 0) > 0
-                  ? "fullName-error"
-                  : undefined
-              }
-              required
-            />
-          </FormField>
+          <Field>
+            <FieldContent>
+              <div className="flex items-baseline justify-between gap-2">
+                <FieldLabel htmlFor="fullName">
+                  {formT("fullName.label")}
+                </FieldLabel>
+                {errors.fullName ? (
+                  <span role="alert" className="text-xs text-destructive">
+                    {errors.fullName.message}
+                  </span>
+                ) : null}
+              </div>
+              <Input
+                id="fullName"
+                type="text"
+                autoComplete="name"
+                placeholder={formT("fullName.placeholder")}
+                aria-invalid={!!errors.fullName || undefined}
+                className={
+                  errors.fullName ? "border-destructive/60" : undefined
+                }
+                {...fullNameRegistration}
+              />
+            </FieldContent>
+          </Field>
 
-          <FormField
-            label={formT("email.label")}
-            htmlFor="email"
-            required
-            error={fieldErrors["email"]}
-          >
-            <Input
-              id="email"
-              name="email"
-              type="email"
-              autoComplete="email"
-              placeholder={formT("email.placeholder")}
-              value={formData.email}
-              onChange={(e) => handleInputChange("email", e.target.value)}
-              ref={emailRef}
-              aria-describedby={
-                (fieldErrors["email"]?.length ?? 0) > 0
-                  ? "email-error"
-                  : undefined
-              }
-              required
-            />
-          </FormField>
+          <Field>
+            <FieldContent>
+              <div className="flex items-baseline justify-between gap-2">
+                <FieldLabel htmlFor="email">{formT("email.label")}</FieldLabel>
+                {errors.email ? (
+                  <span role="alert" className="text-xs text-destructive">
+                    {errors.email.message}
+                  </span>
+                ) : null}
+              </div>
+              <Input
+                id="email"
+                type="email"
+                autoComplete="email"
+                placeholder={formT("email.placeholder")}
+                aria-invalid={!!errors.email || undefined}
+                className={errors.email ? "border-destructive/60" : undefined}
+                {...emailRegistration}
+              />
+            </FieldContent>
+          </Field>
         </div>
 
         <div className="grid grid-cols-1 gap-6 sm:grid-cols-2">
-          <FormField
-            label={formT("contactMethod.label")}
-            htmlFor="contactMethod"
-            required
-            error={fieldErrors["contactMethod"]}
-          >
-            <input
-              type="hidden"
-              name="contactMethod"
-              value={formData.contactMethod}
-            />
+          <Controller
+            control={control}
+            name="contactMethod"
+            rules={{ required: formT("contactMethod.errors.required") }}
+            render={({ field, fieldState }) => (
+              <Field>
+                <FieldContent>
+                  <div className="flex items-baseline justify-between gap-2">
+                    <FieldLabel htmlFor="contactMethod">
+                      {formT("contactMethod.label")}
+                    </FieldLabel>
+                    {fieldState.error ? (
+                      <span role="alert" className="text-xs text-destructive">
+                        {fieldState.error.message}
+                      </span>
+                    ) : null}
+                  </div>
+                  <Select value={field.value} onValueChange={field.onChange}>
+                    <SelectTrigger
+                      id="contactMethod"
+                      aria-invalid={fieldState.invalid || undefined}
+                      className={
+                        fieldState.invalid ? "border-destructive/60" : undefined
+                      }
+                    >
+                      <SelectValue
+                        placeholder={formT("contactMethod.placeholder")}
+                      />
+                    </SelectTrigger>
 
-            <Select
-              value={formData.contactMethod}
-              onValueChange={(value) =>
-                handleInputChange("contactMethod", value)
-              }
-            >
-              <SelectTrigger
-                ref={contactMethodRef}
-                className={
-                  (fieldErrors["contactMethod"]?.length ?? 0) > 0
-                    ? "border-destructive/60"
-                    : undefined
-                }
-              >
-                <SelectValue placeholder={formT("contactMethod.placeholder")} />
-              </SelectTrigger>
+                    <SelectContent>
+                      <SelectGroup>
+                        {CONTACT_METHODS.map((method) => (
+                          <SelectItem key={method} value={method}>
+                            {formT(
+                              `contactMethod.options.${contactMethodTranslationKeys[method]}`,
+                            )}
+                          </SelectItem>
+                        ))}
+                      </SelectGroup>
+                    </SelectContent>
+                  </Select>
+                </FieldContent>
+              </Field>
+            )}
+          />
 
-              <SelectContent>
-                <SelectGroup>
-                  {CONTACT_METHODS.map((method) => (
-                    <SelectItem key={method} value={method}>
-                      {formT(
-                        `contactMethod.options.${contactMethodTranslationKeys[method]}`,
-                      )}
-                    </SelectItem>
-                  ))}
-                </SelectGroup>
-              </SelectContent>
-            </Select>
-          </FormField>
-
-          <FormField
-            label={formT("phone.label")}
-            htmlFor="phone"
-            error={fieldErrors["phone"]}
-            hint={formT("phone.hint")}
-          >
-            <Input
-              id="phone"
-              name="phone"
-              type="tel"
-              autoComplete="tel"
-              placeholder={formT("phone.placeholder")}
-              value={formData.phone}
-              onChange={(e) => handleInputChange("phone", e.target.value)}
-              ref={phoneRef}
-            />
-          </FormField>
+          <Field>
+            <FieldContent>
+              <div className="flex items-baseline justify-between gap-2">
+                <FieldLabel htmlFor="phone">{formT("phone.label")}</FieldLabel>
+                {errors.phone ? (
+                  <span role="alert" className="text-xs text-destructive">
+                    {errors.phone.message}
+                  </span>
+                ) : (
+                  <FieldDescription>{formT("phone.hint")}</FieldDescription>
+                )}
+              </div>
+              <Input
+                id="phone"
+                type="tel"
+                autoComplete="tel"
+                placeholder={formT("phone.placeholder")}
+                aria-invalid={!!errors.phone || undefined}
+                className={errors.phone ? "border-destructive/60" : undefined}
+                {...phoneRegistration}
+              />
+            </FieldContent>
+          </Field>
         </div>
       </fieldset>
 
@@ -540,123 +554,142 @@ export function BookingForm() {
           <Separator />
         </div>
 
-        <FormField
-          label={formT("description.label")}
-          htmlFor="tattooDescription"
-          required
-          error={fieldErrors["tattooDescription"]}
-          hint={formT("description.hint")}
-        >
-          <Textarea
-            id="tattooDescription"
-            name="tattooDescription"
-            rows={6}
-            placeholder={formT("description.placeholder")}
-            value={formData.tattooDescription}
-            onChange={(e) =>
-              handleInputChange("tattooDescription", e.target.value)
-            }
-            ref={tattooDescriptionRef}
-            aria-describedby={
-              (fieldErrors["tattooDescription"]?.length ?? 0) > 0
-                ? "tattooDescription-error"
-                : undefined
-            }
-            required
-          />
-        </FormField>
+        <Field>
+          <FieldContent>
+            <div className="flex items-baseline justify-between gap-2">
+              <FieldLabel htmlFor="tattooDescription">
+                {formT("description.label")}
+              </FieldLabel>
+              {errors.tattooDescription ? (
+                <span role="alert" className="text-xs text-destructive">
+                  {errors.tattooDescription.message}
+                </span>
+              ) : formT("description.hint") ? (
+                <FieldDescription>{formT("description.hint")}</FieldDescription>
+              ) : null}
+            </div>
+            <Textarea
+              id="tattooDescription"
+              rows={6}
+              placeholder={formT("description.placeholder")}
+              aria-invalid={!!errors.tattooDescription || undefined}
+              className={
+                errors.tattooDescription ? "border-destructive/60" : undefined
+              }
+              {...tattooDescriptionRegistration}
+            />
+          </FieldContent>
+        </Field>
 
         <div className="grid grid-cols-1 gap-6 sm:grid-cols-2">
-          <FormField
-            label={formT("bodyPlacement.label")}
-            htmlFor="bodyPlacement"
-            error={fieldErrors["bodyPlacement"]}
-            hint={formT("bodyPlacement.hint")}
-          >
-            <input
-              type="hidden"
-              name="bodyPlacement"
-              value={formData.placement}
-            />
+          <Controller
+            control={control}
+            name="bodyPlacement"
+            render={({ field, fieldState }) => (
+              <Field>
+                <FieldContent>
+                  <div className="flex items-baseline justify-between gap-2">
+                    <FieldLabel htmlFor="bodyPlacement">
+                      {formT("bodyPlacement.label")}
+                    </FieldLabel>
+                    <FieldDescription>
+                      {formT("bodyPlacement.hint")}
+                    </FieldDescription>
+                  </div>
+                  <Select value={field.value} onValueChange={field.onChange}>
+                    <SelectTrigger
+                      id="bodyPlacement"
+                      className={
+                        fieldState.invalid ? "border-destructive/60" : undefined
+                      }
+                    >
+                      <SelectValue
+                        placeholder={formT("bodyPlacement.placeholder")}
+                      />
+                    </SelectTrigger>
 
-            <Select
-              value={formData.placement}
-              onValueChange={(value) => handleInputChange("placement", value)}
-            >
-              <SelectTrigger
-                className={
-                  (fieldErrors["bodyPlacement"]?.length ?? 0) > 0
-                    ? "border-destructive/60"
-                    : undefined
-                }
-              >
-                <SelectValue placeholder={formT("bodyPlacement.placeholder")} />
-              </SelectTrigger>
+                    <SelectContent>
+                      <SelectGroup>
+                        {BODY_PLACEMENTS.map((placement) => (
+                          <SelectItem key={placement} value={placement}>
+                            {formT(
+                              `bodyPlacement.options.${bodyPlacementTranslationKeys[placement]}`,
+                            )}
+                          </SelectItem>
+                        ))}
+                      </SelectGroup>
+                    </SelectContent>
+                  </Select>
+                </FieldContent>
+              </Field>
+            )}
+          />
 
-              <SelectContent>
-                <SelectGroup>
-                  {BODY_PLACEMENTS.map((placement) => (
-                    <SelectItem key={placement} value={placement}>
-                      {formT(
-                        `bodyPlacement.options.${bodyPlacementTranslationKeys[placement]}`,
-                      )}
-                    </SelectItem>
-                  ))}
-                </SelectGroup>
-              </SelectContent>
-            </Select>
-          </FormField>
-
-          <FormField
-            label={formT("size.label")}
-            htmlFor="tattooSize"
-            error={fieldErrors["tattooSize"]}
-            hint={formT("size.hint")}
-          >
-            <Input
-              id="tattooSize"
-              name="tattooSize"
-              type="text"
-              placeholder={formT("size.placeholder")}
-              value={formData.sizeApprox}
-              onChange={(e) => handleInputChange("sizeApprox", e.target.value)}
-            />
-          </FormField>
+          <Controller
+            control={control}
+            name="tattooSize"
+            render={({ field, fieldState }) => (
+              <Field>
+                <FieldContent>
+                  <div className="flex items-baseline justify-between gap-2">
+                    <FieldLabel htmlFor="tattooSize">
+                      {formT("size.label")}
+                    </FieldLabel>
+                    <FieldDescription>{formT("size.hint")}</FieldDescription>
+                  </div>
+                  <Input
+                    id="tattooSize"
+                    type="text"
+                    placeholder={formT("size.placeholder")}
+                    className={
+                      fieldState.invalid ? "border-destructive/60" : undefined
+                    }
+                    {...field}
+                  />
+                </FieldContent>
+              </Field>
+            )}
+          />
         </div>
 
-        <FormField
-          label={formT("budget.label")}
-          htmlFor="budgetRange"
-          error={fieldErrors["budgetRange"]}
-          hint={formT("budget.hint")}
-        >
-          <input type="hidden" name="budgetRange" value={formData.budget} />
+        <Controller
+          control={control}
+          name="budgetRange"
+          render={({ field, fieldState }) => (
+            <Field>
+              <FieldContent>
+                <div className="flex items-baseline justify-between gap-2">
+                  <FieldLabel htmlFor="budgetRange">
+                    {formT("budget.label")}
+                  </FieldLabel>
+                  <FieldDescription>{formT("budget.hint")}</FieldDescription>
+                </div>
+                <Select value={field.value} onValueChange={field.onChange}>
+                  <SelectTrigger
+                    id="budgetRange"
+                    className={
+                      fieldState.invalid ? "border-destructive/60" : undefined
+                    }
+                  >
+                    <SelectValue placeholder={formT("budget.placeholder")} />
+                  </SelectTrigger>
 
-          <Select
-            value={formData.budget}
-            onValueChange={(value) => handleInputChange("budget", value)}
-          >
-            <SelectTrigger
-              className={
-                (fieldErrors["budgetRange"]?.length ?? 0) > 0
-                  ? "border-destructive/60"
-                  : undefined
-              }
-            >
-              <SelectValue placeholder={formT("budget.placeholder")} />
-            </SelectTrigger>
-
-            <SelectContent>
-              <SelectGroup>
-                {BUDGET_RANGES.map((range) => (
-                  <SelectItem key={range} value={range}>
-                    {formT(`budget.options.${budgetTranslationKeys[range]}`)}
-                  </SelectItem>
-                ))}
-              </SelectGroup>
-            </SelectContent>
-          </Select>
-        </FormField>
+                  <SelectContent>
+                    <SelectGroup>
+                      {BUDGET_RANGES.map((range) => (
+                        <SelectItem key={range} value={range}>
+                          {formT(
+                            `budget.options.${budgetTranslationKeys[range]}`,
+                          )}
+                        </SelectItem>
+                      ))}
+                    </SelectGroup>
+                  </SelectContent>
+                </Select>
+              </FieldContent>
+            </Field>
+          )}
+        />
       </fieldset>
 
       {/* Section: Availability */}
@@ -667,52 +700,52 @@ export function BookingForm() {
           <Separator />
         </div>
 
-        <FormField
-          label={formT("preferredDates.label")}
-          htmlFor="preferredDates"
-          required
-          error={fieldErrors["preferredDates"]}
-          hint={formT("preferredDates.hint")}
-        >
-          <div className="flex flex-col gap-3">
-            {preferredDates.map((date) => (
-              <input
-                key={date}
-                type="hidden"
-                name="preferredDates"
-                value={date}
-              />
-            ))}
-            <DatePicker
-              ref={preferredDatesRef}
-              mode="multiple"
-              value={preferredDates}
-              onChange={(dates) => {
-                if (dates.length <= 5) {
-                  setPreferredDates(dates);
-                  if (clientErrors.preferredDates) {
-                    setClientErrors((prev) => {
-                      const next = { ...prev };
-                      delete next.preferredDates;
-                      return next;
-                    });
+        <Controller
+          control={control}
+          name="preferredDates"
+          rules={{ required: formT("preferredDates.errors.required") }}
+          render={({ field, fieldState }) => (
+            <Field>
+              <FieldContent>
+                <div className="flex items-baseline justify-between gap-2">
+                  <FieldLabel htmlFor="preferredDates">
+                    {formT("preferredDates.label")}
+                  </FieldLabel>
+                  {fieldState.error ? (
+                    <span role="alert" className="text-xs text-destructive">
+                      {fieldState.error.message}
+                    </span>
+                  ) : formT("preferredDates.hint") ? (
+                    <FieldDescription>
+                      {formT("preferredDates.hint")}
+                    </FieldDescription>
+                  ) : null}
+                </div>
+                <DatePicker
+                  id="preferredDates"
+                  mode="multiple"
+                  value={field.value}
+                  onChange={(dates) => {
+                    if (dates.length <= MAX_REFERENCE_IMAGES) {
+                      field.onChange(dates);
+                    }
+                  }}
+                  placeholder={preferredDatePlaceholder}
+                  clearLabel={preferredDateClearLabel}
+                  ariaLabel={formT("preferredDates.label")}
+                  hasError={fieldState.invalid}
+                  minDate={minPreferredDate}
+                  locale={locale}
+                  formatDateLabel={(dates) =>
+                    formT("preferredDates.datePicker.selectedCount", {
+                      count: dates.length,
+                    })
                   }
-                }
-              }}
-              placeholder={preferredDatePlaceholder}
-              clearLabel={preferredDateClearLabel}
-              ariaLabel={formT("preferredDates.label")}
-              hasError={preferredDatesError}
-              minDate={minPreferredDate}
-              locale={locale}
-              formatDateLabel={(dates) =>
-                formT("preferredDates.datePicker.selectedCount", {
-                  count: dates.length,
-                })
-              }
-            />
-          </div>
-        </FormField>
+                />
+              </FieldContent>
+            </Field>
+          )}
+        />
       </fieldset>
 
       {/* Section: Reference Images */}
@@ -746,98 +779,124 @@ export function BookingForm() {
         </div>
 
         {imageInputMode === "url" ? (
-          <FormField
-            label={formT("reference.urls.label")}
-            htmlFor="referenceImageUrls-0"
-            error={fieldErrors["referenceImageUrls"]}
-            hint={formT("reference.urls.hint")}
-          >
-            <div className="flex flex-col gap-3">
-              {referenceImageUrls.map((url, index) => (
-                <div key={index} className="flex gap-2">
-                  <Input
-                    id={index === 0 ? "referenceImageUrls-0" : undefined}
-                    name="referenceImageUrls"
-                    type="url"
-                    placeholder={formT("reference.urls.placeholder")}
-                    value={url}
-                    onChange={(e) => {
-                      setReferenceImageUrls((prev) =>
-                        prev.map((u, i) => (i === index ? e.target.value : u)),
-                      );
-                    }}
-                    aria-label={formT("reference.urls.aria", {
-                      number: index + 1,
-                    })}
-                    className="flex-1"
-                  />
-                  {referenceImageUrls.length > 1 && (
-                    <Button
-                      type="button"
-                      size="icon"
-                      variant="outline"
-                      onClick={() => removeReferenceUrl(index)}
-                      aria-label={formT("reference.urls.removeAria", {
+          <Field>
+            <FieldContent>
+              <div className="flex items-baseline justify-between gap-2">
+                <FieldLabel htmlFor="referenceImageUrls-0">
+                  {formT("reference.urls.label")}
+                </FieldLabel>
+                {errors.referenceImageUrls ? (
+                  <span role="alert" className="text-xs text-destructive">
+                    {errors.referenceImageUrls.message}
+                  </span>
+                ) : (
+                  <FieldDescription>
+                    {formT("reference.urls.hint")}
+                  </FieldDescription>
+                )}
+              </div>
+              <div className="flex flex-col gap-3">
+                {referenceUrlsValue.map((url, index) => (
+                  <div key={index} className="flex gap-2">
+                    <Input
+                      id={index === 0 ? "referenceImageUrls-0" : undefined}
+                      type="url"
+                      placeholder={formT("reference.urls.placeholder")}
+                      value={url}
+                      onChange={(e) =>
+                        setValue(
+                          "referenceImageUrls",
+                          referenceUrlsValue.map((u, i) =>
+                            i === index ? e.target.value : u,
+                          ),
+                        )
+                      }
+                      aria-label={formT("reference.urls.aria", {
                         number: index + 1,
                       })}
-                      className="hover:border-destructive/40 hover:text-destructive"
-                    >
-                      <X />
-                    </Button>
-                  )}
-                </div>
-              ))}
-              {referenceImageUrls.length < 5 && (
-                <Button
-                  type="button"
-                  variant="link"
-                  size="link"
-                  onClick={addReferenceUrl}
-                  className="self-start"
-                >
-                  {referenceImageUrls.length === 0
-                    ? formT("reference.urls.add")
-                    : formT("reference.urls.addAnother")}
-                </Button>
-              )}
-            </div>
-          </FormField>
+                      className="flex-1"
+                    />
+                    {referenceUrlsValue.length > 1 && (
+                      <Button
+                        type="button"
+                        size="icon"
+                        variant="outline"
+                        onClick={() =>
+                          setValue(
+                            "referenceImageUrls",
+                            referenceUrlsValue.filter((_, i) => i !== index),
+                          )
+                        }
+                        aria-label={formT("reference.urls.removeAria", {
+                          number: index + 1,
+                        })}
+                        className="hover:border-destructive/40 hover:text-destructive"
+                      >
+                        <X />
+                      </Button>
+                    )}
+                  </div>
+                ))}
+                {referenceUrlsValue.length < MAX_REFERENCE_IMAGES && (
+                  <Button
+                    type="button"
+                    variant="link"
+                    size="link"
+                    onClick={addReferenceUrl}
+                    className="self-start"
+                  >
+                    {formT("reference.urls.addAnother")}
+                  </Button>
+                )}
+              </div>
+            </FieldContent>
+          </Field>
         ) : (
-          <FormField
-            label={formT("reference.upload.label")}
-            htmlFor="referenceImages"
-            error={fieldErrors["referenceImageUrls"]}
-            hint={formT("reference.upload.hint")}
-          >
-            <ImageUploader
-              folder="bookings"
-              maxFiles={5 - referenceImageUrls.filter(Boolean).length}
-              keepUploadedImages={true}
-              onUploadComplete={(data) => {
-                data.forEach((item) => {
-                  setReferenceImageUrls((prev) => {
-                    const emptyIndex = prev.findIndex((u) => !u);
+          <Field>
+            <FieldContent>
+              <div className="flex items-baseline justify-between gap-2">
+                <FieldLabel htmlFor="referenceImages">
+                  {formT("reference.upload.label")}
+                </FieldLabel>
+                {errors.referenceImageUrls ? (
+                  <span role="alert" className="text-xs text-destructive">
+                    {errors.referenceImageUrls.message}
+                  </span>
+                ) : (
+                  <FieldDescription>
+                    {formT("reference.upload.hint")}
+                  </FieldDescription>
+                )}
+              </div>
+              <ImageUploader
+                folder="bookings"
+                maxFiles={
+                  MAX_REFERENCE_IMAGES -
+                  referenceUrlsValue.filter(Boolean).length
+                }
+                keepUploadedImages={true}
+                onUploadComplete={(data) => {
+                  const current = [...referenceUrlsRef.current];
+                  data.forEach((item) => {
+                    const emptyIndex = current.findIndex((u) => !u);
                     if (emptyIndex >= 0) {
-                      return prev.map((u, i) =>
-                        i === emptyIndex ? item.url : u,
-                      );
+                      current[emptyIndex] = item.url;
+                    } else if (current.length < MAX_REFERENCE_IMAGES) {
+                      current.push(item.url);
                     }
-                    return [...prev, item.url];
                   });
-                });
-              }}
-            />
-            {referenceImageUrls
-              .filter((url) => url.trim() !== "")
-              .map((url, index) => (
-                <input
-                  key={`reference-upload-${index}`}
-                  type="hidden"
-                  name="referenceImageUrls"
-                  value={url}
-                />
-              ))}
-          </FormField>
+                  if (
+                    current.every((u) => u) &&
+                    current.length < MAX_REFERENCE_IMAGES
+                  ) {
+                    current.push("");
+                  }
+                  referenceUrlsRef.current = current;
+                  setValue("referenceImageUrls", current);
+                }}
+              />
+            </FieldContent>
+          </Field>
         )}
       </fieldset>
 

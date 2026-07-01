@@ -55,14 +55,18 @@ export default async function NewReviewPage() {
             <ReviewForm
               labels={{
                 nameLabel: t("form.nameLabel"),
+                nameError: t("form.nameError"),
                 emailLabel: t("form.emailLabel"),
+                emailError: t("form.emailError"),
                 ratingLabel: t("form.ratingLabel"),
                 ratingHelp: t("form.ratingHelp"),
+                ratingError: t("form.ratingError"),
                 reviewLabel: t("form.reviewLabel"),
                 reviewPlaceholder: t("form.reviewPlaceholder"),
+                reviewError: t("form.reviewError"),
                 submit: t("form.submit"),
                 submitting: t("form.submitting"),
-                error: t("form.error"),
+                optionalTag: t("form.optionalTag"),
                 ratingArias,
               }}
               success={{

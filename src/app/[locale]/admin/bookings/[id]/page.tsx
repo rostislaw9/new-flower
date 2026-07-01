@@ -141,8 +141,11 @@ export default async function BookingDetailPage({
         </div>
       </BookingSectionCard>
 
-      <div className="grid gap-4 md:grid-cols-3">
-        <BookingSectionCard eyebrow={detailT("sectionEyebrow.contact")}>
+      <div className="grid gap-4 md:grid-cols-5">
+        <BookingSectionCard
+          eyebrow={detailT("sectionEyebrow.contact")}
+          className="md:col-span-2"
+        >
           <div className="grid gap-4 md:grid-cols-2">
             <BookingInfoField
               label={detailT("fullName")}
@@ -182,7 +185,7 @@ export default async function BookingDetailPage({
 
         <BookingSectionCard
           eyebrow={detailT("sectionEyebrow.tattoo")}
-          className="md:col-span-2"
+          className="md:col-span-3"
         >
           <div className="grid gap-4 md:grid-cols-3">
             <BookingInfoField

@@ -1,8 +1,10 @@
 "use client";
 
 import { useActionState, useEffect, useRef, useTransition } from "react";
+import { Controller, useForm } from "react-hook-form";
 
 import { Loader2 } from "lucide-react";
+import { toast } from "sonner";
 
 import { RatingInput } from "@/components/reviews/RatingInput";
 import { Button } from "@/components/styled/Button";
@@ -14,26 +16,31 @@ import {
   CardHeader,
   CardTitle,
 } from "@/components/ui/card";
-import { Input } from "@/components/ui/input";
-import { Label } from "@/components/ui/label";
-import { Textarea } from "@/components/ui/textarea";
 import {
-  type ReviewFormErrors,
-  type ReviewFormState,
-  submitReview,
-} from "@/lib/actions/reviews";
+  Field,
+  FieldContent,
+  FieldDescription,
+  FieldLabel,
+} from "@/components/ui/field";
+import { Input } from "@/components/ui/input";
+import { Textarea } from "@/components/ui/textarea";
+import { type ReviewFormState, submitReview } from "@/lib/actions/reviews";
 
 interface ReviewFormProps {
   labels: {
     nameLabel: string;
+    nameError: string;
     emailLabel: string;
+    emailError: string;
     ratingLabel: string;
     ratingHelp: string;
+    ratingError: string;
     reviewLabel: string;
     reviewPlaceholder: string;
+    reviewError: string;
     submit: string;
     submitting: string;
-    error: string;
+    optionalTag: string;
     ratingArias: string[];
   };
   success: {
@@ -45,12 +52,67 @@ interface ReviewFormProps {
 
 const initialState: ReviewFormState = { status: "idle" };
 
+interface ReviewFormValues {
+  clientName: string;
+  clientEmail: string;
+  rating: number | null;
+  text: string;
+}
+
+const REVIEW_FORM_DEFAULTS: ReviewFormValues = {
+  clientName: "",
+  clientEmail: "",
+  rating: null,
+  text: "",
+};
+
+const reviewFormFieldNames = [
+  "clientName",
+  "clientEmail",
+  "rating",
+  "text",
+] as const satisfies Array<keyof ReviewFormValues>;
+
+function isReviewFormField(
+  key: string,
+): key is (typeof reviewFormFieldNames)[number] {
+  return reviewFormFieldNames.includes(
+    key as (typeof reviewFormFieldNames)[number],
+  );
+}
+
 export function ReviewForm({ labels, success }: ReviewFormProps) {
   const [state, formAction] = useActionState(submitReview, initialState);
   const [pending, startTransition] = useTransition();
   const successRef = useRef<HTMLDivElement>(null);
 
+  const form = useForm<ReviewFormValues>({
+    defaultValues: REVIEW_FORM_DEFAULTS,
+  });
+  const { control, handleSubmit, reset, setError, clearErrors } = form;
+
   const isSuccess = state.status === "success";
+
+  useEffect(() => {
+    if (state.status === "error") {
+      clearErrors();
+      const errors = state.fieldErrors ?? {};
+      Object.entries(errors).forEach(([key, messages]) => {
+        if (!isReviewFormField(key)) {
+          return;
+        }
+        const message = messages?.[0];
+        if (message) {
+          setError(key, { type: "server", message });
+        }
+      });
+    } else if (state.status === "success") {
+      reset(REVIEW_FORM_DEFAULTS);
+      clearErrors();
+    } else if (state.status === "idle") {
+      clearErrors();
+    }
+  }, [state, clearErrors, reset, setError]);
 
   useEffect(() => {
     if (isSuccess) {
@@ -65,17 +127,27 @@ export function ReviewForm({ labels, success }: ReviewFormProps) {
           });
           element.focus();
         }
-      }, 0);
+      }, 500);
     }
   }, [isSuccess]);
 
-  const fieldErrors =
-    state.status === "error"
-      ? (state.fieldErrors ?? ({} as ReviewFormErrors))
-      : {};
-  const ratingError = fieldErrors.rating?.[0];
+  useEffect(() => {
+    if (state.status === "error" && state.message) {
+      toast.error(state.message);
+    }
+  }, [state]);
 
-  const hasGlobalError = state.status === "error" && state.message;
+  const onSubmit = handleSubmit((values) => {
+    const formData = new FormData();
+    formData.append("clientName", values.clientName);
+    formData.append("clientEmail", values.clientEmail ?? "");
+    formData.append("rating", values.rating ? String(values.rating) : "");
+    formData.append("text", values.text);
+
+    startTransition(() => {
+      void formAction(formData);
+    });
+  });
 
   if (isSuccess) {
     return (
@@ -94,68 +166,143 @@ export function ReviewForm({ labels, success }: ReviewFormProps) {
   }
 
   return (
-    <form
-      className="flex flex-col gap-6"
-      action={(formData) => {
-        startTransition(() => {
-          void formAction(formData);
-        });
-      }}
-    >
-      {hasGlobalError ? (
-        <p className="rounded-md border border-destructive/40 bg-destructive/10 px-3 py-2 text-sm text-destructive">
-          {state.message ?? labels.error}
-        </p>
-      ) : null}
-
+    <form className="flex flex-col gap-6" onSubmit={onSubmit} noValidate>
       <div className="grid gap-6 md:grid-cols-2">
-        <div className="flex flex-col gap-2">
-          <Label htmlFor="clientName">{labels.nameLabel}</Label>
-          <Input
-            id="clientName"
-            name="clientName"
-            required
-            aria-required="true"
-          />
-          {fieldErrors.clientName ? (
-            <p className="text-sm text-destructive">
-              {fieldErrors.clientName[0]}
-            </p>
-          ) : null}
-        </div>
-
-        <div className="flex flex-col gap-2">
-          <Label htmlFor="clientEmail">{labels.emailLabel}</Label>
-          <Input id="clientEmail" name="clientEmail" type="email" />
-          {fieldErrors.clientEmail ? (
-            <p className="text-sm text-destructive">
-              {fieldErrors.clientEmail[0]}
-            </p>
-          ) : null}
-        </div>
-      </div>
-
-      <RatingInput
-        label={labels.ratingLabel}
-        helpText={labels.ratingHelp}
-        ariaLabels={labels.ratingArias}
-        {...(ratingError ? { error: ratingError } : {})}
-      />
-
-      <div className="flex flex-col gap-2">
-        <Label htmlFor="text">{labels.reviewLabel}</Label>
-        <Textarea
-          id="text"
-          name="text"
-          rows={6}
-          placeholder={labels.reviewPlaceholder}
-          required
-          aria-required="true"
+        <Controller
+          control={control}
+          name="clientName"
+          rules={{
+            required: labels.nameError,
+            minLength: { value: 2, message: labels.nameError },
+          }}
+          render={({ field, fieldState }) => (
+            <Field>
+              <FieldContent>
+                <div className="flex items-baseline justify-between gap-2">
+                  <FieldLabel htmlFor="clientName">
+                    {labels.nameLabel}
+                  </FieldLabel>
+                  {fieldState.error ? (
+                    <span role="alert" className="text-xs text-destructive">
+                      {fieldState.error.message}
+                    </span>
+                  ) : null}
+                </div>
+                <Input
+                  id="clientName"
+                  aria-invalid={fieldState.invalid || undefined}
+                  className={
+                    fieldState.invalid ? "border-destructive/60" : undefined
+                  }
+                  {...field}
+                />
+              </FieldContent>
+            </Field>
+          )}
         />
-        {fieldErrors.text ? (
-          <p className="text-sm text-destructive">{fieldErrors.text[0]}</p>
-        ) : null}
+
+        <Controller
+          control={control}
+          name="clientEmail"
+          rules={{
+            pattern: {
+              value: /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/,
+              message: labels.emailError,
+            },
+          }}
+          render={({ field, fieldState }) => (
+            <Field>
+              <FieldContent>
+                <div className="flex items-baseline justify-between gap-2">
+                  <FieldLabel htmlFor="clientEmail">
+                    {labels.emailLabel}
+                  </FieldLabel>
+                  {fieldState.error ? (
+                    <span role="alert" className="text-xs text-destructive">
+                      {fieldState.error.message}
+                    </span>
+                  ) : (
+                    <FieldDescription>{labels.optionalTag}</FieldDescription>
+                  )}
+                </div>
+                <Input
+                  id="clientEmail"
+                  type="email"
+                  aria-invalid={fieldState.invalid || undefined}
+                  className={
+                    fieldState.invalid ? "border-destructive/60" : undefined
+                  }
+                  {...field}
+                />
+              </FieldContent>
+            </Field>
+          )}
+        />
+
+        <Controller
+          control={control}
+          name="rating"
+          rules={{
+            required: labels.ratingError,
+            min: { value: 1, message: labels.ratingError },
+          }}
+          render={({ field, fieldState }) => (
+            <Field>
+              <FieldContent>
+                <div className="flex items-baseline justify-between gap-2">
+                  <FieldLabel>{labels.ratingLabel}</FieldLabel>
+                  {fieldState.error ? (
+                    <span role="alert" className="text-xs text-destructive">
+                      {fieldState.error.message}
+                    </span>
+                  ) : (
+                    <FieldDescription>{labels.ratingHelp}</FieldDescription>
+                  )}
+                </div>
+                <RatingInput
+                  ariaLabels={labels.ratingArias}
+                  value={field.value}
+                  onChange={field.onChange}
+                  disabled={pending}
+                />
+              </FieldContent>
+            </Field>
+          )}
+        />
       </div>
+
+      <Controller
+        control={control}
+        name="text"
+        rules={{
+          required: labels.reviewError,
+          minLength: { value: 20, message: labels.reviewError },
+        }}
+        render={({ field, fieldState }) => (
+          <Field>
+            <FieldContent>
+              <div className="flex items-baseline justify-between gap-2">
+                <FieldLabel htmlFor="text">{labels.reviewLabel}</FieldLabel>
+                {fieldState.error ? (
+                  <span role="alert" className="text-xs text-destructive">
+                    {fieldState.error.message}
+                  </span>
+                ) : null}
+              </div>
+              <Textarea
+                id="text"
+                rows={6}
+                placeholder={labels.reviewPlaceholder}
+                aria-invalid={fieldState.invalid || undefined}
+                className={
+                  fieldState.invalid ? "border-destructive/60" : undefined
+                }
+                {...field}
+              />
+            </FieldContent>
+          </Field>
+        )}
+      />
 
       <div>
         <Button type="submit" disabled={pending} className="w-full md:w-auto">

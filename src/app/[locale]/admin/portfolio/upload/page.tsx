@@ -1,6 +1,7 @@
 "use client";
 
-import { useEffect, useMemo, useState } from "react";
+import { useCallback, useEffect, useMemo, useState } from "react";
+import { Controller, useForm } from "react-hook-form";
 
 import { useLocale, useTranslations } from "next-intl";
 import Image from "next/image";
@@ -19,7 +20,6 @@ import { toast } from "sonner";
 import { AdminPageHeader } from "@/components/admin/AdminPageHeader";
 import { ImageUploader } from "@/components/admin/ImageUploader";
 import { Button } from "@/components/styled/Button";
-import { FormField } from "@/components/styled/FormField";
 import { Heading, Text } from "@/components/styled/Typography";
 import { Card, CardContent } from "@/components/ui/card";
 import {
@@ -28,6 +28,13 @@ import {
   EmptyHeader,
   EmptyTitle,
 } from "@/components/ui/empty";
+import {
+  Field,
+  FieldContent,
+  FieldDescription,
+  FieldError,
+  FieldLabel,
+} from "@/components/ui/field";
 import { Input } from "@/components/ui/input";
 import {
   Select,
@@ -59,6 +66,18 @@ interface DraftPortfolioItem {
   category: string;
 }
 
+interface SelectedDraftFormValues {
+  title: string;
+  category: string;
+  description: string;
+}
+
+const SELECTED_DRAFT_DEFAULTS: SelectedDraftFormValues = {
+  title: "",
+  category: "",
+  description: "",
+};
+
 const MAX_FILES = 20;
 
 function createDraftId() {
@@ -84,6 +103,15 @@ export default function UploadPortfolioPage() {
   const [selectedId, setSelectedId] = useState<string | null>(null);
   const [submitting, setSubmitting] = useState(false);
   const [removingId, setRemovingId] = useState<string | null>(null);
+  const {
+    control: selectedDraftControl,
+    register: selectedDraftRegister,
+    reset: resetSelectedDraftForm,
+    watch: watchSelectedDraftForm,
+    formState: { errors: selectedDraftErrors },
+  } = useForm<SelectedDraftFormValues>({
+    defaultValues: SELECTED_DRAFT_DEFAULTS,
+  });
 
   const backHref = useMemo(
     () => getLocalizedPath("/admin/portfolio", locale),
@@ -122,16 +150,21 @@ export default function UploadPortfolioPage() {
     }
   };
 
-  const handleDraftChange = (
-    id: string,
-    updates: Partial<
-      Omit<DraftPortfolioItem, "id" | "imageUrl" | "width" | "height">
-    >,
-  ) => {
-    setDrafts((prev) =>
-      prev.map((draft) => (draft.id === id ? { ...draft, ...updates } : draft)),
-    );
-  };
+  const handleDraftChange = useCallback(
+    (
+      id: string,
+      updates: Partial<
+        Omit<DraftPortfolioItem, "id" | "imageUrl" | "width" | "height">
+      >,
+    ) => {
+      setDrafts((prev) =>
+        prev.map((draft) =>
+          draft.id === id ? { ...draft, ...updates } : draft,
+        ),
+      );
+    },
+    [],
+  );
 
   const handleRemoveDraft = async (id: string) => {
     setRemovingId(id);
@@ -179,6 +212,33 @@ export default function UploadPortfolioPage() {
     }
   }, [drafts, selectedId]);
 
+  const selectedDraft = drafts.find((draft) => draft.id === selectedId) ?? null;
+
+  useEffect(() => {
+    if (!selectedDraft) {
+      resetSelectedDraftForm(SELECTED_DRAFT_DEFAULTS);
+      return;
+    }
+
+    resetSelectedDraftForm({
+      title: selectedDraft.title,
+      category: selectedDraft.category,
+      description: selectedDraft.description,
+    });
+  }, [selectedDraft, resetSelectedDraftForm]);
+
+  useEffect(() => {
+    if (!selectedDraft) {
+      return;
+    }
+
+    const subscription = watchSelectedDraftForm((values) => {
+      handleDraftChange(selectedDraft.id, values);
+    });
+
+    return () => subscription.unsubscribe();
+  }, [selectedDraft, watchSelectedDraftForm, handleDraftChange]);
+
   const isDraftComplete = (draft: DraftPortfolioItem) =>
     draft.title.trim().length > 0 && draft.category.trim().length > 0;
 
@@ -224,8 +284,6 @@ export default function UploadPortfolioPage() {
 
   const allReady = drafts.length > 0 && drafts.every(isDraftComplete);
   const disableSubmit = drafts.length === 0 || !allReady || submitting;
-  const selectedDraft = drafts.find((draft) => draft.id === selectedId) ?? null;
-
   return (
     <div className="flex flex-col gap-6">
       <AdminPageHeader
@@ -382,50 +440,56 @@ export default function UploadPortfolioPage() {
 
                   <div className="flex flex-col gap-4 lg:flex-row lg:items-end lg:gap-6">
                     <div className="flex flex-1 flex-col gap-4">
-                      <FormField
-                        label={formT("titleLabel")}
-                        htmlFor={`title-${selectedDraft.id}`}
-                        required
-                      >
-                        <Input
-                          id={`title-${selectedDraft.id}`}
-                          value={selectedDraft.title}
-                          onChange={(event) =>
-                            handleDraftChange(selectedDraft.id, {
-                              title: event.target.value,
-                            })
-                          }
-                          placeholder={formT("titlePlaceholder")}
-                        />
-                      </FormField>
+                      <Field data-invalid={!!selectedDraftErrors.title}>
+                        <FieldContent>
+                          <FieldLabel htmlFor={`title-${selectedDraft.id}`}>
+                            {formT("titleLabel")}
+                          </FieldLabel>
+                          <Input
+                            id={`title-${selectedDraft.id}`}
+                            placeholder={formT("titlePlaceholder")}
+                            {...selectedDraftRegister("title", {
+                              required: true,
+                            })}
+                          />
+                          <FieldError errors={[selectedDraftErrors.title]} />
+                        </FieldContent>
+                      </Field>
 
-                      <FormField
-                        label={formT("categoryLabel")}
-                        htmlFor={`category-${selectedDraft.id}`}
-                        required
-                      >
-                        <Select
-                          value={selectedDraft.category}
-                          onValueChange={(value) =>
-                            handleDraftChange(selectedDraft.id, {
-                              category: value,
-                            })
-                          }
-                        >
-                          <SelectTrigger id={`category-${selectedDraft.id}`}>
-                            <SelectValue
-                              placeholder={formT("categoryPlaceholder")}
-                            />
-                          </SelectTrigger>
-                          <SelectContent>
-                            {PORTFOLIO_CATEGORIES.map((category) => (
-                              <SelectItem key={category} value={category}>
-                                {category}
-                              </SelectItem>
-                            ))}
-                          </SelectContent>
-                        </Select>
-                      </FormField>
+                      <Field data-invalid={!!selectedDraftErrors.category}>
+                        <FieldContent>
+                          <FieldLabel htmlFor={`category-${selectedDraft.id}`}>
+                            {formT("categoryLabel")}
+                          </FieldLabel>
+                          <Controller
+                            control={selectedDraftControl}
+                            name="category"
+                            rules={{ required: true }}
+                            render={({ field }) => (
+                              <Select
+                                value={field.value}
+                                onValueChange={field.onChange}
+                              >
+                                <SelectTrigger
+                                  id={`category-${selectedDraft.id}`}
+                                >
+                                  <SelectValue
+                                    placeholder={formT("categoryPlaceholder")}
+                                  />
+                                </SelectTrigger>
+                                <SelectContent>
+                                  {PORTFOLIO_CATEGORIES.map((category) => (
+                                    <SelectItem key={category} value={category}>
+                                      {category}
+                                    </SelectItem>
+                                  ))}
+                                </SelectContent>
+                              </Select>
+                            )}
+                          />
+                          <FieldError errors={[selectedDraftErrors.category]} />
+                        </FieldContent>
+                      </Field>
                     </div>
 
                     <div className="relative hidden aspect-square w-40 shrink-0 overflow-hidden rounded-xl border border-border/60 bg-muted/20 lg:block">
@@ -439,23 +503,25 @@ export default function UploadPortfolioPage() {
                     </div>
                   </div>
 
-                  <FormField
-                    label={formT("descriptionLabel")}
-                    hint={formT("optionalTag")}
-                    htmlFor={`description-${selectedDraft.id}`}
-                  >
-                    <Textarea
-                      id={`description-${selectedDraft.id}`}
-                      value={selectedDraft.description}
-                      onChange={(event) =>
-                        handleDraftChange(selectedDraft.id, {
-                          description: event.target.value,
-                        })
-                      }
-                      rows={4}
-                      placeholder={formT("descriptionPlaceholder")}
-                    />
-                  </FormField>
+                  <Field data-invalid={!!selectedDraftErrors.description}>
+                    <FieldContent>
+                      <div className="flex items-baseline justify-between gap-2">
+                        <FieldLabel htmlFor={`description-${selectedDraft.id}`}>
+                          {formT("descriptionLabel")}
+                        </FieldLabel>
+                        <FieldDescription>
+                          {formT("optionalTag")}
+                        </FieldDescription>
+                      </div>
+                      <Textarea
+                        id={`description-${selectedDraft.id}`}
+                        rows={4}
+                        placeholder={formT("descriptionPlaceholder")}
+                        {...selectedDraftRegister("description")}
+                      />
+                      <FieldError errors={[selectedDraftErrors.description]} />
+                    </FieldContent>
+                  </Field>
                 </>
               ) : (
                 <Empty className="rounded-xl border">

@@ -496,7 +496,6 @@
           "label": "Reference Image URLs",
           "hint": "Optional",
           "placeholder": "https://...",
-          "add": "+ Add a link",
           "addAnother": "+ Add another link",
           "aria": "Reference image URL {number}",
           "removeAria": "Remove reference URL {number}"
@@ -538,14 +537,19 @@
     },
     "form": {
       "nameLabel": "Full name",
-      "emailLabel": "Email (optional)",
+      "nameError": "Name must be at least 2 characters",
+      "emailLabel": "Email",
+      "emailError": "Please enter a valid email",
       "ratingLabel": "Rating",
       "ratingHelp": "Tap to select from 1 to 5 stars",
+      "ratingError": "Select a rating",
       "reviewLabel": "Review",
       "reviewPlaceholder": "Tell us about your session, the artwork, or the overall experience…",
+      "reviewError": "Review must be at least 20 characters",
       "submit": "Submit review",
       "submitting": "Submitting…",
       "error": "We couldn’t save your review. Please try again.",
+      "optionalTag": "Optional",
       "ratingAria": "{rating} star rating"
     },
     "success": {
@@ -819,6 +823,7 @@
       "form": {
         "titleLabel": "Title",
         "titlePlaceholder": "Tattoo title",
+        "titleRequired": "Title is required",
         "categoryLabel": "Category",
         "categoryPlaceholder": "Select category",
         "descriptionLabel": "Description",

@@ -496,7 +496,6 @@
           "label": "ลิงก์รูปอ้างอิง",
           "hint": "ไม่บังคับ",
           "placeholder": "https://...",
-          "add": "+ เพิ่มลิงก์",
           "addAnother": "+ เพิ่มลิงก์อื่น",
           "aria": "ลิงก์รูปอ้างอิง {number}",
           "removeAria": "ลบลิงก์ {number}"
@@ -538,14 +537,19 @@
     },
     "form": {
       "nameLabel": "ชื่อเต็ม",
-      "emailLabel": "อีเมล (ไม่บังคับ)",
+      "nameError": "ชื่อต้องมีอย่างน้อย 2 ตัวอักษร",
+      "emailLabel": "อีเมล",
+      "emailError": "กรุณากรอกอีเมลที่ถูกต้อง",
       "ratingLabel": "ให้คะแนน",
       "ratingHelp": "แตะเพื่อเลือก 1 ถึง 5 ดาว",
+      "ratingError": "กรุณาเลือกคะแนน",
       "reviewLabel": "รีวิว",
       "reviewPlaceholder": "เล่าถึงเซสชัน ผลงาน หรือประสบการณ์โดยรวมของคุณ…",
+      "reviewError": "รีวิวต้องมีอย่างน้อย 20 ตัวอักษร",
       "submit": "ส่งรีวิว",
       "submitting": "กำลังส่ง…",
       "error": "ไม่สามารถบันทึกรีวิวได้ โปรดลองอีกครั้ง",
+      "optionalTag": "ไม่บังคับ",
       "ratingAria": "ให้ {rating} ดาว"
     },
     "success": {
@@ -819,6 +823,7 @@
       "form": {
         "titleLabel": "ชื่อเรื่อง",
         "titlePlaceholder": "ชื่อรอยสัก",
+        "titleRequired": "ต้องระบุชื่อเรื่อง",
         "categoryLabel": "หมวดหมู่",
         "categoryPlaceholder": "เลือกหมวดหมู่",
         "descriptionLabel": "คำอธิบาย",

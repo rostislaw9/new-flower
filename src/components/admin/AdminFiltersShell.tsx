@@ -49,12 +49,10 @@ export function AdminFiltersShell({
           <Button
             type="button"
             variant="outline"
-            className="flex w-full items-center justify-between rounded-2xl border border-border/60 bg-card/60 text-sm shadow-lg"
+            className="flex w-full items-center justify-between rounded-2xl border border-border/60 bg-card/60 text-sm text-accent"
           >
-            {/* <span className="flex items-center gap-2 font-semibold uppercase tracking-[0.25em]"> */}
             {drawerTriggerLabel}
-            {/* </span> */}
-            <Filter className="h-4 w-4" />
+            <Filter />
           </Button>
         </DrawerTrigger>
         <DrawerContent className="max-h-[90vh] overflow-y-auto rounded-t-3xl border-border/60 bg-background">
@@ -75,7 +73,7 @@ export function AdminFiltersShell({
       <Collapsible open={desktopOpen} onOpenChange={setDesktopOpen}>
         <div className="flex items-center justify-between gap-4 px-6 py-4">
           <div>
-            <p className="text-[11px] font-semibold uppercase tracking-[0.3em] text-muted-foreground">
+            <p className="text-[11px] font-semibold uppercase tracking-[0.3em] text-accent">
               {title}
             </p>
             {description ? (

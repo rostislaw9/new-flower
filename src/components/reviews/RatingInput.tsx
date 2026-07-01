@@ -1,18 +1,21 @@
 "use client";
 
-import { useState } from "react";
+import { useEffect, useState } from "react";
 
 import { Star } from "lucide-react";
 
 import { Button } from "@/components/styled/Button";
 
 interface RatingInputProps {
-  label: string;
-  helpText: string;
+  label?: string;
+  helpText?: string;
   ariaLabels: string[];
   name?: string;
   initialValue?: number | null;
+  value?: number | null;
+  onChange?: (value: number) => void;
   error?: string;
+  disabled?: boolean;
 }
 
 export function RatingInput({
@@ -21,27 +24,53 @@ export function RatingInput({
   ariaLabels,
   name = "rating",
   initialValue,
+  value,
+  onChange,
   error,
+  disabled,
 }: RatingInputProps) {
-  const [value, setValue] = useState<number | null>(initialValue ?? null);
+  const [internalValue, setInternalValue] = useState<number | null>(
+    initialValue ?? null,
+  );
+  const isControlled = value !== undefined;
+  const resolvedValue = isControlled ? value : internalValue;
+
+  useEffect(() => {
+    if (!isControlled) {
+      setInternalValue(initialValue ?? null);
+    }
+  }, [initialValue, isControlled]);
+
+  const handleSelect = (nextValue: number) => {
+    if (!isControlled) {
+      setInternalValue(nextValue);
+    }
+    onChange?.(nextValue);
+  };
   const ratingButtons = [1, 2, 3, 4, 5];
 
   return (
     <div className="flex flex-col gap-2">
-      <label className="text-sm font-medium text-foreground">{label}</label>
-      <p className="text-sm text-muted-foreground">{helpText}</p>
+      {label ? (
+        <label className="text-sm font-medium text-foreground">{label}</label>
+      ) : null}
+      {helpText ? (
+        <p className="text-sm text-muted-foreground">{helpText}</p>
+      ) : null}
       <div className="flex">
         {ratingButtons.map((ratingValue, index) => {
-          const isActive = value !== null && ratingValue <= value;
+          const isActive =
+            resolvedValue !== null && ratingValue <= resolvedValue;
           return (
             <Button
               variant="accent"
               size="icon-borderless"
               type="button"
               key={ratingValue}
-              onClick={() => setValue(ratingValue)}
+              onClick={() => handleSelect(ratingValue)}
               className="rounded-full hover:bg-transparent hover:text-accent"
               aria-pressed={isActive}
+              disabled={disabled}
               aria-label={
                 ariaLabels[index] ?? ariaLabels[ariaLabels.length - 1] ?? ""
               }
@@ -58,7 +87,7 @@ export function RatingInput({
         })}
       </div>
       {error ? <p className="text-sm text-destructive">{error}</p> : null}
-      <input type="hidden" name={name} value={value ?? ""} />
+      <input type="hidden" name={name} value={resolvedValue ?? ""} />
     </div>
   );
 }

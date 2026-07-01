@@ -1,6 +1,7 @@
 "use client";
 
-import { useEffect, useMemo, useState } from "react";
+import { useEffect, useMemo } from "react";
+import { Controller, useForm } from "react-hook-form";
 
 import { usePathname, useRouter } from "next/navigation";
 
@@ -8,8 +9,13 @@ import { Filter, Search } from "lucide-react";
 
 import { Button } from "@/components/styled/Button";
 import { DatePicker } from "@/components/styled/DatePicker";
+import {
+  Field,
+  FieldContent,
+  FieldError,
+  FieldLabel,
+} from "@/components/ui/field";
 import { Input } from "@/components/ui/input";
-import { Label } from "@/components/ui/label";
 import {
   Select,
   SelectContent,
@@ -46,6 +52,15 @@ interface ReviewsFiltersProps {
   locale: string;
 }
 
+interface FiltersFormValues {
+  search: string;
+  rating: string;
+  submittedRange: {
+    from?: string;
+    to?: string;
+  };
+}
+
 export function ReviewsFilters({
   initialSearch,
   initialRating,
@@ -58,17 +73,23 @@ export function ReviewsFilters({
   const router = useRouter();
   const pathname = usePathname();
 
-  const [searchValue, setSearchValue] = useState(initialSearch);
-  const [ratingValue, setRatingValue] = useState(
-    initialRating ? String(initialRating) : ALL_OPTION_VALUE,
+  const defaultValues = useMemo<FiltersFormValues>(
+    () => ({
+      search: initialSearch ?? "",
+      rating: initialRating ? String(initialRating) : ALL_OPTION_VALUE,
+      submittedRange: {
+        ...(initialSubmittedFrom && { from: initialSubmittedFrom }),
+        ...(initialSubmittedTo && { to: initialSubmittedTo }),
+      },
+    }),
+    [initialRating, initialSearch, initialSubmittedFrom, initialSubmittedTo],
   );
-  const [submittedRange, setSubmittedRange] = useState<{
-    from?: string;
-    to?: string;
-  }>({
-    ...(initialSubmittedFrom && { from: initialSubmittedFrom }),
-    ...(initialSubmittedTo && { to: initialSubmittedTo }),
+
+  const form = useForm<FiltersFormValues>({
+    defaultValues,
   });
+
+  const { control } = form;
 
   const formatDateLabel = useMemo(
     () => createDateLabelFormatter(locale),
@@ -83,13 +104,8 @@ export function ReviewsFilters({
   };
 
   useEffect(() => {
-    setSearchValue(initialSearch);
-    setRatingValue(initialRating ? String(initialRating) : ALL_OPTION_VALUE);
-    setSubmittedRange({
-      ...(initialSubmittedFrom && { from: initialSubmittedFrom }),
-      ...(initialSubmittedTo && { to: initialSubmittedTo }),
-    });
-  }, [initialSearch, initialRating, initialSubmittedFrom, initialSubmittedTo]);
+    form.reset(defaultValues);
+  }, [defaultValues, form]);
 
   const selectOptions = useMemo(
     () => [
@@ -99,79 +115,115 @@ export function ReviewsFilters({
     [labels.ratingAll, ratingOptions],
   );
 
-  function buildQueryString() {
+  function buildQueryString(values: FiltersFormValues) {
     const params = new URLSearchParams();
     params.set("page", "1");
-    if (searchValue.trim()) params.set("search", searchValue.trim());
-    if (ratingValue !== ALL_OPTION_VALUE) params.set("rating", ratingValue);
-    if (submittedRange.from) params.set("submittedFrom", submittedRange.from);
-    if (submittedRange.to) params.set("submittedTo", submittedRange.to);
+    if (values.search.trim()) params.set("search", values.search.trim());
+    if (values.rating !== ALL_OPTION_VALUE) params.set("rating", values.rating);
+    if (values.submittedRange.from)
+      params.set("submittedFrom", values.submittedRange.from);
+    if (values.submittedRange.to)
+      params.set("submittedTo", values.submittedRange.to);
     return params.toString();
   }
 
-  function handleSubmit(event: React.SubmitEvent<HTMLFormElement>) {
-    event.preventDefault();
-    const query = buildQueryString();
+  const onSubmit = form.handleSubmit((values) => {
+    const query = buildQueryString(values);
     router.push(query ? `${pathname}?${query}` : pathname);
     router.refresh();
-  }
+  });
 
   function handleClear() {
-    setSearchValue("");
-    setRatingValue(ALL_OPTION_VALUE);
-    setSubmittedRange({});
+    form.reset({
+      search: "",
+      rating: ALL_OPTION_VALUE,
+      submittedRange: {},
+    });
     router.push(pathname);
     router.refresh();
   }
 
   return (
-    <form className="flex flex-col gap-4" onSubmit={handleSubmit}>
+    <form className="flex flex-col gap-4" onSubmit={onSubmit}>
       <div className="grid gap-4 md:grid-cols-3">
-        <div className="flex flex-col gap-2">
-          <Label htmlFor="reviews-search">{labels.searchLabel}</Label>
-          <div className="relative">
-            <Search className="pointer-events-none absolute left-3 top-1/2 h-4 w-4 -translate-y-1/2 text-muted-foreground" />
-            <Input
-              id="reviews-search"
-              type="text"
-              value={searchValue}
-              onChange={(event) => setSearchValue(event.target.value)}
-              placeholder={labels.searchPlaceholder}
-              className="pl-10"
-            />
-          </div>
-        </div>
+        <Controller
+          control={control}
+          name="search"
+          render={({ field, fieldState }) => (
+            <Field data-invalid={fieldState.invalid}>
+              <FieldContent>
+                <FieldLabel htmlFor="reviews-search">
+                  {labels.searchLabel}
+                </FieldLabel>
+                <div className="relative">
+                  <Search className="pointer-events-none absolute left-3 top-1/2 h-4 w-4 -translate-y-1/2 text-muted-foreground" />
+                  <Input
+                    id="reviews-search"
+                    type="text"
+                    placeholder={labels.searchPlaceholder}
+                    className="pl-10"
+                    {...field}
+                  />
+                </div>
+                {fieldState.error && <FieldError errors={[fieldState.error]} />}
+              </FieldContent>
+            </Field>
+          )}
+        />
 
-        <div className="flex flex-col gap-2">
-          <Label htmlFor="reviews-rating">{labels.ratingLabel}</Label>
-          <Select value={ratingValue} onValueChange={setRatingValue}>
-            <SelectTrigger id="reviews-rating">
-              <SelectValue placeholder={labels.ratingAll} />
-            </SelectTrigger>
-            <SelectContent>
-              {selectOptions.map((option) => (
-                <SelectItem key={option.value} value={option.value}>
-                  {option.label}
-                </SelectItem>
-              ))}
-            </SelectContent>
-          </Select>
-        </div>
+        <Controller
+          control={control}
+          name="rating"
+          render={({ field, fieldState }) => (
+            <Field data-invalid={fieldState.invalid}>
+              <FieldContent>
+                <FieldLabel htmlFor="reviews-rating">
+                  {labels.ratingLabel}
+                </FieldLabel>
+                <Select value={field.value} onValueChange={field.onChange}>
+                  <SelectTrigger
+                    id="reviews-rating"
+                    aria-invalid={fieldState.invalid}
+                  >
+                    <SelectValue placeholder={labels.ratingAll} />
+                  </SelectTrigger>
+                  <SelectContent>
+                    {selectOptions.map((option) => (
+                      <SelectItem key={option.value} value={option.value}>
+                        {option.label}
+                      </SelectItem>
+                    ))}
+                  </SelectContent>
+                </Select>
+                {fieldState.error && <FieldError errors={[fieldState.error]} />}
+              </FieldContent>
+            </Field>
+          )}
+        />
 
-        <div className="flex flex-col gap-2">
-          <Label>{labels.submittedRangeLabel}</Label>
-          <DatePicker
-            id="reviews-submitted-range"
-            mode="range"
-            value={submittedRange}
-            onChange={setSubmittedRange}
-            placeholder={labels.datePickerPlaceholder}
-            clearLabel={labels.datePickerClearLabel}
-            ariaLabel={labels.submittedRangeLabel}
-            locale={locale}
-            formatDateLabel={formatRangeLabel}
-          />
-        </div>
+        <Controller
+          control={control}
+          name="submittedRange"
+          render={({ field, fieldState }) => (
+            <Field data-invalid={fieldState.invalid}>
+              <FieldContent>
+                <FieldLabel>{labels.submittedRangeLabel}</FieldLabel>
+                <DatePicker
+                  id="reviews-submitted-range"
+                  mode="range"
+                  value={field.value ?? {}}
+                  onChange={(value) => field.onChange(value ?? {})}
+                  placeholder={labels.datePickerPlaceholder}
+                  clearLabel={labels.datePickerClearLabel}
+                  ariaLabel={labels.submittedRangeLabel}
+                  locale={locale}
+                  formatDateLabel={formatRangeLabel}
+                />
+                {fieldState.error && <FieldError errors={[fieldState.error]} />}
+              </FieldContent>
+            </Field>
+          )}
+        />
       </div>
 
       <div className="flex gap-4">

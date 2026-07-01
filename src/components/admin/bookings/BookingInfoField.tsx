@@ -23,7 +23,7 @@ export function BookingInfoField({
   return (
     <div
       className={cn(
-        "rounded-xl border border-border/60 bg-card p-3 shadow-lg",
+        "overflow-hidden rounded-xl border border-border/60 bg-card p-3 shadow-lg",
         className,
       )}
     >
