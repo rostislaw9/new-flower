@@ -87,6 +87,12 @@ export default async function AdminDashboard() {
           href="/admin/reviews"
           icon="star"
         />
+        <ActionCard
+          title={t("actions.faq.title")}
+          description={t("actions.faq.description")}
+          href="/admin/faq"
+          icon="helpcircle"
+        />
       </div>
     </div>
   );

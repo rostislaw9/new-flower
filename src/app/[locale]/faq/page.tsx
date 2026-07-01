@@ -1,5 +1,5 @@
 import type { Metadata } from "next";
-import { getTranslations } from "next-intl/server";
+import { getLocale, getTranslations } from "next-intl/server";
 
 import { Container } from "@/components/layout/Container";
 import { Section } from "@/components/layout/Section";
@@ -15,6 +15,7 @@ import {
 import { Eyebrow, Heading, Text } from "@/components/styled/Typography";
 import { Separator } from "@/components/ui/separator";
 import { createBreadcrumbList } from "@/lib/breadcrumbs";
+import { getFaqSections } from "@/lib/faq-data";
 import { buildPageMetadata } from "@/lib/seo/buildPageMetadata";
 
 export async function generateMetadata({
@@ -34,37 +35,20 @@ export async function generateMetadata({
 }
 
 export default async function FAQPage() {
+  const locale = await getLocale();
   const t = await getTranslations("faq");
   const breadcrumb = createBreadcrumbList([
     { name: "Home", item: "/" },
     { name: "FAQ", item: "/faq" },
   ]);
 
-  type SectionContent = {
-    category: string;
-    items: Record<string, { question: string; answer: string }>;
-  };
-
-  const sections = Object.entries(
-    (t as { raw: (key: string) => unknown }).raw("sections") as Record<
-      string,
-      SectionContent
-    >,
-  ).map(([sectionKey, value]) => ({
-    key: sectionKey,
-    category: value.category,
-    items: Object.entries(value.items).map(([itemKey, itemValue]) => ({
-      key: `${sectionKey}.${itemKey}`,
-      question: itemValue.question,
-      answer: itemValue.answer,
-    })),
-  }));
+  const sections = await getFaqSections(locale);
 
   const faqSchema = {
     "@context": "https://schema.org" as const,
     "@type": "FAQPage",
-    mainEntity: sections.flatMap(({ items }) =>
-      items.map(({ question, answer }) => ({
+    mainEntity: sections.flatMap(({ questions }) =>
+      questions.map(({ question, answer }) => ({
         "@type": "Question",
         name: question,
         acceptedAnswer: {
@@ -95,12 +79,12 @@ export default async function FAQPage() {
         <Container>
           <div className="mx-auto max-w-3xl">
             <div className="flex flex-col gap-16">
-              {sections.map(({ category, items }) => (
-                <div key={category} className="flex flex-col gap-6">
-                  <Eyebrow>{category}</Eyebrow>
+              {sections.map((section) => (
+                <div key={section.id} className="flex flex-col gap-6">
+                  <Eyebrow>{section.title}</Eyebrow>
                   <Accordion type="single" collapsible>
-                    {items.map((item) => (
-                      <AccordionItem key={item.key} value={item.question}>
+                    {section.questions.map((item) => (
+                      <AccordionItem key={item.id} value={item.id}>
                         <AccordionTrigger>
                           <Heading as="h3" size="sm" className="text-left">
                             {item.question}

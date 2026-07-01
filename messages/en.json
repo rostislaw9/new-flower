@@ -196,85 +196,6 @@
       "title": "Frequently asked",
       "subtitle": "Everything you need to know before, during, and after your session. If your question is not answered here, reach out directly."
     },
-    "sections": {
-      "pricing": {
-        "category": "Pricing",
-        "items": {
-          "pricingDetermined": {
-            "question": "How is pricing determined?",
-            "answer": "Pricing is based on size, placement, complexity, and estimated time. Small, simple tattoos typically start from ฿5,000. Large-scale work is quoted per session or as a project total. An accurate quote is provided after the consultation."
-          },
-          "consultationFee": {
-            "question": "Do you charge a consultation fee?",
-            "answer": "No. Initial consultations — whether in person or via message — are free of charge. A deposit is only requested once both parties are happy with the design direction and a session is confirmed."
-          },
-          "paymentMethods": {
-            "question": "What forms of payment do you accept?",
-            "answer": "Cash, bank transfer, and major card payments are all accepted. The deposit is typically paid via bank transfer to secure the appointment."
-          }
-        }
-      },
-      "deposits": {
-        "category": "Deposits",
-        "items": {
-          "depositRequired": {
-            "question": "Is a deposit required to book?",
-            "answer": "Yes. A non-refundable deposit is required to confirm all appointments. The deposit amount varies by project size but is typically between ฿2,000 and ฿5,000. It is deducted from the final session cost."
-          },
-          "depositReschedule": {
-            "question": "What happens to my deposit if I need to reschedule?",
-            "answer": "Deposits transfer to a rescheduled appointment if at least 48 hours notice is given. Cancellations with less than 48 hours notice forfeit the deposit."
-          }
-        }
-      },
-      "preparation": {
-        "category": "Preparation",
-        "items": {
-          "sessionPrep": {
-            "question": "How should I prepare for my session?",
-            "answer": "Arrive well-rested and having eaten a proper meal within two hours of the session. Stay hydrated in the days leading up to your appointment. Avoid alcohol for at least 24 hours beforehand. Wear or bring clothing that allows easy access to the area being tattooed."
-          },
-          "moisturise": {
-            "question": "Should I moisturise the area beforehand?",
-            "answer": "Yes — keep the skin well moisturised in the week leading up to your session, but do not apply any lotion on the day of the appointment."
-          },
-          "bringGuest": {
-            "question": "Can I bring someone with me?",
-            "answer": "The studio accommodates one guest per client. For longer sessions it is generally recommended to attend alone to maintain focus and comfort."
-          }
-        }
-      },
-      "healing": {
-        "category": "Healing",
-        "items": {
-          "healingProcess": {
-            "question": "What is the healing process like?",
-            "answer": "Most tattoos move through three stages: the initial healing of the surface skin (1–2 weeks), deeper skin healing (2–4 weeks), and full settling of ink into the skin (up to 4 months). Detailed aftercare instructions are provided after every session."
-          },
-          "aftercareProducts": {
-            "question": "What aftercare products do you recommend?",
-            "answer": "An unscented, gentle moisturiser is all that is needed after the first few days. Specific product recommendations are shared at the end of each session based on skin type and tattoo placement."
-          },
-          "exerciseSwim": {
-            "question": "When can I exercise or swim after getting tattooed?",
-            "answer": "Avoid swimming (pools, the sea, or any submersion) for at least four weeks. Light exercise that does not cause heavy sweating over the tattooed area is generally acceptable after one week."
-          }
-        }
-      },
-      "rescheduling": {
-        "category": "Rescheduling & Cancellations",
-        "items": {
-          "rescheduleNotice": {
-            "question": "How much notice do I need to reschedule?",
-            "answer": "At least 48 hours notice is required to reschedule without losing your deposit. To reschedule, send a message via the contact form or directly via Instagram or WhatsApp."
-          },
-          "artistCancel": {
-            "question": "What if the artist needs to cancel?",
-            "answer": "In the unlikely event that a session must be cancelled by the studio, a full refund of the deposit is offered, or the appointment is rescheduled at a time that suits you."
-          }
-        }
-      }
-    },
     "cta": {
       "eyebrow": "Still have questions?",
       "title": "Ask directly",
@@ -594,7 +515,8 @@
         "portfolio": "Portfolio",
         "bookings": "Bookings",
         "reviews": "Reviews",
-        "artistImages": "Artist Images"
+        "artistImages": "Artist Images",
+        "faq": "FAQ"
       },
       "openWebsite": "Homepage"
     },
@@ -635,6 +557,10 @@
         "artistImages": {
           "title": "Manage artist images",
           "description": "Update artist portrait and shop logo"
+        },
+        "faq": {
+          "title": "Manage FAQ",
+          "description": "Edit frequently asked questions"
         }
       }
     },
@@ -947,6 +873,25 @@
           "description": "Maximum size is {size}MB"
         }
       }
+    },
+    "faq": {
+      "title": "FAQ Management",
+      "subtitle": "Manage FAQ groups, questions, and translations",
+      "addGroup": "Add Group",
+      "addQuestion": "Add Question",
+      "empty": "No FAQ groups yet. Create one to get started.",
+      "error": "Failed to load FAQ data",
+      "groupCreated": "Group created",
+      "groupSaved": "Group saved",
+      "groupDeleted": "Group deleted",
+      "groupDeleteConfirm": "Delete this group and all its questions?",
+      "questionCreated": "Question added",
+      "questionDeleted": "Question deleted",
+      "questionDeleteConfirm": "Delete this question?",
+      "translationSaved": "Translation saved",
+      "untitledQuestion": "Untitled question",
+      "questionLabel": "Question",
+      "answerLabel": "Answer"
     }
   }
 }

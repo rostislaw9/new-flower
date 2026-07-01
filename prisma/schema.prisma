@@ -67,3 +67,43 @@ model Review {
   @@index([featured, createdAt])
   @@index([rating])
 }
+
+model FaqGroup {
+  id          String        @id @default(cuid())
+  createdAt   DateTime      @default(now())
+  updatedAt   DateTime      @updatedAt
+  title       String
+  displayOrder Int          @default(0)
+  questions   FaqQuestion[]
+
+  @@map("faq_groups")
+  @@index([displayOrder])
+}
+
+model FaqQuestion {
+  id          String           @id @default(cuid())
+  createdAt   DateTime         @default(now())
+  updatedAt   DateTime         @updatedAt
+  groupId     String
+  group       FaqGroup         @relation(fields: [groupId], references: [id], onDelete: Cascade)
+  displayOrder Int             @default(0)
+  translations FaqTranslation[]
+
+  @@map("faq_questions")
+  @@index([groupId, displayOrder])
+}
+
+model FaqTranslation {
+  id          String       @id @default(cuid())
+  createdAt   DateTime     @default(now())
+  updatedAt   DateTime     @updatedAt
+  questionId  String
+  question    FaqQuestion  @relation(fields: [questionId], references: [id], onDelete: Cascade)
+  locale      String
+  questionText String
+  answerText  String
+
+  @@unique([questionId, locale])
+  @@map("faq_translations")
+  @@index([questionId, locale])
+}

@@ -7,7 +7,14 @@ import { useLocale, useTranslations } from "next-intl";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 
-import { Calendar, Images, LayoutDashboard, Star, User } from "lucide-react";
+import {
+  Calendar,
+  HelpCircle,
+  Images,
+  LayoutDashboard,
+  Star,
+  User,
+} from "lucide-react";
 
 import { AdminPageShell } from "@/components/admin/AdminPageShell";
 import { AdminSidebarFooter } from "@/components/admin/sidebar/AdminSidebarFooter";
@@ -61,6 +68,7 @@ export default function AdminLayout({ children }: { children: ReactNode }) {
     { href: "/admin/portfolio", icon: Images, label: t("nav.portfolio") },
     { href: "/admin/bookings", icon: Calendar, label: t("nav.bookings") },
     { href: "/admin/reviews", icon: Star, label: t("nav.reviews") },
+    { href: "/admin/faq", icon: HelpCircle, label: t("nav.faq") },
   ];
 
   const breadcrumbItems = useMemo(
@@ -204,6 +212,7 @@ function buildAdminBreadcrumbs(
     bookings: "Bookings",
     portfolio: "Portfolio",
     reviews: "Reviews",
+    faq: "FAQ",
     new: "New",
     edit: "Edit",
   };
