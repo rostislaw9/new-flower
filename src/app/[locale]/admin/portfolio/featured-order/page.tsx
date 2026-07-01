@@ -81,8 +81,9 @@ const SortableFeaturedCard = memo(function SortableFeaturedCard({
           fill
           sizes="(max-width: 768px) 45vw, 200px"
           className="h-full w-full object-cover"
+          loading="eager"
         />
-        <div className="absolute left-2 top-2 rounded-full border border-border/60 bg-background/80 px-2 py-1 text-[11px] font-semibold uppercase tracking-[0.3em] text-muted-foreground">
+        <div className="absolute left-2 top-2 rounded-full border border-border/60 bg-background/80 px-2 py-1 text-xs font-semibold text-muted-foreground">
           {index + 1}
         </div>
       </div>
