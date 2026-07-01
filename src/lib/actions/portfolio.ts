@@ -160,8 +160,12 @@ export async function updatePortfolioItem(
     const description = formData.get("description") as string | null;
     const imageUrl = formData.get("imageUrl") as string;
     const category = formData.get("category") as string;
-    const featured = formData.get("featured") === "true";
-    const displayOrder = parseInt(formData.get("displayOrder") as string) || 0;
+    const hasFeatured = formData.has("featured");
+    const featured = hasFeatured && formData.get("featured") === "true";
+    const hasDisplayOrder = formData.has("displayOrder");
+    const displayOrder = hasDisplayOrder
+      ? parseInt(formData.get("displayOrder") as string) || 0
+      : undefined;
 
     if (!title || !imageUrl || !category) {
       return {
@@ -170,17 +174,17 @@ export async function updatePortfolioItem(
       };
     }
 
-    // Get current featured state
+    // Get current item state
     const currentItem = await prisma.portfolioItem.findUnique({
       where: { id },
-      select: { featured: true },
+      select: { featured: true, displayOrder: true },
     });
 
     if (!currentItem) {
       return { success: false, message: "Portfolio item not found" };
     }
 
-    // Update non-featured fields
+    // Update fields, only including featured/displayOrder when provided
     await prisma.portfolioItem.update({
       where: { id },
       data: {
@@ -188,12 +192,12 @@ export async function updatePortfolioItem(
         description,
         imageUrl,
         category,
-        displayOrder,
+        ...(displayOrder !== undefined ? { displayOrder } : {}),
       },
     });
 
     // Handle featured state change separately to enforce limit
-    if (featured !== currentItem.featured) {
+    if (hasFeatured && featured !== currentItem.featured) {
       const result = await setPortfolioItemFeatured(id, featured);
       if (!result.success) {
         return {

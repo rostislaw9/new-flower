@@ -818,7 +818,8 @@
         "success": "Featured order updated",
         "error": "Failed to update featured order",
         "emptyTitle": "No featured items",
-        "emptyDescription": "Flag portfolio items as featured in the main grid to manage their order here."
+        "emptyDescription": "Flag portfolio items as featured in the main grid to manage their order here.",
+        "landscapeHint": "Rotate your device to landscape for a better experience"
       },
       "form": {
         "titleLabel": "Title",

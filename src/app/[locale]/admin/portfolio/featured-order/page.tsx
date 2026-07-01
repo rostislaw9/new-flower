@@ -20,7 +20,7 @@ import {
   useSortable,
 } from "@dnd-kit/sortable";
 import { CSS } from "@dnd-kit/utilities";
-import { Loader2, MoveLeft, Save } from "lucide-react";
+import { Loader2, MoveLeft, RotateCw, Save } from "lucide-react";
 import { toast } from "sonner";
 
 import { AdminPageHeader } from "@/components/admin/AdminPageHeader";
@@ -79,23 +79,27 @@ const SortableFeaturedCard = memo(function SortableFeaturedCard({
           src={item.imageUrl}
           alt={item.title}
           fill
-          sizes="(max-width: 768px) 45vw, 200px"
+          sizes="(max-width: 768px) 20vw, 200px"
           className="h-full w-full object-cover"
           loading="eager"
         />
-        <div className="absolute left-2 top-2 rounded-full border border-border/60 bg-background/80 px-2 py-1 text-xs font-semibold text-muted-foreground">
+        <div className="absolute left-1.5 top-1.5 rounded-full border border-border/60 bg-background/80 px-1.5 py-0.5 text-2xs font-semibold text-muted-foreground max-md:landscape:text-2xs">
           {index + 1}
         </div>
       </div>
-      <CardContent className="p-4">
+      <CardContent className="p-3 max-md:landscape:p-2">
         <Heading
           serif={false}
           size="sm"
-          className="text-foreground transition-colors group-hover:text-accent"
+          className="text-foreground transition-colors group-hover:text-accent max-md:landscape:text-xs max-md:landscape:leading-tight"
         >
           {item.title}
         </Heading>
-        <Text size="sm" muted className="capitalize">
+        <Text
+          size="sm"
+          muted
+          className="capitalize max-md:landscape:text-2xs max-md:landscape:leading-tight"
+        >
           {item.category}
         </Text>
       </CardContent>
@@ -237,6 +241,12 @@ export default function FeaturedOrderPage() {
         actions={actions}
       />
 
+      {/* Landscape hint for mobile */}
+      <div className="flex items-center gap-2 rounded-md border border-border/60 bg-muted/30 px-3 py-2 text-sm text-muted-foreground md:hidden">
+        <RotateCw className="h-4 w-4 shrink-0" />
+        <span>{t("landscapeHint")}</span>
+      </div>
+
       {isLoading ? (
         <div className="flex min-h-[400px] flex-col items-center justify-center gap-3">
           <Loader2 className="h-8 w-8 animate-spin" />
@@ -259,7 +269,7 @@ export default function FeaturedOrderPage() {
         <DndContext sensors={sensors} onDragEnd={handleDragEnd}>
           <SortableContext items={sortableIds} strategy={rectSortingStrategy}>
             <div className="overflow-x-auto pb-2">
-              <div className="grid auto-cols-[minmax(200px,1fr)] grid-flow-col grid-rows-2 gap-4">
+              <div className="grid auto-cols-[minmax(200px,1fr)] grid-flow-col grid-rows-2 gap-4 max-md:landscape:auto-cols-[minmax(100px,1fr)] max-md:landscape:gap-2">
                 {items.map((item, index) => (
                   <SortableFeaturedCard
                     key={item.id}
