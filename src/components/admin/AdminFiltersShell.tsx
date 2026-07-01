@@ -1,6 +1,6 @@
 "use client";
 
-import { type ReactNode, useState } from "react";
+import { type ReactNode, createContext, useContext, useState } from "react";
 
 import { Filter } from "lucide-react";
 
@@ -19,7 +19,14 @@ import {
   DrawerTitle,
   DrawerTrigger,
 } from "@/components/ui/drawer";
+import { ScrollArea } from "@/components/ui/scroll-area";
 import { useIsMobile } from "@/hooks/use-mobile";
+
+const DrawerCloseContext = createContext<(() => void) | null>(null);
+
+export function useDrawerClose() {
+  return useContext(DrawerCloseContext);
+}
 
 interface AdminFiltersShellProps {
   title: string;
@@ -42,29 +49,35 @@ export function AdminFiltersShell({
   const [drawerOpen, setDrawerOpen] = useState(false);
   const [desktopOpen, setDesktopOpen] = useState(true);
 
+  const closeDrawer = () => setDrawerOpen(false);
+
   if (isMobile) {
     return (
-      <Drawer open={drawerOpen} onOpenChange={setDrawerOpen}>
-        <DrawerTrigger asChild>
-          <Button
-            type="button"
-            variant="outline"
-            className="flex w-full items-center justify-between rounded-2xl border border-border/60 bg-card/60 text-sm text-accent"
-          >
-            {drawerTriggerLabel}
-            <Filter />
-          </Button>
-        </DrawerTrigger>
-        <DrawerContent className="max-h-[90vh] overflow-y-auto rounded-t-3xl border-border/60 bg-background">
-          <DrawerHeader className="text-left">
-            <DrawerTitle>{title}</DrawerTitle>
-            {description ? (
-              <DrawerDescription>{description}</DrawerDescription>
-            ) : null}
-          </DrawerHeader>
-          <div className="px-4 pb-6">{children}</div>
-        </DrawerContent>
-      </Drawer>
+      <DrawerCloseContext.Provider value={closeDrawer}>
+        <Drawer open={drawerOpen} onOpenChange={setDrawerOpen}>
+          <DrawerTrigger asChild>
+            <Button
+              type="button"
+              variant="outline"
+              className="flex w-full items-center justify-between rounded-2xl border border-border/60 bg-card/60 text-sm text-accent"
+            >
+              {drawerTriggerLabel}
+              <Filter />
+            </Button>
+          </DrawerTrigger>
+          <DrawerContent className="max-h-[90vh] rounded-t-3xl border-border/60 bg-background">
+            <DrawerHeader className="text-left">
+              <DrawerTitle>{title}</DrawerTitle>
+              {description ? (
+                <DrawerDescription>{description}</DrawerDescription>
+              ) : null}
+            </DrawerHeader>
+            <ScrollArea className="flex-1">
+              <div className="px-4 pb-6">{children}</div>
+            </ScrollArea>
+          </DrawerContent>
+        </Drawer>
+      </DrawerCloseContext.Provider>
     );
   }
 

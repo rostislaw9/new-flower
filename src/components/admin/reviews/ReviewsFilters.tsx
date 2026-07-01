@@ -7,6 +7,7 @@ import { usePathname, useRouter } from "next/navigation";
 
 import { Filter, Search } from "lucide-react";
 
+import { useDrawerClose } from "@/components/admin/AdminFiltersShell";
 import { Button } from "@/components/styled/Button";
 import { DatePicker } from "@/components/styled/DatePicker";
 import {
@@ -72,6 +73,7 @@ export function ReviewsFilters({
 }: ReviewsFiltersProps) {
   const router = useRouter();
   const pathname = usePathname();
+  const closeDrawer = useDrawerClose();
 
   const defaultValues = useMemo<FiltersFormValues>(
     () => ({
@@ -131,6 +133,7 @@ export function ReviewsFilters({
     const query = buildQueryString(values);
     router.push(query ? `${pathname}?${query}` : pathname);
     router.refresh();
+    closeDrawer?.();
   });
 
   function handleClear() {
@@ -141,6 +144,7 @@ export function ReviewsFilters({
     });
     router.push(pathname);
     router.refresh();
+    closeDrawer?.();
   }
 
   return (
