@@ -6,9 +6,9 @@ import { useLocale, useTranslations } from "next-intl";
 import Image from "next/image";
 import { useRouter } from "next/navigation";
 
+import type { DragEndEvent } from "@dnd-kit/core";
 import {
   DndContext,
-  type DragEndEvent,
   PointerSensor,
   useSensor,
   useSensors,
@@ -20,7 +20,7 @@ import {
   useSortable,
 } from "@dnd-kit/sortable";
 import { CSS } from "@dnd-kit/utilities";
-import { Loader2, MoveLeft, RotateCw, Save } from "lucide-react";
+import { Loader2, MoveLeft, RotateCcwSquare, Save } from "lucide-react";
 import { toast } from "sonner";
 
 import { AdminPageHeader } from "@/components/admin/AdminPageHeader";
@@ -74,7 +74,7 @@ const SortableFeaturedCard = memo(function SortableFeaturedCard({
       {...attributes}
       {...listeners}
     >
-      <div className="relative aspect-[3/4] overflow-hidden bg-muted/20">
+      <div className="relative aspect-[4/2] overflow-hidden bg-muted/20 md:aspect-[3/4]">
         <Image
           src={item.imageUrl}
           alt={item.title}
@@ -124,7 +124,9 @@ export default function FeaturedOrderPage() {
 
   const sensors = useSensors(
     useSensor(PointerSensor, {
-      activationConstraint: { distance: 6 },
+      activationConstraint: {
+        distance: 6,
+      },
     }),
   );
 
@@ -162,6 +164,20 @@ export default function FeaturedOrderPage() {
   useEffect(() => {
     void fetchFeaturedItems();
   }, [fetchFeaturedItems]);
+
+  const preventScroll = useCallback((e: TouchEvent) => {
+    e.preventDefault();
+  }, []);
+
+  const handleDragStart = useCallback(() => {
+    document.addEventListener("touchmove", preventScroll, {
+      passive: false,
+    });
+  }, [preventScroll]);
+
+  const handleDragStop = useCallback(() => {
+    document.removeEventListener("touchmove", preventScroll);
+  }, [preventScroll]);
 
   const handleDragEnd = useCallback((event: DragEndEvent) => {
     const { active, over } = event;
@@ -242,9 +258,11 @@ export default function FeaturedOrderPage() {
       />
 
       {/* Landscape hint for mobile */}
-      <div className="flex items-center gap-2 rounded-md border border-border/60 bg-muted/30 px-3 py-2 text-sm text-muted-foreground md:hidden">
-        <RotateCw className="h-4 w-4 shrink-0" />
-        <span>{t("landscapeHint")}</span>
+      <div className="flex items-center gap-2 rounded-md border border-border/60 bg-muted/30 px-3 py-2 md:hidden landscape:hidden">
+        <RotateCcwSquare className="text-muted-foreground" />
+        <Text muted size="sm">
+          {t("landscapeHint")}
+        </Text>
       </div>
 
       {isLoading ? (
@@ -266,10 +284,18 @@ export default function FeaturedOrderPage() {
           </EmptyContent>
         </Empty>
       ) : (
-        <DndContext sensors={sensors} onDragEnd={handleDragEnd}>
+        <DndContext
+          sensors={sensors}
+          onDragStart={handleDragStart}
+          onDragCancel={handleDragStop}
+          onDragEnd={(event) => {
+            handleDragStop();
+            handleDragEnd(event);
+          }}
+        >
           <SortableContext items={sortableIds} strategy={rectSortingStrategy}>
-            <div className="overflow-x-auto pb-2">
-              <div className="grid auto-cols-[minmax(200px,1fr)] grid-flow-col grid-rows-2 gap-4 max-md:landscape:auto-cols-[minmax(100px,1fr)] max-md:landscape:gap-2">
+            <div className="hidden overflow-x-auto pb-2 md:block landscape:block">
+              <div className="grid grid-flow-col grid-cols-5 grid-rows-2 gap-4 max-md:landscape:gap-2">
                 {items.map((item, index) => (
                   <SortableFeaturedCard
                     key={item.id}

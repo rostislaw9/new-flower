@@ -4,7 +4,7 @@
     "description": "Premium tattoo art by a professional artist based in Phuket, Thailand. Specialising in Thai Sak Yant tattooing, Japanese style compositions, blackwork, and realism. Book your appointment today."
   },
   "nav": {
-    "portfolio": "Portfolio",
+    "portfolio": "Gallery",
     "about": "About",
     "faq": "FAQ",
     "contact": "Contact",
@@ -20,10 +20,10 @@
       "title": "Art that lives on skin",
       "subtitle": "Specialising in Thai Sak Yant tattooing, Japanese style compositions, blackwork, and realism. Every piece begins with a conversation and ends with something permanent.",
       "bookButton": "Book Appointment",
-      "portfolioButton": "View Portfolio"
+      "portfolioButton": "View Gallery"
     },
     "featured": {
-      "eyebrow": "Selected Work",
+      "eyebrow": "Selected",
       "title": "Masterpieces",
       "viewAll": "View All Work"
     },
@@ -36,7 +36,7 @@
       "imageAlt": "New Flower Tattoo artist"
     },
     "testimonials": {
-      "eyebrow": "Client Stories",
+      "eyebrow": "Reviews",
       "title": "What customers say",
       "empty": "Featured reviews will appear here once customers share them",
       "ratingAria": "{rating} out of 5 stars"
@@ -52,21 +52,21 @@
       "eyebrow": "The page has faded",
       "title": "404",
       "subtitle": "The link you followed no longer exists or has moved. Let's guide you back to work that is very much alive.",
-      "primary": "Return home",
-      "secondary": "View portfolio"
+      "primary": "Return Home",
+      "secondary": "View Gallery"
     }
   },
   "portfolio": {
     "metadata": {
-      "title": "Portfolio",
-      "description": "Browse the full tattoo portfolio — Thai Sak Yant tattooing, Japanese style compositions, blackwork, and realism work."
+      "title": "Gallery",
+      "description": "Browse the full tattoo gallery — Thai Sak Yant tattooing, Japanese style compositions, blackwork, and realism work."
     },
     "hero": {
       "eyebrow": "All Work",
-      "title": "Masterpieces",
+      "title": "Gallery",
       "subtitle": "A selection of pieces across styles. Each tattoo is custom-designed for the client. No templates, no stock — just original art."
     },
-    "noItems": "No portfolio items yet",
+    "noItems": "No gallery items yet",
     "processCards": {
       "process": {
         "eyebrow": "Process",
@@ -76,7 +76,7 @@
       "commissions": {
         "eyebrow": "Commissions",
         "title": "Similar work welcome",
-        "description": "Inspired by something in the portfolio? Describe it in your booking request — a new interpretation can be created."
+        "description": "Inspired by something in the gallery? Describe it in your booking request — a new interpretation can be created."
       },
       "updates": {
         "eyebrow": "Updates",
@@ -486,7 +486,7 @@
     "navigation": "Navigation",
     "connect": "Connect",
     "links": {
-      "portfolio": "Portfolio",
+      "portfolio": "Gallery",
       "about": "About",
       "faq": "FAQ",
       "contact": "Contact",
@@ -512,7 +512,7 @@
       "title": "Admin Panel",
       "nav": {
         "dashboard": "Dashboard",
-        "portfolio": "Portfolio",
+        "portfolio": "Gallery",
         "bookings": "Bookings",
         "reviews": "Reviews",
         "artistImages": "Artist Images",
@@ -537,7 +537,7 @@
           "description": "Finished appointments"
         },
         "portfolio": {
-          "title": "Portfolio",
+          "title": "Gallery",
           "description": "Masterpieces"
         }
       },
@@ -547,8 +547,8 @@
           "description": "View and manage all appointment requests"
         },
         "portfolio": {
-          "title": "Manage portfolio",
-          "description": "Add, edit, or remove portfolio items"
+          "title": "Manage gallery",
+          "description": "Add, edit, or remove gallery items"
         },
         "reviews": {
           "title": "Manage reviews",
@@ -706,16 +706,16 @@
       }
     },
     "portfolio": {
-      "title": "Portfolio Management",
+      "title": "Gallery Management",
       "description": "Manage your showcase collection",
       "uploadButton": "Upload",
       "publishWork": "Publish your work",
-      "noItems": "No portfolio items yet",
+      "noItems": "No gallery items yet",
       "featured": "Featured",
       "alerts": {
-        "deleteSuccess": "Portfolio item deleted",
-        "deleteFailed": "Failed to delete portfolio item",
-        "bulkDeleteSuccess": "{count, plural, one {# portfolio item deleted} other {# portfolio items deleted}}",
+        "deleteSuccess": "Gallery item deleted",
+        "deleteFailed": "Failed to delete gallery item",
+        "bulkDeleteSuccess": "{count, plural, one {# gallery item deleted} other {# gallery items deleted}}",
         "bulkDeletePartialFail": "Deleted {success} of {total} items. Some deletions failed.",
         "markedFeatured": "Item marked as featured",
         "removedFeatured": "Item removed from featured",
@@ -726,7 +726,7 @@
       "bulk": {
         "delete": {
           "title": "Delete {count, plural, one {# item} other {# items}}?",
-          "description": "This action cannot be undone. All selected portfolio items will be permanently deleted."
+          "description": "This action cannot be undone. All selected gallery items will be permanently deleted."
         },
         "selectAll": "Select all",
         "deselectAll": "Deselect all",
@@ -739,13 +739,14 @@
         "title": "Reorder featured items",
         "description": "Drag featured pieces to control how they appear on the site",
         "button": "Reorder featured",
+        "buttonShort": "Reorder",
         "save": "Save order",
         "saving": "Saving...",
         "success": "Featured order updated",
         "error": "Failed to update featured order",
         "emptyTitle": "No featured items",
-        "emptyDescription": "Flag portfolio items as featured in the main grid to manage their order here.",
-        "landscapeHint": "Rotate your device to landscape for a better experience"
+        "emptyDescription": "Flag gallery pieces as featured in the main grid to manage their order here.",
+        "landscapeHint": "Rotate your device to landscape"
       },
       "form": {
         "titleLabel": "Title",
@@ -763,7 +764,7 @@
         "optionalTag": "Optional"
       },
       "upload": {
-        "title": "Publish portfolio items",
+        "title": "Publish gallery pieces",
         "subtitle": "Upload images first, then add details to each piece before publishing",
         "instructions": {
           "upload": "Upload up to {count} images",
@@ -775,8 +776,8 @@
         },
         "alerts": {
           "missingFields": "Please provide a title and category for every uploaded image.",
-          "created": "{count, plural, one {# portfolio item created} other {# portfolio items created}}",
-          "createFailed": "Failed to create portfolio items"
+          "created": "{count, plural, one {# gallery item created} other {# gallery items created}}",
+          "createFailed": "Failed to create gallery items"
         },
         "buttons": {
           "create": "Publish items",
@@ -798,13 +799,13 @@
         }
       },
       "edit": {
-        "title": "Edit portfolio item",
-        "subtitle": "Edit an existing portfolio entry",
+        "title": "Edit gallery item",
+        "subtitle": "Edit an existing gallery entry",
         "alerts": {
-          "loadFailed": "Failed to load portfolio item",
-          "updateFailed": "Failed to update portfolio item",
+          "loadFailed": "Failed to load gallery item",
+          "updateFailed": "Failed to update gallery item",
           "notFound": "Item not found",
-          "updated": "Portfolio item updated"
+          "updated": "Gallery item updated"
         }
       }
     },

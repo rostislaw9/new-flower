@@ -429,10 +429,6 @@ export default function PortfolioAdminPage() {
     </div>
   );
 
-  const reorderBtnText = isMobile
-    ? t("reorder.button").split(/\s+/)[0]
-    : t("reorder.button");
-
   return (
     <div className="flex flex-col gap-6">
       <AdminPageHeader
@@ -457,7 +453,7 @@ export default function PortfolioAdminPage() {
                 className="flex items-center gap-2 bg-background/70"
               >
                 <GripVertical className="h-4 w-4" />
-                {reorderBtnText}
+                {isMobile ? t("reorder.buttonShort") : t("reorder.button")}
               </Button>
             </div>
             <Button

@@ -131,8 +131,8 @@ export default async function HomePage() {
       {/* About Preview */}
       <Section size="lg">
         <Container>
-          <div className="grid grid-cols-1 gap-16 lg:grid-cols-2 lg:gap-24">
-            <div className="relative aspect-[3/4] lg:order-last">
+          <div className="grid grid-cols-1 gap-16 lg:grid-cols-2 lg:gap-24 landscape:grid-cols-2">
+            <div className="relative aspect-[3/4] lg:order-last landscape:order-last">
               <Image
                 src={portraitUrl}
                 alt={t("aboutPreview.imageAlt")}
