@@ -97,3 +97,9 @@
     text-wrap: pretty;
   }
 }
+
+@media (pointer: coarse) {
+  [data-state="open"][role="combobox"] {
+    pointer-events: none;
+  }
+}
