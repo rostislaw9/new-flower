@@ -63,11 +63,7 @@ export function TranslationEditor({
       </div>
       <div className="flex flex-col gap-1">
         <label className="text-xs text-muted-foreground">{questionLabel}</label>
-        <Input
-          value={question}
-          onChange={(e) => setQuestion(e.target.value)}
-          className="text-sm"
-        />
+        <Input value={question} onChange={(e) => setQuestion(e.target.value)} />
       </div>
       <div className="flex flex-col gap-1">
         <label className="text-xs text-muted-foreground">{answerLabel}</label>
@@ -75,7 +71,6 @@ export function TranslationEditor({
           value={answer}
           onChange={(e) => setAnswer(e.target.value)}
           rows={3}
-          className="text-sm"
         />
       </div>
     </div>

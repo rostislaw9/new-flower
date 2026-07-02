@@ -277,11 +277,11 @@ export default function FaqAdminPage() {
                 <Card className="rounded-2xl border border-border/60 bg-card/60 shadow-lg">
                   <CardContent className="p-4">
                     {/* Group header */}
-                    <div className="flex items-center gap-2">
+                    <div className="flex items-center justify-between gap-2">
                       <CollapsibleTrigger asChild>
                         <button
                           type="button"
-                          className="flex items-center gap-1 text-muted-foreground hover:text-foreground"
+                          className="flex items-center gap-2 text-muted-foreground hover:text-foreground"
                         >
                           <ChevronDown
                             className={cn(
@@ -289,11 +289,14 @@ export default function FaqAdminPage() {
                               isExpanded || "-rotate-90",
                             )}
                           />
+                          <Eyebrow
+                            size="xs"
+                            className="flex-1 text-left hover:text-foreground"
+                          >
+                            {displayTitle}
+                          </Eyebrow>
                         </button>
                       </CollapsibleTrigger>
-                      <Eyebrow size="xs" className="flex-1">
-                        {displayTitle}
-                      </Eyebrow>
                       <Button
                         size="icon"
                         variant="destructive"
@@ -362,11 +365,11 @@ export default function FaqAdminPage() {
                               >
                                 <div className="rounded-lg border border-border/40">
                                   {/* Question header */}
-                                  <div className="flex items-center gap-2 p-3">
+                                  <div className="flex items-center justify-between gap-2 p-2">
                                     <CollapsibleTrigger asChild>
                                       <button
                                         type="button"
-                                        className="flex items-center gap-1 text-muted-foreground hover:text-foreground"
+                                        className="flex items-center gap-2 text-muted-foreground hover:text-foreground"
                                       >
                                         <ChevronDown
                                           className={cn(
@@ -374,11 +377,14 @@ export default function FaqAdminPage() {
                                             isQExpanded || "-rotate-90",
                                           )}
                                         />
+                                        <Text
+                                          size="sm"
+                                          className="flex-1 text-left hover:text-foreground"
+                                        >
+                                          {qDisplay}
+                                        </Text>
                                       </button>
                                     </CollapsibleTrigger>
-                                    <Text size="sm" className="flex-1">
-                                      {qDisplay}
-                                    </Text>
                                     <Button
                                       size="icon"
                                       variant="destructive"

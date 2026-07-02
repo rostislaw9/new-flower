@@ -54,11 +54,7 @@ export function GroupTitleEditor({
       </div>
       <div className="flex flex-col gap-1">
         <label className="text-xs text-muted-foreground">{titleLabel}</label>
-        <Input
-          value={title}
-          onChange={(e) => setTitle(e.target.value)}
-          className="text-sm"
-        />
+        <Input value={title} onChange={(e) => setTitle(e.target.value)} />
       </div>
     </div>
   );
