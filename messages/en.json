@@ -97,13 +97,7 @@
     },
     "bio": {
       "eyebrow": "Biography",
-      "title": "From illustration to ink",
-      "imageAlt": "New Flower Tattoo artist",
-      "paragraphs": [
-        "More than eight years of dedicated practice means every line is placed with purpose. The studio is collaborative — your ideas and the artist's craft meeting in the middle.",
-        "Before tattooing came classical illustration: botanical drawing, etching, and printmaking. That training guides composition, contrast, and longevity on skin.",
-        "Sessions are appointment-only and intentionally unhurried. Consultation, design, and execution happen together to produce work that endures."
-      ]
+      "imageAlt": "New Flower Tattoo artist"
     },
     "specialisations": {
       "eyebrow": "Areas of Expertise",
@@ -129,34 +123,7 @@
     },
     "timeline": {
       "eyebrow": "Journey",
-      "title": "How it unfolded",
-      "events": [
-        {
-          "year": "2016",
-          "title": "Tattoo apprenticeship begins",
-          "description": "Started a professional apprenticeship in Saint Petersburg under master tattooist Dmitri Volkov, focusing on foundational technique, blackwork fundamentals, and skin theory."
-        },
-        {
-          "year": "2018",
-          "title": "Exploration of Japanese and blackwork styles",
-          "description": "Traveled across Europe and Japan to study traditional Japanese tattoo composition and modern blackwork approaches, shaping a bold, structured style."
-        },
-        {
-          "year": "2020",
-          "title": "Studio established in Thailand",
-          "description": "Opened a private appointment-only studio in Phuket, focusing on custom tattoo work including Thai Sak Yant-inspired pieces and large-scale compositions."
-        },
-        {
-          "year": "2022",
-          "title": "International guest artist work",
-          "description": "Worked as a guest artist in studios across Asia and Europe, expanding expertise in realism, Japanese style, and sacred tattoo traditions."
-        },
-        {
-          "year": "2024",
-          "title": "Established signature style",
-          "description": "Completed 500+ tattoos and refined a signature blend of Thai Sak Yant, Japanese composition, blackwork, and realism techniques."
-        }
-      ]
+      "title": "How it unfolded"
     },
     "studio": {
       "location": {
@@ -516,6 +483,7 @@
         "bookings": "Bookings",
         "reviews": "Reviews",
         "artistImages": "Artist Images",
+        "about": "About",
         "faq": "FAQ"
       },
       "openWebsite": "Homepage"
@@ -561,6 +529,10 @@
         "faq": {
           "title": "Manage FAQ",
           "description": "Edit frequently asked questions"
+        },
+        "about": {
+          "title": "Manage About",
+          "description": "Edit biography and journey timeline"
         }
       }
     },
@@ -900,6 +872,28 @@
       "questionLabel": "Question",
       "answerLabel": "Answer",
       "titleLabel": "Title",
+      "delete": "Delete",
+      "cancel": "Cancel"
+    },
+    "about": {
+      "title": "About Page Management",
+      "subtitle": "Edit biography and journey timeline",
+      "bioSection": "Biography",
+      "journeySection": "Journey Timeline",
+      "addJourney": "Add Journey Entry",
+      "noJourneys": "No journey entries yet",
+      "untitledJourney": "Untitled journey",
+      "titleLabel": "Title",
+      "descriptionLabel": "Description",
+      "yearLabel": "Year",
+      "buddhistYearLabel": "Buddhist Year",
+      "bioSaved": "Biography saved",
+      "journeyCreated": "Journey entry added",
+      "journeySaved": "Journey entry saved",
+      "journeyDeleted": "Journey entry deleted",
+      "journeyDeleteTitle": "Delete journey entry",
+      "journeyDeleteDescription": "Delete this journey entry? This cannot be undone.",
+      "error": "Failed to load about data",
       "delete": "Delete",
       "cancel": "Cancel"
     }

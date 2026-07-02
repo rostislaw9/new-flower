@@ -68,6 +68,57 @@ model Review {
   @@index([rating])
 }
 
+model AboutBio {
+  id          String                @id @default(cuid())
+  createdAt   DateTime              @default(now())
+  updatedAt   DateTime              @updatedAt
+  translations AboutBioTranslation[]
+
+  @@map("about_bios")
+}
+
+model AboutBioTranslation {
+  id          String   @id @default(cuid())
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+  bioId       String
+  bio         AboutBio @relation(fields: [bioId], references: [id], onDelete: Cascade)
+  locale      String
+  title       String
+  description String
+
+  @@unique([bioId, locale])
+  @@map("about_bio_translations")
+  @@index([bioId, locale])
+}
+
+model AboutJourney {
+  id           String                    @id @default(cuid())
+  createdAt    DateTime                  @default(now())
+  updatedAt    DateTime                  @updatedAt
+  displayOrder Int                       @default(0)
+  year         String
+  translations AboutJourneyTranslation[]
+
+  @@map("about_journeys")
+  @@index([displayOrder])
+}
+
+model AboutJourneyTranslation {
+  id          String   @id @default(cuid())
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+  journeyId   String
+  journey     AboutJourney @relation(fields: [journeyId], references: [id], onDelete: Cascade)
+  locale      String
+  title       String
+  description String
+
+  @@unique([journeyId, locale])
+  @@map("about_journey_translations")
+  @@index([journeyId, locale])
+}
+
 model FaqGroup {
   id          String                @id @default(cuid())
   createdAt   DateTime              @default(now())

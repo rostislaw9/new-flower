@@ -10,6 +10,7 @@ import { JsonLd } from "@/components/seo/JsonLd";
 import { Eyebrow, Heading, Text } from "@/components/styled/Typography";
 import { Separator } from "@/components/ui/separator";
 import { type Locale, defaultLocale } from "@/i18n/config";
+import { getAboutBio, getAboutJourneys } from "@/lib/about-data";
 import { getArtistImagesConfig } from "@/lib/artist-images-config";
 import { createBreadcrumbList } from "@/lib/breadcrumbs";
 import { isSupportedLocale } from "@/lib/locale-utils";
@@ -36,12 +37,6 @@ type Specialisation = {
   description: string;
 };
 
-type TimelineEvent = {
-  year: string;
-  title: string;
-  description: string;
-};
-
 interface AboutReviewsPageProps {
   params: Promise<{ locale?: string }>;
 }
@@ -58,9 +53,11 @@ export default async function AboutPage({ params }: AboutReviewsPageProps) {
     { name: "About", item: "/about" },
   ]);
 
-  const bioParagraphs = t.raw("bio.paragraphs") as string[];
+  const bioData = await getAboutBio(locale);
+  const bioParagraphs = bioData ? bioData.description.split("\n\n") : [];
+  const bioTitle = bioData?.title ?? "";
   const specialisations = t.raw("specialisations.items") as Specialisation[];
-  const timelineEvents = t.raw("timeline.events") as TimelineEvent[];
+  const timelineEvents = await getAboutJourneys(locale);
   const artistImagesConfig = await getArtistImagesConfig();
   const portraitUrl =
     artistImagesConfig.portraitUrl || "/images/artist-portrait.jpg";
@@ -98,7 +95,7 @@ export default async function AboutPage({ params }: AboutReviewsPageProps) {
               <div className="flex flex-col gap-3">
                 <Eyebrow>{t("bio.eyebrow")}</Eyebrow>
                 <Heading as="h2" size="title">
-                  {t("bio.title")}
+                  {bioTitle}
                 </Heading>
               </div>
               <div className="flex flex-col gap-4">

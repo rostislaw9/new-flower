@@ -30,9 +30,9 @@ interface DeleteConfirmDialogProps {
   description: string;
   onConfirm: () => Promise<void>;
   onCancel: () => void;
-  confirmLabel?: string;
-  confirmLoadingLabel?: string;
-  cancelLabel?: string;
+  confirmLabel: string;
+  confirmLoadingLabel: string;
+  cancelLabel: string;
 }
 
 export function DeleteConfirmDialog({
@@ -62,7 +62,7 @@ export function DeleteConfirmDialog({
         disabled={deleting}
         className="w-full sm:w-auto"
       >
-        {cancelLabel ?? "Cancel"}
+        {cancelLabel}
       </Button>
       <Button
         variant="destructive"

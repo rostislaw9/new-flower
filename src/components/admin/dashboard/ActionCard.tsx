@@ -3,7 +3,14 @@
 import { useRouter } from "next/navigation";
 import { useTopLoader } from "nextjs-toploader";
 
-import { Calendar, HelpCircle, Images, Star, User } from "lucide-react";
+import {
+  BookText,
+  Calendar,
+  FileUser,
+  HelpCircle,
+  Images,
+  Star,
+} from "lucide-react";
 
 import { Heading, Text } from "@/components/styled/Typography";
 import { Card } from "@/components/ui/card";
@@ -13,8 +20,9 @@ const ICONS = {
   calendar: Calendar,
   images: Images,
   star: Star,
-  user: User,
-  helpcircle: HelpCircle,
+  user: FileUser,
+  faq: HelpCircle,
+  about: BookText,
 } as const;
 
 type IconKey = keyof typeof ICONS;

@@ -8,12 +8,13 @@ import Link from "next/link";
 import { usePathname } from "next/navigation";
 
 import {
+  BookText,
   Calendar,
+  FileUser,
   HelpCircle,
   Images,
   LayoutDashboard,
   Star,
-  User,
 } from "lucide-react";
 
 import { AdminPageShell } from "@/components/admin/AdminPageShell";
@@ -64,11 +65,16 @@ export default function AdminLayout({ children }: { children: ReactNode }) {
 
   const navItems = [
     { href: "/admin", icon: LayoutDashboard, label: t("nav.dashboard") },
-    { href: "/admin/artist-images", icon: User, label: t("nav.artistImages") },
+    {
+      href: "/admin/artist-images",
+      icon: FileUser,
+      label: t("nav.artistImages"),
+    },
+    { href: "/admin/about", icon: BookText, label: t("nav.about") },
     { href: "/admin/gallery", icon: Images, label: t("nav.gallery") },
+    { href: "/admin/faq", icon: HelpCircle, label: t("nav.faq") },
     { href: "/admin/bookings", icon: Calendar, label: t("nav.bookings") },
     { href: "/admin/reviews", icon: Star, label: t("nav.reviews") },
-    { href: "/admin/faq", icon: HelpCircle, label: t("nav.faq") },
   ];
 
   const breadcrumbItems = useMemo(
@@ -213,6 +219,7 @@ function buildAdminBreadcrumbs(
     gallery: "Gallery",
     reviews: "Reviews",
     faq: "FAQ",
+    about: "About",
     new: "New",
     edit: "Edit",
   };
