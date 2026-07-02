@@ -6,14 +6,14 @@ import { ChevronLeft, ChevronRight } from "lucide-react";
 
 import { Button } from "@/components/styled/Button";
 import { ScrollArea, ScrollBar } from "@/components/ui/scroll-area";
-import type { PortfolioCategory } from "@/lib/portfolio-data";
+import type { GalleryCategory } from "@/lib/gallery-data";
 import { cn } from "@/lib/utils";
 
 interface CategoryFilterProps {
-  categories: PortfolioCategory[];
-  active: PortfolioCategory | null;
-  counts: Record<PortfolioCategory, number>;
-  onSelect: (category: PortfolioCategory | null) => void;
+  categories: GalleryCategory[];
+  active: GalleryCategory | null;
+  counts: Record<GalleryCategory, number>;
+  onSelect: (category: GalleryCategory | null) => void;
 }
 
 export function CategoryFilter({
@@ -77,7 +77,7 @@ export function CategoryFilter({
   };
 
   return (
-    <nav aria-label="Filter portfolio by category" className="relative">
+    <nav aria-label="Filter gallery by category" className="relative">
       {canScrollLeft && (
         <button
           type="button"

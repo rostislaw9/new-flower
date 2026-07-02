@@ -2,6 +2,7 @@
 CREATE TYPE "AppointmentStatus" AS ENUM ('pending', 'contacted', 'approved', 'rejected', 'completed');
 
 -- CreateTable
+
 CREATE TABLE "appointments" (
     "id" TEXT NOT NULL,
     "createdAt" TIMESTAMP(3) NOT NULL DEFAULT CURRENT_TIMESTAMP,
@@ -32,7 +33,6 @@ CREATE TABLE "portfolio_items" (
     "category" TEXT NOT NULL,
     "featured" BOOLEAN NOT NULL DEFAULT false,
     "displayOrder" INTEGER NOT NULL DEFAULT 0,
-
     CONSTRAINT "portfolio_items_pkey" PRIMARY KEY ("id")
 );
 
@@ -43,6 +43,5 @@ CREATE TABLE "testimonials" (
     "clientName" TEXT NOT NULL,
     "rating" INTEGER NOT NULL,
     "text" TEXT NOT NULL,
-
     CONSTRAINT "testimonials_pkey" PRIMARY KEY ("id")
 );

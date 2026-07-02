@@ -2,9 +2,9 @@ import type { Metadata } from "next";
 import { getTranslations } from "next-intl/server";
 import Image from "next/image";
 
+import { Gallery } from "@/components/gallery/Gallery";
 import { Container } from "@/components/layout/Container";
 import { Section } from "@/components/layout/Section";
-import { PortfolioGallery } from "@/components/portfolio/PortfolioGallery";
 import { ContactCTA } from "@/components/sections/ContactCTA";
 import {
   JsonLd,
@@ -17,7 +17,7 @@ import { Empty, EmptyHeader, EmptyTitle } from "@/components/ui/empty";
 import { Separator } from "@/components/ui/separator";
 import { getArtistImagesConfig } from "@/lib/artist-images-config";
 import { createBreadcrumbList } from "@/lib/breadcrumbs";
-import { getFeaturedItems } from "@/lib/portfolio-loader";
+import { getFeaturedItems } from "@/lib/gallery-loader";
 import { getFeaturedReviews } from "@/lib/reviews";
 import { buildPageMetadata } from "@/lib/seo/buildPageMetadata";
 
@@ -83,8 +83,8 @@ export default async function HomePage() {
               <Button href="/booking" size="lg">
                 {t("hero.bookButton")}
               </Button>
-              <Button href="/portfolio" variant="outline" size="lg">
-                {t("hero.portfolioButton")}
+              <Button href="/gallery" variant="outline" size="lg">
+                {t("hero.galleryButton")}
               </Button>
             </div>
           </div>
@@ -105,7 +105,7 @@ export default async function HomePage() {
                 </Heading>
               </div>
               <Button
-                href="/portfolio"
+                href="/gallery"
                 variant="ghost"
                 size="sm"
                 className="hidden md:block"
@@ -114,11 +114,11 @@ export default async function HomePage() {
               </Button>
             </div>
             <div className="flex flex-1 flex-col gap-8">
-              <PortfolioGallery
+              <Gallery
                 items={featuredItems}
                 scrollableClassName="h-full w-full"
               />
-              <Button href="/portfolio" variant="outline" className="md:hidden">
+              <Button href="/gallery" variant="outline" className="md:hidden">
                 {t("featured.viewAll")}
               </Button>
             </div>

@@ -10,7 +10,7 @@ import { Eyebrow, Text } from "@/components/styled/Typography";
 import { Separator } from "@/components/ui/separator";
 
 const FOOTER_LINKS = [
-  { href: "/portfolio", labelKey: "links.portfolio" },
+  { href: "/gallery", labelKey: "links.gallery" },
   { href: "/about", labelKey: "links.about" },
   { href: "/faq", labelKey: "links.faq" },
   { href: "/contact", labelKey: "links.contact" },

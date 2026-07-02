@@ -2,22 +2,22 @@
 
 import { useCallback, useEffect, useRef, useState } from "react";
 
-import { CategoryFilter } from "@/components/portfolio/CategoryFilter";
-import { Lightbox } from "@/components/portfolio/Lightbox";
-import { PortfolioGrid } from "@/components/portfolio/PortfolioGrid";
-import type { PortfolioCategory, PortfolioItem } from "@/lib/portfolio-data";
-import { PORTFOLIO_CATEGORIES } from "@/lib/portfolio-data";
+import { CategoryFilter } from "@/components/gallery/CategoryFilter";
+import { GalleryGrid } from "@/components/gallery/GalleryGrid";
+import { Lightbox } from "@/components/gallery/Lightbox";
+import type { GalleryCategory, GalleryItem } from "@/lib/gallery-data";
+import { GALLERY_CATEGORIES } from "@/lib/gallery-data";
 
-interface PortfolioGalleryProps {
-  items: PortfolioItem[];
+interface GalleryProps {
+  items: GalleryItem[];
   scrollableClassName: string;
   pageSize?: number;
   totalCount?: number;
-  categoryCounts?: Record<PortfolioCategory, number>;
+  categoryCounts?: Record<GalleryCategory, number>;
 }
 
-interface PortfolioApiResponse {
-  items: PortfolioItem[];
+interface GalleryApiResponse {
+  items: GalleryItem[];
   total: number;
   hasMore: boolean;
   nextOffset: number;
@@ -25,13 +25,13 @@ interface PortfolioApiResponse {
 
 const DEFAULT_PAGE_SIZE = 10;
 
-export function PortfolioGallery({
+export function Gallery({
   items,
   scrollableClassName,
   pageSize = DEFAULT_PAGE_SIZE,
   totalCount,
   categoryCounts,
-}: PortfolioGalleryProps) {
+}: GalleryProps) {
   const initialHasMore = (totalCount ?? items.length) > items.length;
   const [hasMore, setHasMore] = useState(initialHasMore);
   const [offset, setOffset] = useState(items.length);
@@ -39,8 +39,9 @@ export function PortfolioGallery({
   const [lightboxIndex, setLightboxIndex] = useState<number | null>(null);
   const [isLoadingMore, setIsLoadingMore] = useState(false);
   const [isCategoryLoading, setIsCategoryLoading] = useState(false);
-  const [activeCategory, setActiveCategory] =
-    useState<PortfolioCategory | null>(null);
+  const [activeCategory, setActiveCategory] = useState<GalleryCategory | null>(
+    null,
+  );
 
   const loadMoreRef = useRef<HTMLDivElement | null>(null);
   const hasTriggeredRef = useRef(false);
@@ -60,7 +61,7 @@ export function PortfolioGallery({
       replace,
     }: {
       offset: number;
-      category: PortfolioCategory | null;
+      category: GalleryCategory | null;
       replace: boolean;
     }) => {
       const params = new URLSearchParams();
@@ -70,14 +71,12 @@ export function PortfolioGallery({
         params.set("category", category);
       }
 
-      const response = await fetch(
-        `/api/portfolio/public?${params.toString()}`,
-      );
+      const response = await fetch(`/api/gallery/public?${params.toString()}`);
       if (!response.ok) {
-        throw new Error("Failed to fetch portfolio items");
+        throw new Error("Failed to fetch gallery items");
       }
 
-      const data = (await response.json()) as PortfolioApiResponse;
+      const data = (await response.json()) as GalleryApiResponse;
 
       if (replace) {
         setItemsState(data.items);
@@ -113,7 +112,7 @@ export function PortfolioGallery({
           replace: true,
         });
       } catch (error) {
-        console.error("[PortfolioGallery] Failed to load category", error);
+        console.error("[Gallery] Failed to load category", error);
       } finally {
         if (!cancelled) {
           setIsCategoryLoading(false);
@@ -151,7 +150,7 @@ export function PortfolioGallery({
           replace: false,
         })
           .catch((error) => {
-            console.error("[PortfolioGallery] Failed to load more", error);
+            console.error("[Gallery] Failed to load more", error);
           })
           .finally(() => {
             setIsLoadingMore(false);
@@ -181,7 +180,7 @@ export function PortfolioGallery({
       <div className="flex flex-col gap-2">
         {categoryCounts && (
           <CategoryFilter
-            categories={PORTFOLIO_CATEGORIES}
+            categories={GALLERY_CATEGORIES}
             active={activeCategory}
             counts={categoryCounts}
             onSelect={(category) => {
@@ -190,7 +189,7 @@ export function PortfolioGallery({
             }}
           />
         )}
-        <PortfolioGrid
+        <GalleryGrid
           items={filteredItems}
           onSelect={(index) => setLightboxIndex(index)}
           scrollableClassName={scrollableClassName}

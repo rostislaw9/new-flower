@@ -1,6 +1,6 @@
 # New Flower Tattoo
 
-> A premium, production-ready portfolio and booking platform for tattoo artists. Built with modern web technologies for performance, scalability, and exceptional user experience.
+> A premium, production-ready gallery and booking platform for tattoo artists. Built with modern web technologies for performance, scalability, and exceptional user experience.
 
 ![Next.js](https://img.shields.io/badge/Next.js-16.2-black?logo=next.js)
 ![TypeScript](https://img.shields.io/badge/TypeScript-5.7-blue?logo=typescript)
@@ -12,7 +12,7 @@
 
 New Flower Tattoo is a full-featured web application designed specifically for tattoo artists and studios. It provides:
 
-- **Portfolio Management** — Showcase tattoo work with organized galleries and featured pieces
+- **Gallery Management** — Showcase tattoo work with organized galleries and featured pieces
 - **Booking System** — Accept and manage appointment requests with status tracking
 - **Client Reviews** — Display testimonials and ratings from satisfied clients
 - **Admin Dashboard** — Comprehensive management interface for all studio operations
@@ -57,8 +57,8 @@ New Flower Tattoo is a full-featured web application designed specifically for t
 
 ### Public Pages
 
-- **Homepage** — Hero section, featured portfolio, testimonials, CTA
-- **Portfolio** — Gallery with filtering, detailed project views
+- **Homepage** — Hero section, featured gallery, testimonials, CTA
+- **Gallery** — Gallery with filtering, detailed project views
 - **About** — Artist biography and studio information
 - **Booking** — Appointment request form with validation
 - **Reviews** — Client testimonials and ratings
@@ -68,7 +68,7 @@ New Flower Tattoo is a full-featured web application designed specifically for t
 ### Admin Dashboard
 
 - **Dashboard** — Overview with key metrics and statistics
-- **Portfolio Management** — Create, edit, delete portfolio items with image uploads
+- **Gallery Management** — Create, edit, delete gallery items with image uploads
 - **Booking Management** — View, filter, and update appointment statuses
 - **Review Management** — Moderate and feature client reviews
 - **Artist Images** — Manage artist portrait and shop logo with Cloudinary integration
@@ -219,9 +219,9 @@ Stores booking requests from clients.
 - updatedAt: DateTime
 ```
 
-### PortfolioItem
+### GalleryItem
 
-Represents a tattoo portfolio entry.
+Represents a tattoo gallery entry.
 
 ```typescript
 - id: String (CUID)
@@ -260,7 +260,7 @@ src/
 │   ├── [locale]/          # Localized routes
 │   │   ├── admin/         # Admin dashboard
 │   │   ├── booking/       # Booking form
-│   │   ├── portfolio/     # Portfolio gallery
+│   │   ├── gallery/     # Gallery
 │   │   ├── reviews/       # Reviews page
 │   │   └── ...
 │   ├── api/               # API routes

@@ -10,7 +10,7 @@ interface UploadActionResult {
 
 export async function uploadToCloudinaryAction(
   file: File,
-  folder: string = "portfolio",
+  folder: string = "gallery",
   useOverwrite = false,
 ): Promise<UploadActionResult> {
   try {

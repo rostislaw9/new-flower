@@ -11,10 +11,10 @@ import { ChevronLeft, ChevronRight, Loader2 } from "lucide-react";
 import { Text } from "@/components/styled/Typography";
 import { Empty, EmptyHeader, EmptyTitle } from "@/components/ui/empty";
 import { ScrollArea, ScrollBar } from "@/components/ui/scroll-area";
-import type { PortfolioItem } from "@/lib/portfolio-data";
+import type { GalleryItem } from "@/lib/gallery-data";
 
-interface PortfolioGridProps {
-  items: PortfolioItem[];
+interface GalleryGridProps {
+  items: GalleryItem[];
   onSelect: (index: number) => void;
   scrollableClassName: string;
   loadMoreRef?: React.RefObject<HTMLDivElement | null> | undefined;
@@ -43,7 +43,7 @@ const itemVariants = {
   },
 };
 
-export function PortfolioGrid({
+export function GalleryGrid({
   items,
   onSelect,
   scrollableClassName,
@@ -51,8 +51,8 @@ export function PortfolioGrid({
   isLoadingMore,
   isCategoryLoading,
   hasMore,
-}: PortfolioGridProps) {
-  const t = useTranslations("portfolio");
+}: GalleryGridProps) {
+  const t = useTranslations("gallery");
   const [loadedIds, setLoadedIds] = useState<Record<string, boolean>>({});
   const scrollAreaRef = useRef<HTMLDivElement | null>(null);
   const viewportRef = useRef<HTMLDivElement | null>(null);
@@ -127,7 +127,7 @@ export function PortfolioGrid({
       animate="visible"
       className="grid auto-cols-[50%] grid-flow-col grid-rows-2 bg-border sm:auto-cols-[40%] md:auto-cols-[30%] lg:auto-cols-[20%] max-md:landscape:auto-cols-[20%] max-md:landscape:grid-rows-1"
       role="list"
-      aria-label="Portfolio gallery"
+      aria-label="Gallery"
     >
       {items.map((item, index) => (
         <motion.li

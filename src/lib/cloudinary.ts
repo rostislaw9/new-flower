@@ -23,7 +23,7 @@ export interface UploadResult {
 
 export async function uploadToCloudinary(
   file: File,
-  folder: string = "portfolio",
+  folder: string = "gallery",
   useOverwrite = false,
 ): Promise<UploadResult> {
   const buffer = Buffer.from(await file.arrayBuffer());

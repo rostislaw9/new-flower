@@ -1,13 +1,7 @@
 import { NextResponse } from "next/server";
 
-import {
-  PORTFOLIO_CATEGORIES,
-  type PortfolioCategory,
-} from "@/lib/portfolio-data";
-import {
-  countPortfolioItems,
-  loadPortfolioItems,
-} from "@/lib/portfolio-loader";
+import { GALLERY_CATEGORIES, type GalleryCategory } from "@/lib/gallery-data";
+import { countGalleryItems, loadGalleryItems } from "@/lib/gallery-loader";
 
 const DEFAULT_LIMIT = 10;
 const MAX_LIMIT = 20;
@@ -30,10 +24,10 @@ function parseOffset(param: string | null): number {
   return parsed;
 }
 
-function parseCategory(param: string | null): PortfolioCategory | null {
+function parseCategory(param: string | null): GalleryCategory | null {
   if (!param) return null;
-  return PORTFOLIO_CATEGORIES.includes(param as PortfolioCategory)
-    ? (param as PortfolioCategory)
+  return GALLERY_CATEGORIES.includes(param as GalleryCategory)
+    ? (param as GalleryCategory)
     : null;
 }
 
@@ -45,12 +39,12 @@ export async function GET(request: Request): Promise<NextResponse> {
 
   try {
     const [items, total] = await Promise.all([
-      loadPortfolioItems({
+      loadGalleryItems({
         take: limit,
         skip: offset,
         category: category ?? undefined,
       }),
-      countPortfolioItems(category ?? undefined),
+      countGalleryItems(category ?? undefined),
     ]);
 
     const nextOffset = offset + items.length;
@@ -63,9 +57,9 @@ export async function GET(request: Request): Promise<NextResponse> {
       nextOffset,
     });
   } catch (error) {
-    console.error("[GET /api/portfolio/public] Error:", error);
+    console.error("[GET /api/gallery/public] Error:", error);
     return NextResponse.json(
-      { error: "Failed to fetch portfolio items" },
+      { error: "Failed to fetch gallery items" },
       { status: 500 },
     );
   }

@@ -1,6 +1,6 @@
 import { NextResponse } from "next/server";
 
-import { getPortfolioItemById } from "@/lib/portfolio-loader";
+import { getGalleryItemById } from "@/lib/gallery-loader";
 
 export async function GET(
   _request: Request,
@@ -8,7 +8,7 @@ export async function GET(
 ): Promise<NextResponse> {
   try {
     const { id } = await params;
-    const item = await getPortfolioItemById(id);
+    const item = await getGalleryItemById(id);
 
     if (!item) {
       return NextResponse.json({ error: "Item not found" }, { status: 404 });
@@ -16,9 +16,9 @@ export async function GET(
 
     return NextResponse.json(item);
   } catch (error) {
-    console.error("[GET /api/portfolio/[id]] Error:", error);
+    console.error("[GET /api/gallery/[id]] Error:", error);
     return NextResponse.json(
-      { error: "Failed to fetch portfolio item" },
+      { error: "Failed to fetch gallery item" },
       { status: 500 },
     );
   }

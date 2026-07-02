@@ -4,7 +4,7 @@ import { useMemo, useState } from "react";
 
 import Image from "next/image";
 
-import { Lightbox, type LightboxItem } from "@/components/portfolio/Lightbox";
+import { Lightbox, type LightboxItem } from "@/components/gallery/Lightbox";
 import { Text } from "@/components/styled/Typography";
 
 export interface BookingReferenceItem {

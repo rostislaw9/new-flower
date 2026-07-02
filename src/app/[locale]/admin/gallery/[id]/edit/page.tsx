@@ -39,33 +39,30 @@ import {
 } from "@/components/ui/select";
 import { Textarea } from "@/components/ui/textarea";
 import { type Locale, defaultLocale } from "@/i18n/config";
-import {
-  deletePortfolioItem,
-  updatePortfolioItem,
-} from "@/lib/actions/portfolio";
+import { deleteGalleryItem, updateGalleryItem } from "@/lib/actions/gallery";
+import type { GalleryItem } from "@/lib/gallery-data";
+import { GALLERY_CATEGORIES } from "@/lib/gallery-data";
 import { getLocalizedPath, isSupportedLocale } from "@/lib/locale-utils";
-import type { PortfolioItem } from "@/lib/portfolio-data";
-import { PORTFOLIO_CATEGORIES } from "@/lib/portfolio-data";
 
-interface EditPortfolioItemPageProps {
+interface EditGalleryItemPageProps {
   params: Promise<{ id: string; locale: string }>;
 }
-interface PortfolioFormValues {
+interface GalleryFormValues {
   title: string;
   category: string;
   description: string;
   imageUrl: string;
 }
 
-export default function EditPortfolioItemPage({
+export default function EditGalleryItemPage({
   params,
-}: EditPortfolioItemPageProps) {
+}: EditGalleryItemPageProps) {
   const { locale: rawLocale, id } = use(params);
   const locale: Locale = isSupportedLocale(rawLocale)
     ? rawLocale
     : defaultLocale;
   const router = useRouter();
-  const t = useTranslations("admin.portfolio");
+  const t = useTranslations("admin.gallery");
   const actionsT = useTranslations("admin.common.actions");
   const {
     register,
@@ -75,26 +72,26 @@ export default function EditPortfolioItemPage({
     watch,
     setValue,
     formState: { errors, isDirty },
-  } = useForm<PortfolioFormValues>();
+  } = useForm<GalleryFormValues>();
   const imageUrl = watch("imageUrl");
-  const [item, setItem] = useState<PortfolioItem | null>(null);
-  const [deleteItem, setDeleteItem] = useState<PortfolioItem | null>(null);
+  const [item, setItem] = useState<GalleryItem | null>(null);
+  const [deleteItem, setDeleteItem] = useState<GalleryItem | null>(null);
   const [loading, setLoading] = useState(true);
   const [saving, setSaving] = useState(false);
   const [error, setError] = useState<string | null>(null);
   const [currentImageLoading, setCurrentImageLoading] = useState(true);
 
   const backHref = useMemo(
-    () => getLocalizedPath("/admin/portfolio", locale),
+    () => getLocalizedPath("/admin/gallery", locale),
     [locale],
   );
 
   useEffect(() => {
     const fetchItem = async () => {
       try {
-        const response = await fetch(`/api/portfolio/${id}`);
+        const response = await fetch(`/api/gallery/${id}`);
         if (!response.ok) throw new Error(t("edit.alerts.notFound"));
-        const data = (await response.json()) as PortfolioItem;
+        const data = (await response.json()) as GalleryItem;
         setItem(data);
         setCurrentImageLoading(true);
         reset({
@@ -114,7 +111,7 @@ export default function EditPortfolioItemPage({
     void fetchItem();
   }, [id, t, reset]);
 
-  async function onSubmit(values: PortfolioFormValues) {
+  async function onSubmit(values: GalleryFormValues) {
     setSaving(true);
     setError(null);
 
@@ -124,7 +121,7 @@ export default function EditPortfolioItemPage({
       formData.set(key, String(value));
     });
 
-    const result = await updatePortfolioItem(id, formData);
+    const result = await updateGalleryItem(id, formData);
 
     if (result.success) {
       toast.success(t("edit.alerts.updated"));
@@ -140,7 +137,7 @@ export default function EditPortfolioItemPage({
   async function handleDelete() {
     if (!deleteItem) return;
 
-    const result = await deletePortfolioItem(deleteItem.id);
+    const result = await deleteGalleryItem(deleteItem.id);
 
     if (result.success) {
       toast.success(t("alerts.deleteSuccess"));
@@ -315,7 +312,7 @@ export default function EditPortfolioItemPage({
                               />
                             </SelectTrigger>
                             <SelectContent>
-                              {PORTFOLIO_CATEGORIES.map((cat) => (
+                              {GALLERY_CATEGORIES.map((cat) => (
                                 <SelectItem key={cat} value={cat}>
                                   {cat.charAt(0).toUpperCase() +
                                     cat.slice(1).replace("-", " ")}
@@ -365,7 +362,7 @@ export default function EditPortfolioItemPage({
                 <div className="flex flex-col gap-2">
                   <Label>{t("form.imageLabel")}</Label>
                   <ImageUploader
-                    folder="portfolio"
+                    folder="gallery"
                     maxFiles={1}
                     useOverwrite={true}
                     showPreviewGrid={false}

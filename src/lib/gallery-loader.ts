@@ -1,11 +1,11 @@
 "use server";
 
 import {
+  GALLERY_CATEGORIES,
+  type GalleryCategory,
+  type GalleryItem,
   MAX_FEATURED_ITEMS,
-  PORTFOLIO_CATEGORIES,
-  type PortfolioCategory,
-  type PortfolioItem,
-} from "./portfolio-data";
+} from "./gallery-data";
 import { prisma } from "./prisma";
 
 function mapPrismaItem(item: {
@@ -18,13 +18,13 @@ function mapPrismaItem(item: {
   displayOrder: number;
   width: number;
   height: number;
-}): PortfolioItem {
+}): GalleryItem {
   return {
     id: item.id,
     title: item.title,
     description: item.description,
     imageUrl: item.imageUrl,
-    category: item.category as PortfolioCategory,
+    category: item.category as GalleryCategory,
     featured: item.featured,
     displayOrder: item.displayOrder,
     width: item.width,
@@ -32,17 +32,17 @@ function mapPrismaItem(item: {
   };
 }
 
-interface LoadPortfolioOptions {
+interface LoadGalleryOptions {
   skip?: number;
   take?: number;
-  category?: PortfolioCategory | undefined;
+  category?: GalleryCategory | undefined;
 }
 
-export async function loadPortfolioItems(
-  options?: LoadPortfolioOptions,
-): Promise<PortfolioItem[]> {
+export async function loadGalleryItems(
+  options?: LoadGalleryOptions,
+): Promise<GalleryItem[]> {
   const where = options?.category ? { category: options.category } : undefined;
-  const query: Parameters<typeof prisma.portfolioItem.findMany>[0] = {
+  const query: Parameters<typeof prisma.galleryItem.findMany>[0] = {
     orderBy: { createdAt: "desc" },
   };
 
@@ -56,44 +56,44 @@ export async function loadPortfolioItems(
     query.take = options.take;
   }
 
-  const items = await prisma.portfolioItem.findMany(query);
+  const items = await prisma.galleryItem.findMany(query);
 
   return items.map(mapPrismaItem);
 }
 
-export async function countPortfolioItems(
-  category?: PortfolioCategory | undefined,
+export async function countGalleryItems(
+  category?: GalleryCategory | undefined,
 ): Promise<number> {
   const where = category ? { category } : undefined;
-  const query: Parameters<typeof prisma.portfolioItem.count>[0] = {};
+  const query: Parameters<typeof prisma.galleryItem.count>[0] = {};
   if (where) {
     query.where = where;
   }
-  return prisma.portfolioItem.count(query);
+  return prisma.galleryItem.count(query);
 }
 
-export async function getPortfolioCategoryCounts(): Promise<
-  Record<PortfolioCategory, number>
+export async function getGalleryCategoryCounts(): Promise<
+  Record<GalleryCategory, number>
 > {
-  const grouped = await prisma.portfolioItem.groupBy({
+  const grouped = await prisma.galleryItem.groupBy({
     by: ["category"],
     _count: { category: true },
   });
 
-  return PORTFOLIO_CATEGORIES.reduce<Record<PortfolioCategory, number>>(
+  return GALLERY_CATEGORIES.reduce<Record<GalleryCategory, number>>(
     (acc, category) => {
       const match = grouped.find((item) => item.category === category);
       acc[category] = match?._count.category ?? 0;
       return acc;
     },
-    {} as Record<PortfolioCategory, number>,
+    {} as Record<GalleryCategory, number>,
   );
 }
 
-export async function getPortfolioItemById(
+export async function getGalleryItemById(
   id: string,
-): Promise<PortfolioItem | null> {
-  const item = await prisma.portfolioItem.findUnique({
+): Promise<GalleryItem | null> {
+  const item = await prisma.galleryItem.findUnique({
     where: { id },
   });
 
@@ -102,31 +102,31 @@ export async function getPortfolioItemById(
   return mapPrismaItem(item);
 }
 
-export async function getPortfolioItems(
-  category?: PortfolioCategory,
-): Promise<PortfolioItem[]> {
-  const items = await loadPortfolioItems();
+export async function getGalleryItems(
+  category?: GalleryCategory,
+): Promise<GalleryItem[]> {
+  const items = await loadGalleryItems();
   if (category === undefined) return items;
   return items.filter((item) => item.category === category);
 }
 
 export async function getFeaturedItems(
   limit = MAX_FEATURED_ITEMS,
-): Promise<PortfolioItem[]> {
-  const items = await prisma.portfolioItem.findMany({
+): Promise<GalleryItem[]> {
+  const items = await prisma.galleryItem.findMany({
     where: { featured: true },
     orderBy: { displayOrder: "asc" },
   });
   return items.map(mapPrismaItem).slice(0, limit);
 }
 
-export async function getAdminPortfolioItems(): Promise<PortfolioItem[]> {
+export async function getAdminGalleryItems(): Promise<GalleryItem[]> {
   const [featured, regular] = await Promise.all([
-    prisma.portfolioItem.findMany({
+    prisma.galleryItem.findMany({
       where: { featured: true },
       orderBy: { displayOrder: "asc" },
     }),
-    prisma.portfolioItem.findMany({
+    prisma.galleryItem.findMany({
       where: { featured: false },
       orderBy: { createdAt: "desc" },
     }),

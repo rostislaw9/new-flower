@@ -4,7 +4,7 @@
     "description": "Premium tattoo art by a professional artist based in Phuket, Thailand. Specialising in Thai Sak Yant tattooing, Japanese style compositions, blackwork, and realism. Book your appointment today."
   },
   "nav": {
-    "portfolio": "Gallery",
+    "gallery": "Gallery",
     "about": "About",
     "faq": "FAQ",
     "contact": "Contact",
@@ -20,7 +20,7 @@
       "title": "Art that lives on skin",
       "subtitle": "Specialising in Thai Sak Yant tattooing, Japanese style compositions, blackwork, and realism. Every piece begins with a conversation and ends with something permanent.",
       "bookButton": "Book Appointment",
-      "portfolioButton": "View Gallery"
+      "galleryButton": "View Gallery"
     },
     "featured": {
       "eyebrow": "Selected",
@@ -56,7 +56,7 @@
       "secondary": "View Gallery"
     }
   },
-  "portfolio": {
+  "gallery": {
     "metadata": {
       "title": "Gallery",
       "description": "Browse the full tattoo gallery — Thai Sak Yant tattooing, Japanese style compositions, blackwork, and realism work."
@@ -486,7 +486,7 @@
     "navigation": "Navigation",
     "connect": "Connect",
     "links": {
-      "portfolio": "Gallery",
+      "gallery": "Gallery",
       "about": "About",
       "faq": "FAQ",
       "contact": "Contact",
@@ -512,7 +512,7 @@
       "title": "Admin Panel",
       "nav": {
         "dashboard": "Dashboard",
-        "portfolio": "Gallery",
+        "gallery": "Gallery",
         "bookings": "Bookings",
         "reviews": "Reviews",
         "artistImages": "Artist Images",
@@ -536,7 +536,7 @@
           "title": "Completed",
           "description": "Finished appointments"
         },
-        "portfolio": {
+        "gallery": {
           "title": "Gallery",
           "description": "Masterpieces"
         }
@@ -546,7 +546,7 @@
           "title": "Manage bookings",
           "description": "View and manage all appointment requests"
         },
-        "portfolio": {
+        "gallery": {
           "title": "Manage gallery",
           "description": "Add, edit, or remove gallery items"
         },
@@ -705,7 +705,7 @@
         "showing": "Page {current}/{totalPages} · {total} reviews"
       }
     },
-    "portfolio": {
+    "gallery": {
       "title": "Gallery Management",
       "description": "Manage your showcase collection",
       "uploadButton": "Upload",

@@ -1,19 +1,19 @@
 import type { Metadata } from "next";
 import { getTranslations } from "next-intl/server";
 
+import { Gallery } from "@/components/gallery/Gallery";
 import { Container } from "@/components/layout/Container";
 import { Section } from "@/components/layout/Section";
-import { PortfolioGallery } from "@/components/portfolio/PortfolioGallery";
 import { PageHeading } from "@/components/sections/PageHeading";
 import { JsonLd } from "@/components/seo/JsonLd";
 import { Eyebrow, Heading, Text } from "@/components/styled/Typography";
 import { Separator } from "@/components/ui/separator";
 import { createBreadcrumbList } from "@/lib/breadcrumbs";
 import {
-  countPortfolioItems,
-  getPortfolioCategoryCounts,
-  loadPortfolioItems,
-} from "@/lib/portfolio-loader";
+  countGalleryItems,
+  getGalleryCategoryCounts,
+  loadGalleryItems,
+} from "@/lib/gallery-loader";
 import { buildPageMetadata } from "@/lib/seo/buildPageMetadata";
 
 export async function generateMetadata({
@@ -22,11 +22,11 @@ export async function generateMetadata({
   params: Promise<{ locale: string }>;
 }): Promise<Metadata> {
   const { locale } = await params;
-  const t = await getTranslations({ locale, namespace: "portfolio.metadata" });
+  const t = await getTranslations({ locale, namespace: "gallery.metadata" });
 
   return buildPageMetadata({
     locale,
-    canonical: "/portfolio",
+    canonical: "/gallery",
     title: t("title"),
     description: t("description"),
   });
@@ -34,16 +34,16 @@ export async function generateMetadata({
 
 const INITIAL_GALLERY_PAGE_SIZE = 12;
 
-export default async function PortfolioPage() {
-  const t = await getTranslations("portfolio");
+export default async function GalleryPage() {
+  const t = await getTranslations("gallery");
   const breadcrumb = createBreadcrumbList([
     { name: "Home", item: "/" },
-    { name: "Portfolio", item: "/portfolio" },
+    { name: "Gallery", item: "/gallery" },
   ]);
   const [initialItems, totalCount, categoryCounts] = await Promise.all([
-    loadPortfolioItems({ take: INITIAL_GALLERY_PAGE_SIZE }),
-    countPortfolioItems(),
-    getPortfolioCategoryCounts(),
+    loadGalleryItems({ take: INITIAL_GALLERY_PAGE_SIZE }),
+    countGalleryItems(),
+    getGalleryCategoryCounts(),
   ]);
 
   return (
@@ -63,7 +63,7 @@ export default async function PortfolioPage() {
       {/* Gallery */}
       <Section size="md">
         <Container>
-          <PortfolioGallery
+          <Gallery
             items={initialItems}
             pageSize={INITIAL_GALLERY_PAGE_SIZE}
             totalCount={totalCount}

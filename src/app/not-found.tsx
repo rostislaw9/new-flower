@@ -9,7 +9,7 @@ export default async function GlobalNotFound() {
   const locale = isSupportedLocale(rawLocale) ? rawLocale : defaultLocale;
   const t = await getTranslations({ locale, namespace: "home.notFound" });
   const homeHref = getLocalizedPath("/", locale);
-  const portfolioHref = getLocalizedPath("/portfolio", locale);
+  const galleryHref = getLocalizedPath("/gallery", locale);
 
   return (
     <NotFoundSection
@@ -18,7 +18,7 @@ export default async function GlobalNotFound() {
       subtitle={t("subtitle")}
       primaryHref={homeHref}
       primaryLabel={t("primary")}
-      secondaryHref={portfolioHref}
+      secondaryHref={galleryHref}
       secondaryLabel={t("secondary")}
     />
   );

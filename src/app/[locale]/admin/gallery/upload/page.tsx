@@ -46,17 +46,14 @@ import {
 import { Textarea } from "@/components/ui/textarea";
 import { type Locale, defaultLocale } from "@/i18n/config";
 import {
-  createPortfolioItems,
+  createGalleryItems,
   deleteCloudinaryImage,
-} from "@/lib/actions/portfolio";
+} from "@/lib/actions/gallery";
+import { GALLERY_CATEGORIES, type GalleryCategory } from "@/lib/gallery-data";
 import { getLocalizedPath, isSupportedLocale } from "@/lib/locale-utils";
-import {
-  PORTFOLIO_CATEGORIES,
-  type PortfolioCategory,
-} from "@/lib/portfolio-data";
 import { cn } from "@/lib/utils";
 
-interface DraftPortfolioItem {
+interface DraftGalleryItem {
   id: string;
   imageUrl: string;
   width: number;
@@ -87,7 +84,7 @@ function createDraftId() {
   return `${Date.now()}-${Math.random().toString(36).slice(2, 8)}`;
 }
 
-export default function UploadPortfolioPage() {
+export default function UploadGalleryPage() {
   const rawLocale = useLocale();
   const locale: Locale = isSupportedLocale(rawLocale)
     ? rawLocale
@@ -95,11 +92,11 @@ export default function UploadPortfolioPage() {
 
   const router = useRouter();
   const { start } = useTopLoader();
-  const uploadT = useTranslations("admin.portfolio.upload");
-  const formT = useTranslations("admin.portfolio.form");
+  const uploadT = useTranslations("admin.gallery.upload");
+  const formT = useTranslations("admin.gallery.form");
   const actionsT = useTranslations("admin.common.actions");
 
-  const [drafts, setDrafts] = useState<DraftPortfolioItem[]>([]);
+  const [drafts, setDrafts] = useState<DraftGalleryItem[]>([]);
   const [selectedId, setSelectedId] = useState<string | null>(null);
   const [submitting, setSubmitting] = useState(false);
   const [removingId, setRemovingId] = useState<string | null>(null);
@@ -114,7 +111,7 @@ export default function UploadPortfolioPage() {
   });
 
   const backHref = useMemo(
-    () => getLocalizedPath("/admin/portfolio", locale),
+    () => getLocalizedPath("/admin/gallery", locale),
     [locale],
   );
 
@@ -123,7 +120,7 @@ export default function UploadPortfolioPage() {
   ) => {
     if (uploads.length === 0) return;
 
-    const appended: DraftPortfolioItem[] = [];
+    const appended: DraftGalleryItem[] = [];
     setDrafts((prev) => {
       const existingUrls = new Set(prev.map((draft) => draft.imageUrl));
 
@@ -154,7 +151,7 @@ export default function UploadPortfolioPage() {
     (
       id: string,
       updates: Partial<
-        Omit<DraftPortfolioItem, "id" | "imageUrl" | "width" | "height">
+        Omit<DraftGalleryItem, "id" | "imageUrl" | "width" | "height">
       >,
     ) => {
       setDrafts((prev) =>
@@ -174,7 +171,7 @@ export default function UploadPortfolioPage() {
         await deleteCloudinaryImage(draft.imageUrl);
       } catch (error) {
         console.error(
-          "[UploadPortfolioPage] Failed to delete from Cloudinary:",
+          "[UploadGalleryPage] Failed to delete from Cloudinary:",
           error,
         );
       }
@@ -239,7 +236,7 @@ export default function UploadPortfolioPage() {
     return () => subscription.unsubscribe();
   }, [selectedDraft, watchSelectedDraftForm, handleDraftChange]);
 
-  const isDraftComplete = (draft: DraftPortfolioItem) =>
+  const isDraftComplete = (draft: DraftGalleryItem) =>
     draft.title.trim().length > 0 && draft.category.trim().length > 0;
 
   const hasMissingRequired = drafts.some((draft) => !isDraftComplete(draft));
@@ -248,7 +245,7 @@ export default function UploadPortfolioPage() {
     title: draft.title.trim(),
     description: draft.description.trim() || null,
     imageUrl: draft.imageUrl,
-    category: draft.category as PortfolioCategory,
+    category: draft.category as GalleryCategory,
     width: draft.width,
     height: draft.height,
   }));
@@ -261,7 +258,7 @@ export default function UploadPortfolioPage() {
 
     setSubmitting(true);
     try {
-      const result = await createPortfolioItems(normalizedPayload);
+      const result = await createGalleryItems(normalizedPayload);
       if (!result.success) {
         toast.error(result.message || uploadT("alerts.createFailed"));
         setSubmitting(false);
@@ -276,7 +273,7 @@ export default function UploadPortfolioPage() {
       router.push(backHref);
       router.refresh();
     } catch (error) {
-      console.error("[UploadPortfolioPage] create", error);
+      console.error("[UploadGalleryPage] create", error);
       toast.error(uploadT("alerts.createFailed"));
       setSubmitting(false);
     }
@@ -315,7 +312,7 @@ export default function UploadPortfolioPage() {
                 </Text>
               </div>
               <ImageUploader
-                folder="portfolio"
+                folder="gallery"
                 maxFiles={MAX_FILES}
                 useOverwrite={true}
                 onUploadComplete={handleUploadComplete}
@@ -478,7 +475,7 @@ export default function UploadPortfolioPage() {
                                   />
                                 </SelectTrigger>
                                 <SelectContent>
-                                  {PORTFOLIO_CATEGORIES.map((category) => (
+                                  {GALLERY_CATEGORIES.map((category) => (
                                     <SelectItem key={category} value={category}>
                                       {category}
                                     </SelectItem>

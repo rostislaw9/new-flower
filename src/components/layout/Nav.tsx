@@ -14,7 +14,7 @@ import { isSupportedLocale } from "@/lib/locale-utils";
 import { cn } from "@/lib/utils";
 
 const NAV_LINKS = [
-  { href: "/portfolio", key: "portfolio" },
+  { href: "/gallery", key: "gallery" },
   { href: "/about", key: "about" },
   { href: "/faq", key: "faq" },
   { href: "/contact", key: "contact" },

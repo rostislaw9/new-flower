@@ -4,19 +4,19 @@ import { revalidatePath } from "next/cache";
 
 import { deleteFromCloudinary, extractPublicIdFromUrl } from "@/lib/cloudinary";
 import {
+  GALLERY_CATEGORIES,
+  type GalleryCategory,
   MAX_FEATURED_ITEMS,
-  PORTFOLIO_CATEGORIES,
-  type PortfolioCategory,
-} from "@/lib/portfolio-data";
+} from "@/lib/gallery-data";
 import { prisma } from "@/lib/prisma";
 
-export type PortfolioActionResult =
+export type GalleryActionResult =
   | { success: true; id?: string }
   | { success: false; message: string };
 
 export async function reorderFeaturedItems(
   orderedIds: string[],
-): Promise<PortfolioActionResult> {
+): Promise<GalleryActionResult> {
   if (!Array.isArray(orderedIds) || orderedIds.length === 0) {
     return { success: false, message: "No featured items provided" };
   }
@@ -26,7 +26,7 @@ export async function reorderFeaturedItems(
   );
 
   try {
-    const currentFeatured = await prisma.portfolioItem.findMany({
+    const currentFeatured = await prisma.galleryItem.findMany({
       where: { featured: true },
       select: { id: true },
       orderBy: { displayOrder: "asc" },
@@ -51,7 +51,7 @@ export async function reorderFeaturedItems(
     await prisma.$transaction(async (tx) => {
       await Promise.all(
         normalizedOrder.map((id, index) =>
-          tx.portfolioItem.update({
+          tx.galleryItem.update({
             where: { id },
             data: { displayOrder: index, featured: true },
           }),
@@ -59,9 +59,9 @@ export async function reorderFeaturedItems(
       );
     });
 
-    revalidatePath("/portfolio");
-    revalidatePath("/admin/portfolio");
-    revalidatePath("/admin/portfolio/featured-order");
+    revalidatePath("/gallery");
+    revalidatePath("/admin/gallery");
+    revalidatePath("/admin/gallery/featured-order");
 
     return { success: true };
   } catch (error) {
@@ -70,26 +70,26 @@ export async function reorderFeaturedItems(
   }
 }
 
-export interface PortfolioUploadCreateItem {
+export interface GalleryUploadCreateItem {
   title: string;
   description?: string | null;
   imageUrl: string;
-  category: PortfolioCategory;
+  category: GalleryCategory;
   featured?: boolean;
   displayOrder?: number;
   width?: number;
   height?: number;
 }
 
-export type PortfolioUploadActionResult =
+export type GalleryUploadActionResult =
   | { success: true; count: number }
   | { success: false; message: string };
 
-export async function createPortfolioItems(
-  items: PortfolioUploadCreateItem[],
-): Promise<PortfolioUploadActionResult> {
+export async function createGalleryItems(
+  items: GalleryUploadCreateItem[],
+): Promise<GalleryUploadActionResult> {
   if (!Array.isArray(items) || items.length === 0) {
-    return { success: false, message: "No portfolio items provided" };
+    return { success: false, message: "No gallery items provided" };
   }
 
   const prepared = items.map((item, index) => {
@@ -102,7 +102,7 @@ export async function createPortfolioItems(
       : index;
     const width = item.width ?? 800;
     const height = item.height ?? 600;
-    const isValidCategory = PORTFOLIO_CATEGORIES.includes(item.category);
+    const isValidCategory = GALLERY_CATEGORIES.includes(item.category);
 
     return {
       title,
@@ -128,33 +128,33 @@ export async function createPortfolioItems(
   }
 
   try {
-    const result = await prisma.portfolioItem.createMany({
+    const result = await prisma.galleryItem.createMany({
       data: prepared as Array<
-        Omit<PortfolioUploadCreateItem, "category"> & {
-          category: PortfolioCategory;
+        Omit<GalleryUploadCreateItem, "category"> & {
+          category: GalleryCategory;
           width: number;
           height: number;
         }
       >,
     });
 
-    revalidatePath("/portfolio");
-    revalidatePath("/admin/portfolio");
+    revalidatePath("/gallery");
+    revalidatePath("/admin/gallery");
 
     return { success: true, count: result.count };
   } catch (error) {
-    console.error("[createPortfolioItems] Error:", error);
+    console.error("[createGalleryItems] Error:", error);
     return {
       success: false,
-      message: "Failed to create portfolio items",
+      message: "Failed to create gallery items",
     };
   }
 }
 
-export async function updatePortfolioItem(
+export async function updateGalleryItem(
   id: string,
   formData: FormData,
-): Promise<PortfolioActionResult> {
+): Promise<GalleryActionResult> {
   try {
     const title = formData.get("title") as string;
     const description = formData.get("description") as string | null;
@@ -175,17 +175,17 @@ export async function updatePortfolioItem(
     }
 
     // Get current item state
-    const currentItem = await prisma.portfolioItem.findUnique({
+    const currentItem = await prisma.galleryItem.findUnique({
       where: { id },
       select: { featured: true, displayOrder: true },
     });
 
     if (!currentItem) {
-      return { success: false, message: "Portfolio item not found" };
+      return { success: false, message: "Gallery item not found" };
     }
 
     // Update fields, only including featured/displayOrder when provided
-    await prisma.portfolioItem.update({
+    await prisma.galleryItem.update({
       where: { id },
       data: {
         title,
@@ -198,7 +198,7 @@ export async function updatePortfolioItem(
 
     // Handle featured state change separately to enforce limit
     if (hasFeatured && featured !== currentItem.featured) {
-      const result = await setPortfolioItemFeatured(id, featured);
+      const result = await setGalleryItemFeatured(id, featured);
       if (!result.success) {
         return {
           success: false,
@@ -207,21 +207,21 @@ export async function updatePortfolioItem(
       }
     }
 
-    revalidatePath("/portfolio");
-    revalidatePath("/admin/portfolio");
+    revalidatePath("/gallery");
+    revalidatePath("/admin/gallery");
 
     return { success: true };
   } catch (error) {
-    console.error("[updatePortfolioItem] Error:", error);
-    return { success: false, message: "Failed to update portfolio item" };
+    console.error("[updateGalleryItem] Error:", error);
+    return { success: false, message: "Failed to update gallery item" };
   }
 }
 
-export async function deletePortfolioItem(
+export async function deleteGalleryItem(
   id: string,
-): Promise<PortfolioActionResult> {
+): Promise<GalleryActionResult> {
   try {
-    const item = await prisma.portfolioItem.findUnique({
+    const item = await prisma.galleryItem.findUnique({
       where: { id },
     });
 
@@ -229,31 +229,31 @@ export async function deletePortfolioItem(
       return { success: false, message: "Item not found" };
     }
 
-    await prisma.portfolioItem.delete({ where: { id } });
+    await prisma.galleryItem.delete({ where: { id } });
 
     if (item.imageUrl) {
       const result = await deleteCloudinaryImage(item.imageUrl);
       if (!result.success) {
         console.error(
-          "[deletePortfolioItem] Cloudinary delete error:",
+          "[deleteGalleryItem] Cloudinary delete error:",
           result.message,
         );
       }
     }
 
-    revalidatePath("/portfolio");
-    revalidatePath("/admin/portfolio");
+    revalidatePath("/gallery");
+    revalidatePath("/admin/gallery");
 
     return { success: true };
   } catch (error) {
-    console.error("[deletePortfolioItem] Error:", error);
-    return { success: false, message: "Failed to delete portfolio item" };
+    console.error("[deleteGalleryItem] Error:", error);
+    return { success: false, message: "Failed to delete gallery item" };
   }
 }
 
 export async function deleteCloudinaryImage(
   imageUrl: string,
-): Promise<PortfolioActionResult> {
+): Promise<GalleryActionResult> {
   try {
     if (!imageUrl) {
       return { success: false, message: "Image URL is required" };
@@ -287,21 +287,21 @@ export async function deleteCloudinaryImage(
   }
 }
 
-export async function setPortfolioItemFeatured(
+export async function setGalleryItemFeatured(
   id: string,
   featured: boolean,
 ): Promise<{ success: boolean; message?: string }> {
   try {
     await prisma.$transaction(async (tx) => {
       if (!featured) {
-        await tx.portfolioItem.update({
+        await tx.galleryItem.update({
           where: { id },
           data: { featured: false, displayOrder: 0 },
         });
         return;
       }
 
-      const currentlyFeatured = await tx.portfolioItem.findMany({
+      const currentlyFeatured = await tx.galleryItem.findMany({
         where: { featured: true },
         orderBy: { createdAt: "asc" },
         select: { id: true },
@@ -315,7 +315,7 @@ export async function setPortfolioItemFeatured(
         return;
       }
 
-      await tx.portfolioItem.update({
+      await tx.galleryItem.update({
         where: { id },
         data: { featured: true },
       });
@@ -332,7 +332,7 @@ export async function setPortfolioItemFeatured(
           .filter((itemId) => itemId !== id);
 
         if (toUnfeatureIds.length > 0) {
-          await tx.portfolioItem.updateMany({
+          await tx.galleryItem.updateMany({
             where: { id: { in: toUnfeatureIds } },
             data: { featured: false, displayOrder: 0 },
           });
@@ -340,12 +340,12 @@ export async function setPortfolioItemFeatured(
       }
     });
 
-    revalidatePath("/portfolio");
-    revalidatePath("/admin/portfolio");
+    revalidatePath("/gallery");
+    revalidatePath("/admin/gallery");
 
     return { success: true };
   } catch (error) {
-    console.error("[setPortfolioItemFeatured] Error", error);
+    console.error("[setGalleryItemFeatured] Error", error);
     return { success: false, message: "Failed to update featured state" };
   }
 }

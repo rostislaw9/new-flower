@@ -1,16 +1,16 @@
 import { NextResponse } from "next/server";
 
-import { getAdminPortfolioItems } from "@/lib/portfolio-loader";
+import { getAdminGalleryItems } from "@/lib/gallery-loader";
 
 export async function GET(): Promise<NextResponse> {
   try {
-    const items = await getAdminPortfolioItems();
+    const items = await getAdminGalleryItems();
 
     return NextResponse.json(items);
   } catch (error) {
-    console.error("[GET /api/portfolio] Error:", error);
+    console.error("[GET /api/gallery] Error:", error);
     return NextResponse.json(
-      { error: "Failed to fetch portfolio items" },
+      { error: "Failed to fetch gallery items" },
       { status: 500 },
     );
   }

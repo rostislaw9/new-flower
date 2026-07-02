@@ -35,16 +35,16 @@ import {
 import { useIsMobile } from "@/hooks/use-mobile";
 import { type Locale, defaultLocale } from "@/i18n/config";
 import {
-  deletePortfolioItem,
-  setPortfolioItemFeatured,
-} from "@/lib/actions/portfolio";
+  deleteGalleryItem,
+  setGalleryItemFeatured,
+} from "@/lib/actions/gallery";
+import { type GalleryItem, MAX_FEATURED_ITEMS } from "@/lib/gallery-data";
 import { getLocalizedPath, isSupportedLocale } from "@/lib/locale-utils";
-import { MAX_FEATURED_ITEMS, type PortfolioItem } from "@/lib/portfolio-data";
 
 const INITIAL_BATCH = 15;
 const LOAD_MORE_BATCH = 10;
 
-export default function PortfolioAdminPage() {
+export default function GalleryAdminPage() {
   const rawLocale = useLocale();
   const locale: Locale = isSupportedLocale(rawLocale)
     ? rawLocale
@@ -53,10 +53,10 @@ export default function PortfolioAdminPage() {
   const isMobile = useIsMobile();
   const router = useRouter();
   const { start } = useTopLoader();
-  const t = useTranslations("admin.portfolio");
+  const t = useTranslations("admin.gallery");
   const actionsT = useTranslations("admin.common.actions");
 
-  const [items, setItems] = useState<PortfolioItem[]>([]);
+  const [items, setItems] = useState<GalleryItem[]>([]);
   const [loading, setLoading] = useState(true);
   const [visibleCount, setVisibleCount] = useState(INITIAL_BATCH);
   const [loadedImages, setLoadedImages] = useState<Record<string, boolean>>({});
@@ -70,12 +70,12 @@ export default function PortfolioAdminPage() {
   useEffect(() => {
     const fetchItems = async () => {
       try {
-        const response = await fetch("/api/portfolio");
-        const data = (await response.json()) as PortfolioItem[];
+        const response = await fetch("/api/gallery");
+        const data = (await response.json()) as GalleryItem[];
         setItems(data);
         setVisibleCount(Math.min(data.length, INITIAL_BATCH));
       } catch {
-        console.error("Failed to fetch portfolio items");
+        console.error("Failed to fetch gallery items");
       } finally {
         setLoading(false);
       }
@@ -145,8 +145,8 @@ export default function PortfolioAdminPage() {
   const canFlagNotFeatured = selectedFeaturedCount > 0;
 
   const refreshItems = async () => {
-    const response = await fetch("/api/portfolio");
-    const data = (await response.json()) as PortfolioItem[];
+    const response = await fetch("/api/gallery");
+    const data = (await response.json()) as GalleryItem[];
     setItems(data);
   };
 
@@ -167,7 +167,7 @@ export default function PortfolioAdminPage() {
     setBulkFlagLoading(featured ? "feature" : "unfeature");
     try {
       for (const id of selectedIds) {
-        const result = await setPortfolioItemFeatured(id, featured);
+        const result = await setGalleryItemFeatured(id, featured);
         if (!result.success) {
           throw new Error(result.message ?? "Failed to update");
         }
@@ -192,7 +192,7 @@ export default function PortfolioAdminPage() {
     let successCount = 0;
 
     for (const id of idsToDelete) {
-      const result = await deletePortfolioItem(id);
+      const result = await deleteGalleryItem(id);
       if (result.success) {
         successCount++;
       }
@@ -247,12 +247,9 @@ export default function PortfolioAdminPage() {
 
   const backHref = getLocalizedPath("/admin", locale);
   const editHref = (id: string) =>
-    getLocalizedPath(`/admin/portfolio/${id}/edit`, locale);
-  const uploadHref = getLocalizedPath("/admin/portfolio/upload", locale);
-  const reorderHref = getLocalizedPath(
-    "/admin/portfolio/featured-order",
-    locale,
-  );
+    getLocalizedPath(`/admin/gallery/${id}/edit`, locale);
+  const uploadHref = getLocalizedPath("/admin/gallery/upload", locale);
+  const reorderHref = getLocalizedPath("/admin/gallery/featured-order", locale);
 
   const emptyState = (
     <Empty className="rounded-xl border">

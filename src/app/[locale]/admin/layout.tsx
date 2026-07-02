@@ -65,7 +65,7 @@ export default function AdminLayout({ children }: { children: ReactNode }) {
   const navItems = [
     { href: "/admin", icon: LayoutDashboard, label: t("nav.dashboard") },
     { href: "/admin/artist-images", icon: User, label: t("nav.artistImages") },
-    { href: "/admin/portfolio", icon: Images, label: t("nav.portfolio") },
+    { href: "/admin/gallery", icon: Images, label: t("nav.gallery") },
     { href: "/admin/bookings", icon: Calendar, label: t("nav.bookings") },
     { href: "/admin/reviews", icon: Star, label: t("nav.reviews") },
     { href: "/admin/faq", icon: HelpCircle, label: t("nav.faq") },
@@ -210,7 +210,7 @@ function buildAdminBreadcrumbs(
   const labelMap: Record<string, string> = {
     admin: "Dashboard",
     bookings: "Bookings",
-    portfolio: "Portfolio",
+    gallery: "Gallery",
     reviews: "Reviews",
     faq: "FAQ",
     new: "New",

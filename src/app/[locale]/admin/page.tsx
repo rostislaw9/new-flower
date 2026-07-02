@@ -6,23 +6,19 @@ import { StatCard } from "@/components/admin/dashboard/StatCard";
 import { prisma } from "@/lib/prisma";
 
 async function getStats() {
-  const [
-    totalBookings,
-    pendingBookings,
-    completedBookings,
-    totalPortfolioItems,
-  ] = await Promise.all([
-    prisma.appointment.count(),
-    prisma.appointment.count({ where: { status: "pending" } }),
-    prisma.appointment.count({ where: { status: "completed" } }),
-    prisma.portfolioItem.count(),
-  ]);
+  const [totalBookings, pendingBookings, completedBookings, totalGalleryItems] =
+    await Promise.all([
+      prisma.appointment.count(),
+      prisma.appointment.count({ where: { status: "pending" } }),
+      prisma.appointment.count({ where: { status: "completed" } }),
+      prisma.galleryItem.count(),
+    ]);
 
   return {
     totalBookings,
     pendingBookings,
     completedBookings,
-    totalPortfolioItems,
+    totalGalleryItems,
   };
 }
 
@@ -57,11 +53,11 @@ export default async function AdminDashboard() {
           href="/admin/bookings?status=completed"
         />
         <StatCard
-          title={t("stats.portfolio.title")}
-          value={stats.totalPortfolioItems}
+          title={t("stats.gallery.title")}
+          value={stats.totalGalleryItems}
           icon="images"
-          description={t("stats.portfolio.description")}
-          href="/admin/portfolio"
+          description={t("stats.gallery.description")}
+          href="/admin/gallery"
         />
         <ActionCard
           title={t("actions.artistImages.title")}
@@ -70,9 +66,9 @@ export default async function AdminDashboard() {
           icon="user"
         />
         <ActionCard
-          title={t("actions.portfolio.title")}
-          description={t("actions.portfolio.description")}
-          href="/admin/portfolio"
+          title={t("actions.gallery.title")}
+          description={t("actions.gallery.description")}
+          href="/admin/gallery"
           icon="images"
         />
         <ActionCard

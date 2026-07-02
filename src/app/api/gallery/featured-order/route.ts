@@ -1,6 +1,6 @@
 import { NextResponse } from "next/server";
 
-import { reorderFeaturedItems } from "@/lib/actions/portfolio";
+import { reorderFeaturedItems } from "@/lib/actions/gallery";
 
 export async function POST(request: Request): Promise<NextResponse> {
   try {
@@ -14,7 +14,7 @@ export async function POST(request: Request): Promise<NextResponse> {
 
     return NextResponse.json({ success: true });
   } catch (error) {
-    console.error("[POST /api/portfolio/featured-order] Error", error);
+    console.error("[POST /api/gallery/featured-order] Error", error);
     return NextResponse.json(
       { success: false, message: "Failed to update featured order" },
       { status: 500 },

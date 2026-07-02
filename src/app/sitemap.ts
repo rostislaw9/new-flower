@@ -13,7 +13,7 @@ export default function sitemap(): MetadataRoute.Sitemap {
       priority: 1,
     },
     {
-      url: `${SITE_URL}/portfolio`,
+      url: `${SITE_URL}/gallery`,
       lastModified: now,
       changeFrequency: "weekly",
       priority: 0.9,

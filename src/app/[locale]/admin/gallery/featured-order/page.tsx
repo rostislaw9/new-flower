@@ -34,12 +34,12 @@ import {
   EmptyTitle,
 } from "@/components/ui/empty";
 import { type Locale, defaultLocale } from "@/i18n/config";
+import { type GalleryItem } from "@/lib/gallery-data";
 import { getLocalizedPath, isSupportedLocale } from "@/lib/locale-utils";
-import { type PortfolioItem } from "@/lib/portfolio-data";
 import { cn } from "@/lib/utils";
 
 interface SortableFeaturedCardProps {
-  item: PortfolioItem;
+  item: GalleryItem;
   index: number;
 }
 
@@ -113,11 +113,11 @@ export default function FeaturedOrderPage() {
     ? rawLocale
     : defaultLocale;
 
-  const t = useTranslations("admin.portfolio.reorder");
+  const t = useTranslations("admin.gallery.reorder");
   const actionsT = useTranslations("admin.common.actions");
   const router = useRouter();
 
-  const [items, setItems] = useState<PortfolioItem[]>([]);
+  const [items, setItems] = useState<GalleryItem[]>([]);
   const [initialOrder, setInitialOrder] = useState<string[]>([]);
   const [isLoading, setIsLoading] = useState(true);
   const [isSaving, setIsSaving] = useState(false);
@@ -130,7 +130,7 @@ export default function FeaturedOrderPage() {
     }),
   );
 
-  const backHref = getLocalizedPath("/admin/portfolio", locale);
+  const backHref = getLocalizedPath("/admin/gallery", locale);
   const sortableIds = useMemo(() => items.map((item) => item.id), [items]);
 
   const hasChanges = useMemo(() => {
@@ -143,11 +143,11 @@ export default function FeaturedOrderPage() {
   const fetchFeaturedItems = useCallback(async () => {
     setIsLoading(true);
     try {
-      const response = await fetch("/api/portfolio", { cache: "no-store" });
+      const response = await fetch("/api/gallery", { cache: "no-store" });
       if (!response.ok) {
-        throw new Error("Failed to load portfolio");
+        throw new Error("Failed to load gallery");
       }
-      const data = (await response.json()) as PortfolioItem[];
+      const data = (await response.json()) as GalleryItem[];
       const featuredOnly = data
         .filter((item) => item.featured)
         .sort((a, b) => a.displayOrder - b.displayOrder);
@@ -200,7 +200,7 @@ export default function FeaturedOrderPage() {
     }
     setIsSaving(true);
     try {
-      const response = await fetch("/api/portfolio/featured-order", {
+      const response = await fetch("/api/gallery/featured-order", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ ids: items.map((item) => item.id) }),

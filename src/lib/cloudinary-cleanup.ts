@@ -11,7 +11,7 @@ cloudinary.config({
   secure: true,
 });
 
-const CLOUDINARY_FOLDERS = ["portfolio", "bookings", "artist-images"] as const;
+const CLOUDINARY_FOLDERS = ["gallery", "bookings", "artist-images"] as const;
 
 interface CloudinaryResource {
   public_id: string;
@@ -49,10 +49,10 @@ async function listAllCloudinaryResources(
 async function collectUsedImageUrls(): Promise<Set<string>> {
   const usedUrls = new Set<string>();
 
-  const portfolioItems = await prisma.portfolioItem.findMany({
+  const galleryItems = await prisma.galleryItem.findMany({
     select: { imageUrl: true },
   });
-  for (const item of portfolioItems) {
+  for (const item of galleryItems) {
     if (item.imageUrl) usedUrls.add(item.imageUrl);
   }
 

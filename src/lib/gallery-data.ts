@@ -1,4 +1,4 @@
-export type PortfolioCategory =
+export type GalleryCategory =
   | "Thai Sak Yant"
   | "Japanese Style"
   | "Realism"
@@ -11,7 +11,7 @@ export type PortfolioCategory =
   | "Tribal"
   | "Other";
 
-export const PORTFOLIO_CATEGORIES: PortfolioCategory[] = [
+export const GALLERY_CATEGORIES: GalleryCategory[] = [
   "Thai Sak Yant",
   "Japanese Style",
   "Realism",
@@ -25,12 +25,12 @@ export const PORTFOLIO_CATEGORIES: PortfolioCategory[] = [
   "Other",
 ];
 
-export interface PortfolioItem {
+export interface GalleryItem {
   id: string;
   title: string;
   description: string | null;
   imageUrl: string;
-  category: PortfolioCategory;
+  category: GalleryCategory;
   featured: boolean;
   displayOrder: number;
   width: number;
