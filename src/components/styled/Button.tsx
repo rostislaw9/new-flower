@@ -7,18 +7,19 @@ import { type VariantProps, cva } from "class-variance-authority";
 import { Button as ShadcnButton } from "@/components/ui/button";
 import { cn } from "@/lib/utils";
 
-const customButtonVariants = cva(["tracking-wider", "uppercase", "shadow-sm"], {
+const customButtonVariants = cva(["tracking-wider", "uppercase"], {
   variants: {
     variant: {
       default:
-        "bg-primary text-primary-foreground hover:bg-primary/90 border border-primary",
+        "bg-primary text-primary-foreground hover:bg-primary/90 border border-primary shadow-sm",
       accent:
-        "bg-transparent text-accent border border-accent hover:bg-accent hover:text-secondary",
+        "bg-transparent text-accent border border-accent hover:bg-accent hover:text-secondary shadow-sm",
       destructive:
-        "bg-transparent text-red-600 hover:bg-red-600 hover:text-secondary border border-border",
+        "bg-transparent text-red-600 hover:bg-red-600 hover:text-secondary border border-border shadow-sm",
       outline:
-        "bg-transparent text-foreground hover:bg-secondary border border-border hover:border-foreground/30",
-      secondary: "bg-secondary text-secondary-foreground hover:bg-secondary/80",
+        "bg-transparent text-foreground hover:bg-secondary border border-border hover:border-foreground/30 shadow-sm",
+      secondary:
+        "bg-secondary text-secondary-foreground hover:bg-secondary/80 shadow-sm",
       ghost:
         "bg-transparent text-foreground hover:bg-secondary border border-transparent",
       link: "bg-transparent text-primary hover:bg-transparent hover:opacity-70 p-0",
