@@ -301,7 +301,7 @@ export default function UploadGalleryPage() {
 
       <div className="grid gap-6 lg:grid-cols-2">
         <div className="flex flex-col gap-6">
-          <Card className="rounded-2xl border border-border/60 bg-card/60 shadow-lg">
+          <Card className="rounded-2xl border border-border/60 bg-card/60 shadow-md">
             <CardContent className="flex flex-col gap-6 pt-6">
               <div>
                 <Heading size="sm" serif={false}>
@@ -320,7 +320,7 @@ export default function UploadGalleryPage() {
             </CardContent>
           </Card>
 
-          <Card className="rounded-2xl border border-border/60 bg-card/60 shadow-lg">
+          <Card className="rounded-2xl border border-border/60 bg-card/60 shadow-md">
             <CardContent className="flex flex-col gap-4 pt-6">
               <div className="flex items-center justify-between gap-2">
                 <div>
@@ -402,7 +402,7 @@ export default function UploadGalleryPage() {
         </div>
 
         <div className="sticky top-20 flex h-fit flex-col gap-6">
-          <Card className="rounded-2xl border border-border/60 bg-card/60 shadow-lg">
+          <Card className="rounded-2xl border border-border/60 bg-card/60 shadow-md">
             <CardContent className="flex flex-col gap-6 pt-6">
               {selectedDraft ? (
                 <>

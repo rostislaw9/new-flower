@@ -14,4 +14,4 @@ export const fontSans = Geist({
   display: "swap",
 });
 
-export const themeFontClass = `dark font-sans ${fontDisplay.variable} ${fontSans.variable}`;
+export const fontClass = `font-sans ${fontDisplay.variable} ${fontSans.variable}`;

@@ -67,7 +67,7 @@ const SortableFeaturedCard = memo(function SortableFeaturedCard({
       ref={setNodeRef}
       style={style}
       className={cn(
-        "group relative flex h-full flex-col overflow-hidden rounded-2xl border border-border/60 bg-card/80 shadow-lg transition-colors hover:border-accent",
+        "group relative flex h-full flex-col overflow-hidden rounded-2xl border border-border/60 bg-card/80 shadow-md transition-colors hover:border-accent",
         isDragging &&
           "z-10 border-accent/80 bg-background shadow-xl ring-2 ring-accent/40",
       )}

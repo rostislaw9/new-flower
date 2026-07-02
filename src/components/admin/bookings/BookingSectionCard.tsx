@@ -22,7 +22,7 @@ export function BookingSectionCard({
   return (
     <Card
       className={cn(
-        "rounded-2xl border border-border/60 bg-card/60 shadow-lg",
+        "rounded-2xl border border-border/60 bg-card/60 shadow-md",
         className,
       )}
     >

@@ -118,7 +118,7 @@ export default async function BookingDetailPage({
         hint={detailT("bookingCodeLabel", { code: booking.id })}
       >
         <div className="grid gap-4 md:grid-cols-4">
-          <div className="col-span-2 content-center rounded-xl border border-border/60 bg-card/60 p-4 shadow-lg">
+          <div className="col-span-2 content-center rounded-xl border border-border/60 bg-card/60 p-4 shadow-md">
             <BookingStatusControl
               bookingId={booking.id}
               currentStatus={booking.status}

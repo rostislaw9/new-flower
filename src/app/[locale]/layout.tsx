@@ -8,7 +8,7 @@ import NextTopLoader from "nextjs-toploader";
 import { Footer } from "@/components/layout/Footer";
 import { Nav } from "@/components/layout/Nav";
 import { getArtistImagesConfig } from "@/lib/artist-images-config";
-import { themeFontClass } from "@/lib/fonts";
+import { fontClass } from "@/lib/fonts";
 
 const SITE_URL = process.env.NEXT_PUBLIC_SITE_URL!;
 
@@ -107,7 +107,7 @@ export default async function LocaleLayout({
 
   return (
     <NextIntlClientProvider messages={messages} locale={locale}>
-      <div className={themeFontClass} data-scroll-behavior="smooth">
+      <div className={fontClass} data-scroll-behavior="smooth">
         <a
           href="#main-content"
           className="sr-only focus:not-sr-only focus:fixed focus:left-4 focus:top-4 focus:z-[100] focus:bg-accent focus:px-4 focus:py-2 focus:text-xs focus:font-semibold focus:uppercase focus:tracking-[0.2em] focus:text-accent-foreground"
@@ -118,7 +118,7 @@ export default async function LocaleLayout({
         <Nav />
         <main
           id="main-content"
-          className={themeFontClass}
+          className={fontClass}
           data-scroll-behavior="smooth"
         >
           {children}

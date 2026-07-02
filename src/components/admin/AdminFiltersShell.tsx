@@ -59,7 +59,7 @@ export function AdminFiltersShell({
             <Button
               type="button"
               variant="outline"
-              className="flex w-full items-center justify-between rounded-2xl border border-border/60 bg-card/60 text-sm text-accent"
+              className="flex w-full items-center justify-between rounded-2xl border border-border/60 bg-card/60 text-sm text-accent shadow-md"
             >
               {drawerTriggerLabel}
               <Filter />
@@ -82,7 +82,7 @@ export function AdminFiltersShell({
   }
 
   return (
-    <Card className="rounded-2xl border border-border/60 bg-card/60 shadow-lg">
+    <Card className="rounded-2xl border border-border/60 bg-card/60 shadow-md">
       <Collapsible open={desktopOpen} onOpenChange={setDesktopOpen}>
         <div className="flex items-center justify-between gap-4 px-6 py-4">
           <div>

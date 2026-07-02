@@ -21,6 +21,7 @@ import { AdminPageShell } from "@/components/admin/AdminPageShell";
 import { AdminSidebarFooter } from "@/components/admin/sidebar/AdminSidebarFooter";
 import { AdminSidebarHeader } from "@/components/admin/sidebar/AdminSidebarHeader";
 import { AdminSidebarNavMenu } from "@/components/admin/sidebar/AdminSidebarNavMenu";
+import { ThemeSwitcher } from "@/components/admin/sidebar/ThemeSwitcher";
 import { LanguageSwitcher } from "@/components/styled/LanguageSwitcher";
 import {
   Breadcrumb,
@@ -115,6 +116,13 @@ export default function AdminLayout({ children }: { children: ReactNode }) {
           />
         </SidebarContent>
         <SidebarFooter className="px-2 py-4">
+          <ThemeSwitcher
+            labels={{
+              light: t("theme.light"),
+              dark: t("theme.dark"),
+              system: t("theme.system"),
+            }}
+          />
           <AdminSidebarFooter href={`/${locale}`} label={t("openWebsite")} />
         </SidebarFooter>
         <SidebarRail />

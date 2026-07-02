@@ -76,13 +76,6 @@ export function Text({
   );
 }
 
-const eyebrowSizeClasses = {
-  lg: "text-lg",
-  md: "text-base",
-  sm: "text-sm",
-  xs: "text-xs",
-};
-
 interface EyebrowProps {
   children: ReactNode;
   className?: string;
@@ -99,7 +92,7 @@ export function Eyebrow({
   return (
     <p
       className={cn(
-        eyebrowSizeClasses[size],
+        textSizeClasses[size],
         "font-sans font-semibold uppercase tracking-widest text-accent",
         muted && "text-muted-foreground",
         className,

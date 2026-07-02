@@ -71,7 +71,7 @@ New Flower Tattoo is a full-featured web application designed specifically for t
 - **Gallery Management** — Create, edit, delete gallery items with image uploads
 - **Booking Management** — View, filter, and update appointment statuses
 - **Review Management** — Moderate and feature client reviews
-- **Artist Images** — Manage artist portrait and shop logo with Cloudinary integration
+- **Artist Images Management** — Manage artist portrait and shop logo with Cloudinary integration
 - **About Page Management** — Edit biography and journey timeline with localized content
 - **FAQ Management** — Manage FAQ groups, questions, and translations
 - **Responsive Sidebar** — Collapsible navigation with mobile support

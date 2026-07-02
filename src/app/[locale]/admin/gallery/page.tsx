@@ -359,7 +359,7 @@ export default function GalleryAdminPage() {
                 router.push(editHref(item.id));
               }
             }}
-            className="group cursor-pointer overflow-hidden rounded-xl border-border/60 bg-card/60 shadow-lg transition-transform duration-200 ease-out hover:border-accent hover:bg-accent/5 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-accent"
+            className="group cursor-pointer overflow-hidden rounded-xl border-border/60 bg-card/60 shadow-md transition-transform duration-200 ease-out hover:border-accent hover:bg-accent/5 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-accent"
           >
             <div className="relative aspect-[3/4] overflow-hidden bg-muted/20">
               {!loadedImages[item.id] && (

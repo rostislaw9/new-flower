@@ -210,7 +210,7 @@ export default function EditGalleryItemPage({
       >
         <div className="grid items-start gap-6 lg:grid-cols-[2fr,3fr]">
           <div className="flex flex-col gap-6">
-            <Card className="row-span-2 rounded-2xl border border-border/60 bg-card/60 shadow-lg">
+            <Card className="row-span-2 rounded-2xl border border-border/60 bg-card/60 shadow-md">
               <CardContent className="pt-6">
                 <div className="flex flex-col gap-2">
                   <Label>{t("form.currentImageLabel")}</Label>
@@ -242,7 +242,7 @@ export default function EditGalleryItemPage({
           </div>
 
           <div className="flex flex-col gap-6">
-            <Card className="rounded-2xl border border-border/60 bg-card/60 shadow-lg">
+            <Card className="rounded-2xl border border-border/60 bg-card/60 shadow-md">
               <CardContent className="pt-6">
                 <div className="grid gap-4 sm:grid-cols-2">
                   <Field>
@@ -357,7 +357,7 @@ export default function EditGalleryItemPage({
               </CardContent>
             </Card>
 
-            <Card className="rounded-2xl border border-border/60 bg-card/60 shadow-lg">
+            <Card className="rounded-2xl border border-border/60 bg-card/60 shadow-md">
               <CardContent className="pt-6">
                 <div className="flex flex-col gap-2">
                   <Label>{t("form.imageLabel")}</Label>

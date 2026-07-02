@@ -1,8 +1,9 @@
 import type { ReactNode } from "react";
 
+import { ThemeProvider } from "@/components/providers/ThemeProvider";
 import { ToastProvider } from "@/components/providers/ToastProvider";
 import { defaultLocale } from "@/i18n/config";
-import { themeFontClass } from "@/lib/fonts";
+import { fontClass } from "@/lib/fonts";
 
 import "./globals.css";
 
@@ -12,7 +13,11 @@ interface RootLayoutProps {
 
 export default function RootLayout({ children }: RootLayoutProps) {
   return (
-    <html lang={defaultLocale} data-scroll-behavior="smooth">
+    <html
+      lang={defaultLocale}
+      data-scroll-behavior="smooth"
+      suppressHydrationWarning
+    >
       <head>
         <link rel="preconnect" href="https://fonts.googleapis.com" />
         <link
@@ -22,9 +27,16 @@ export default function RootLayout({ children }: RootLayoutProps) {
         />
         <link rel="preconnect" href="https://res.cloudinary.com" />
       </head>
-      <body className={themeFontClass}>
-        {children}
-        <ToastProvider />
+      <body className={fontClass}>
+        <ThemeProvider
+          attribute="class"
+          defaultTheme="dark"
+          enableSystem
+          disableTransitionOnChange
+        >
+          {children}
+          <ToastProvider />
+        </ThemeProvider>
       </body>
     </html>
   );

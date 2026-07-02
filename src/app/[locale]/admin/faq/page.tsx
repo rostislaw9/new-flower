@@ -274,14 +274,15 @@ export default function FaqAdminPage() {
                   setExpandedQuestionId(null);
                 }}
               >
-                <Card className="rounded-2xl border border-border/60 bg-card/60 shadow-lg">
+                <Card className="rounded-2xl border border-border/60 bg-card/60 shadow-md">
                   <CardContent className="p-4">
                     {/* Group header */}
                     <div className="flex items-center justify-between gap-2">
                       <CollapsibleTrigger asChild>
-                        <button
+                        <Button
                           type="button"
-                          className="flex flex-1 items-center gap-2 text-muted-foreground hover:text-foreground"
+                          variant="ghost"
+                          className="flex flex-1 p-2"
                         >
                           <ChevronDown
                             className={cn(
@@ -289,13 +290,10 @@ export default function FaqAdminPage() {
                               isExpanded || "-rotate-90",
                             )}
                           />
-                          <Eyebrow
-                            size="xs"
-                            className="flex-1 text-left hover:text-foreground"
-                          >
+                          <Eyebrow size="xs" className="flex-1 text-left">
                             {displayTitle}
                           </Eyebrow>
-                        </button>
+                        </Button>
                       </CollapsibleTrigger>
                       <Button
                         size="icon"
@@ -363,27 +361,28 @@ export default function FaqAdminPage() {
                                   );
                                 }}
                               >
-                                <div className="rounded-lg border border-border/40">
+                                <div className="rounded-lg border border-border/40 shadow-sm">
                                   {/* Question header */}
                                   <div className="flex items-center justify-between gap-2 p-2">
                                     <CollapsibleTrigger asChild>
-                                      <button
+                                      <Button
                                         type="button"
-                                        className="flex flex-1 items-center gap-2 text-muted-foreground hover:text-foreground"
+                                        variant="ghost"
+                                        className="flex flex-1 p-2"
                                       >
                                         <ChevronDown
                                           className={cn(
-                                            "h-4 w-4 transition-transform",
+                                            "transition-transform",
                                             isQExpanded || "-rotate-90",
                                           )}
                                         />
                                         <Text
                                           size="sm"
-                                          className="flex-1 text-left hover:text-foreground"
+                                          className="flex-1 text-left"
                                         >
                                           {qDisplay}
                                         </Text>
-                                      </button>
+                                      </Button>
                                     </CollapsibleTrigger>
                                     <Button
                                       size="icon"
@@ -462,8 +461,9 @@ export default function FaqAdminPage() {
 
                           <Button
                             size="sm"
-                            variant="outline"
+                            variant="accent"
                             onClick={() => void handleAddQuestion(group.id)}
+                            className="w-fit"
                           >
                             <Plus />
                             {t("addQuestion")}

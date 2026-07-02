@@ -38,7 +38,7 @@ export function TranslationEditor({
   const hasChanges = question !== initialQuestion || answer !== initialAnswer;
 
   return (
-    <div className="flex w-full flex-col gap-2 rounded-md border border-border/30 bg-muted/20 p-3">
+    <div className="flex w-full flex-col gap-2 rounded-lg border border-border/30 bg-muted/20 p-3 shadow-sm">
       <div className="flex items-center justify-between gap-2">
         <span className="rounded bg-primary/10 p-2 text-xs font-semibold text-primary">
           {label}

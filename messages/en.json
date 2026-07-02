@@ -486,7 +486,12 @@
         "about": "About",
         "faq": "FAQ"
       },
-      "openWebsite": "Homepage"
+      "openWebsite": "Homepage",
+      "theme": {
+        "light": "Light",
+        "dark": "Dark",
+        "system": "System"
+      }
     },
     "dashboard": {
       "title": "Dashboard",
@@ -537,7 +542,7 @@
       }
     },
     "bookings": {
-      "title": "Bookings management",
+      "title": "Bookings Management",
       "subtitle": "View and manage all appointment requests",
       "filters": {
         "panelTitle": "Filters",
@@ -634,7 +639,7 @@
       }
     },
     "reviews": {
-      "title": "Client reviews",
+      "title": "Reviews Management",
       "subtitle": "Moderate testimonials and choose what appears on the homepage",
       "filters": {
         "panelTitle": "Filters",
@@ -814,7 +819,7 @@
       "removeAria": "Remove image"
     },
     "artistImages": {
-      "title": "Artist Images",
+      "title": "Artist Images Management",
       "subtitle": "Manage artist portrait and shop logo",
       "portrait": {
         "title": "Artist Portrait",

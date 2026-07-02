@@ -56,7 +56,7 @@ export function StatCard({
         }
       }}
       className={cn(
-        "group rounded-2xl border border-border/60 bg-card/60 shadow-lg transition-colors hover:border-accent hover:bg-accent/5 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-accent",
+        "group rounded-2xl border border-border/60 bg-card/60 shadow-md transition-colors hover:border-accent hover:bg-accent/5 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-accent",
         className,
       )}
     >

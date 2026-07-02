@@ -232,7 +232,7 @@ export default function AboutAdminPage() {
       {/* Bio section */}
       <div className="flex flex-col gap-3">
         <Eyebrow size="xs">{t("bioSection")}</Eyebrow>
-        <Card className="rounded-2xl border border-border/60 bg-card/60 shadow-lg">
+        <Card className="rounded-2xl border border-border/60 bg-card/60 shadow-md">
           <CardContent className="flex flex-col gap-2 p-4 md:flex-row">
             {(
               bio?.translations ?? [
@@ -278,7 +278,7 @@ export default function AboutAdminPage() {
                   setExpandedJourneyId(open ? journey.id : null);
                 }}
               >
-                <Card className="rounded-2xl border border-border/60 bg-card/60 shadow-lg">
+                <Card className="rounded-2xl border border-border/60 bg-card/60 shadow-md">
                   <CardContent className="p-4">
                     <div className="flex items-center justify-between gap-2">
                       <CollapsibleTrigger asChild>

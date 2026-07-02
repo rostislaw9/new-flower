@@ -7,7 +7,7 @@ import { type VariantProps, cva } from "class-variance-authority";
 import { Button as ShadcnButton } from "@/components/ui/button";
 import { cn } from "@/lib/utils";
 
-const customButtonVariants = cva(["tracking-wider", "uppercase"], {
+const customButtonVariants = cva(["tracking-wider", "uppercase", "shadow-sm"], {
   variants: {
     variant: {
       default:

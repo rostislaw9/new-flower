@@ -112,7 +112,7 @@ export default function ArtistImagesPage() {
 
       <div className="grid items-start gap-6 lg:grid-cols-2">
         {/* Artist Portrait */}
-        <Card className="rounded-2xl border border-border/60 bg-card/60 shadow-lg">
+        <Card className="rounded-2xl border border-border/60 bg-card/60 shadow-md">
           <CardContent className="flex flex-col gap-6 pt-6">
             <div>
               <Heading size="sm" serif={false}>
@@ -179,7 +179,7 @@ export default function ArtistImagesPage() {
         </Card>
 
         {/* Shop Logo */}
-        <Card className="rounded-2xl border border-border/60 bg-card/60 shadow-lg">
+        <Card className="rounded-2xl border border-border/60 bg-card/60 shadow-md">
           <CardContent className="flex flex-col gap-6 pt-6">
             <div>
               <Heading size="sm" serif={false}>

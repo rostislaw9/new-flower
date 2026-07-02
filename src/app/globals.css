@@ -4,6 +4,55 @@
 
 @layer base {
   :root {
+    /* Light palette — clean whites + warm gold accent */
+    --background: 30 20% 99%;
+    --foreground: 0 0% 10%;
+
+    --card: 0 0% 100%;
+    --card-foreground: 0 0% 10%;
+
+    --popover: 0 0% 100%;
+    --popover-foreground: 0 0% 10%;
+
+    /* Primary = dark for text/buttons on light */
+    --primary: 0 0% 10%;
+    --primary-foreground: 30 20% 99%;
+
+    /* Secondary = subtle surface lift */
+    --secondary: 30 10% 96%;
+    --secondary-foreground: 0 0% 20%;
+
+    /* Muted = dimmed text and surfaces */
+    --muted: 30 10% 96%;
+    --muted-foreground: 0 0% 45%;
+
+    /* Accent = warm gold */
+    --accent: 36 45% 50%;
+    --accent-foreground: 0 0% 100%;
+
+    --destructive: 0 72% 51%;
+    --destructive-foreground: 0 0% 100%;
+
+    /* Borders */
+    --border: 0 0% 90%;
+    --input: 0 0% 90%;
+    --ring: 36 45% 50%;
+
+    /* Sharp, editorial radius */
+    --radius: 0.125rem;
+
+    /* Sidebar colors (light) */
+    --sidebar-background: 0 0% 100%;
+    --sidebar-foreground: 0 0% 15%;
+    --sidebar-primary: 0 0% 10%;
+    --sidebar-primary-foreground: 0 0% 98%;
+    --sidebar-accent: 30 10% 96%;
+    --sidebar-accent-foreground: 0 0% 10%;
+    --sidebar-border: 0 0% 90%;
+    --sidebar-ring: 36 45% 50%;
+  }
+
+  .dark {
     /* Dark-first palette — warm near-black + off-white + gold */
     --background: 0 0% 4%;
     --foreground: 30 15% 95%;
@@ -11,8 +60,8 @@
     --card: 0 0% 6%;
     --card-foreground: 30 15% 95%;
 
-    --popover: 0 0% 4%;
-    --popover-foreground: 36 45% 60%;
+    --popover: 0 0% 6%;
+    --popover-foreground: 30 15% 95%;
 
     /* Primary = off-white for text/buttons on dark */
     --primary: 30 15% 95%;
@@ -38,28 +87,15 @@
     --input: 0 0% 10%;
     --ring: 36 45% 60%;
 
-    /* Sharp, editorial radius */
-    --radius: 0.125rem;
-
-    /* Sidebar colors */
-    --sidebar-background: 0 0% 98%;
-    --sidebar-foreground: 240 5.3% 26.1%;
-    --sidebar-primary: 240 5.9% 10%;
-    --sidebar-primary-foreground: 0 0% 98%;
-    --sidebar-accent: 240 4.8% 95.9%;
-    --sidebar-accent-foreground: 240 5.9% 10%;
-    --sidebar-border: 220 13% 91%;
-    --sidebar-ring: 217.2 91.2% 59.8%;
-  }
-  .dark {
-    --sidebar-background: 240 5.9% 6%;
-    --sidebar-foreground: 240 4.8% 95.9%;
-    --sidebar-primary: 224.3 76.3% 48%;
-    --sidebar-primary-foreground: 0 0% 100%;
-    --sidebar-accent: 240 3.7% 15.9%;
-    --sidebar-accent-foreground: 240 4.8% 95.9%;
-    --sidebar-border: 240 3.7% 15.9%;
-    --sidebar-ring: 217.2 91.2% 59.8%;
+    /* Sidebar colors (dark) */
+    --sidebar-background: 0 0% 6%;
+    --sidebar-foreground: 30 15% 95%;
+    --sidebar-primary: 30 15% 95%;
+    --sidebar-primary-foreground: 0 0% 4%;
+    --sidebar-accent: 0 0% 10%;
+    --sidebar-accent-foreground: 30 15% 95%;
+    --sidebar-border: 0 0% 14%;
+    --sidebar-ring: 36 45% 60%;
   }
 }
 

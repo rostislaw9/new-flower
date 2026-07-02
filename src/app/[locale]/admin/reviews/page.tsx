@@ -165,7 +165,7 @@ export default async function AdminReviewsPage({
       </AdminFiltersShell>
 
       {/* Reviews Table */}
-      <Card className="rounded-2xl border border-border/60 bg-card/60 shadow-lg">
+      <Card className="rounded-2xl border border-border/60 bg-card/60 shadow-md">
         <CardContent className="p-0">
           <div className="overflow-x-auto">
             <Table>
