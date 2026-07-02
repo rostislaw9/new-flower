@@ -18,7 +18,7 @@ import {
 import { toast } from "sonner";
 
 import { AdminPageHeader } from "@/components/admin/AdminPageHeader";
-import { ImageUploader } from "@/components/admin/ImageUploader";
+import { ImageUploader } from "@/components/common/ImageUploader";
 import { Button } from "@/components/styled/Button";
 import { Heading, Text } from "@/components/styled/Typography";
 import { Card, CardContent } from "@/components/ui/card";

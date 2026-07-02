@@ -22,7 +22,7 @@ import {
 } from "lucide-react";
 import { toast } from "sonner";
 
-import { ImageUploader } from "@/components/admin/ImageUploader";
+import { ImageUploader } from "@/components/common/ImageUploader";
 import { Button } from "@/components/styled/Button";
 import { DatePicker } from "@/components/styled/DatePicker";
 import { Eyebrow, Heading, Text } from "@/components/styled/Typography";

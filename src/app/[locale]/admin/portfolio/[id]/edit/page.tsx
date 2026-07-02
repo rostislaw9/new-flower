@@ -11,7 +11,7 @@ import { ImageOff, Loader2, MoveLeft, Save, Trash2 } from "lucide-react";
 import { toast } from "sonner";
 
 import { AdminPageHeader } from "@/components/admin/AdminPageHeader";
-import { ImageUploader } from "@/components/admin/ImageUploader";
+import { ImageUploader } from "@/components/common/ImageUploader";
 import { Button } from "@/components/styled/Button";
 import { DeleteConfirmDialog } from "@/components/styled/DeleteConfirmDialog";
 import { Heading, Text } from "@/components/styled/Typography";
