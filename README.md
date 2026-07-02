@@ -59,10 +59,10 @@ New Flower Tattoo is a full-featured web application designed specifically for t
 
 - **Homepage** — Hero section, featured gallery, testimonials, CTA
 - **Gallery** — Gallery with filtering, detailed project views
-- **About** — Artist biography and studio information
+- **About** — Artist biography, journey timeline, and studio information (content managed via DB)
 - **Booking** — Appointment request form with validation
 - **Reviews** — Client testimonials and ratings
-- **FAQ** — Frequently asked questions
+- **FAQ** — Frequently asked questions (content managed via DB)
 - **Contact** — Contact form and information
 
 ### Admin Dashboard
@@ -72,6 +72,8 @@ New Flower Tattoo is a full-featured web application designed specifically for t
 - **Booking Management** — View, filter, and update appointment statuses
 - **Review Management** — Moderate and feature client reviews
 - **Artist Images** — Manage artist portrait and shop logo with Cloudinary integration
+- **About Page Management** — Edit biography and journey timeline with localized content
+- **FAQ Management** — Manage FAQ groups, questions, and translations
 - **Responsive Sidebar** — Collapsible navigation with mobile support
 
 ### Technical Features
@@ -195,6 +197,7 @@ Copy `.env.example` to `.env` and configure:
 | `yarn db:migrate:deploy` | Run migrations (production)              |
 | `yarn db:studio`         | Open Prisma Studio GUI                   |
 | `yarn db:seed`           | Seed database with sample data           |
+| `yarn db:sync-prod`      | Sync production data to local database   |
 
 ## 🗄️ Database Schema
 
@@ -252,6 +255,86 @@ Client testimonials and ratings.
 - updatedAt: DateTime
 ```
 
+### AboutBio + AboutBioTranslation
+
+Artist biography with localized title and description.
+
+```typescript
+// AboutBio
+- id: String (CUID)
+- createdAt: DateTime
+- updatedAt: DateTime
+
+// AboutBioTranslation
+- id: String (CUID)
+- bioId: String (FK → AboutBio)
+- locale: String (en, th)
+- title: String
+- description: String
+- unique: [bioId, locale]
+```
+
+### AboutJourney + AboutJourneyTranslation
+
+Journey timeline entries with localized title and description. Year is stored once per journey (calendar year).
+
+```typescript
+// AboutJourney
+- id: String (CUID)
+- displayOrder: Int
+- year: String (calendar year, e.g. "2016")
+- createdAt: DateTime
+- updatedAt: DateTime
+
+// AboutJourneyTranslation
+- id: String (CUID)
+- journeyId: String (FK → AboutJourney)
+- locale: String (en, th)
+- title: String
+- description: String
+- unique: [journeyId, locale]
+```
+
+### FaqGroup + FaqGroupTranslation
+
+FAQ categories with localized titles.
+
+```typescript
+// FaqGroup
+- id: String (CUID)
+- displayOrder: Int
+- createdAt: DateTime
+- updatedAt: DateTime
+
+// FaqGroupTranslation
+- id: String (CUID)
+- groupId: String (FK → FaqGroup)
+- locale: String (en, th)
+- title: String
+- unique: [groupId, locale]
+```
+
+### FaqQuestion + FaqTranslation
+
+Individual FAQ questions with localized question and answer text.
+
+```typescript
+// FaqQuestion
+- id: String (CUID)
+- groupId: String (FK → FaqGroup)
+- displayOrder: Int
+- createdAt: DateTime
+- updatedAt: DateTime
+
+// FaqTranslation
+- id: String (CUID)
+- questionId: String (FK → FaqQuestion)
+- locale: String (en, th)
+- questionText: String
+- answerText: String
+- unique: [questionId, locale]
+```
+
 ## 🏗️ Project Structure
 
 ```text
@@ -259,21 +342,39 @@ src/
 ├── app/                    # Next.js App Router
 │   ├── [locale]/          # Localized routes
 │   │   ├── admin/         # Admin dashboard
+│   │   │   ├── about/     # About page content management
+│   │   │   ├── artist-images/ # Artist portrait & logo
+│   │   │   ├── bookings/  # Booking management
+│   │   │   ├── faq/       # FAQ management
+│   │   │   ├── gallery/   # Gallery management
+│   │   │   ├── reviews/   # Review moderation
+│   │   │   └── layout.tsx # Admin layout with sidebar
+│   │   ├── about/         # Public about page
 │   │   ├── booking/       # Booking form
-│   │   ├── gallery/     # Gallery
+│   │   ├── gallery/       # Public gallery
 │   │   ├── reviews/       # Reviews page
 │   │   └── ...
 │   ├── api/               # API routes
+│   │   ├── about/         # About data endpoint
+│   │   ├── faq/           # FAQ data endpoint
+│   │   └── gallery/       # Gallery endpoints
 │   └── layout.tsx         # Root layout
 ├── components/            # React components
 │   ├── admin/            # Admin-specific components
+│   │   ├── about/        # About editors (Bio, Journey, Year)
+│   │   ├── faq/          # FAQ editors
+│   │   ├── dashboard/    # Dashboard cards & stats
+│   │   └── ...
 │   ├── sections/         # Page sections
+│   ├── styled/           # Styled UI components
 │   ├── ui/               # shadcn/ui components
 │   └── ...
 ├── lib/                  # Utilities and helpers
 │   ├── actions/          # Server actions
 │   ├── email/            # Email templates
 │   ├── schemas/          # Zod validation schemas
+│   ├── about-data.ts     # About page data loader
+│   ├── faq-data.ts       # FAQ data loader
 │   └── ...
 ├── types/                # TypeScript type definitions
 ├── hooks/                # Custom React hooks
@@ -375,6 +476,17 @@ yarn test:coverage
 1. Add keys to `messages/en.json`
 2. Add translations to `messages/th.json`
 3. Use `useTranslations()` hook in components
+4. Run `yarn i18n:check` to validate key parity
+
+### Syncing Production Data to Local
+
+To copy production database data to your local environment:
+
+```bash
+yarn db:sync-prod
+```
+
+This script dumps data from the production database (using `DATABASE_URL` from `.env`) and imports it locally. It syncs all content tables: appointments, gallery items, reviews, about bios/journeys, and FAQ groups/questions with their translations.
 
 ## 🔐 Security
 
