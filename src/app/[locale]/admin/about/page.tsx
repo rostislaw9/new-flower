@@ -282,9 +282,10 @@ export default function AboutAdminPage() {
                   <CardContent className="p-4">
                     <div className="flex items-center justify-between gap-2">
                       <CollapsibleTrigger asChild>
-                        <button
+                        <Button
                           type="button"
-                          className="flex flex-1 items-center gap-2 text-muted-foreground hover:text-foreground"
+                          variant="ghost"
+                          className="flex flex-1 p-2"
                         >
                           <ChevronDown
                             className={cn(
@@ -293,12 +294,12 @@ export default function AboutAdminPage() {
                             )}
                           />
                           <Text
-                            size="sm"
-                            className="flex-1 text-left hover:text-foreground"
+                            size="xs"
+                            className="flex-1 text-wrap text-left"
                           >
                             {displayTitle}
                           </Text>
-                        </button>
+                        </Button>
                       </CollapsibleTrigger>
                       <Button
                         size="icon"

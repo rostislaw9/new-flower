@@ -377,8 +377,8 @@ export default function FaqAdminPage() {
                                           )}
                                         />
                                         <Text
-                                          size="sm"
-                                          className="flex-1 text-left"
+                                          size="xs"
+                                          className="flex-1 text-wrap text-left"
                                         >
                                           {qDisplay}
                                         </Text>
