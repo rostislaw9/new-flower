@@ -281,7 +281,7 @@ export default function FaqAdminPage() {
                       <CollapsibleTrigger asChild>
                         <button
                           type="button"
-                          className="flex items-center gap-2 text-muted-foreground hover:text-foreground"
+                          className="flex flex-1 items-center gap-2 text-muted-foreground hover:text-foreground"
                         >
                           <ChevronDown
                             className={cn(
@@ -310,9 +310,9 @@ export default function FaqAdminPage() {
                     </div>
 
                     <CollapsibleContent>
-                      <div className="mt-4 flex flex-col gap-4 pl-6">
+                      <div className="mt-4 flex flex-col gap-4">
                         {/* Group title editors */}
-                        <div className="flex flex-col gap-4 md:flex-row">
+                        <div className="flex flex-col gap-2 md:flex-row">
                           <GroupTitleEditor
                             label="EN"
                             initialTitle={enTitle?.title ?? ""}
@@ -369,7 +369,7 @@ export default function FaqAdminPage() {
                                     <CollapsibleTrigger asChild>
                                       <button
                                         type="button"
-                                        className="flex items-center gap-2 text-muted-foreground hover:text-foreground"
+                                        className="flex flex-1 items-center gap-2 text-muted-foreground hover:text-foreground"
                                       >
                                         <ChevronDown
                                           className={cn(
@@ -401,7 +401,7 @@ export default function FaqAdminPage() {
                                   </div>
 
                                   <CollapsibleContent>
-                                    <div className="flex flex-col gap-4 p-3 pt-0 md:flex-row">
+                                    <div className="flex flex-col gap-2 p-2 pt-0 md:flex-row">
                                       {/* English translation */}
                                       <TranslationEditor
                                         label="EN"
