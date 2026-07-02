@@ -36,6 +36,11 @@ export async function generateMetadata({
     authors: [{ name: "New Flower Tattoo", url: SITE_URL }],
     keywords: [
       "tattoo artist Phuket",
+      "tattoo artist Patong",
+      "tattoo studio Phuket",
+      "tattoo studio Patong",
+      "tattoo shop Phuket",
+      "tattoo shop Patong",
       "realism tattoo",
       "dotwork tattoo",
       "blackwork tattoo",
@@ -46,7 +51,6 @@ export async function generateMetadata({
       "fine line tattoo",
       "geometric tattoo",
       "tribal tattoo",
-      "tattoo studio Phuket",
       "custom tattoo design",
     ],
     robots: {
