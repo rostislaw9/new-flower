@@ -1,18 +1,12 @@
 import type { Metadata } from "next";
 import { getLocale, getTranslations } from "next-intl/server";
 
+import { FaqAccordion } from "@/components/faq/FaqAccordion";
 import { Container } from "@/components/layout/Container";
 import { Section } from "@/components/layout/Section";
 import { ContactCTA } from "@/components/sections/ContactCTA";
 import { PageHeading } from "@/components/sections/PageHeading";
 import { JsonLd } from "@/components/seo/JsonLd";
-import {
-  Accordion,
-  AccordionContent,
-  AccordionItem,
-  AccordionTrigger,
-} from "@/components/styled/Accordion";
-import { Eyebrow, Heading, Text } from "@/components/styled/Typography";
 import { Separator } from "@/components/ui/separator";
 import { createBreadcrumbList } from "@/lib/breadcrumbs";
 import { getFaqSections } from "@/lib/faq-data";
@@ -63,6 +57,7 @@ export default async function FAQPage() {
     <>
       <JsonLd data={breadcrumb} />
       <JsonLd data={faqSchema} />
+
       {/* Page hero */}
       <Section size="lg" className="border-b border-border">
         <Container>
@@ -78,27 +73,7 @@ export default async function FAQPage() {
       <Section size="lg">
         <Container>
           <div className="mx-auto max-w-3xl">
-            <div className="flex flex-col gap-16">
-              {sections.map((section) => (
-                <div key={section.id} className="flex flex-col gap-6">
-                  <Eyebrow>{section.title}</Eyebrow>
-                  <Accordion type="single" collapsible>
-                    {section.questions.map((item) => (
-                      <AccordionItem key={item.id} value={item.id}>
-                        <AccordionTrigger>
-                          <Heading as="h3" size="sm" className="text-left">
-                            {item.question}
-                          </Heading>
-                        </AccordionTrigger>
-                        <AccordionContent>
-                          <Text muted>{item.answer}</Text>
-                        </AccordionContent>
-                      </AccordionItem>
-                    ))}
-                  </Accordion>
-                </div>
-              ))}
-            </div>
+            <FaqAccordion sections={sections} />
           </div>
         </Container>
       </Section>
