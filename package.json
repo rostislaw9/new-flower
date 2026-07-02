@@ -20,6 +20,7 @@
     "db:migrate:deploy": "prisma migrate deploy",
     "db:studio": "prisma studio",
     "db:seed": "tsx prisma/seed.ts",
+    "db:sync-prod": "bash scripts/sync-prod-to-local.sh",
     "prepare": "husky install"
   },
   "dependencies": {
