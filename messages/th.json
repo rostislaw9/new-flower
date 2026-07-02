@@ -880,19 +880,28 @@
       "subtitle": "จัดการกลุ่มคำถาม คำถาม และคำแปล",
       "addGroup": "เพิ่มกลุ่ม",
       "addQuestion": "เพิ่มคำถาม",
-      "empty": "ยังไม่มีกลุ่มคำถาม สร้างใหม่เพื่อเริ่มต้น",
+      "empty": {
+        "title": "ยังไม่มีกลุ่มคำถาม",
+        "description": "สร้างใหม่เพื่อเริ่มต้น"
+      },
       "error": "โหลดข้อมูลคำถามไม่สำเร็จ",
       "groupCreated": "สร้างกลุ่มแล้ว",
       "groupSaved": "บันทึกกลุ่มแล้ว",
       "groupDeleted": "ลบกลุ่มแล้ว",
-      "groupDeleteConfirm": "ลบกลุ่มนี้และคำถามทั้งหมดในกลุ่ม?",
+      "groupDeleteTitle": "ลบกลุ่ม",
+      "groupDeleteDescription": "ลบกลุ่มนี้และคำถามทั้งหมดในกลุ่ม? ไม่สามารถยกเลิกได้",
       "questionCreated": "เพิ่มคำถามแล้ว",
       "questionDeleted": "ลบคำถามแล้ว",
-      "questionDeleteConfirm": "ลบคำถามนี้?",
+      "questionDeleteTitle": "ลบคำถาม",
+      "questionDeleteDescription": "ลบคำถามนี้? ไม่สามารถยกเลิกได้",
       "translationSaved": "บันทึกคำแปลแล้ว",
       "untitledQuestion": "คำถามไม่มีชื่อ",
+      "untitledGroup": "กลุ่มไม่มีชื่อ",
       "questionLabel": "คำถาม",
-      "answerLabel": "คำตอบ"
+      "answerLabel": "คำตอบ",
+      "titleLabel": "ชื่อ",
+      "delete": "ลบ",
+      "cancel": "ยกเลิก"
     }
   }
 }

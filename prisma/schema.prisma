@@ -69,15 +69,29 @@ model Review {
 }
 
 model FaqGroup {
-  id          String        @id @default(cuid())
-  createdAt   DateTime      @default(now())
-  updatedAt   DateTime      @updatedAt
-  title       String
-  displayOrder Int          @default(0)
+  id          String                @id @default(cuid())
+  createdAt   DateTime              @default(now())
+  updatedAt   DateTime              @updatedAt
+  displayOrder Int                  @default(0)
   questions   FaqQuestion[]
+  translations FaqGroupTranslation[]
 
   @@map("faq_groups")
   @@index([displayOrder])
+}
+
+model FaqGroupTranslation {
+  id          String   @id @default(cuid())
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+  groupId     String
+  group       FaqGroup @relation(fields: [groupId], references: [id], onDelete: Cascade)
+  locale      String
+  title       String
+
+  @@unique([groupId, locale])
+  @@map("faq_group_translations")
+  @@index([groupId, locale])
 }
 
 model FaqQuestion {

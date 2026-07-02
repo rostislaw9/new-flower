@@ -880,19 +880,28 @@
       "subtitle": "Manage FAQ groups, questions, and translations",
       "addGroup": "Add Group",
       "addQuestion": "Add Question",
-      "empty": "No FAQ groups yet. Create one to get started.",
+      "empty": {
+        "title": "No FAQ groups yet",
+        "description": "Create one to get started"
+      },
       "error": "Failed to load FAQ data",
       "groupCreated": "Group created",
       "groupSaved": "Group saved",
       "groupDeleted": "Group deleted",
-      "groupDeleteConfirm": "Delete this group and all its questions?",
+      "groupDeleteTitle": "Delete group",
+      "groupDeleteDescription": "Delete this group and all its questions? This cannot be undone.",
       "questionCreated": "Question added",
       "questionDeleted": "Question deleted",
-      "questionDeleteConfirm": "Delete this question?",
+      "questionDeleteTitle": "Delete question",
+      "questionDeleteDescription": "Delete this question? This cannot be undone.",
       "translationSaved": "Translation saved",
       "untitledQuestion": "Untitled question",
+      "untitledGroup": "Untitled group",
       "questionLabel": "Question",
-      "answerLabel": "Answer"
+      "answerLabel": "Answer",
+      "titleLabel": "Title",
+      "delete": "Delete",
+      "cancel": "Cancel"
     }
   }
 }

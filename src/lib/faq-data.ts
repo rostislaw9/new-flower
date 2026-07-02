@@ -16,6 +16,9 @@ export async function getFaqSections(
   const groups = await prisma.faqGroup.findMany({
     orderBy: { displayOrder: "asc" },
     include: {
+      translations: {
+        where: { locale },
+      },
       questions: {
         orderBy: { displayOrder: "asc" },
         include: {
@@ -29,7 +32,7 @@ export async function getFaqSections(
 
   return groups.map((group) => ({
     id: group.id,
-    title: group.title,
+    title: group.translations[0]?.title ?? "",
     questions: group.questions
       .filter((q) => q.translations.length > 0)
       .map((q) => ({
@@ -40,10 +43,16 @@ export async function getFaqSections(
   }));
 }
 
+export interface FaqGroupTranslationData {
+  id: string;
+  locale: string;
+  title: string;
+}
+
 export interface FaqGroupWithQuestions {
   id: string;
-  title: string;
   displayOrder: number;
+  translations: FaqGroupTranslationData[];
   questions: {
     id: string;
     displayOrder: number;
@@ -60,6 +69,7 @@ export async function getAllFaqGroups(): Promise<FaqGroupWithQuestions[]> {
   const groups = await prisma.faqGroup.findMany({
     orderBy: { displayOrder: "asc" },
     include: {
+      translations: true,
       questions: {
         orderBy: { displayOrder: "asc" },
         include: {
@@ -71,8 +81,12 @@ export async function getAllFaqGroups(): Promise<FaqGroupWithQuestions[]> {
 
   return groups.map((group) => ({
     id: group.id,
-    title: group.title,
     displayOrder: group.displayOrder,
+    translations: group.translations.map((t) => ({
+      id: t.id,
+      locale: t.locale,
+      title: t.title,
+    })),
     questions: group.questions.map((q) => ({
       id: q.id,
       displayOrder: q.displayOrder,

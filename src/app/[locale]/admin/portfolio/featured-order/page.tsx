@@ -271,7 +271,7 @@ export default function FeaturedOrderPage() {
           <Text muted>{actionsT("loading")}</Text>
         </div>
       ) : items.length === 0 ? (
-        <Empty className="rounded-2xl border">
+        <Empty className="rounded-xl border">
           <EmptyHeader>
             <EmptyTitle>
               <Heading size="sm" serif={false}>

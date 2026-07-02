@@ -392,12 +392,12 @@ export function BookingForm() {
               >
                 {copied ? (
                   <>
-                    <Check className="h-3.5 w-3.5" />
+                    <Check />
                     <span>{successT("copied")}</span>
                   </>
                 ) : (
                   <>
-                    <Copy className="h-3.5 w-3.5" />
+                    <Copy />
                     <span>{successT("copyAction")}</span>
                   </>
                 )}

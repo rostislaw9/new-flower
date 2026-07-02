@@ -2,33 +2,40 @@
 
 import { useCallback, useEffect, useState } from "react";
 
-import { useTranslations } from "next-intl";
+import { useLocale, useTranslations } from "next-intl";
 
-import {
-  ChevronDown,
-  ChevronRight,
-  Loader2,
-  MoveLeft,
-  Plus,
-  Save,
-  Trash2,
-} from "lucide-react";
+import { ChevronDown, Loader2, MoveLeft, Plus, Trash2 } from "lucide-react";
 import { toast } from "sonner";
 
 import { AdminPageHeader } from "@/components/admin/AdminPageHeader";
+import { GroupTitleEditor } from "@/components/admin/faq/GroupTitleEditor";
+import { TranslationEditor } from "@/components/admin/faq/TranslationEditor";
 import { Button } from "@/components/styled/Button";
-import { Text } from "@/components/styled/Typography";
+import { DeleteConfirmDialog } from "@/components/styled/DeleteConfirmDialog";
+import { Eyebrow, Heading, Text } from "@/components/styled/Typography";
 import { Card, CardContent } from "@/components/ui/card";
-import { Input } from "@/components/ui/input";
-import { Textarea } from "@/components/ui/textarea";
+import {
+  Collapsible,
+  CollapsibleContent,
+  CollapsibleTrigger,
+} from "@/components/ui/collapsible";
+import {
+  Empty,
+  EmptyContent,
+  EmptyHeader,
+  EmptyTitle,
+} from "@/components/ui/empty";
+import { type Locale, defaultLocale } from "@/i18n/config";
 import {
   createFaqGroup,
   createFaqQuestion,
   deleteFaqGroup,
   deleteFaqQuestion,
-  updateFaqGroup,
+  updateFaqGroupTitle,
   updateFaqTranslation,
 } from "@/lib/actions/faq";
+import { getLocalizedPath, isSupportedLocale } from "@/lib/locale-utils";
+import { cn } from "@/lib/utils";
 
 interface FaqTranslationData {
   id: string;
@@ -43,24 +50,39 @@ interface FaqQuestionData {
   translations: FaqTranslationData[];
 }
 
+interface FaqGroupTranslationData {
+  id: string;
+  locale: string;
+  title: string;
+}
+
 interface FaqGroupData {
   id: string;
-  title: string;
   displayOrder: number;
+  translations: FaqGroupTranslationData[];
   questions: FaqQuestionData[];
 }
 
 export default function FaqAdminPage() {
+  const rawLocale = useLocale();
+  const locale: Locale = isSupportedLocale(rawLocale)
+    ? rawLocale
+    : defaultLocale;
   const t = useTranslations("admin.faq");
   const actionsT = useTranslations("admin.common.actions");
+
+  const backHref = getLocalizedPath("/admin", locale);
 
   const [groups, setGroups] = useState<FaqGroupData[]>([]);
   const [loading, setLoading] = useState(true);
   const [saving, setSaving] = useState<string | null>(null);
-  const [expandedGroups, setExpandedGroups] = useState<Set<string>>(new Set());
-  const [expandedQuestions, setExpandedQuestions] = useState<Set<string>>(
-    new Set(),
+  const [expandedGroupId, setExpandedGroupId] = useState<string | null>(null);
+  const [expandedQuestionId, setExpandedQuestionId] = useState<string | null>(
+    null,
   );
+  const [deleteTarget, setDeleteTarget] = useState<
+    { type: "group"; id: string } | { type: "question"; id: string } | null
+  >(null);
 
   const fetchGroups = useCallback(async () => {
     try {
@@ -68,9 +90,6 @@ export default function FaqAdminPage() {
       if (!res.ok) throw new Error("Failed to fetch FAQ");
       const data = (await res.json()) as FaqGroupData[];
       setGroups(data);
-      if (data.length > 0) {
-        setExpandedGroups(new Set([data[0]!.id]));
-      }
     } catch {
       toast.error(t("error"));
     } finally {
@@ -82,33 +101,19 @@ export default function FaqAdminPage() {
     void fetchGroups();
   }, [fetchGroups]);
 
-  const toggleGroup = (id: string) => {
-    setExpandedGroups((prev) => {
-      const next = new Set(prev);
-      if (next.has(id)) {
-        next.delete(id);
-      } else {
-        next.add(id);
-      }
-      return next;
-    });
-  };
-
-  const toggleQuestion = (id: string) => {
-    setExpandedQuestions((prev) => {
-      const next = new Set(prev);
-      if (next.has(id)) {
-        next.delete(id);
-      } else {
-        next.add(id);
-      }
-      return next;
-    });
-  };
-
   const handleAddGroup = async () => {
-    const result = await createFaqGroup("New Group");
-    if (result.success) {
+    const result = await createFaqGroup("New Group", "กลุ่มใหม่");
+    if (result.success && result.id) {
+      toast.success(t("groupCreated"));
+      await fetchGroups();
+      setExpandedGroupId(result.id);
+      setExpandedQuestionId(null);
+      requestAnimationFrame(() => {
+        document
+          .getElementById(`faq-group-${result.id}`)
+          ?.scrollIntoView({ behavior: "smooth", block: "center" });
+      });
+    } else if (result.success) {
       toast.success(t("groupCreated"));
       await fetchGroups();
     } else {
@@ -116,9 +121,13 @@ export default function FaqAdminPage() {
     }
   };
 
-  const handleSaveGroup = async (id: string, title: string) => {
-    setSaving(`group-${id}`);
-    const result = await updateFaqGroup(id, title);
+  const handleSaveGroupTitle = async (
+    groupId: string,
+    locale: string,
+    title: string,
+  ) => {
+    setSaving(`group-${groupId}-${locale}`);
+    const result = await updateFaqGroupTitle(groupId, locale, title);
     if (result.success) {
       toast.success(t("groupSaved"));
       await fetchGroups();
@@ -129,10 +138,10 @@ export default function FaqAdminPage() {
   };
 
   const handleDeleteGroup = async (id: string) => {
-    if (!confirm(t("groupDeleteConfirm"))) return;
     const result = await deleteFaqGroup(id);
     if (result.success) {
       toast.success(t("groupDeleted"));
+      setExpandedGroupId(null);
       await fetchGroups();
     } else {
       toast.error(result.message);
@@ -141,20 +150,30 @@ export default function FaqAdminPage() {
 
   const handleAddQuestion = async (groupId: string) => {
     const result = await createFaqQuestion(groupId);
-    if (result.success) {
+    if (result.success && result.id) {
       toast.success(t("questionCreated"));
       await fetchGroups();
-      setExpandedGroups((prev) => new Set(prev).add(groupId));
+      setExpandedGroupId(groupId);
+      setExpandedQuestionId(result.id);
+      requestAnimationFrame(() => {
+        document
+          .getElementById(`faq-question-${result.id}`)
+          ?.scrollIntoView({ behavior: "smooth", block: "center" });
+      });
+    } else if (result.success) {
+      toast.success(t("questionCreated"));
+      await fetchGroups();
+      setExpandedGroupId(groupId);
     } else {
       toast.error(result.message);
     }
   };
 
   const handleDeleteQuestion = async (id: string) => {
-    if (!confirm(t("questionDeleteConfirm"))) return;
     const result = await deleteFaqQuestion(id);
     if (result.success) {
       toast.success(t("questionDeleted"));
+      setExpandedQuestionId(null);
       await fetchGroups();
     } else {
       toast.error(result.message);
@@ -176,6 +195,7 @@ export default function FaqAdminPage() {
     );
     if (result.success) {
       toast.success(t("translationSaved"));
+      await fetchGroups();
     } else {
       toast.error(result.message);
     }
@@ -200,7 +220,7 @@ export default function FaqAdminPage() {
           <div className="flex flex-wrap gap-2">
             <Button
               size="sm"
-              href="/admin"
+              href={backHref}
               variant="outline"
               className="flex items-center gap-2"
             >
@@ -221,245 +241,264 @@ export default function FaqAdminPage() {
       />
 
       {groups.length === 0 ? (
-        <Card className="rounded-2xl border border-border/60 bg-card/60 shadow-lg">
-          <CardContent className="py-12 text-center">
-            <Text muted>{t("empty")}</Text>
-          </CardContent>
-        </Card>
+        <Empty className="rounded-xl border">
+          <EmptyHeader>
+            <EmptyTitle>
+              <Heading size="sm" serif={false}>
+                {t("empty.title")}
+              </Heading>
+            </EmptyTitle>
+          </EmptyHeader>
+          <EmptyContent>
+            <Text muted>{t("empty.description")}</Text>
+          </EmptyContent>
+        </Empty>
       ) : (
         <div className="flex flex-col gap-4">
           {groups.map((group) => {
-            const isExpanded = expandedGroups.has(group.id);
+            const isExpanded = expandedGroupId === group.id;
+            const enTitle = group.translations.find((tr) => tr.locale === "en");
+            const thTitle = group.translations.find((tr) => tr.locale === "th");
+            const displayTitle =
+              (locale === "th" ? thTitle?.title : enTitle?.title) ||
+              enTitle?.title ||
+              t("untitledGroup");
+
             return (
-              <Card
+              <Collapsible
                 key={group.id}
-                className="rounded-2xl border border-border/60 bg-card/60 shadow-lg"
+                id={`faq-group-${group.id}`}
+                open={isExpanded}
+                onOpenChange={(open) => {
+                  setExpandedGroupId(open ? group.id : null);
+                  setExpandedQuestionId(null);
+                }}
               >
-                <CardContent className="p-4">
-                  {/* Group header */}
-                  <div className="flex items-center gap-2">
-                    <button
-                      type="button"
-                      onClick={() => toggleGroup(group.id)}
-                      className="flex items-center gap-1 text-muted-foreground hover:text-foreground"
-                    >
-                      {isExpanded ? (
-                        <ChevronDown className="h-4 w-4" />
-                      ) : (
-                        <ChevronRight className="h-4 w-4" />
-                      )}
-                    </button>
-                    <Input
-                      defaultValue={group.title}
-                      onBlur={(e) => {
-                        if (e.target.value !== group.title) {
-                          void handleSaveGroup(group.id, e.target.value);
-                        }
-                      }}
-                      className="flex-1 font-medium"
-                    />
-                    <Button
-                      size="icon"
-                      variant="outline"
-                      onClick={() => void handleDeleteGroup(group.id)}
-                      aria-label={actionsT("delete")}
-                      className="hover:border-destructive/40 hover:text-destructive"
-                    >
-                      <Trash2 className="h-4 w-4" />
-                    </Button>
-                  </div>
-
-                  {isExpanded && (
-                    <div className="mt-4 flex flex-col gap-3 pl-6">
-                      {group.questions.map((question) => {
-                        const isQExpanded = expandedQuestions.has(question.id);
-                        const enTranslation = question.translations.find(
-                          (tr) => tr.locale === "en",
-                        );
-                        const thTranslation = question.translations.find(
-                          (tr) => tr.locale === "th",
-                        );
-
-                        return (
-                          <div
-                            key={question.id}
-                            className="rounded-lg border border-border/40"
-                          >
-                            {/* Question header */}
-                            <div className="flex items-center gap-2 p-3">
-                              <button
-                                type="button"
-                                onClick={() => toggleQuestion(question.id)}
-                                className="flex items-center gap-1 text-muted-foreground hover:text-foreground"
-                              >
-                                {isQExpanded ? (
-                                  <ChevronDown className="h-4 w-4" />
-                                ) : (
-                                  <ChevronRight className="h-4 w-4" />
-                                )}
-                              </button>
-                              <Text
-                                size="sm"
-                                className="flex-1 truncate font-medium"
-                              >
-                                {enTranslation?.questionText ||
-                                  t("untitledQuestion")}
-                              </Text>
-                              <Button
-                                size="icon"
-                                variant="outline"
-                                onClick={() =>
-                                  void handleDeleteQuestion(question.id)
-                                }
-                                aria-label={actionsT("delete")}
-                                className="h-7 w-7 hover:border-destructive/40 hover:text-destructive"
-                              >
-                                <Trash2 className="h-3.5 w-3.5" />
-                              </Button>
-                            </div>
-
-                            {isQExpanded && (
-                              <div className="flex flex-col gap-4 p-3 pt-0">
-                                {/* English translation */}
-                                <TranslationEditor
-                                  label="EN"
-                                  initialQuestion={
-                                    enTranslation?.questionText ?? ""
-                                  }
-                                  initialAnswer={
-                                    enTranslation?.answerText ?? ""
-                                  }
-                                  questionLabel={t("questionLabel")}
-                                  answerLabel={t("answerLabel")}
-                                  saveLabel={actionsT("save")}
-                                  saving={
-                                    saving === `translation-${question.id}-en`
-                                  }
-                                  onSave={(q, a) =>
-                                    void handleSaveTranslation(
-                                      question.id,
-                                      "en",
-                                      q,
-                                      a,
-                                    )
-                                  }
-                                />
-
-                                {/* Thai translation */}
-                                <TranslationEditor
-                                  label="TH"
-                                  initialQuestion={
-                                    thTranslation?.questionText ?? ""
-                                  }
-                                  initialAnswer={
-                                    thTranslation?.answerText ?? ""
-                                  }
-                                  questionLabel={t("questionLabel")}
-                                  answerLabel={t("answerLabel")}
-                                  saveLabel={actionsT("save")}
-                                  saving={
-                                    saving === `translation-${question.id}-th`
-                                  }
-                                  onSave={(q, a) =>
-                                    void handleSaveTranslation(
-                                      question.id,
-                                      "th",
-                                      q,
-                                      a,
-                                    )
-                                  }
-                                />
-                              </div>
+                <Card className="rounded-2xl border border-border/60 bg-card/60 shadow-lg">
+                  <CardContent className="p-4">
+                    {/* Group header */}
+                    <div className="flex items-center gap-2">
+                      <CollapsibleTrigger asChild>
+                        <button
+                          type="button"
+                          className="flex items-center gap-1 text-muted-foreground hover:text-foreground"
+                        >
+                          <ChevronDown
+                            className={cn(
+                              "transition-transform",
+                              isExpanded || "-rotate-90",
                             )}
-                          </div>
-                        );
-                      })}
-
+                          />
+                        </button>
+                      </CollapsibleTrigger>
+                      <Eyebrow size="xs" className="flex-1">
+                        {displayTitle}
+                      </Eyebrow>
                       <Button
-                        size="sm"
-                        variant="outline"
-                        onClick={() => void handleAddQuestion(group.id)}
-                        className="flex items-center gap-2 self-start"
+                        size="icon"
+                        variant="destructive"
+                        onClick={() =>
+                          setDeleteTarget({ type: "group", id: group.id })
+                        }
+                        aria-label={t("delete")}
                       >
-                        <Plus className="h-4 w-4" />
-                        {t("addQuestion")}
+                        <Trash2 />
                       </Button>
                     </div>
-                  )}
-                </CardContent>
-              </Card>
+
+                    <CollapsibleContent>
+                      <div className="mt-4 flex flex-col gap-4 pl-6">
+                        {/* Group title editors */}
+                        <div className="flex flex-col gap-4 md:flex-row">
+                          <GroupTitleEditor
+                            label="EN"
+                            initialTitle={enTitle?.title ?? ""}
+                            titleLabel={t("titleLabel")}
+                            saveLabel={actionsT("save")}
+                            saving={saving === `group-${group.id}-en`}
+                            onSave={(title) =>
+                              void handleSaveGroupTitle(group.id, "en", title)
+                            }
+                          />
+                          <GroupTitleEditor
+                            label="TH"
+                            initialTitle={thTitle?.title ?? ""}
+                            titleLabel={t("titleLabel")}
+                            saveLabel={actionsT("save")}
+                            saving={saving === `group-${group.id}-th`}
+                            onSave={(title) =>
+                              void handleSaveGroupTitle(group.id, "th", title)
+                            }
+                          />
+                        </div>
+
+                        <div className="flex flex-col gap-3">
+                          {group.questions.map((question) => {
+                            const isQExpanded =
+                              expandedQuestionId === question.id;
+                            const enTranslation = question.translations.find(
+                              (tr) => tr.locale === "en",
+                            );
+                            const thTranslation = question.translations.find(
+                              (tr) => tr.locale === "th",
+                            );
+                            const qDisplay =
+                              (locale === "th"
+                                ? thTranslation?.questionText
+                                : enTranslation?.questionText) ||
+                              enTranslation?.questionText ||
+                              t("untitledQuestion");
+
+                            return (
+                              <Collapsible
+                                key={question.id}
+                                id={`faq-question-${question.id}`}
+                                open={isQExpanded}
+                                onOpenChange={(open) => {
+                                  setExpandedQuestionId(
+                                    open ? question.id : null,
+                                  );
+                                }}
+                              >
+                                <div className="rounded-lg border border-border/40">
+                                  {/* Question header */}
+                                  <div className="flex items-center gap-2 p-3">
+                                    <CollapsibleTrigger asChild>
+                                      <button
+                                        type="button"
+                                        className="flex items-center gap-1 text-muted-foreground hover:text-foreground"
+                                      >
+                                        <ChevronDown
+                                          className={cn(
+                                            "h-4 w-4 transition-transform",
+                                            isQExpanded || "-rotate-90",
+                                          )}
+                                        />
+                                      </button>
+                                    </CollapsibleTrigger>
+                                    <Text size="sm" className="flex-1">
+                                      {qDisplay}
+                                    </Text>
+                                    <Button
+                                      size="icon"
+                                      variant="destructive"
+                                      onClick={() =>
+                                        setDeleteTarget({
+                                          type: "question",
+                                          id: question.id,
+                                        })
+                                      }
+                                      aria-label={t("delete")}
+                                    >
+                                      <Trash2 />
+                                    </Button>
+                                  </div>
+
+                                  <CollapsibleContent>
+                                    <div className="flex flex-col gap-4 p-3 pt-0 md:flex-row">
+                                      {/* English translation */}
+                                      <TranslationEditor
+                                        label="EN"
+                                        initialQuestion={
+                                          enTranslation?.questionText ?? ""
+                                        }
+                                        initialAnswer={
+                                          enTranslation?.answerText ?? ""
+                                        }
+                                        questionLabel={t("questionLabel")}
+                                        answerLabel={t("answerLabel")}
+                                        saveLabel={actionsT("save")}
+                                        saving={
+                                          saving ===
+                                          `translation-${question.id}-en`
+                                        }
+                                        onSave={(q, a) =>
+                                          void handleSaveTranslation(
+                                            question.id,
+                                            "en",
+                                            q,
+                                            a,
+                                          )
+                                        }
+                                      />
+
+                                      {/* Thai translation */}
+                                      <TranslationEditor
+                                        label="TH"
+                                        initialQuestion={
+                                          thTranslation?.questionText ?? ""
+                                        }
+                                        initialAnswer={
+                                          thTranslation?.answerText ?? ""
+                                        }
+                                        questionLabel={t("questionLabel")}
+                                        answerLabel={t("answerLabel")}
+                                        saveLabel={actionsT("save")}
+                                        saving={
+                                          saving ===
+                                          `translation-${question.id}-th`
+                                        }
+                                        onSave={(q, a) =>
+                                          void handleSaveTranslation(
+                                            question.id,
+                                            "th",
+                                            q,
+                                            a,
+                                          )
+                                        }
+                                      />
+                                    </div>
+                                  </CollapsibleContent>
+                                </div>
+                              </Collapsible>
+                            );
+                          })}
+
+                          <Button
+                            size="sm"
+                            variant="outline"
+                            onClick={() => void handleAddQuestion(group.id)}
+                          >
+                            <Plus />
+                            {t("addQuestion")}
+                          </Button>
+                        </div>
+                      </div>
+                    </CollapsibleContent>
+                  </CardContent>
+                </Card>
+              </Collapsible>
             );
           })}
         </div>
       )}
-    </div>
-  );
-}
 
-function TranslationEditor({
-  label,
-  initialQuestion,
-  initialAnswer,
-  questionLabel,
-  answerLabel,
-  saveLabel,
-  saving,
-  onSave,
-}: {
-  label: string;
-  initialQuestion: string;
-  initialAnswer: string;
-  questionLabel: string;
-  answerLabel: string;
-  saveLabel: string;
-  saving: boolean;
-  onSave: (question: string, answer: string) => void;
-}) {
-  const [question, setQuestion] = useState(initialQuestion);
-  const [answer, setAnswer] = useState(initialAnswer);
-
-  const hasChanges = question !== initialQuestion || answer !== initialAnswer;
-
-  return (
-    <div className="flex flex-col gap-2 rounded-md border border-border/30 bg-muted/20 p-3">
-      <div className="flex items-center gap-2">
-        <span className="rounded bg-primary/10 px-2 py-0.5 text-xs font-semibold text-primary">
-          {label}
-        </span>
-      </div>
-      <div className="flex flex-col gap-1">
-        <label className="text-xs text-muted-foreground">{questionLabel}</label>
-        <Input
-          value={question}
-          onChange={(e) => setQuestion(e.target.value)}
-          className="text-sm"
-        />
-      </div>
-      <div className="flex flex-col gap-1">
-        <label className="text-xs text-muted-foreground">{answerLabel}</label>
-        <Textarea
-          value={answer}
-          onChange={(e) => setAnswer(e.target.value)}
-          rows={3}
-          className="text-sm"
-        />
-      </div>
-      {hasChanges && (
-        <Button
-          size="sm"
-          variant="accent"
-          disabled={saving}
-          onClick={() => onSave(question, answer)}
-          className="flex items-center gap-2 self-start"
-        >
-          {saving ? (
-            <Loader2 className="h-3.5 w-3.5 animate-spin" />
-          ) : (
-            <Save className="h-3.5 w-3.5" />
-          )}
-          {saveLabel}
-        </Button>
-      )}
+      <DeleteConfirmDialog
+        open={deleteTarget !== null}
+        title={
+          deleteTarget?.type === "group"
+            ? t("groupDeleteTitle")
+            : t("questionDeleteTitle")
+        }
+        description={
+          deleteTarget?.type === "group"
+            ? t("groupDeleteDescription")
+            : t("questionDeleteDescription")
+        }
+        confirmLabel={t("delete")}
+        confirmLoadingLabel={actionsT("loading")}
+        cancelLabel={t("cancel")}
+        onConfirm={async () => {
+          if (!deleteTarget) return;
+          if (deleteTarget.type === "group") {
+            await handleDeleteGroup(deleteTarget.id);
+          } else {
+            await handleDeleteQuestion(deleteTarget.id);
+          }
+          setDeleteTarget(null);
+        }}
+        onCancel={() => setDeleteTarget(null)}
+      />
     </div>
   );
 }

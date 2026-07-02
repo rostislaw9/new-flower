@@ -5,61 +5,64 @@ import { revalidatePath } from "next/cache";
 import { prisma } from "@/lib/prisma";
 
 export type FaqActionResult =
-  | { success: true }
+  | { success: true; id?: string }
   | { success: false; message: string };
 
 // --- Groups ---
 
 export async function createFaqGroup(
-  title: string,
-  displayOrder?: number,
+  titleEn: string,
+  titleTh?: string,
 ): Promise<FaqActionResult> {
   try {
-    if (!title.trim()) {
+    if (!titleEn.trim()) {
       return { success: false, message: "Group title is required" };
     }
 
     const count = await prisma.faqGroup.count();
-    await prisma.faqGroup.create({
+    const group = await prisma.faqGroup.create({
       data: {
-        title: title.trim(),
-        displayOrder: displayOrder ?? count,
+        displayOrder: count,
+        translations: {
+          create: [
+            { locale: "en", title: titleEn.trim() },
+            { locale: "th", title: (titleTh ?? titleEn).trim() },
+          ],
+        },
       },
     });
 
     revalidatePath("/faq");
-    revalidatePath("/admin/faq");
-    return { success: true };
+    return { success: true, id: group.id };
   } catch (error) {
     console.error("[createFaqGroup] Error:", error);
     return { success: false, message: "Failed to create FAQ group" };
   }
 }
 
-export async function updateFaqGroup(
-  id: string,
+export async function updateFaqGroupTitle(
+  groupId: string,
+  locale: string,
   title: string,
-  displayOrder?: number,
 ): Promise<FaqActionResult> {
   try {
     if (!title.trim()) {
       return { success: false, message: "Group title is required" };
     }
 
-    await prisma.faqGroup.update({
-      where: { id },
-      data: {
-        title: title.trim(),
-        ...(displayOrder !== undefined ? { displayOrder } : {}),
+    await prisma.faqGroupTranslation.upsert({
+      where: {
+        groupId_locale: { groupId, locale },
       },
+      update: { title: title.trim() },
+      create: { groupId, locale, title: title.trim() },
     });
 
     revalidatePath("/faq");
-    revalidatePath("/admin/faq");
     return { success: true };
   } catch (error) {
-    console.error("[updateFaqGroup] Error:", error);
-    return { success: false, message: "Failed to update FAQ group" };
+    console.error("[updateFaqGroupTitle] Error:", error);
+    return { success: false, message: "Failed to update FAQ group title" };
   }
 }
 
@@ -68,7 +71,6 @@ export async function deleteFaqGroup(id: string): Promise<FaqActionResult> {
     await prisma.faqGroup.delete({ where: { id } });
 
     revalidatePath("/faq");
-    revalidatePath("/admin/faq");
     return { success: true };
   } catch (error) {
     console.error("[deleteFaqGroup] Error:", error);
@@ -87,7 +89,7 @@ export async function createFaqQuestion(
       where: { groupId },
     });
 
-    await prisma.faqQuestion.create({
+    const question = await prisma.faqQuestion.create({
       data: {
         groupId,
         displayOrder: displayOrder ?? count,
@@ -101,8 +103,7 @@ export async function createFaqQuestion(
     });
 
     revalidatePath("/faq");
-    revalidatePath("/admin/faq");
-    return { success: true };
+    return { success: true, id: question.id };
   } catch (error) {
     console.error("[createFaqQuestion] Error:", error);
     return { success: false, message: "Failed to create FAQ question" };
@@ -114,7 +115,6 @@ export async function deleteFaqQuestion(id: string): Promise<FaqActionResult> {
     await prisma.faqQuestion.delete({ where: { id } });
 
     revalidatePath("/faq");
-    revalidatePath("/admin/faq");
     return { success: true };
   } catch (error) {
     console.error("[deleteFaqQuestion] Error:", error);
@@ -136,19 +136,18 @@ export async function updateFaqTranslation(
         questionId_locale: { questionId, locale },
       },
       update: {
-        questionText,
-        answerText,
+        questionText: questionText.trim(),
+        answerText: answerText.trim(),
       },
       create: {
         questionId,
         locale,
-        questionText,
-        answerText,
+        questionText: questionText.trim(),
+        answerText: answerText.trim(),
       },
     });
 
     revalidatePath("/faq");
-    revalidatePath("/admin/faq");
     return { success: true };
   } catch (error) {
     console.error("[updateFaqTranslation] Error:", error);
