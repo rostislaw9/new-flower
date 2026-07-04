@@ -60,6 +60,7 @@ export function Lightbox({
   onNavigate,
 }: LightboxProps) {
   const closeButtonRef = useRef<HTMLButtonElement>(null);
+  const imgRef = useRef<HTMLImageElement>(null);
   const isOpen = activeIndex !== null;
   const activeItem = activeIndex !== null ? (items[activeIndex] ?? null) : null;
   const hasPrev = activeIndex !== null && activeIndex > 0;
@@ -153,6 +154,10 @@ export function Lightbox({
   useEffect(() => {
     if (activeIndex !== null) {
       setImageLoading(true);
+      const img = imgRef.current;
+      if (img?.complete && img.naturalWidth > 0) {
+        setImageLoading(false);
+      }
     }
   }, [activeIndex]);
 
@@ -223,7 +228,27 @@ export function Lightbox({
             animate={{ opacity: 1, scale: 1 }}
             exit={{ opacity: 0, scale: 0.97 }}
             transition={{ duration: 0.25, ease: [0.16, 1, 0.3, 1] }}
-            className="flex flex-col items-center gap-4"
+            drag="x"
+            dragDirectionLock
+            dragConstraints={{ left: 0, right: 0 }}
+            dragElastic={0.2}
+            dragMomentum={false}
+            onDragEnd={(_, info) => {
+              const threshold = 100;
+              const velocityThreshold = 500;
+              if (
+                info.offset.x < -threshold ||
+                info.velocity.x < -velocityThreshold
+              ) {
+                handleNext();
+              } else if (
+                info.offset.x > threshold ||
+                info.velocity.x > velocityThreshold
+              ) {
+                handlePrev();
+              }
+            }}
+            className="flex touch-none select-none flex-col items-center gap-4"
             onClick={(e) => e.stopPropagation()}
           >
             <div
@@ -239,12 +264,14 @@ export function Lightbox({
                 </div>
               )}
               <Image
+                ref={imgRef}
                 src={activeItem.imageUrl}
                 alt={activeItem.title}
                 width={imageDimensions.width}
                 height={imageDimensions.height}
+                draggable={false}
                 className={cn(
-                  "object-contain transition-opacity duration-300",
+                  "pointer-events-none select-none object-contain transition-opacity duration-300",
                   imageLoading ? "opacity-0" : "opacity-100",
                 )}
                 preload
@@ -254,6 +281,7 @@ export function Lightbox({
                   height: `${imageDimensions.height}px`,
                 }}
                 onLoad={() => setImageLoading(false)}
+                onError={() => setImageLoading(false)}
               />
             </div>
 
