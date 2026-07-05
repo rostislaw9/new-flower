@@ -166,11 +166,14 @@ export default function GalleryAdminPage() {
 
     setBulkFlagLoading(featured ? "feature" : "unfeature");
     try {
-      for (const id of selectedIds) {
-        const result = await setGalleryItemFeatured(id, featured);
-        if (!result.success) {
-          throw new Error(result.message ?? "Failed to update");
-        }
+      const results = await Promise.all(
+        Array.from(selectedIds).map((id) =>
+          setGalleryItemFeatured(id, featured),
+        ),
+      );
+      const failed = results.find((r) => !r.success);
+      if (failed) {
+        throw new Error(failed.message ?? "Failed to update");
       }
 
       await refreshItems();
@@ -189,14 +192,10 @@ export default function GalleryAdminPage() {
     if (selectedIds.size === 0) return;
 
     const idsToDelete = Array.from(selectedIds);
-    let successCount = 0;
-
-    for (const id of idsToDelete) {
-      const result = await deleteGalleryItem(id);
-      if (result.success) {
-        successCount++;
-      }
-    }
+    const results = await Promise.all(
+      idsToDelete.map((id) => deleteGalleryItem(id)),
+    );
+    const successCount = results.filter((r) => r.success).length;
 
     setItems((prev) => prev.filter((i) => !selectedIds.has(i.id)));
     setSelectedIds(new Set());
@@ -343,7 +342,7 @@ export default function GalleryAdminPage() {
   const listContent = (
     <div className="flex flex-col gap-6">
       <div className="grid grid-cols-2 gap-3 sm:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5">
-        {visibleItems.map((item) => (
+        {visibleItems.map((item, index) => (
           <Card
             key={item.id}
             role="button"
@@ -373,7 +372,7 @@ export default function GalleryAdminPage() {
                 fill
                 sizes="(max-width: 480px) 45vw, (max-width: 768px) 30vw, 20vw"
                 className={`h-full w-full object-cover transition-opacity duration-300 ${loadedImages[item.id] ? "opacity-100" : "opacity-0"}`}
-                loading="eager"
+                loading={index < 15 ? "eager" : "lazy"}
                 onLoad={() =>
                   setLoadedImages((prev) => ({ ...prev, [item.id]: true }))
                 }

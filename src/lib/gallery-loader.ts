@@ -124,11 +124,11 @@ export async function getAdminGalleryItems(): Promise<GalleryItem[]> {
   const [featured, regular] = await Promise.all([
     prisma.galleryItem.findMany({
       where: { featured: true },
-      orderBy: { displayOrder: "asc" },
+      orderBy: [{ displayOrder: "asc" }, { id: "asc" }],
     }),
     prisma.galleryItem.findMany({
       where: { featured: false },
-      orderBy: { createdAt: "desc" },
+      orderBy: [{ createdAt: "desc" }, { id: "asc" }],
     }),
   ]);
 
