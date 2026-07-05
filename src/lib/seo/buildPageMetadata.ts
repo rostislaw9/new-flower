@@ -7,7 +7,7 @@ const SITE_URL = process.env.NEXT_PUBLIC_SITE_URL!;
 type BuildMetaArgs = {
   locale: string;
 
-  title: string;
+  title: string | { absolute: string };
   description: string;
   canonical: string;
 
@@ -46,7 +46,7 @@ export async function buildPageMetadata({
       locale: locale === "th" ? "th_TH" : "en_US",
       url: `${SITE_URL}${canonical}`,
       siteName: "New Flower Tattoo",
-      title,
+      title: typeof title === "string" ? title : title.absolute,
       description,
 
       images: [

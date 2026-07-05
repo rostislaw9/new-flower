@@ -32,7 +32,7 @@ export async function generateMetadata({
   return buildPageMetadata({
     locale,
     canonical: "/",
-    title: t("title"),
+    title: { absolute: t("title") },
     description: t("description"),
   });
 }
