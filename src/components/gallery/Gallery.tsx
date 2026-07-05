@@ -210,6 +210,7 @@ export function Gallery({
           width: item.width,
           height: item.height,
         }))}
+        totalCount={totalCount}
         activeIndex={lightboxIndex}
         onClose={() => setLightboxIndex(null)}
         onNavigate={(index) => setLightboxIndex(index)}

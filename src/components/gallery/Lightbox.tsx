@@ -48,6 +48,7 @@ export interface LightboxItem {
 
 interface LightboxProps {
   items: LightboxItem[];
+  totalCount?: number | undefined;
   activeIndex: number | null;
   onClose: () => void;
   onNavigate: (index: number) => void;
@@ -55,6 +56,7 @@ interface LightboxProps {
 
 export function Lightbox({
   items,
+  totalCount,
   activeIndex,
   onClose,
   onNavigate,
@@ -267,8 +269,8 @@ export function Lightbox({
                 ref={imgRef}
                 src={activeItem.imageUrl}
                 alt={activeItem.title}
-                width={imageDimensions.width}
-                height={imageDimensions.height}
+                fill
+                sizes="80vw"
                 draggable={false}
                 className={cn(
                   "pointer-events-none select-none object-contain transition-opacity duration-300",
@@ -276,10 +278,6 @@ export function Lightbox({
                 )}
                 preload
                 unoptimized={shouldUnoptimize}
-                style={{
-                  width: `${imageDimensions.width}px`,
-                  height: `${imageDimensions.height}px`,
-                }}
                 onLoad={() => setImageLoading(false)}
                 onError={() => setImageLoading(false)}
               />
@@ -300,7 +298,7 @@ export function Lightbox({
             {/* Counter */}
             {activeIndex !== null && (
               <p className="font-sans text-xs text-muted-foreground/40">
-                {activeIndex + 1} / {items.length}
+                {activeIndex + 1} / {totalCount ?? items.length}
               </p>
             )}
           </motion.div>
