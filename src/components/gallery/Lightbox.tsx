@@ -287,16 +287,21 @@ export function Lightbox({
               />
             </div>
 
-            <div className="flex w-full items-baseline justify-between gap-4">
-              <div className="flex flex-col">
-                <Heading size="md">{activeItem.title}</Heading>
-                {activeItem.description && (
-                  <Text muted className="max-w-[50vw]">
-                    {activeItem.description}
-                  </Text>
-                )}
-              </div>
-              {activeItem.category && <Eyebrow>{activeItem.category}</Eyebrow>}
+            <div
+              className="grid w-full grid-cols-2 gap-x-4 gap-y-2"
+              style={{
+                width: `${imageDimensions.width}px`,
+              }}
+            >
+              <Heading size="sm">{activeItem.title}</Heading>
+              {activeItem.category && (
+                <Eyebrow className="text-right">{activeItem.category}</Eyebrow>
+              )}
+              {activeItem.description && (
+                <Text muted className="col-span-2 max-w-[80vw]">
+                  {activeItem.description}
+                </Text>
+              )}
             </div>
 
             {/* Counter */}
