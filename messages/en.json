@@ -516,19 +516,19 @@
       },
       "actions": {
         "bookings": {
-          "title": "Manage bookings",
+          "title": "Manage Bookings",
           "description": "View and manage all appointment requests"
         },
         "gallery": {
-          "title": "Manage gallery",
+          "title": "Manage Gallery",
           "description": "Add, edit, or remove gallery items"
         },
         "reviews": {
-          "title": "Manage reviews",
+          "title": "Manage Reviews",
           "description": "View and manage customer reviews"
         },
         "artistImages": {
-          "title": "Manage artist images",
+          "title": "Manage Artist Images",
           "description": "Update artist portrait and shop logo"
         },
         "faq": {
