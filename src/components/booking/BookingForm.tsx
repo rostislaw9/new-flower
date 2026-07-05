@@ -194,6 +194,7 @@ export function BookingForm() {
 
   const [imageInputMode, setImageInputMode] = useState<"url" | "upload">("url");
   const [copied, setCopied] = useState(false);
+  const [uploadedUrlSet, setUploadedUrlSet] = useState<Set<string>>(new Set());
 
   const successRef = useRef<HTMLDivElement>(null);
 
@@ -290,6 +291,7 @@ export function BookingForm() {
       setValue("referenceImageUrls", BOOKING_FORM_DEFAULTS.referenceImageUrls);
       setImageInputMode("url");
       setCopied(false);
+      setUploadedUrlSet(new Set());
       try {
         sessionStorage.removeItem(BOOKING_FORM_STORAGE_KEY);
       } catch {
@@ -908,6 +910,11 @@ export function BookingForm() {
                   referenceUrlsValue.filter(Boolean).length
                 }
                 keepUploadedImages={true}
+                initialUrls={[
+                  ...new Set(
+                    referenceUrlsValue.filter((u) => uploadedUrlSet.has(u)),
+                  ),
+                ]}
                 onUploadComplete={(data) => {
                   const current = [...referenceUrlsRef.current];
                   data.forEach((item) => {
@@ -925,6 +932,11 @@ export function BookingForm() {
                     current.push("");
                   }
                   referenceUrlsRef.current = current;
+                  setUploadedUrlSet((prev) => {
+                    const next = new Set(prev);
+                    data.forEach((item) => next.add(item.url));
+                    return next;
+                  });
                   setValue("referenceImageUrls", current);
                 }}
               />

@@ -14,7 +14,7 @@ import { uploadToCloudinaryAction } from "@/lib/actions/upload";
 import { cn } from "@/lib/utils";
 
 interface ImageUpload {
-  file: File;
+  file: File | null;
   preview: string;
   uploading: boolean;
   uploaded: boolean;
@@ -36,6 +36,7 @@ interface ImageUploaderProps {
   showPreviewGrid?: boolean;
   useOverwrite?: boolean;
   keepUploadedImages?: boolean;
+  initialUrls?: string[];
 }
 
 export function ImageUploader({
@@ -47,8 +48,17 @@ export function ImageUploader({
   showPreviewGrid = true,
   useOverwrite = false,
   keepUploadedImages = false,
+  initialUrls = [],
 }: ImageUploaderProps) {
-  const [images, setImages] = useState<ImageUpload[]>([]);
+  const [images, setImages] = useState<ImageUpload[]>(() =>
+    initialUrls.filter(Boolean).map((url) => ({
+      file: null,
+      preview: url,
+      uploading: false,
+      uploaded: true,
+      url,
+    })),
+  );
   const [isDragging, setIsDragging] = useState(false);
   const t = useTranslations("admin.imageUploader");
   const sizeLimitMb = 10;
@@ -77,7 +87,7 @@ export function ImageUploader({
 
         try {
           const result = await uploadToCloudinaryAction(
-            image.file,
+            image.file!,
             folder,
             useOverwrite,
           );
