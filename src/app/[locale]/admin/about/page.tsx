@@ -302,7 +302,7 @@ export default function AboutAdminPage() {
                         </Button>
                       </CollapsibleTrigger>
                       <Button
-                        size="icon"
+                        size="icon-borderless"
                         variant="destructive"
                         onClick={() => setDeleteTarget(journey.id)}
                         aria-label={t("delete")}

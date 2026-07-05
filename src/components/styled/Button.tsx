@@ -30,7 +30,7 @@ const customButtonVariants = cva(["tracking-wider", "uppercase"], {
       lg: "h-12 px-8 text-md",
       xl: "h-14 px-10 text-xl",
       icon: "h-10 w-10",
-      "icon-borderless": "h-10 w-10 border border-transparent",
+      "icon-borderless": "h-10 w-10 border border-transparent shadow-none",
       link: "p-0",
     },
   },

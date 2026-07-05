@@ -158,7 +158,7 @@ export default function ArtistImagesPage() {
                   disabled={deleting === "portrait"}
                   className="w-full"
                 >
-                  <Trash2 className="h-4 w-4" />
+                  <Trash2 />
                   {deleting === "portrait"
                     ? actionsT("deleting")
                     : actionsT("delete")}
@@ -225,7 +225,7 @@ export default function ArtistImagesPage() {
                   disabled={deleting === "logo"}
                   className="w-full"
                 >
-                  <Trash2 className="h-4 w-4" />
+                  <Trash2 />
                   {deleting === "logo"
                     ? actionsT("deleting")
                     : actionsT("delete")}

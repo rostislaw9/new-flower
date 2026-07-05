@@ -290,13 +290,16 @@ export default function FaqAdminPage() {
                               isExpanded || "-rotate-90",
                             )}
                           />
-                          <Eyebrow size="xs" className="flex-1 text-left">
+                          <Eyebrow
+                            size="xs"
+                            className="flex-1 text-wrap text-left"
+                          >
                             {displayTitle}
                           </Eyebrow>
                         </Button>
                       </CollapsibleTrigger>
                       <Button
-                        size="icon"
+                        size="icon-borderless"
                         variant="destructive"
                         onClick={() =>
                           setDeleteTarget({ type: "group", id: group.id })
@@ -385,7 +388,7 @@ export default function FaqAdminPage() {
                                       </Button>
                                     </CollapsibleTrigger>
                                     <Button
-                                      size="icon"
+                                      size="icon-borderless"
                                       variant="destructive"
                                       onClick={() =>
                                         setDeleteTarget({
