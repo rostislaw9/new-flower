@@ -42,6 +42,7 @@ import { type Locale, defaultLocale } from "@/i18n/config";
 import { deleteGalleryItem, updateGalleryItem } from "@/lib/actions/gallery";
 import type { GalleryItem } from "@/lib/gallery-data";
 import { GALLERY_CATEGORIES } from "@/lib/gallery-data";
+import { getGalleryItemById } from "@/lib/gallery-loader";
 import { getLocalizedPath, isSupportedLocale } from "@/lib/locale-utils";
 
 interface EditGalleryItemPageProps {
@@ -108,9 +109,8 @@ export default function EditGalleryItemPage({
 
     const fetchItem = async () => {
       try {
-        const response = await fetch(`/api/gallery/${id}`);
-        if (!response.ok) throw new Error(t("edit.alerts.notFound"));
-        const data = (await response.json()) as GalleryItem;
+        const data = await getGalleryItemById(id);
+        if (!data) throw new Error(t("edit.alerts.notFound"));
         setItem(data);
         setCurrentImageLoading(true);
 

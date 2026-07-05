@@ -39,7 +39,7 @@ interface LoadGalleryOptions {
   featuredFirst?: boolean;
 }
 
-export async function loadGalleryItems(
+export async function getGalleryItems(
   options?: LoadGalleryOptions,
 ): Promise<GalleryItem[]> {
   const where = options?.category ? { category: options.category } : undefined;

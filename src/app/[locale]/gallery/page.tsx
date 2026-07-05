@@ -12,7 +12,7 @@ import { createBreadcrumbList } from "@/lib/breadcrumbs";
 import {
   countGalleryItems,
   getGalleryCategoryCounts,
-  loadGalleryItems,
+  getGalleryItems,
 } from "@/lib/gallery-loader";
 import { buildPageMetadata } from "@/lib/seo/buildPageMetadata";
 
@@ -41,7 +41,7 @@ export default async function GalleryPage() {
     { name: "Gallery", item: "/gallery" },
   ]);
   const [initialItems, totalCount, categoryCounts] = await Promise.all([
-    loadGalleryItems({ take: INITIAL_GALLERY_PAGE_SIZE }),
+    getGalleryItems({ take: INITIAL_GALLERY_PAGE_SIZE }),
     countGalleryItems(),
     getGalleryCategoryCounts(),
   ]);

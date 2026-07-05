@@ -2,11 +2,16 @@
 
 import { revalidatePath } from "next/cache";
 
+import { getAllFaqGroups } from "@/lib/faq-data";
 import { prisma } from "@/lib/prisma";
 
 export type FaqActionResult =
   | { success: true; id?: string }
   | { success: false; message: string };
+
+export async function fetchAllFaqGroups() {
+  return getAllFaqGroups();
+}
 
 // --- Groups ---
 

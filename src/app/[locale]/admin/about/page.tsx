@@ -25,6 +25,7 @@ import {
   createAboutBio,
   createAboutJourney,
   deleteAboutJourney,
+  fetchAboutAdminData,
   updateAboutBioTranslation,
   updateAboutJourneyTranslation,
   updateAboutJourneyYear,
@@ -58,11 +59,6 @@ interface JourneyData {
   translations: JourneyTranslationData[];
 }
 
-interface AboutApiResponse {
-  bio: BioData | null;
-  journeys: JourneyData[];
-}
-
 export default function AboutAdminPage() {
   const rawLocale = useLocale();
   const locale: Locale = isSupportedLocale(rawLocale)
@@ -84,9 +80,7 @@ export default function AboutAdminPage() {
 
   const fetchData = useCallback(async () => {
     try {
-      const res = await fetch("/api/about", { cache: "no-store" });
-      if (!res.ok) throw new Error("Failed to fetch about data");
-      const data = (await res.json()) as AboutApiResponse;
+      const data = await fetchAboutAdminData();
       setBio(data.bio);
       setJourneys(data.journeys);
     } catch {

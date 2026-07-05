@@ -153,7 +153,7 @@ export function GalleryGrid({
               fill
               sizes="(max-width: 640px) 50vw, (max-width: 1024px) 33vw, 25vw"
               className={`object-cover transition-transform duration-600 ease-premium group-hover:scale-[1.03] ${loadedIds[item.id] ? "opacity-100" : "opacity-0"}`}
-              loading={index < 6 ? "eager" : "lazy"}
+              loading={index < 10 ? "eager" : "lazy"}
               onLoad={() =>
                 setLoadedIds((prev) => ({ ...prev, [item.id]: true }))
               }

@@ -36,6 +36,7 @@ import {
 import { type Locale, defaultLocale } from "@/i18n/config";
 import { reorderFeaturedItems } from "@/lib/actions/gallery";
 import { type GalleryItem } from "@/lib/gallery-data";
+import { getGalleryItems } from "@/lib/gallery-loader";
 import { getLocalizedPath, isSupportedLocale } from "@/lib/locale-utils";
 import { cn } from "@/lib/utils";
 
@@ -144,13 +145,7 @@ export default function FeaturedOrderPage() {
   const fetchFeaturedItems = useCallback(async () => {
     setIsLoading(true);
     try {
-      const response = await fetch("/api/gallery?featuredFirst=true", {
-        cache: "no-store",
-      });
-      if (!response.ok) {
-        throw new Error("Failed to load gallery");
-      }
-      const data = (await response.json()) as GalleryItem[];
+      const data = await getGalleryItems({ featuredFirst: true });
       const featuredOnly = data
         .filter((item) => item.featured)
         .sort((a, b) => a.displayOrder - b.displayOrder);

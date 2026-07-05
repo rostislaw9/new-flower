@@ -2,11 +2,20 @@
 
 import { revalidatePath } from "next/cache";
 
+import { getAboutBioAdmin, getAboutJourneysAdmin } from "@/lib/about-data";
 import { prisma } from "@/lib/prisma";
 
 export type AboutActionResult =
   | { success: true; id?: string }
   | { success: false; message: string };
+
+export async function fetchAboutAdminData() {
+  const [bio, journeys] = await Promise.all([
+    getAboutBioAdmin(),
+    getAboutJourneysAdmin(),
+  ]);
+  return { bio, journeys };
+}
 
 // --- Bio ---
 

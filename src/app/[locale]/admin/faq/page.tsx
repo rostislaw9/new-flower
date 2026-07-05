@@ -31,6 +31,7 @@ import {
   createFaqQuestion,
   deleteFaqGroup,
   deleteFaqQuestion,
+  fetchAllFaqGroups,
   updateFaqGroupTitle,
   updateFaqTranslation,
 } from "@/lib/actions/faq";
@@ -86,9 +87,7 @@ export default function FaqAdminPage() {
 
   const fetchGroups = useCallback(async () => {
     try {
-      const res = await fetch("/api/faq", { cache: "no-store" });
-      if (!res.ok) throw new Error("Failed to fetch FAQ");
-      const data = (await res.json()) as FaqGroupData[];
+      const data = await fetchAllFaqGroups();
       setGroups(data);
     } catch {
       toast.error(t("error"));

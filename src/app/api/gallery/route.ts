@@ -4,7 +4,7 @@ import { GALLERY_CATEGORIES, type GalleryCategory } from "@/lib/gallery-data";
 import {
   countFeaturedItems,
   countGalleryItems,
-  loadGalleryItems,
+  getGalleryItems,
 } from "@/lib/gallery-loader";
 
 const DEFAULT_LIMIT = 10;
@@ -45,7 +45,7 @@ export async function GET(request: Request): Promise<NextResponse> {
 
   try {
     if (!hasPagination) {
-      const items = await loadGalleryItems({
+      const items = await getGalleryItems({
         category: category ?? undefined,
         featuredFirst,
       });
@@ -53,7 +53,7 @@ export async function GET(request: Request): Promise<NextResponse> {
     }
 
     const [items, total] = await Promise.all([
-      loadGalleryItems({
+      getGalleryItems({
         take: limit,
         skip: offset,
         category: category ?? undefined,
