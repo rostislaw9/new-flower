@@ -49,6 +49,7 @@ export interface LightboxItem {
 interface LightboxProps {
   items: LightboxItem[];
   totalCount?: number | undefined;
+  hasMore?: boolean;
   activeIndex: number | null;
   onClose: () => void;
   onNavigate: (index: number) => void;
@@ -57,6 +58,7 @@ interface LightboxProps {
 export function Lightbox({
   items,
   totalCount,
+  hasMore,
   activeIndex,
   onClose,
   onNavigate,
@@ -66,7 +68,9 @@ export function Lightbox({
   const isOpen = activeIndex !== null;
   const activeItem = activeIndex !== null ? (items[activeIndex] ?? null) : null;
   const hasPrev = activeIndex !== null && activeIndex > 0;
-  const hasNext = activeIndex !== null && activeIndex < items.length - 1;
+  const hasNext =
+    activeIndex !== null &&
+    (activeIndex < items.length - 1 || hasMore === true);
   const [imageLoading, setImageLoading] = useState(true);
   const shouldUnoptimize = activeItem?.unoptimized ?? false;
 

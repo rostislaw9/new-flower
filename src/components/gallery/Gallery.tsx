@@ -175,6 +175,34 @@ export function Gallery({
       ? itemsState
       : itemsState.filter((item) => item.category === activeCategory);
 
+  useEffect(() => {
+    if (lightboxIndex === null) return;
+    if (!hasMore || isLoadingMore || isCategoryLoading) return;
+    if (lightboxIndex < filteredItems.length - 3) return;
+
+    setIsLoadingMore(true);
+    fetchItems({
+      offset,
+      category: activeCategory,
+      replace: false,
+    })
+      .catch((error) => {
+        console.error("[Gallery] Failed to load more (lightbox)", error);
+      })
+      .finally(() => {
+        setIsLoadingMore(false);
+      });
+  }, [
+    lightboxIndex,
+    filteredItems.length,
+    hasMore,
+    isLoadingMore,
+    isCategoryLoading,
+    offset,
+    activeCategory,
+    fetchItems,
+  ]);
+
   return (
     <>
       <div className="flex flex-col gap-2">
@@ -211,6 +239,7 @@ export function Gallery({
           height: item.height,
         }))}
         totalCount={totalCount}
+        hasMore={hasMore}
         activeIndex={lightboxIndex}
         onClose={() => setLightboxIndex(null)}
         onNavigate={(index) => setLightboxIndex(index)}
