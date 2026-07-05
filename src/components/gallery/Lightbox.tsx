@@ -4,7 +4,12 @@ import { useCallback, useEffect, useMemo, useRef, useState } from "react";
 
 import Image from "next/image";
 
-import { AnimatePresence, motion } from "framer-motion";
+import {
+  AnimatePresence,
+  motion,
+  useMotionValue,
+  useTransform,
+} from "framer-motion";
 import { ChevronLeft, ChevronRight, Loader2, X } from "lucide-react";
 
 import { Eyebrow, Heading, Text } from "@/components/styled/Typography";
@@ -167,6 +172,9 @@ export function Lightbox({
     }
   }, [activeIndex]);
 
+  const y = useMotionValue(0);
+  const opacity = useTransform(y, [-300, 0, 300], [0.2, 1, 0.2]);
+
   return (
     <AnimatePresence>
       {isOpen && activeItem && (
@@ -230,26 +238,42 @@ export function Lightbox({
           {/* Image + meta */}
           <motion.div
             key={activeItem.id}
+            style={{ y, opacity }}
             initial={{ opacity: 0, scale: 0.97 }}
             animate={{ opacity: 1, scale: 1 }}
             exit={{ opacity: 0, scale: 0.97 }}
             transition={{ duration: 0.25, ease: [0.16, 1, 0.3, 1] }}
-            drag="x"
+            drag
             dragDirectionLock
-            dragConstraints={{ left: 0, right: 0 }}
+            dragConstraints={{ top: 0, bottom: 0, left: 0, right: 0 }}
             dragElastic={0.2}
             dragMomentum={false}
             onDragEnd={(_, info) => {
-              const threshold = 100;
-              const velocityThreshold = 500;
+              const horizontalThreshold = 100;
+              const horizontalVelocity = 500;
+
+              const verticalThreshold = 200;
+              const verticalVelocity = 650;
+
               if (
-                info.offset.x < -threshold ||
-                info.velocity.x < -velocityThreshold
+                info.offset.y > verticalThreshold ||
+                info.velocity.y > verticalVelocity
+              ) {
+                onClose();
+                return;
+              }
+
+              if (
+                info.offset.x < -horizontalThreshold ||
+                info.velocity.x < -horizontalVelocity
               ) {
                 handleNext();
-              } else if (
-                info.offset.x > threshold ||
-                info.velocity.x > velocityThreshold
+                return;
+              }
+
+              if (
+                info.offset.x > horizontalThreshold ||
+                info.velocity.x > horizontalVelocity
               ) {
                 handlePrev();
               }
