@@ -36,6 +36,7 @@ export function Gallery({
   const [hasMore, setHasMore] = useState(initialHasMore);
   const [offset, setOffset] = useState(items.length);
   const [itemsState, setItemsState] = useState(items);
+  const [currentTotal, setCurrentTotal] = useState(totalCount ?? items.length);
   const [lightboxIndex, setLightboxIndex] = useState<number | null>(null);
   const [isLoadingMore, setIsLoadingMore] = useState(false);
   const [isCategoryLoading, setIsCategoryLoading] = useState(false);
@@ -81,24 +82,47 @@ export function Gallery({
       if (replace) {
         setItemsState(data.items);
       } else {
-        setItemsState((prev) => [...prev, ...data.items]);
+        setItemsState((prev) => {
+          const existingIds = new Set(prev.map((item) => item.id));
+          const newItems = data.items.filter(
+            (item) => !existingIds.has(item.id),
+          );
+          return [...prev, ...newItems];
+        });
       }
 
       setOffset(data.nextOffset);
       setHasMore(data.hasMore);
+      setCurrentTotal(data.total);
 
       if (category === null) {
         allItemsCacheRef.current = replace
           ? data.items
-          : [...allItemsCacheRef.current, ...data.items];
+          : (() => {
+              const existingIds = new Set(
+                allItemsCacheRef.current.map((item) => item.id),
+              );
+              const newItems = data.items.filter(
+                (item) => !existingIds.has(item.id),
+              );
+              return [...allItemsCacheRef.current, ...newItems];
+            })();
       }
     },
     [pageSize],
   );
 
   useEffect(() => {
+    hasTriggeredRef.current = false;
+
     if (activeCategory === null) {
       setItemsState(allItemsCacheRef.current);
+      setOffset(allItemsCacheRef.current.length);
+      setHasMore(
+        allItemsCacheRef.current.length <
+          (totalCount ?? allItemsCacheRef.current.length),
+      );
+      setCurrentTotal(totalCount ?? allItemsCacheRef.current.length);
       return;
     }
 
@@ -124,7 +148,7 @@ export function Gallery({
     return () => {
       cancelled = true;
     };
-  }, [activeCategory, fetchItems]);
+  }, [activeCategory, fetchItems, totalCount]);
 
   useEffect(() => {
     if (!hasMore || isLoadingMore || isCategoryLoading) {
@@ -238,7 +262,7 @@ export function Gallery({
           width: item.width,
           height: item.height,
         }))}
-        totalCount={totalCount}
+        totalCount={currentTotal}
         hasMore={hasMore}
         activeIndex={lightboxIndex}
         onClose={() => setLightboxIndex(null)}
