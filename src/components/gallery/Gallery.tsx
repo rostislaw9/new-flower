@@ -72,7 +72,7 @@ export function Gallery({
         params.set("category", category);
       }
 
-      const response = await fetch(`/api/gallery/public?${params.toString()}`);
+      const response = await fetch(`/api/gallery?${params.toString()}`);
       if (!response.ok) {
         throw new Error("Failed to fetch gallery items");
       }

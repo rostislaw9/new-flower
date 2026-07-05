@@ -49,6 +49,7 @@ interface AdminApiResponse {
   total: number;
   featuredCount: number;
   hasMore: boolean;
+  nextOffset: number;
 }
 
 export default function GalleryAdminPage() {
@@ -81,7 +82,7 @@ export default function GalleryAdminPage() {
     const fetchItems = async () => {
       try {
         const response = await fetch(
-          `/api/gallery?limit=${INITIAL_BATCH}&offset=0`,
+          `/api/gallery?limit=${INITIAL_BATCH}&offset=0&featuredFirst=true`,
         );
         const data = (await response.json()) as AdminApiResponse;
         setItems(data.items);
@@ -110,7 +111,9 @@ export default function GalleryAdminPage() {
 
         observer.disconnect();
         setIsLoadingMore(true);
-        fetch(`/api/gallery?limit=${LOAD_MORE_BATCH}&offset=${items.length}`)
+        fetch(
+          `/api/gallery?limit=${LOAD_MORE_BATCH}&offset=${items.length}&featuredFirst=true`,
+        )
           .then((res) => res.json())
           .then((data: AdminApiResponse) => {
             setItems((prev) => {
@@ -161,7 +164,7 @@ export default function GalleryAdminPage() {
 
   const refreshItems = async () => {
     const response = await fetch(
-      `/api/gallery?limit=${Math.max(items.length, INITIAL_BATCH)}&offset=0`,
+      `/api/gallery?limit=${Math.max(items.length, INITIAL_BATCH)}&offset=0&featuredFirst=true`,
     );
     const data = (await response.json()) as AdminApiResponse;
     setItems(data.items);

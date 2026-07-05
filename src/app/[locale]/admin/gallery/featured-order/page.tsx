@@ -34,6 +34,7 @@ import {
   EmptyTitle,
 } from "@/components/ui/empty";
 import { type Locale, defaultLocale } from "@/i18n/config";
+import { reorderFeaturedItems } from "@/lib/actions/gallery";
 import { type GalleryItem } from "@/lib/gallery-data";
 import { getLocalizedPath, isSupportedLocale } from "@/lib/locale-utils";
 import { cn } from "@/lib/utils";
@@ -143,7 +144,9 @@ export default function FeaturedOrderPage() {
   const fetchFeaturedItems = useCallback(async () => {
     setIsLoading(true);
     try {
-      const response = await fetch("/api/gallery", { cache: "no-store" });
+      const response = await fetch("/api/gallery?featuredFirst=true", {
+        cache: "no-store",
+      });
       if (!response.ok) {
         throw new Error("Failed to load gallery");
       }
@@ -200,17 +203,8 @@ export default function FeaturedOrderPage() {
     }
     setIsSaving(true);
     try {
-      const response = await fetch("/api/gallery/featured-order", {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ ids: items.map((item) => item.id) }),
-      });
-
-      const result = (await response.json()) as {
-        success: boolean;
-        message?: string;
-      };
-      if (!response.ok || !result.success) {
+      const result = await reorderFeaturedItems(items.map((item) => item.id));
+      if (!result.success) {
         throw new Error(result.message || "Failed to save order");
       }
 
