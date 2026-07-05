@@ -77,6 +77,8 @@ const SELECTED_DRAFT_DEFAULTS: SelectedDraftFormValues = {
 
 const MAX_FILES = 20;
 
+const UPLOAD_DRAFTS_STORAGE_KEY = "gallery-upload-drafts";
+
 function createDraftId() {
   if (typeof crypto !== "undefined" && "randomUUID" in crypto) {
     return crypto.randomUUID();
@@ -100,6 +102,7 @@ export default function UploadGalleryPage() {
   const [selectedId, setSelectedId] = useState<string | null>(null);
   const [submitting, setSubmitting] = useState(false);
   const [removingId, setRemovingId] = useState<string | null>(null);
+  const [hydrated, setHydrated] = useState(false);
   const {
     control: selectedDraftControl,
     register: selectedDraftRegister,
@@ -109,6 +112,41 @@ export default function UploadGalleryPage() {
   } = useForm<SelectedDraftFormValues>({
     defaultValues: SELECTED_DRAFT_DEFAULTS,
   });
+
+  useEffect(() => {
+    try {
+      const saved = sessionStorage.getItem(UPLOAD_DRAFTS_STORAGE_KEY);
+      if (saved) {
+        const parsed = JSON.parse(saved) as {
+          drafts: DraftGalleryItem[];
+          selectedId: string | null;
+        };
+        if (parsed.drafts?.length) {
+          setDrafts(parsed.drafts);
+          setSelectedId(parsed.selectedId ?? parsed.drafts[0]?.id ?? null);
+        }
+      }
+    } catch {
+      // ignore
+    }
+    setHydrated(true);
+  }, []);
+
+  useEffect(() => {
+    if (!hydrated) return;
+    try {
+      if (drafts.length === 0) {
+        sessionStorage.removeItem(UPLOAD_DRAFTS_STORAGE_KEY);
+      } else {
+        sessionStorage.setItem(
+          UPLOAD_DRAFTS_STORAGE_KEY,
+          JSON.stringify({ drafts, selectedId }),
+        );
+      }
+    } catch {
+      // ignore
+    }
+  }, [drafts, selectedId, hydrated]);
 
   const backHref = useMemo(
     () => getLocalizedPath("/admin/gallery", locale),
@@ -269,6 +307,11 @@ export default function UploadGalleryPage() {
       setDrafts([]);
       setSelectedId(null);
       setSubmitting(false);
+      try {
+        sessionStorage.removeItem(UPLOAD_DRAFTS_STORAGE_KEY);
+      } catch {
+        // ignore
+      }
       start();
       router.push(backHref);
       router.refresh();

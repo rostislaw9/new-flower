@@ -54,6 +54,8 @@ interface GalleryFormValues {
   imageUrl: string;
 }
 
+const EDIT_FORM_STORAGE_PREFIX = "gallery-edit-form-";
+
 export default function EditGalleryItemPage({
   params,
 }: EditGalleryItemPageProps) {
@@ -102,6 +104,8 @@ export default function EditGalleryItemPage({
     if (fetchedIdRef.current === id) return;
     fetchedIdRef.current = id;
 
+    const storageKey = `${EDIT_FORM_STORAGE_PREFIX}${id}`;
+
     const fetchItem = async () => {
       try {
         const response = await fetch(`/api/gallery/${id}`);
@@ -109,11 +113,22 @@ export default function EditGalleryItemPage({
         const data = (await response.json()) as GalleryItem;
         setItem(data);
         setCurrentImageLoading(true);
+
+        let savedValues: Partial<GalleryFormValues> | null = null;
+        try {
+          const saved = sessionStorage.getItem(storageKey);
+          if (saved) {
+            savedValues = JSON.parse(saved) as Partial<GalleryFormValues>;
+          }
+        } catch {
+          // ignore
+        }
+
         reset({
-          title: data.title,
-          category: data.category,
-          description: data.description ?? "",
-          imageUrl: data.imageUrl,
+          title: savedValues?.title ?? data.title,
+          category: savedValues?.category ?? data.category,
+          description: savedValues?.description ?? data.description ?? "",
+          imageUrl: savedValues?.imageUrl ?? data.imageUrl,
         });
       } catch {
         const message = t("edit.alerts.loadFailed");
@@ -125,6 +140,19 @@ export default function EditGalleryItemPage({
     };
     void fetchItem();
   }, [id, t, reset]);
+
+  useEffect(() => {
+    if (!fetchedIdRef.current) return;
+    const storageKey = `${EDIT_FORM_STORAGE_PREFIX}${fetchedIdRef.current}`;
+    const subscription = watch((values) => {
+      try {
+        sessionStorage.setItem(storageKey, JSON.stringify(values));
+      } catch {
+        // ignore
+      }
+    });
+    return () => subscription.unsubscribe();
+  }, [watch]);
 
   async function onSubmit(values: GalleryFormValues) {
     setSaving(true);
@@ -140,6 +168,11 @@ export default function EditGalleryItemPage({
 
     if (result.success) {
       toast.success(t("edit.alerts.updated"));
+      try {
+        sessionStorage.removeItem(`${EDIT_FORM_STORAGE_PREFIX}${id}`);
+      } catch {
+        // ignore
+      }
       router.push(backHref);
     } else {
       const message = result.message || t("edit.alerts.updateFailed");
@@ -156,6 +189,11 @@ export default function EditGalleryItemPage({
 
     if (result.success) {
       toast.success(t("alerts.deleteSuccess"));
+      try {
+        sessionStorage.removeItem(`${EDIT_FORM_STORAGE_PREFIX}${id}`);
+      } catch {
+        // ignore
+      }
       router.push(backHref);
     } else {
       toast.error(result.message || t("alerts.deleteFailed"));
