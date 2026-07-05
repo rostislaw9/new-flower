@@ -488,7 +488,25 @@ yarn db:sync-prod
 
 This script dumps data from the production database (using `DATABASE_URL` from `.env`) and imports it locally. It syncs all content tables: appointments, gallery items, reviews, about bios/journeys, and FAQ groups/questions with their translations.
 
-## 🔐 Security
+## � Cron Jobs
+
+### Cloudinary Image Cleanup
+
+Removes unused images from Cloudinary that aren't referenced in the database.
+
+```bash
+curl -H "Authorization: Bearer $CRON_SECRET" https://newflower.tattoo/api/cron/cloudinary-cleanup
+```
+
+For local development:
+
+```bash
+curl -H "Authorization: Bearer YOUR_CRON_SECRET" http://localhost:3000/api/cron/cloudinary-cleanup
+```
+
+The `CRON_SECRET` environment variable must be set. The endpoint returns a JSON summary of deleted and remaining images.
+
+## �🔐 Security
 
 - **TypeScript Strict Mode** — Catches type errors at compile time
 - **Input Validation** — Zod schemas validate all user input
