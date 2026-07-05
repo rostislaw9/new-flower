@@ -59,6 +59,8 @@ interface ReviewFormValues {
   text: string;
 }
 
+const REVIEW_FORM_STORAGE_KEY = "review-form-values";
+
 const REVIEW_FORM_DEFAULTS: ReviewFormValues = {
   clientName: "",
   clientEmail: "",
@@ -89,7 +91,30 @@ export function ReviewForm({ labels, success }: ReviewFormProps) {
   const form = useForm<ReviewFormValues>({
     defaultValues: REVIEW_FORM_DEFAULTS,
   });
-  const { control, handleSubmit, reset, setError, clearErrors } = form;
+  const { control, handleSubmit, reset, setError, clearErrors, watch } = form;
+
+  useEffect(() => {
+    try {
+      const saved = sessionStorage.getItem(REVIEW_FORM_STORAGE_KEY);
+      if (saved) {
+        const parsed = JSON.parse(saved) as Partial<ReviewFormValues>;
+        reset({ ...REVIEW_FORM_DEFAULTS, ...parsed });
+      }
+    } catch {
+      // ignore parse errors
+    }
+  }, [reset]);
+
+  useEffect(() => {
+    const subscription = watch((values) => {
+      try {
+        sessionStorage.setItem(REVIEW_FORM_STORAGE_KEY, JSON.stringify(values));
+      } catch {
+        // ignore storage errors
+      }
+    });
+    return () => subscription.unsubscribe();
+  }, [watch]);
 
   const isSuccess = state.status === "success";
 
@@ -109,6 +134,11 @@ export function ReviewForm({ labels, success }: ReviewFormProps) {
     } else if (state.status === "success") {
       reset(REVIEW_FORM_DEFAULTS);
       clearErrors();
+      try {
+        sessionStorage.removeItem(REVIEW_FORM_STORAGE_KEY);
+      } catch {
+        // ignore
+      }
     } else if (state.status === "idle") {
       clearErrors();
     }

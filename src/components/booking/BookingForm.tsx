@@ -131,6 +131,8 @@ const budgetTranslationKeys: Record<BudgetRange, BudgetOptionKey> = {
 
 const MAX_REFERENCE_IMAGES = 5;
 
+const BOOKING_FORM_STORAGE_KEY = "booking-form-values";
+
 const bookingFieldNames = [
   "fullName",
   "email",
@@ -209,6 +211,32 @@ export function BookingForm() {
     defaultValues: BOOKING_FORM_DEFAULTS,
   });
 
+  useEffect(() => {
+    try {
+      const saved = sessionStorage.getItem(BOOKING_FORM_STORAGE_KEY);
+      if (saved) {
+        const parsed = JSON.parse(saved) as Partial<BookingFormValues>;
+        reset({ ...BOOKING_FORM_DEFAULTS, ...parsed });
+      }
+    } catch {
+      // ignore parse errors
+    }
+  }, [reset]);
+
+  useEffect(() => {
+    const subscription = watch((values) => {
+      try {
+        sessionStorage.setItem(
+          BOOKING_FORM_STORAGE_KEY,
+          JSON.stringify(values),
+        );
+      } catch {
+        // ignore storage errors
+      }
+    });
+    return () => subscription.unsubscribe();
+  }, [watch]);
+
   const contactMethodValue = watch("contactMethod");
   const referenceUrlsValue = watch("referenceImageUrls") ?? [""];
   const referenceUrlsRef = useRef<string[]>(referenceUrlsValue);
@@ -262,6 +290,11 @@ export function BookingForm() {
       setValue("referenceImageUrls", BOOKING_FORM_DEFAULTS.referenceImageUrls);
       setImageInputMode("url");
       setCopied(false);
+      try {
+        sessionStorage.removeItem(BOOKING_FORM_STORAGE_KEY);
+      } catch {
+        // ignore
+      }
 
       setTimeout(() => {
         const element = successRef.current;
