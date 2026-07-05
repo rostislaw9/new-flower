@@ -43,7 +43,7 @@ export async function loadGalleryItems(
 ): Promise<GalleryItem[]> {
   const where = options?.category ? { category: options.category } : undefined;
   const query: Parameters<typeof prisma.galleryItem.findMany>[0] = {
-    orderBy: { createdAt: "desc" },
+    orderBy: [{ createdAt: "desc" }, { id: "asc" }],
   };
 
   if (where) {
