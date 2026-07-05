@@ -299,8 +299,8 @@ export function ImageUploader({
             <div key={index} className="relative aspect-square h-20">
               <Image
                 src={image.url || image.preview}
-                width={300}
-                height={300}
+                fill
+                sizes="80px"
                 alt={t("previewAlt", { index: index + 1 })}
                 className="h-full w-full rounded-md object-cover"
               />

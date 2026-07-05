@@ -44,6 +44,13 @@ import { getLocalizedPath, isSupportedLocale } from "@/lib/locale-utils";
 const INITIAL_BATCH = 15;
 const LOAD_MORE_BATCH = 10;
 
+interface AdminApiResponse {
+  items: GalleryItem[];
+  total: number;
+  featuredCount: number;
+  hasMore: boolean;
+}
+
 export default function GalleryAdminPage() {
   const rawLocale = useLocale();
   const locale: Locale = isSupportedLocale(rawLocale)
@@ -57,23 +64,30 @@ export default function GalleryAdminPage() {
   const actionsT = useTranslations("admin.common.actions");
 
   const [items, setItems] = useState<GalleryItem[]>([]);
+  const [total, setTotal] = useState(0);
+  const [featuredCount, setFeaturedCount] = useState(0);
+  const [hasMore, setHasMore] = useState(false);
   const [loading, setLoading] = useState(true);
-  const [visibleCount, setVisibleCount] = useState(INITIAL_BATCH);
   const [loadedImages, setLoadedImages] = useState<Record<string, boolean>>({});
   const [selectedIds, setSelectedIds] = useState<Set<string>>(new Set());
   const [confirmBulkDelete, setConfirmBulkDelete] = useState(false);
   const [bulkFlagLoading, setBulkFlagLoading] = useState<
     "feature" | "unfeature" | null
   >(null);
+  const [isLoadingMore, setIsLoadingMore] = useState(false);
   const loadMoreRef = useRef<HTMLDivElement | null>(null);
 
   useEffect(() => {
     const fetchItems = async () => {
       try {
-        const response = await fetch("/api/gallery");
-        const data = (await response.json()) as GalleryItem[];
-        setItems(data);
-        setVisibleCount(Math.min(data.length, INITIAL_BATCH));
+        const response = await fetch(
+          `/api/gallery?limit=${INITIAL_BATCH}&offset=0`,
+        );
+        const data = (await response.json()) as AdminApiResponse;
+        setItems(data.items);
+        setTotal(data.total);
+        setFeaturedCount(data.featuredCount);
+        setHasMore(data.hasMore);
       } catch {
         console.error("Failed to fetch gallery items");
       } finally {
@@ -84,49 +98,50 @@ export default function GalleryAdminPage() {
   }, []);
 
   useEffect(() => {
-    setVisibleCount((prev) => {
-      if (items.length === 0) {
-        return INITIAL_BATCH;
-      }
-      return Math.min(Math.max(prev, INITIAL_BATCH), items.length);
-    });
-  }, [items.length]);
+    if (!hasMore || isLoadingMore) return;
 
-  useEffect(() => {
     const sentinel = loadMoreRef.current;
     if (!sentinel) return;
-    if (visibleCount >= items.length) return;
 
     const observer = new IntersectionObserver(
       (entries) => {
         const [entry] = entries;
-        if (!entry) {
-          return;
-        }
-        if (entry.isIntersecting) {
-          setVisibleCount((prev) =>
-            Math.min(items.length, prev + LOAD_MORE_BATCH),
-          );
-        }
+        if (!entry || !entry.isIntersecting) return;
+
+        observer.disconnect();
+        setIsLoadingMore(true);
+        fetch(`/api/gallery?limit=${LOAD_MORE_BATCH}&offset=${items.length}`)
+          .then((res) => res.json())
+          .then((data: AdminApiResponse) => {
+            setItems((prev) => {
+              const existingIds = new Set(prev.map((i) => i.id));
+              const newItems = data.items.filter((i) => !existingIds.has(i.id));
+              return [...prev, ...newItems];
+            });
+            setHasMore(data.hasMore);
+          })
+          .catch((error) => {
+            console.error("[Admin Gallery] Failed to load more", error);
+          })
+          .finally(() => {
+            setIsLoadingMore(false);
+          });
       },
       { rootMargin: "200px" },
     );
 
     observer.observe(sentinel);
     return () => observer.disconnect();
-  }, [items.length, visibleCount]);
+  }, [hasMore, isLoadingMore, items.length]);
 
-  const visibleItems = items.slice(0, visibleCount);
+  const visibleItems = items;
 
   const selectedItems = useMemo(
     () => items.filter((item) => selectedIds.has(item.id)),
     [items, selectedIds],
   );
 
-  const featuredItemsCount = useMemo(
-    () => items.filter((item) => item.featured).length,
-    [items],
-  );
+  const featuredItemsCount = featuredCount;
 
   const selectedFeaturedCount = selectedItems.filter(
     (item) => item.featured,
@@ -145,9 +160,14 @@ export default function GalleryAdminPage() {
   const canFlagNotFeatured = selectedFeaturedCount > 0;
 
   const refreshItems = async () => {
-    const response = await fetch("/api/gallery");
-    const data = (await response.json()) as GalleryItem[];
-    setItems(data);
+    const response = await fetch(
+      `/api/gallery?limit=${Math.max(items.length, INITIAL_BATCH)}&offset=0`,
+    );
+    const data = (await response.json()) as AdminApiResponse;
+    setItems(data.items);
+    setTotal(data.total);
+    setFeaturedCount(data.featuredCount);
+    setHasMore(data.hasMore);
   };
 
   async function handleBulkFeatureUpdate(featured: boolean) {
@@ -417,9 +437,14 @@ export default function GalleryAdminPage() {
         ))}
       </div>
 
-      {visibleCount < items.length ? (
-        <div className="flex items-center justify-center py-4">
-          <Loader2 className="h-6 w-6 animate-spin text-muted-foreground" />
+      {hasMore ? (
+        <div
+          ref={loadMoreRef}
+          className="flex items-center justify-center py-4"
+        >
+          {isLoadingMore && (
+            <Loader2 className="h-6 w-6 animate-spin text-muted-foreground" />
+          )}
         </div>
       ) : null}
     </div>
@@ -429,7 +454,7 @@ export default function GalleryAdminPage() {
     <div className="flex flex-col gap-6">
       <AdminPageHeader
         title={t("title")}
-        subtitle={t("description")}
+        subtitle={`${t("description")} (${total})`}
         actions={
           <div className="flex w-full flex-wrap justify-between gap-2 md:w-fit">
             <div className="flex gap-2">

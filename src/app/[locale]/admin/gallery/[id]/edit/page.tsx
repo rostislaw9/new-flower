@@ -1,6 +1,6 @@
 "use client";
 
-import { use, useEffect, useMemo, useState } from "react";
+import { use, useEffect, useMemo, useRef, useState } from "react";
 import { Controller, useForm } from "react-hook-form";
 
 import { useTranslations } from "next-intl";
@@ -80,13 +80,28 @@ export default function EditGalleryItemPage({
   const [saving, setSaving] = useState(false);
   const [error, setError] = useState<string | null>(null);
   const [currentImageLoading, setCurrentImageLoading] = useState(true);
+  const imgRef = useRef<HTMLImageElement>(null);
+
+  useEffect(() => {
+    if (imageUrl) {
+      const img = imgRef.current;
+      if (img?.complete && img.naturalWidth > 0) {
+        setCurrentImageLoading(false);
+      }
+    }
+  }, [imageUrl]);
 
   const backHref = useMemo(
     () => getLocalizedPath("/admin/gallery", locale),
     [locale],
   );
 
+  const fetchedIdRef = useRef<string | null>(null);
+
   useEffect(() => {
+    if (fetchedIdRef.current === id) return;
+    fetchedIdRef.current = id;
+
     const fetchItem = async () => {
       try {
         const response = await fetch(`/api/gallery/${id}`);
@@ -215,20 +230,22 @@ export default function EditGalleryItemPage({
                 <div className="flex flex-col gap-2">
                   <Label>{t("form.currentImageLabel")}</Label>
                   {imageUrl ? (
-                    <div className="relative overflow-hidden rounded-xl border border-border/60 bg-muted/20">
+                    <div className="relative aspect-[3/4] overflow-hidden rounded-xl border border-border/60 bg-muted/20">
                       {currentImageLoading && (
                         <div className="pointer-events-none absolute inset-0 z-10 flex items-center justify-center bg-background/30">
                           <Loader2 className="h-6 w-6 animate-spin text-muted-foreground" />
                         </div>
                       )}
                       <Image
+                        ref={imgRef}
                         src={imageUrl}
                         alt={item.title}
-                        width={item.width}
-                        height={item.height}
-                        className={`h-auto w-full object-cover transition-opacity duration-300 ${currentImageLoading ? "opacity-0" : "opacity-100"}`}
+                        fill
+                        sizes="(max-width: 1024px) 40vw, 400px"
+                        className={`object-cover transition-opacity duration-300 ${currentImageLoading ? "opacity-0" : "opacity-100"}`}
                         loading="eager"
                         onLoad={() => setCurrentImageLoading(false)}
+                        onError={() => setCurrentImageLoading(false)}
                       />
                     </div>
                   ) : (

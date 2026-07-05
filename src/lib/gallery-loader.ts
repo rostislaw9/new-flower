@@ -134,3 +134,46 @@ export async function getAdminGalleryItems(): Promise<GalleryItem[]> {
 
   return [...featured, ...regular].map(mapPrismaItem);
 }
+
+export interface AdminGalleryPage {
+  items: GalleryItem[];
+  total: number;
+  featuredCount: number;
+  hasMore: boolean;
+}
+
+export async function getAdminGalleryItemsPaginated(
+  skip: number,
+  take: number,
+): Promise<AdminGalleryPage> {
+  const featuredTake = Math.max(0, take - Math.max(0, skip));
+  const featuredSkip = Math.min(skip, MAX_FEATURED_ITEMS);
+  const regularSkip = Math.max(0, skip - MAX_FEATURED_ITEMS);
+  const regularTake = take - featuredTake;
+
+  const [featured, regular, total, featuredCount] = await Promise.all([
+    prisma.galleryItem.findMany({
+      where: { featured: true },
+      orderBy: [{ displayOrder: "asc" }, { id: "asc" }],
+      skip: featuredSkip,
+      take: featuredTake > 0 ? featuredTake : 0,
+    }),
+    prisma.galleryItem.findMany({
+      where: { featured: false },
+      orderBy: [{ createdAt: "desc" }, { id: "asc" }],
+      skip: regularSkip,
+      take: regularTake > 0 ? regularTake : 0,
+    }),
+    prisma.galleryItem.count(),
+    prisma.galleryItem.count({ where: { featured: true } }),
+  ]);
+
+  const items = [...featured, ...regular].map(mapPrismaItem);
+
+  return {
+    items,
+    total,
+    featuredCount,
+    hasMore: skip + take < total,
+  };
+}
