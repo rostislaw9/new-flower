@@ -1,31 +1,30 @@
 # New Flower Tattoo
 
-> A premium, production-ready gallery and booking platform for tattoo artists. Built with modern web technologies for performance, scalability, and exceptional user experience.
+Production website for New Flower Tattoo studio. Built with Next.js, TypeScript, and Prisma.
 
 ![Next.js](https://img.shields.io/badge/Next.js-16.2-black?logo=next.js)
 ![TypeScript](https://img.shields.io/badge/TypeScript-5.7-blue?logo=typescript)
 ![PostgreSQL](https://img.shields.io/badge/PostgreSQL-Latest-336791?logo=postgresql)
 ![Tailwind CSS](https://img.shields.io/badge/Tailwind-3.4-38B2AC?logo=tailwind-css)
-![License](https://img.shields.io/badge/License-MIT-green)
 
-## 🎯 Overview
+## Overview
 
-New Flower Tattoo is a full-featured web application designed specifically for tattoo artists and studios. It provides:
+The website provides:
 
-- **Gallery Management** — Showcase tattoo work with organized galleries and featured pieces
-- **Booking System** — Accept and manage appointment requests with status tracking
-- **Client Reviews** — Display testimonials and ratings from satisfied clients
-- **Admin Dashboard** — Comprehensive management interface for all studio operations
-- **Multi-Language Support** — Built-in internationalization (English, Thai)
+- **Gallery** — Tattoo work showcase with category filtering and featured pieces
+- **Booking System** — Appointment request form with status tracking
+- **Client Reviews** — Testimonials and ratings display
+- **Admin Dashboard** — Management interface for gallery, bookings, reviews, about content, and FAQ
+- **Multi-Language** — English and Thai with automatic locale detection
 - **Image Management** — Cloudinary integration for optimized image delivery
-- **Email Notifications** — Automated confirmations and status updates
-- **SEO Optimized** — Structured data, sitemaps, and meta tags for search visibility
+- **Email Notifications** — Automated booking confirmations and status updates via Resend
+- **SEO** — JSON-LD structured data, dynamic sitemaps, robots.txt
 
-## 🛠️ Tech Stack
+## Tech Stack
 
 ### Core
 
-- **Framework**: [Next.js 16](https://nextjs.org/) (App Router, Standalone Output)
+- **Framework**: [Next.js 16](https://nextjs.org/) (App Router)
 - **Language**: [TypeScript 5.7](https://www.typescriptlang.org/) (Strict mode with `exactOptionalPropertyTypes`)
 - **Runtime**: Node.js 22+
 
@@ -37,6 +36,7 @@ New Flower Tattoo is a full-featured web application designed specifically for t
 - **Icons**: [Lucide React](https://lucide.dev/)
 - **Forms**: [React Hook Form](https://react-hook-form.com/) + [Zod](https://zod.dev/) validation
 - **Notifications**: [Sonner](https://sonner.emilkowal.ski/) toast library
+- **Theming**: [next-themes](https://github.com/pacocoursey/next-themes) (dark mode)
 
 ### Backend
 
@@ -47,19 +47,19 @@ New Flower Tattoo is a full-featured web application designed specifically for t
 ### Developer Experience
 
 - **Package Manager**: [Yarn 4](https://yarnpkg.com/) (Corepack)
-- **Testing**: [Vitest](https://vitest.dev/) + [React Testing Library](https://testing-library.com/react)
+- **Testing**: [Vitest](https://vitest.dev/)
 - **Linting**: [ESLint 9](https://eslint.org/)
 - **Formatting**: [Prettier](https://prettier.io/)
 - **Git Hooks**: [Husky](https://typicode.github.io/husky/)
 - **Internationalization**: [next-intl](https://next-intl-docs.vercel.app/)
 
-## 📋 Features
+## Features
 
 ### Public Pages
 
 - **Homepage** — Hero section, featured gallery, testimonials, CTA
-- **Gallery** — Gallery with filtering, detailed project views
-- **About** — Artist biography, journey timeline, and studio information (content managed via DB)
+- **Gallery** — Gallery with category filtering, detailed lightbox views
+- **About** — Artist biography, journey timeline (content managed via DB)
 - **Booking** — Appointment request form with validation
 - **Reviews** — Client testimonials and ratings
 - **FAQ** — Frequently asked questions (content managed via DB)
@@ -68,10 +68,10 @@ New Flower Tattoo is a full-featured web application designed specifically for t
 ### Admin Dashboard
 
 - **Dashboard** — Overview with key metrics and statistics
-- **Gallery Management** — Create, edit, delete gallery items with image uploads
+- **Gallery Management** — Create, edit, delete, feature, and reorder gallery items
 - **Booking Management** — View, filter, and update appointment statuses
 - **Review Management** — Moderate and feature client reviews
-- **Artist Images Management** — Manage artist portrait and shop logo with Cloudinary integration
+- **Artist Images Management** — Manage artist portrait and shop logo
 - **About Page Management** — Edit biography and journey timeline with localized content
 - **FAQ Management** — Manage FAQ groups, questions, and translations
 - **Responsive Sidebar** — Collapsible navigation with mobile support
@@ -79,15 +79,14 @@ New Flower Tattoo is a full-featured web application designed specifically for t
 ### Technical Features
 
 - **Multi-Language** — English and Thai with automatic locale detection
-- **Responsive Design** — Mobile-first approach, works on all devices
+- **Responsive Design** — Mobile-first approach
 - **Dark Mode** — Theme switching with next-themes
 - **SEO** — JSON-LD structured data, dynamic sitemaps, robots.txt
 - **Performance** — Image optimization, code splitting, caching strategies
 - **Type Safety** — Full TypeScript coverage with strict mode
-- **Database Indexing** — Optimized queries with strategic indexes
 - **Error Handling** — Comprehensive error boundaries and fallbacks
 
-## 🚀 Quick Start
+## Quick Start
 
 ### Prerequisites
 
@@ -97,40 +96,33 @@ New Flower Tattoo is a full-featured web application designed specifically for t
 
 ### Installation
 
-1. **Clone the repository**
-
-   ```bash
-   git clone https://github.com/yourusername/new-flower.git
-   cd new-flower
-   ```
-
-2. **Install dependencies**
+1. **Install dependencies**
 
    ```bash
    yarn install
    ```
 
-3. **Configure environment**
+2. **Configure environment**
 
    ```bash
    cp .env.example .env
    ```
 
-   Edit `.env` with your configuration (see [Environment Variables](#-environment-variables) below)
+   Edit `.env` with your configuration (see [Environment Variables](#environment-variables) below)
 
-4. **Start PostgreSQL**
+3. **Start PostgreSQL**
 
    ```bash
    docker compose up postgres -d
    ```
 
-5. **Run database migrations**
+4. **Run database migrations**
 
    ```bash
    yarn db:migrate
    ```
 
-6. **Start development server**
+5. **Start development server**
 
    ```bash
    yarn dev
@@ -138,19 +130,17 @@ New Flower Tattoo is a full-featured web application designed specifically for t
 
    Open [http://localhost:3000](http://localhost:3000) in your browser.
 
-## 📦 Docker Setup
+## Docker Setup
 
-### Run Full Stack
+The `docker-compose.yml` defines a PostgreSQL database and a Next.js dev server for local development.
 
 ```bash
+# Start both PostgreSQL and Next.js dev server
 docker compose up
-```
 
-This starts both the Next.js application and PostgreSQL database.
+# Start PostgreSQL only (for local yarn dev)
+docker compose up postgres -d
 
-### Stop Services
-
-```bash
 # Stop all services
 docker compose down
 
@@ -158,25 +148,28 @@ docker compose down
 docker compose down -v
 ```
 
-## 🔧 Environment Variables
+## Environment Variables
 
 Copy `.env.example` to `.env` and configure:
 
 | Variable                | Description                       | Required    | Example                                    |
 | ----------------------- | --------------------------------- | ----------- | ------------------------------------------ |
-| `DATABASE_URL`          | PostgreSQL connection string      | ✅          | `postgresql://user:pass@localhost:5432/db` |
-| `NEXT_PUBLIC_SITE_URL`  | Public site URL                   | ✅          | `https://studio.com`                       |
-| `CLOUDINARY_CLOUD_NAME` | Cloudinary cloud name             | ✅          | `your-cloud-name`                          |
-| `CLOUDINARY_API_KEY`    | Cloudinary API key                | ✅          | `your-api-key`                             |
-| `CLOUDINARY_API_SECRET` | Cloudinary API secret             | ✅          | `your-api-secret`                          |
-| `RESEND_API_KEY`        | Resend email API key              | ✅          | `re_xxxxx`                                 |
-| `ARTIST_EMAIL`          | Email for booking notifications   | ✅          | `artist@studio.com`                        |
-| `EMAIL_FROM`            | Sender email address              | ✅          | `Studio <noreply@studio.com>`              |
+| `DATABASE_URL`          | PostgreSQL connection string      | Yes         | `postgresql://user:pass@localhost:5432/db` |
+| `NEXT_PUBLIC_SITE_URL`  | Public site URL                   | Yes         | `https://newflower.tattoo`                 |
+| `CLOUDINARY_CLOUD_NAME` | Cloudinary cloud name             | Yes         | `your-cloud-name`                          |
+| `CLOUDINARY_API_KEY`    | Cloudinary API key                | Yes         | `your-api-key`                             |
+| `CLOUDINARY_API_SECRET` | Cloudinary API secret             | Yes         | `your-api-secret`                          |
+| `RESEND_API_KEY`        | Resend email API key              | Yes         | `re_xxxxx`                                 |
+| `ARTIST_EMAIL`          | Email for booking notifications   | Yes         | `artist@studio.com`                        |
+| `EMAIL_FROM`            | Sender email address              | Yes         | `Studio <noreply@studio.com>`              |
+| `ADMIN_USERNAME`        | Admin dashboard basic auth user   | Yes         | `admin`                                    |
+| `ADMIN_PASSWORD`        | Admin dashboard basic auth pass   | Yes         | `secure_password`                          |
+| `CRON_SECRET`           | Bearer token for cron endpoints   | Optional    | `your-cron-secret`                         |
 | `POSTGRES_USER`         | PostgreSQL username (Docker)      | Docker only | `flower`                                   |
 | `POSTGRES_PASSWORD`     | PostgreSQL password (Docker)      | Docker only | `secure_password`                          |
 | `POSTGRES_DB`           | PostgreSQL database name (Docker) | Docker only | `flower_db`                                |
 
-## 📚 Scripts
+## Scripts
 
 | Command                  | Description                              |
 | ------------------------ | ---------------------------------------- |
@@ -199,7 +192,7 @@ Copy `.env.example` to `.env` and configure:
 | `yarn db:seed`           | Seed database with sample data           |
 | `yarn db:sync-prod`      | Sync production data to local database   |
 
-## 🗄️ Database Schema
+## Database Schema
 
 ### Appointment
 
@@ -335,7 +328,7 @@ Individual FAQ questions with localized question and answer text.
 - unique: [questionId, locale]
 ```
 
-## 🏗️ Project Structure
+## Project Structure
 
 ```text
 src/
@@ -355,82 +348,30 @@ src/
 │   │   ├── reviews/       # Reviews page
 │   │   └── ...
 │   ├── api/               # API routes
-│   │   ├── about/         # About data endpoint
-│   │   ├── faq/           # FAQ data endpoint
-│   │   └── gallery/       # Gallery endpoints
+│   │   ├── cron/          # Cron endpoints (cloudinary cleanup)
+│   │   └── gallery/       # Gallery endpoint (public, paginated)
 │   └── layout.tsx         # Root layout
 ├── components/            # React components
 │   ├── admin/            # Admin-specific components
-│   │   ├── about/        # About editors (Bio, Journey, Year)
-│   │   ├── faq/          # FAQ editors
-│   │   ├── dashboard/    # Dashboard cards & stats
-│   │   └── ...
 │   ├── sections/         # Page sections
 │   ├── styled/           # Styled UI components
 │   ├── ui/               # shadcn/ui components
 │   └── ...
 ├── lib/                  # Utilities and helpers
-│   ├── actions/          # Server actions
+│   ├── actions/          # Server actions (mutations + data fetching)
 │   ├── email/            # Email templates
 │   ├── schemas/          # Zod validation schemas
-│   ├── about-data.ts     # About page data loader
-│   ├── faq-data.ts       # FAQ data loader
 │   └── ...
 ├── types/                # TypeScript type definitions
 ├── hooks/                # Custom React hooks
 └── i18n/                 # Internationalization config
 ```
 
-## 🚢 Deployment
+## Deployment
 
-### Deployment Prerequisites
+Docker is used for local development only. Production deployment is handled separately.
 
-- All environment variables configured
-- PostgreSQL database provisioned
-- Cloudinary account set up
-- Resend email account configured
-
-### Supported Platforms
-
-#### Vercel (Recommended for Next.js)
-
-```bash
-# Connect repository to Vercel dashboard
-# Set environment variables
-# Deploy automatically on push
-```
-
-#### Docker-based Platforms (Render, Railway, Fly.io)
-
-```bash
-# Set environment variables in platform dashboard
-# Connect repository
-# Platform automatically builds and deploys using Dockerfile
-```
-
-#### Self-hosted
-
-```bash
-# Build
-yarn build
-
-# Start
-yarn start
-```
-
-### Production Checklist
-
-- [ ] Environment variables configured
-- [ ] Database migrations deployed
-- [ ] Cloudinary images migrated
-- [ ] Email service tested
-- [ ] DNS configured
-- [ ] SSL certificate installed
-- [ ] Backups configured
-- [ ] Monitoring set up
-- [ ] Error tracking enabled
-
-## 🧪 Testing
+## Testing
 
 Run the test suite:
 
@@ -450,7 +391,7 @@ Generate coverage report:
 yarn test:coverage
 ```
 
-## 📖 Development Guide
+## Development Guide
 
 ### Adding a New Page
 
@@ -488,7 +429,7 @@ yarn db:sync-prod
 
 This script dumps data from the production database (using `DATABASE_URL` from `.env`) and imports it locally. It syncs all content tables: appointments, gallery items, reviews, about bios/journeys, and FAQ groups/questions with their translations.
 
-## � Cron Jobs
+## Cron Jobs
 
 ### Cloudinary Image Cleanup
 
@@ -506,7 +447,7 @@ curl -H "Authorization: Bearer YOUR_CRON_SECRET" http://localhost:3000/api/cron/
 
 The `CRON_SECRET` environment variable must be set. The endpoint returns a JSON summary of deleted and remaining images.
 
-## �🔐 Security
+## Security
 
 - **TypeScript Strict Mode** — Catches type errors at compile time
 - **Input Validation** — Zod schemas validate all user input
@@ -515,34 +456,9 @@ The `CRON_SECRET` environment variable must be set. The endpoint returns a JSON 
 - **Environment Variables** — Sensitive data never committed
 - **API Routes** — Server-side validation and authentication ready
 
-## 📊 Performance
+## Performance
 
 - **Image Optimization** — Cloudinary handles resizing and caching
 - **Code Splitting** — Automatic with Next.js App Router
 - **Database Indexing** — Strategic indexes on frequently queried fields
 - **Caching** — Next.js built-in caching strategies
-- **Standalone Output** — Minimal Docker image size
-
-## 🤝 Contributing
-
-1. Create a feature branch
-2. Make your changes
-3. Run `yarn lint:fix` and `yarn format`
-4. Run `yarn test` to ensure tests pass
-5. Submit a pull request
-
-## 📝 License
-
-MIT License — see LICENSE file for details
-
-## 📞 Support
-
-For issues and questions:
-
-- Check existing [GitHub Issues](https://github.com/yourusername/new-flower/issues)
-- Create a new issue with detailed information
-- Include steps to reproduce and environment details
-
-## 🙏 Acknowledgments
-
-Built with [Next.js](https://nextjs.org/), [Tailwind CSS](https://tailwindcss.com/), [shadcn/ui](https://ui.shadcn.com/), and [Prisma](https://www.prisma.io/).
