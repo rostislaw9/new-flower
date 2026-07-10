@@ -39,7 +39,8 @@
       "eyebrow": "Reviews",
       "title": "What customers say",
       "empty": "Featured reviews will appear here once customers share them",
-      "ratingAria": "{rating} out of 5 stars"
+      "ratingAria": "{rating} out of 5 stars",
+      "viewAll": "View all reviews"
     },
     "cta": {
       "eyebrow": "Ready to begin?",
@@ -446,6 +447,25 @@
       "subtitle": "Once it’s reviewed, it may appear on the homepage."
     }
   },
+  "reviewsPage": {
+    "metadata": {
+      "title": "Reviews",
+      "description": "Read what clients have to say about their experience at New Flower Tattoo."
+    },
+    "hero": {
+      "eyebrow": "Testimonials",
+      "title": "Client reviews",
+      "subtitle": "Real experiences from people who trusted New Flower Tattoo with their art."
+    },
+    "empty": "No reviews yet. Be the first to share your experience.",
+    "ratingAria": "{rating} out of 5 stars",
+    "cta": {
+      "eyebrow": "Your turn",
+      "title": "Share your experience",
+      "subtitle": "Your words help others feel confident booking their session.",
+      "button": "Leave a review"
+    }
+  },
   "footer": {
     "text": "Premium tattoo art. Every piece is a collaboration between artist and client — crafted with intention.",
     "copyright": "© {year} New Flower Tattoo. All rights reserved.",
@@ -454,6 +474,7 @@
     "connect": "Connect",
     "links": {
       "gallery": "Gallery",
+      "reviews": "Reviews",
       "about": "About",
       "faq": "FAQ",
       "contact": "Contact",
@@ -666,6 +687,8 @@
         "review": "Review",
         "created": "Submitted",
         "featured": "Featured",
+        "visible": "Visible",
+        "visibleLabel": "Visible",
         "actions": "Actions",
         "empty": "No reviews found",
         "deleteTitle": "Delete review",
@@ -675,6 +698,9 @@
         "toggleFeaturedOn": "Review added to homepage",
         "toggleFeaturedOff": "Review removed from homepage",
         "toggleError": "Failed to update featured state",
+        "toggleVisibleOn": "Review is now visible on reviews page",
+        "toggleVisibleOff": "Review hidden from reviews page",
+        "toggleVisibleError": "Failed to update visibility",
         "deleteSuccess": "Review deleted",
         "deleteError": "Failed to delete review"
       },

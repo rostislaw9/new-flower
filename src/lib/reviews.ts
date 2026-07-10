@@ -27,6 +27,15 @@ export async function getFeaturedReviews(limit = 3) {
   });
 }
 
+export async function getVisibleReviews(limit?: number) {
+  noStore();
+  return prisma.review.findMany({
+    where: { visible: true },
+    orderBy: { createdAt: "desc" },
+    ...(limit ? { take: limit } : {}),
+  });
+}
+
 interface GetReviewsInput {
   page: number;
   rating?: number;

@@ -62,9 +62,11 @@ model Review {
   rating     Int
   text       String
   featured   Boolean  @default(false)
+  visible    Boolean  @default(false)
 
   @@map("reviews")
   @@index([featured, createdAt])
+  @@index([visible, createdAt])
   @@index([rating])
 }
 

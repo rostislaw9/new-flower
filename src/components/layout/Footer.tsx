@@ -10,11 +10,12 @@ import { Eyebrow, Text } from "@/components/styled/Typography";
 import { Separator } from "@/components/ui/separator";
 
 const FOOTER_LINKS = [
+  { href: "/booking", labelKey: "links.booking" },
   { href: "/gallery", labelKey: "links.gallery" },
   { href: "/about", labelKey: "links.about" },
   { href: "/faq", labelKey: "links.faq" },
   { href: "/contact", labelKey: "links.contact" },
-  { href: "/booking", labelKey: "links.booking" },
+  { href: "/reviews", labelKey: "links.reviews" },
 ] as const;
 
 const SOCIAL_LINKS = [

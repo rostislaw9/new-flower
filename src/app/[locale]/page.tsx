@@ -172,11 +172,21 @@ export default async function HomePage() {
       <Section size="lg">
         <Container>
           <div className="flex flex-col gap-12">
-            <div className="flex flex-col gap-3">
-              <Eyebrow>{t("testimonials.eyebrow")}</Eyebrow>
-              <Heading as="h2" size="headline">
-                {t("testimonials.title")}
-              </Heading>
+            <div className="flex flex-col items-start justify-between gap-4 sm:flex-row sm:items-end">
+              <div className="flex flex-col gap-3">
+                <Eyebrow>{t("testimonials.eyebrow")}</Eyebrow>
+                <Heading as="h2" size="headline">
+                  {t("testimonials.title")}
+                </Heading>
+              </div>
+              <Button
+                href="/reviews"
+                variant="ghost"
+                size="sm"
+                className="hidden md:block"
+              >
+                {t("testimonials.viewAll")}
+              </Button>
             </div>
             {featuredReviews.length === 0 ? (
               <Empty className="border">
@@ -187,36 +197,43 @@ export default async function HomePage() {
                 </EmptyHeader>
               </Empty>
             ) : (
-              <div className="grid grid-cols-1 gap-px md:grid-cols-3">
-                {featuredReviews.map((review) => (
-                  <article
-                    key={review.id}
-                    className="flex flex-col gap-6 bg-background p-8"
-                  >
-                    <div
-                      className="flex gap-0.5"
-                      aria-label={t("testimonials.ratingAria", {
-                        rating: review.rating,
-                      })}
+              <div className="flex flex-1 flex-col gap-8">
+                <div className="grid grid-cols-1 gap-px md:grid-cols-3">
+                  {featuredReviews.map((review) => (
+                    <article
+                      key={review.id}
+                      className="flex flex-col gap-6 bg-background p-8"
                     >
-                      {Array.from({ length: review.rating }).map((_, index) => (
-                        <span
-                          key={`${review.id}-star-${index}`}
-                          className="text-accent"
-                          aria-hidden="true"
-                        >
-                          ★
-                        </span>
-                      ))}
-                    </div>
-                    <Text muted className="flex-1 italic">
-                      &ldquo;{review.text}&rdquo;
-                    </Text>
-                    <Text size="sm" className="font-medium text-foreground">
-                      — {review.clientName}
-                    </Text>
-                  </article>
-                ))}
+                      <div
+                        className="flex gap-0.5"
+                        aria-label={t("testimonials.ratingAria", {
+                          rating: review.rating,
+                        })}
+                      >
+                        {Array.from({ length: review.rating }).map(
+                          (_, index) => (
+                            <span
+                              key={`${review.id}-star-${index}`}
+                              className="text-accent"
+                              aria-hidden="true"
+                            >
+                              ★
+                            </span>
+                          ),
+                        )}
+                      </div>
+                      <Text muted className="flex-1 italic">
+                        &ldquo;{review.text}&rdquo;
+                      </Text>
+                      <Text size="sm" className="font-medium text-foreground">
+                        — {review.clientName}
+                      </Text>
+                    </article>
+                  ))}
+                </div>
+                <Button href="/reviews" variant="outline" className="md:hidden">
+                  {t("testimonials.viewAll")}
+                </Button>
               </div>
             )}
           </div>

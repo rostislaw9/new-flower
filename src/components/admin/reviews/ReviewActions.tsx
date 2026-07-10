@@ -4,16 +4,21 @@ import { useState, useTransition } from "react";
 
 import { useRouter } from "next/navigation";
 
-import { Flag, Loader2, Trash2 } from "lucide-react";
+import { Eye, EyeOff, Flag, FlagOff, Loader2, Trash2 } from "lucide-react";
 import { toast } from "sonner";
 
 import { Button } from "@/components/styled/Button";
 import { DeleteConfirmDialog } from "@/components/styled/DeleteConfirmDialog";
-import { deleteReview, setReviewFeatured } from "@/lib/actions/reviews";
+import {
+  deleteReview,
+  setReviewFeatured,
+  setReviewVisible,
+} from "@/lib/actions/reviews";
 
 interface ReviewActionsProps {
   id: string;
   featured: boolean;
+  visible: boolean;
   labels: {
     deleteTitle: string;
     deleteDescription: string;
@@ -29,12 +34,16 @@ interface ReviewActionsProps {
     toggleError: string;
     deleteSuccess: string;
     deleteError: string;
+    visibleOn: string;
+    visibleOff: string;
+    visibleError: string;
   };
 }
 
 export function ReviewActions({
   id,
   featured,
+  visible,
   labels,
   dialogLabels,
   messages,
@@ -42,6 +51,7 @@ export function ReviewActions({
   const router = useRouter();
   const [confirmOpen, setConfirmOpen] = useState(false);
   const [togglePending, startToggleTransition] = useTransition();
+  const [visiblePending, startVisibleTransition] = useTransition();
   const [deletePending, setDeletePending] = useState(false);
 
   function handleToggleFeatured() {
@@ -57,6 +67,26 @@ export function ReviewActions({
         .catch((error) => {
           console.error("[ReviewActions] Toggle failed", error);
           toast.error(messages.toggleError);
+        })
+        .finally(() => {
+          router.refresh();
+        });
+    });
+  }
+
+  function handleToggleVisible() {
+    startVisibleTransition(() => {
+      void setReviewVisible(id, !visible)
+        .then((result) => {
+          if (!result.success) {
+            toast.error(result.message || messages.visibleError);
+            return;
+          }
+          toast.success(visible ? messages.visibleOff : messages.visibleOn);
+        })
+        .catch((error) => {
+          console.error("[ReviewActions] Visibility toggle failed", error);
+          toast.error(messages.visibleError);
         })
         .finally(() => {
           router.refresh();
@@ -89,12 +119,35 @@ export function ReviewActions({
       <div className="flex justify-end gap-2">
         <Button
           type="button"
+          variant="ghost"
+          size="icon-borderless"
+          onClick={handleToggleVisible}
+          disabled={visiblePending || deletePending}
+          aria-label={visible ? messages.visibleOff : messages.visibleOn}
+        >
+          {visiblePending ? (
+            <Loader2 className="animate-spin" />
+          ) : visible ? (
+            <EyeOff />
+          ) : (
+            <Eye />
+          )}
+        </Button>
+        <Button
+          type="button"
           variant="accent"
           size="icon-borderless"
           onClick={handleToggleFeatured}
           disabled={togglePending || deletePending}
+          aria-label={featured ? messages.toggleOff : messages.toggleOn}
         >
-          {togglePending ? <Loader2 className="animate-spin" /> : <Flag />}
+          {togglePending ? (
+            <Loader2 className="animate-spin" />
+          ) : featured ? (
+            <FlagOff />
+          ) : (
+            <Flag />
+          )}
         </Button>
         <Button
           type="button"

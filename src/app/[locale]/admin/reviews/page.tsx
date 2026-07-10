@@ -175,6 +175,7 @@ export default async function AdminReviewsPage({
                   <TableHead>{t("table.rating")}</TableHead>
                   <TableHead>{t("table.review")}</TableHead>
                   <TableHead>{t("table.created")}</TableHead>
+                  <TableHead>{t("table.visible")}</TableHead>
                   <TableHead>{t("table.featured")}</TableHead>
                   <TableHead className="text-right">
                     {t("table.actions")}
@@ -185,7 +186,7 @@ export default async function AdminReviewsPage({
                 {reviews.length === 0 ? (
                   <TableRow>
                     <TableCell
-                      colSpan={6}
+                      colSpan={7}
                       className="py-12 text-center text-muted-foreground"
                     >
                       {t("table.empty")}
@@ -231,6 +232,17 @@ export default async function AdminReviewsPage({
                         {formatDateWithTime(review.createdAt)}
                       </TableCell>
                       <TableCell className="min-w-32">
+                        {review.visible ? (
+                          <Badge variant="default">
+                            {t("table.visibleLabel")}
+                          </Badge>
+                        ) : (
+                          <Text size="sm" muted>
+                            —
+                          </Text>
+                        )}
+                      </TableCell>
+                      <TableCell className="min-w-32">
                         {review.featured ? (
                           <Badge variant="accent">{t("table.featured")}</Badge>
                         ) : (
@@ -243,6 +255,7 @@ export default async function AdminReviewsPage({
                         <ReviewActions
                           id={review.id}
                           featured={review.featured}
+                          visible={review.visible}
                           labels={{
                             deleteTitle: t("table.deleteTitle"),
                             deleteDescription: t("table.deleteDescription"),
@@ -258,6 +271,9 @@ export default async function AdminReviewsPage({
                             toggleError: t("messages.toggleError"),
                             deleteSuccess: t("messages.deleteSuccess"),
                             deleteError: t("messages.deleteError"),
+                            visibleOn: t("messages.toggleVisibleOn"),
+                            visibleOff: t("messages.toggleVisibleOff"),
+                            visibleError: t("messages.toggleVisibleError"),
                           }}
                         />
                       </TableCell>

@@ -28,6 +28,13 @@ function revalidateAdminReviews() {
   });
 }
 
+function revalidateReviewsPage() {
+  locales.forEach((locale) => {
+    const path = locale === defaultLocale ? "/reviews" : `/${locale}/reviews`;
+    revalidatePath(path);
+  });
+}
+
 export async function submitReview(
   _prevState: ReviewFormState,
   formData: FormData,
@@ -130,6 +137,7 @@ export async function setReviewFeatured(
 
     revalidateAdminReviews();
     revalidateHomePages();
+    revalidateReviewsPage();
 
     return { success: true };
   } catch (error) {
@@ -146,10 +154,28 @@ export async function deleteReview(
 
     revalidateAdminReviews();
     revalidateHomePages();
+    revalidateReviewsPage();
 
     return { success: true };
   } catch (error) {
     console.error("[deleteReview] Error", error);
     return { success: false, message: "Failed to delete review" };
+  }
+}
+
+export async function setReviewVisible(
+  id: string,
+  visible: boolean,
+): Promise<{ success: boolean; message?: string }> {
+  try {
+    await prisma.review.update({ where: { id }, data: { visible } });
+
+    revalidateAdminReviews();
+    revalidateReviewsPage();
+
+    return { success: true };
+  } catch (error) {
+    console.error("[setReviewVisible] Error", error);
+    return { success: false, message: "Failed to update visibility" };
   }
 }
