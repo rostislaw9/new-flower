@@ -14,6 +14,8 @@ export type BreadcrumbList = {
   }[];
 };
 
+const SITE_URL = process.env.NEXT_PUBLIC_SITE_URL;
+
 export function createBreadcrumbList(items: BreadcrumbItem[]): BreadcrumbList {
   return {
     "@context": "https://schema.org",
@@ -22,7 +24,7 @@ export function createBreadcrumbList(items: BreadcrumbItem[]): BreadcrumbList {
       "@type": "ListItem",
       position: index + 1,
       name,
-      item,
+      item: `${SITE_URL}${item}`,
     })),
   };
 }
