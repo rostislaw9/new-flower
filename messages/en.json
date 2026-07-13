@@ -416,39 +416,6 @@
   },
   "reviews": {
     "metadata": {
-      "title": "Leave a review",
-      "description": "Share your experience working with New Flower Tattoo so future customers know what to expect."
-    },
-    "hero": {
-      "eyebrow": "Client stories",
-      "title": "Share your experience",
-      "subtitle": "Your words help others feel confident booking their session. It only takes a minute to leave a few thoughts."
-    },
-    "form": {
-      "nameLabel": "Full name",
-      "nameError": "Name must be at least 2 characters",
-      "emailLabel": "Email",
-      "emailError": "Please enter a valid email",
-      "ratingLabel": "Rating",
-      "ratingHelp": "Tap to select from 1 to 5 stars",
-      "ratingError": "Select a rating",
-      "reviewLabel": "Review",
-      "reviewPlaceholder": "Tell us about your session, the artwork, or the overall experience…",
-      "reviewError": "Review must be at least 20 characters",
-      "submit": "Submit review",
-      "submitting": "Submitting…",
-      "error": "We couldn’t save your review. Please try again.",
-      "optionalTag": "Optional",
-      "ratingAria": "{rating} star rating"
-    },
-    "success": {
-      "eyebrow": "Thank you",
-      "title": "Your review has been received",
-      "subtitle": "Once it’s reviewed, it may appear on the homepage."
-    }
-  },
-  "reviewsPage": {
-    "metadata": {
       "title": "Reviews",
       "description": "Read what clients have to say about their experience at New Flower Tattoo."
     },
@@ -464,6 +431,39 @@
       "title": "Share your experience",
       "subtitle": "Your words help others feel confident booking their session.",
       "button": "Leave a review"
+    },
+    "new": {
+      "metadata": {
+        "title": "Leave a review",
+        "description": "Share your experience working with New Flower Tattoo so future customers know what to expect."
+      },
+      "hero": {
+        "eyebrow": "Client stories",
+        "title": "Share your experience",
+        "subtitle": "Your words help others feel confident booking their session. It only takes a minute to leave a few thoughts."
+      },
+      "form": {
+        "nameLabel": "Full name",
+        "nameError": "Name must be at least 2 characters",
+        "emailLabel": "Email",
+        "emailError": "Please enter a valid email",
+        "ratingLabel": "Rating",
+        "ratingHelp": "Tap to select from 1 to 5 stars",
+        "ratingError": "Select a rating",
+        "reviewLabel": "Review",
+        "reviewPlaceholder": "Tell us about your session, the artwork, or the overall experience…",
+        "reviewError": "Review must be at least 20 characters",
+        "submit": "Submit review",
+        "submitting": "Submitting…",
+        "error": "We couldn’t save your review. Please try again.",
+        "optionalTag": "Optional",
+        "ratingAria": "{rating} star rating"
+      },
+      "success": {
+        "eyebrow": "Thank you",
+        "title": "Your review has been received",
+        "subtitle": "Once it’s reviewed, it may appear on the homepage."
+      }
     }
   },
   "footer": {
@@ -812,38 +812,6 @@
         }
       }
     },
-    "imageUploader": {
-      "alerts": {
-        "invalidType": {
-          "title": "Invalid file type for {file}",
-          "description": "Only JPG, PNG, WEBP and HEIC are allowed"
-        },
-        "fileTooLarge": {
-          "title": "{file} is too large",
-          "description": "Maximum size is {size}MB"
-        },
-        "maxFiles": "Maximum {count} files allowed",
-        "uploadFailed": "Upload failed"
-      },
-      "dropzone": {
-        "hint": {
-          "action": "Drag and drop images here, or click to browse"
-        },
-        "specs": "Max {count} files · {size}MB each · {types}"
-      },
-      "actions": {
-        "upload": "Upload images",
-        "uploading": {
-          "title": "Uploading...",
-          "hint": "Getting your images ready..."
-        }
-      },
-      "status": {
-        "allUploaded": "All images uploaded successfully"
-      },
-      "previewAlt": "Upload {index}",
-      "removeAria": "Remove image"
-    },
     "artistImages": {
       "title": "Artist Images Management",
       "subtitle": "Manage artist portrait and shop logo",
@@ -928,5 +896,38 @@
       "delete": "Delete",
       "cancel": "Cancel"
     }
+  },
+  "imageUploader": {
+    "alerts": {
+      "invalidType": {
+        "title": "Invalid file type for {file}",
+        "description": "Only JPG, PNG, WEBP and HEIC are allowed"
+      },
+      "fileTooLarge": {
+        "title": "{file} is too large",
+        "description": "Maximum size is {size}MB"
+      },
+      "maxFiles": "Maximum {count} files allowed",
+      "uploadFailed": "Upload failed"
+    },
+    "dropzone": {
+      "hint": {
+        "action": "Drag and drop images here,",
+        "actionSecondary": "or click to browse"
+      },
+      "specs": "Max {count} files · {size}MB each · {types}"
+    },
+    "actions": {
+      "upload": "Upload images",
+      "uploading": {
+        "title": "Uploading...",
+        "hint": "Getting your images ready..."
+      }
+    },
+    "status": {
+      "allUploaded": "All images uploaded successfully"
+    },
+    "previewAlt": "Upload {index}",
+    "removeAria": "Remove image"
   }
 }

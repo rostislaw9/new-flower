@@ -19,10 +19,7 @@ export async function generateMetadata({
   params: Promise<{ locale: string }>;
 }): Promise<Metadata> {
   const { locale } = await params;
-  const t = await getTranslations({
-    locale,
-    namespace: "reviewsPage.metadata",
-  });
+  const t = await getTranslations({ locale, namespace: "reviews.metadata" });
 
   return buildPageMetadata({
     locale,
@@ -33,7 +30,7 @@ export async function generateMetadata({
 }
 
 export default async function ReviewsPage() {
-  const t = await getTranslations("reviewsPage");
+  const t = await getTranslations("reviews");
   const reviews = await getVisibleReviews();
   const breadcrumb = createBreadcrumbList([
     { name: "Home", item: "/" },

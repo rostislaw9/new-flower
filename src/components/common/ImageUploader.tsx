@@ -60,7 +60,7 @@ export function ImageUploader({
     })),
   );
   const [isDragging, setIsDragging] = useState(false);
-  const t = useTranslations("admin.imageUploader");
+  const t = useTranslations("imageUploader");
   const sizeLimitMb = 10;
 
   const formattedTypes = useMemo(() => {
@@ -292,13 +292,18 @@ export function ImageUploader({
             </Text>
           </>
         ) : (
-          <>
-            <Upload className="mx-auto mb-2 text-muted-foreground" />
-            <Text muted>{t("dropzone.hint.action")}</Text>
+          <div className="flex flex-col gap-1">
+            <div>
+              <Upload className="mx-auto mb-2 text-muted-foreground" />
+              <Text muted>
+                {t("dropzone.hint.action")} <br className="md:hidden" />
+                {t("dropzone.hint.actionSecondary")}
+              </Text>
+            </div>
             <Text size="xs" muted>
               {dropSpecs}
             </Text>
-          </>
+          </div>
         )}
       </label>
 
