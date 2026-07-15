@@ -49,6 +49,11 @@ import {
   createGalleryItems,
   deleteCloudinaryImage,
 } from "@/lib/actions/gallery";
+import {
+  clearFormState,
+  loadFormState,
+  saveFormState,
+} from "@/lib/form-storage";
 import { GALLERY_CATEGORIES, type GalleryCategory } from "@/lib/gallery-data";
 import { getLocalizedPath, isSupportedLocale } from "@/lib/locale-utils";
 import { cn } from "@/lib/utils";
@@ -114,39 +119,25 @@ export default function UploadGalleryPage() {
   });
 
   useEffect(() => {
-    try {
-      const saved = sessionStorage.getItem(UPLOAD_DRAFTS_STORAGE_KEY);
-      if (saved) {
-        const parsed = JSON.parse(saved) as {
-          drafts: DraftGalleryItem[];
-          selectedId: string | null;
-        };
-        if (parsed.drafts?.length) {
-          setDrafts(parsed.drafts);
-          setSelectedId(parsed.selectedId ?? parsed.drafts[0]?.id ?? null);
-        }
-      }
-    } catch {
-      // ignore
+    const saved = loadFormState<{
+      drafts: DraftGalleryItem[];
+      selectedId: string | null;
+    }>(UPLOAD_DRAFTS_STORAGE_KEY, locale);
+    if (saved?.drafts?.length) {
+      setDrafts(saved.drafts);
+      setSelectedId(saved.selectedId ?? saved.drafts[0]?.id ?? null);
     }
     setHydrated(true);
-  }, []);
+  }, [locale]);
 
   useEffect(() => {
     if (!hydrated) return;
-    try {
-      if (drafts.length === 0) {
-        sessionStorage.removeItem(UPLOAD_DRAFTS_STORAGE_KEY);
-      } else {
-        sessionStorage.setItem(
-          UPLOAD_DRAFTS_STORAGE_KEY,
-          JSON.stringify({ drafts, selectedId }),
-        );
-      }
-    } catch {
-      // ignore
+    if (drafts.length === 0) {
+      clearFormState(UPLOAD_DRAFTS_STORAGE_KEY);
+    } else {
+      saveFormState(UPLOAD_DRAFTS_STORAGE_KEY, { drafts, selectedId }, locale);
     }
-  }, [drafts, selectedId, hydrated]);
+  }, [drafts, selectedId, hydrated, locale]);
 
   const backHref = useMemo(
     () => getLocalizedPath("/admin/gallery", locale),
@@ -308,7 +299,7 @@ export default function UploadGalleryPage() {
       setSelectedId(null);
       setSubmitting(false);
       try {
-        sessionStorage.removeItem(UPLOAD_DRAFTS_STORAGE_KEY);
+        clearFormState(UPLOAD_DRAFTS_STORAGE_KEY);
       } catch {
         // ignore
       }

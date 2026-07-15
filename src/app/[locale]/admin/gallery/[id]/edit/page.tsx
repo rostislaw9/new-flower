@@ -40,6 +40,11 @@ import {
 import { Textarea } from "@/components/ui/textarea";
 import { type Locale, defaultLocale } from "@/i18n/config";
 import { deleteGalleryItem, updateGalleryItem } from "@/lib/actions/gallery";
+import {
+  clearFormState,
+  loadFormState,
+  saveFormState,
+} from "@/lib/form-storage";
 import type { GalleryItem } from "@/lib/gallery-data";
 import { GALLERY_CATEGORIES } from "@/lib/gallery-data";
 import { getGalleryItemById } from "@/lib/gallery-loader";
@@ -116,20 +121,38 @@ export default function EditGalleryItemPage({
 
         let savedValues: Partial<GalleryFormValues> | null = null;
         try {
-          const saved = sessionStorage.getItem(storageKey);
-          if (saved) {
-            savedValues = JSON.parse(saved) as Partial<GalleryFormValues>;
-          }
+          savedValues = loadFormState<Partial<GalleryFormValues>>(
+            storageKey,
+            locale,
+          );
         } catch {
           // ignore
         }
 
-        reset({
-          title: savedValues?.title ?? data.title,
-          category: savedValues?.category ?? data.category,
-          description: savedValues?.description ?? data.description ?? "",
-          imageUrl: savedValues?.imageUrl ?? data.imageUrl,
-        });
+        const serverValues: GalleryFormValues = {
+          title: data.title,
+          category: data.category,
+          description: data.description ?? "",
+          imageUrl: data.imageUrl,
+        };
+
+        reset(serverValues);
+
+        if (savedValues) {
+          (Object.keys(savedValues) as Array<keyof GalleryFormValues>).forEach(
+            (key) => {
+              const saved = savedValues[key];
+              if (saved !== undefined && saved !== serverValues[key]) {
+                setValue(key, saved, { shouldDirty: true });
+              }
+            },
+          );
+          saveFormState(
+            storageKey,
+            { ...serverValues, ...savedValues },
+            locale,
+          );
+        }
       } catch {
         const message = t("edit.alerts.loadFailed");
         setError(message);
@@ -139,20 +162,16 @@ export default function EditGalleryItemPage({
       }
     };
     void fetchItem();
-  }, [id, t, reset]);
+  }, [id, t, reset, setValue, locale]);
 
   useEffect(() => {
     if (!fetchedIdRef.current) return;
     const storageKey = `${EDIT_FORM_STORAGE_PREFIX}${fetchedIdRef.current}`;
     const subscription = watch((values) => {
-      try {
-        sessionStorage.setItem(storageKey, JSON.stringify(values));
-      } catch {
-        // ignore
-      }
+      saveFormState(storageKey, values, locale);
     });
     return () => subscription.unsubscribe();
-  }, [watch]);
+  }, [watch, locale]);
 
   async function onSubmit(values: GalleryFormValues) {
     setSaving(true);
@@ -169,7 +188,7 @@ export default function EditGalleryItemPage({
     if (result.success) {
       toast.success(t("edit.alerts.updated"));
       try {
-        sessionStorage.removeItem(`${EDIT_FORM_STORAGE_PREFIX}${id}`);
+        clearFormState(`${EDIT_FORM_STORAGE_PREFIX}${id}`);
       } catch {
         // ignore
       }
@@ -190,7 +209,7 @@ export default function EditGalleryItemPage({
     if (result.success) {
       toast.success(t("alerts.deleteSuccess"));
       try {
-        sessionStorage.removeItem(`${EDIT_FORM_STORAGE_PREFIX}${id}`);
+        clearFormState(`${EDIT_FORM_STORAGE_PREFIX}${id}`);
       } catch {
         // ignore
       }

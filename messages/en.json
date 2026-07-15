@@ -383,7 +383,7 @@
         },
         "urls": {
           "label": "Reference Image URLs",
-          "hint": "Optional",
+          "hint": "Up to {max} images · {count}/{max}",
           "placeholder": "https://...",
           "addAnother": "+ Add another link",
           "aria": "Reference image URL {number}",
@@ -391,7 +391,7 @@
         },
         "upload": {
           "label": "Upload Reference Images",
-          "hint": "Optional"
+          "hint": "Up to {max} images · {count}/{max}"
         }
       },
       "disclaimer": {
@@ -919,6 +919,7 @@
     },
     "actions": {
       "upload": "Upload images",
+      "retry": "Retry upload",
       "uploading": {
         "title": "Uploading...",
         "hint": "Getting your images ready..."

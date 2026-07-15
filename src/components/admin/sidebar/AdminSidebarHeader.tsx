@@ -31,7 +31,7 @@ export function AdminSidebarHeader() {
           <Link href="/admin" onClick={handleNavigate}>
             <Cog size={20} className="text-accent" />
             <Eyebrow className="group-data-[collapsible=icon]:hidden">
-              Console
+              Admin Console
             </Eyebrow>
           </Link>
         </SidebarMenuButton>

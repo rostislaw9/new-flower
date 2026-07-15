@@ -3,6 +3,8 @@
 import { useActionState, useEffect, useRef, useTransition } from "react";
 import { Controller, useForm } from "react-hook-form";
 
+import { useLocale } from "next-intl";
+
 import { Loader2 } from "lucide-react";
 import { toast } from "sonner";
 
@@ -25,6 +27,11 @@ import {
 import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
 import { type ReviewFormState, submitReview } from "@/lib/actions/reviews";
+import {
+  clearFormState,
+  loadFormState,
+  saveFormState,
+} from "@/lib/form-storage";
 
 interface ReviewFormProps {
   labels: {
@@ -84,6 +91,7 @@ function isReviewFormField(
 }
 
 export function ReviewForm({ labels, success }: ReviewFormProps) {
+  const locale = useLocale();
   const [state, formAction] = useActionState(submitReview, initialState);
   const [pending, startTransition] = useTransition();
   const successRef = useRef<HTMLDivElement>(null);
@@ -91,30 +99,36 @@ export function ReviewForm({ labels, success }: ReviewFormProps) {
   const form = useForm<ReviewFormValues>({
     defaultValues: REVIEW_FORM_DEFAULTS,
   });
-  const { control, handleSubmit, reset, setError, clearErrors, watch } = form;
+  const {
+    control,
+    handleSubmit,
+    reset,
+    setError,
+    clearErrors,
+    watch,
+    getValues,
+  } = form;
 
   useEffect(() => {
-    try {
-      const saved = sessionStorage.getItem(REVIEW_FORM_STORAGE_KEY);
-      if (saved) {
-        const parsed = JSON.parse(saved) as Partial<ReviewFormValues>;
-        reset({ ...REVIEW_FORM_DEFAULTS, ...parsed });
-      }
-    } catch {
-      // ignore parse errors
+    const saved = loadFormState<Partial<ReviewFormValues>>(
+      REVIEW_FORM_STORAGE_KEY,
+      locale,
+    );
+    if (saved) {
+      const restored = { ...REVIEW_FORM_DEFAULTS, ...saved };
+      reset(restored);
+      saveFormState(REVIEW_FORM_STORAGE_KEY, restored, locale);
+    } else {
+      saveFormState(REVIEW_FORM_STORAGE_KEY, getValues(), locale);
     }
-  }, [reset]);
+  }, [reset, getValues, locale]);
 
   useEffect(() => {
     const subscription = watch((values) => {
-      try {
-        sessionStorage.setItem(REVIEW_FORM_STORAGE_KEY, JSON.stringify(values));
-      } catch {
-        // ignore storage errors
-      }
+      saveFormState(REVIEW_FORM_STORAGE_KEY, values, locale);
     });
     return () => subscription.unsubscribe();
-  }, [watch]);
+  }, [watch, locale]);
 
   const isSuccess = state.status === "success";
 
@@ -135,7 +149,7 @@ export function ReviewForm({ labels, success }: ReviewFormProps) {
       reset(REVIEW_FORM_DEFAULTS);
       clearErrors();
       try {
-        sessionStorage.removeItem(REVIEW_FORM_STORAGE_KEY);
+        clearFormState(REVIEW_FORM_STORAGE_KEY);
       } catch {
         // ignore
       }

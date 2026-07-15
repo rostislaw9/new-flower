@@ -5,11 +5,21 @@ import { useCallback, useMemo, useState } from "react";
 import { useTranslations } from "next-intl";
 import Image from "next/image";
 
-import { Check, Loader2, Upload, X } from "lucide-react";
+import { Check, Loader2, RefreshCw, Upload, X } from "lucide-react";
 import { toast } from "sonner";
 
 import { Button } from "@/components/styled/Button";
 import { Text } from "@/components/styled/Typography";
+import {
+  Attachment,
+  AttachmentAction,
+  AttachmentActions,
+  AttachmentContent,
+  AttachmentDescription,
+  AttachmentGroup,
+  AttachmentMedia,
+  AttachmentTitle,
+} from "@/components/ui/attachment";
 import { uploadToCloudinaryAction } from "@/lib/actions/upload";
 import { cn } from "@/lib/utils";
 
@@ -23,44 +33,82 @@ interface ImageUpload {
   publicId?: string | undefined;
   width?: number | undefined;
   height?: number | undefined;
+  name?: string | undefined;
+  meta?: string | undefined;
+}
+
+interface InitialImage {
+  url: string;
+  name?: string | undefined;
+  meta?: string | undefined;
 }
 
 interface ImageUploaderProps {
   folder: string;
   onUploadComplete?: (
-    data: { url: string; width: number; height: number }[],
+    data: {
+      url: string;
+      width: number;
+      height: number;
+      name?: string | undefined;
+      meta?: string | undefined;
+    }[],
   ) => void;
-  onUploadedUrlsChange?: (urls: Set<string>) => void;
   maxFiles?: number;
   allowedTypes?: string[];
   showPreviewGrid?: boolean;
   useOverwrite?: boolean;
   keepUploadedImages?: boolean;
-  initialUrls?: string[];
+  initialImages?: InitialImage[];
+}
+
+function deriveNameAndMeta(
+  url: string,
+  name?: string | undefined,
+  meta?: string | undefined,
+  allUploadedLabel?: string,
+) {
+  const pathName = name ?? url.split("/").pop()?.split("?")[0] ?? url;
+  const ext = pathName.split(".").pop()?.toUpperCase() ?? "";
+  const fallbackMeta = ext
+    ? `${ext} · ${allUploadedLabel ?? ""}`
+    : (allUploadedLabel ?? "");
+  return { name: pathName, meta: meta ?? fallbackMeta };
 }
 
 export function ImageUploader({
   folder,
   onUploadComplete,
-  onUploadedUrlsChange,
   maxFiles = 10,
   allowedTypes = ["image/jpeg", "image/png", "image/webp", "image/heic"],
   showPreviewGrid = true,
   useOverwrite = false,
   keepUploadedImages = false,
-  initialUrls = [],
+  initialImages = [],
 }: ImageUploaderProps) {
+  const t = useTranslations("imageUploader");
   const [images, setImages] = useState<ImageUpload[]>(() =>
-    initialUrls.filter(Boolean).map((url) => ({
-      file: null,
-      preview: url,
-      uploading: false,
-      uploaded: true,
-      url,
-    })),
+    initialImages
+      .filter((img) => img.url)
+      .map((img) => {
+        const { name, meta } = deriveNameAndMeta(
+          img.url,
+          img.name,
+          img.meta,
+          t("status.allUploaded"),
+        );
+        return {
+          file: null,
+          preview: img.url,
+          uploading: false,
+          uploaded: true,
+          url: img.url,
+          name,
+          meta,
+        } as ImageUpload;
+      }),
   );
   const [isDragging, setIsDragging] = useState(false);
-  const t = useTranslations("imageUploader");
   const sizeLimitMb = 10;
 
   const formattedTypes = useMemo(() => {
@@ -81,7 +129,9 @@ export function ImageUploader({
 
         setImages((prev) =>
           prev.map((img) =>
-            img.file === image.file ? { ...img, uploading: true } : img,
+            img.file === image.file
+              ? { ...img, uploading: true, error: undefined }
+              : img,
           ),
         );
 
@@ -98,6 +148,8 @@ export function ImageUploader({
               url: data.url,
               width: data.width,
               height: data.height,
+              name: image.name,
+              meta: image.meta,
             };
 
             setImages((prev) =>
@@ -111,13 +163,14 @@ export function ImageUploader({
                       publicId: data.publicId,
                       width: data.width,
                       height: data.height,
+                      name:
+                        img.name ?? data.url.split("/").pop()?.split("?")[0],
                     }
                   : img,
               ),
             );
 
             onUploadComplete?.([uploadedData]);
-            onUploadedUrlsChange?.(new Set([data.url]));
 
             if (!keepUploadedImages) {
               setImages((prev) =>
@@ -125,27 +178,15 @@ export function ImageUploader({
               );
             }
           } else {
-            setImages((prev) =>
-              prev.map((img) =>
-                img.file === image.file
-                  ? {
-                      ...img,
-                      uploading: false,
-                      error: result.error || t("alerts.uploadFailed"),
-                    }
-                  : img,
-              ),
-            );
+            throw new Error(result.error || t("alerts.uploadFailed"));
           }
-        } catch {
+        } catch (err) {
+          const message =
+            err instanceof Error ? err.message : t("alerts.uploadFailed");
           setImages((prev) =>
             prev.map((img) =>
               img.file === image.file
-                ? {
-                    ...img,
-                    uploading: false,
-                    error: t("alerts.uploadFailed"),
-                  }
+                ? { ...img, uploading: false, error: message }
                 : img,
             ),
           );
@@ -154,14 +195,7 @@ export function ImageUploader({
 
       await Promise.all(uploadPromises);
     },
-    [
-      folder,
-      useOverwrite,
-      t,
-      onUploadComplete,
-      onUploadedUrlsChange,
-      keepUploadedImages,
-    ],
+    [folder, useOverwrite, t, onUploadComplete, keepUploadedImages],
   );
 
   const handleFiles = useCallback(
@@ -207,6 +241,8 @@ export function ImageUploader({
         uploaded: false,
         url: undefined,
         publicId: undefined,
+        name: file.name,
+        meta: `${file.type.split("/")[1]?.toUpperCase() ?? ""} · ${Math.round(file.size / 1024)} KB`,
       }));
 
       setImages((prev) => [...prev, ...newImages]);
@@ -309,53 +345,85 @@ export function ImageUploader({
 
       {/* Preview Grid */}
       {showPreviewGrid && images.length > 0 && (
-        <div className="flex flex-wrap gap-4 sm:gap-6">
-          {images.map((image, index) => (
-            <div key={index} className="relative aspect-square h-20">
-              <Image
-                src={image.url || image.preview}
-                fill
-                sizes="80px"
-                alt={t("previewAlt", { index: index + 1 })}
-                className="h-full w-full rounded-md object-cover"
-              />
+        <AttachmentGroup>
+          {images.map((image, index) => {
+            const state = image.error
+              ? "error"
+              : image.uploading
+                ? "uploading"
+                : image.uploaded
+                  ? "done"
+                  : "idle";
+            const fileName =
+              image.name ?? t("previewAlt", { index: index + 1 });
+            const fileMeta =
+              image.error ??
+              image.meta ??
+              (image.uploaded ? t("status.allUploaded") : "");
 
-              {/* Status Overlay */}
-              {image.uploading && (
-                <div className="absolute inset-0 flex items-center justify-center rounded-md bg-black/50">
-                  <Loader2 className="h-6 w-6 animate-spin text-white" />
-                </div>
-              )}
-
-              {image.uploaded && (
-                <div className="absolute inset-0 flex items-center justify-center rounded-md bg-green-500/50">
-                  <Check className="h-6 w-6 text-white" />
-                </div>
-              )}
-
-              {image.error && (
-                <div className="absolute inset-0 flex items-center justify-center rounded-md bg-red-500/50">
-                  <Text size="xs" className="px-2 text-center text-white">
-                    {image.error}
-                  </Text>
-                </div>
-              )}
-
-              {/* Remove Button */}
-              <button
-                onClick={() => removeImage(index)}
-                className={cn(
-                  "absolute -right-2 -top-2 rounded-full bg-destructive p-1 text-white hover:bg-destructive/80",
-                  (isUploading || image.uploaded) && "hidden",
-                )}
-                disabled={image.uploading}
-                aria-label={t("removeAria")}
+            return (
+              <Attachment
+                key={index}
+                orientation="vertical"
+                state={state}
+                className="p-1"
               >
-                <X className="h-4 w-4" />
-              </button>
-            </div>
-          ))}
-        </div>
+                <AttachmentMedia
+                  variant="image"
+                  className="relative rounded-xl"
+                >
+                  <Image
+                    src={image.url || image.preview}
+                    fill
+                    sizes="96px"
+                    alt={t("previewAlt", { index: index + 1 })}
+                    className="h-full w-full object-cover"
+                  />
+                  {image.uploading && (
+                    <div className="absolute inset-0 flex items-center justify-center bg-black/50">
+                      <Loader2 className="size-6 animate-spin text-white" />
+                    </div>
+                  )}
+                  {image.uploaded && (
+                    <div className="absolute inset-0 flex items-center justify-center bg-green-500/50">
+                      <Check className="size-6 text-white" />
+                    </div>
+                  )}
+                </AttachmentMedia>
+                <AttachmentContent>
+                  <AttachmentTitle>{fileName}</AttachmentTitle>
+                  <AttachmentDescription className="text-2xs">
+                    {fileMeta}
+                  </AttachmentDescription>
+                </AttachmentContent>
+                <AttachmentActions>
+                  {image.error && (
+                    <AttachmentAction
+                      type="button"
+                      onClick={() => uploadImages([image])}
+                      variant="secondary"
+                      className="rounded-full"
+                      aria-label={t("actions.retry")}
+                    >
+                      <RefreshCw />
+                    </AttachmentAction>
+                  )}
+                  {!image.uploading && !image.uploaded && (
+                    <AttachmentAction
+                      type="button"
+                      onClick={() => removeImage(index)}
+                      variant="destructive"
+                      className="rounded-full"
+                      aria-label={`Remove ${image.file}`}
+                    >
+                      <X />
+                    </AttachmentAction>
+                  )}
+                </AttachmentActions>
+              </Attachment>
+            );
+          })}
+        </AttachmentGroup>
       )}
 
       {/* Upload Button */}

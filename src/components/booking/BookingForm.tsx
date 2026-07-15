@@ -46,6 +46,11 @@ import { Textarea } from "@/components/ui/textarea";
 import { type Locale, defaultLocale } from "@/i18n/config";
 import type { ActionResult } from "@/lib/actions/create-appointment";
 import { createAppointment } from "@/lib/actions/create-appointment";
+import {
+  clearFormState,
+  loadFormState,
+  saveFormState,
+} from "@/lib/form-storage";
 import { isSupportedLocale } from "@/lib/locale-utils";
 import type {
   BodyPlacement,
@@ -131,6 +136,17 @@ const budgetTranslationKeys: Record<BudgetRange, BudgetOptionKey> = {
 
 const MAX_REFERENCE_IMAGES = 5;
 
+type UploadedImageMeta = {
+  url: string;
+  name?: string | undefined;
+  meta?: string | undefined;
+};
+
+type StoredBookingFormState = Partial<BookingFormValues> & {
+  uploadedImagesMeta?: UploadedImageMeta[];
+  imageInputMode?: "url" | "upload";
+};
+
 const BOOKING_FORM_STORAGE_KEY = "booking-form-values";
 
 const bookingFieldNames = [
@@ -194,9 +210,16 @@ export function BookingForm() {
 
   const [imageInputMode, setImageInputMode] = useState<"url" | "upload">("url");
   const [copied, setCopied] = useState(false);
-  const [uploadedUrlSet, setUploadedUrlSet] = useState<Set<string>>(new Set());
+  const [manualUrls, setManualUrls] = useState<string[]>([""]);
+  const [uploadedImagesMeta, setUploadedImagesMeta] = useState<
+    UploadedImageMeta[]
+  >([]);
 
   const successRef = useRef<HTMLDivElement>(null);
+  const uploadedImagesMetaRef = useRef(uploadedImagesMeta);
+  uploadedImagesMetaRef.current = uploadedImagesMeta;
+  const imageInputModeRef = useRef(imageInputMode);
+  imageInputModeRef.current = imageInputMode;
 
   const {
     control,
@@ -207,41 +230,78 @@ export function BookingForm() {
     setValue,
     watch,
     trigger,
+    getValues,
     formState: { errors },
   } = useForm<BookingFormValues>({
     defaultValues: BOOKING_FORM_DEFAULTS,
   });
 
   useEffect(() => {
-    try {
-      const saved = sessionStorage.getItem(BOOKING_FORM_STORAGE_KEY);
-      if (saved) {
-        const parsed = JSON.parse(saved) as Partial<BookingFormValues>;
-        reset({ ...BOOKING_FORM_DEFAULTS, ...parsed });
+    const saved = loadFormState<StoredBookingFormState>(
+      BOOKING_FORM_STORAGE_KEY,
+      locale,
+    );
+    if (saved) {
+      const restored = { ...BOOKING_FORM_DEFAULTS, ...saved };
+      reset(restored);
+      if (saved.uploadedImagesMeta?.length) {
+        setUploadedImagesMeta(saved.uploadedImagesMeta);
       }
-    } catch {
-      // ignore parse errors
+      if (saved.imageInputMode) {
+        setImageInputMode(saved.imageInputMode);
+      }
+      const uploadedUrls = new Set(
+        saved.uploadedImagesMeta?.map((m) => m.url) ?? [],
+      );
+      const manualOnly = (saved.referenceImageUrls ?? []).filter(
+        (url) => url && !uploadedUrls.has(url),
+      );
+      setManualUrls(manualOnly.length > 0 ? manualOnly : [""]);
+      saveFormState(BOOKING_FORM_STORAGE_KEY, restored, locale);
+    } else {
+      saveFormState(
+        BOOKING_FORM_STORAGE_KEY,
+        {
+          ...getValues(),
+          uploadedImagesMeta: uploadedImagesMetaRef.current,
+          imageInputMode: imageInputModeRef.current,
+        },
+        locale,
+      );
     }
-  }, [reset]);
+  }, [reset, getValues, locale]);
 
   useEffect(() => {
     const subscription = watch((values) => {
-      try {
-        sessionStorage.setItem(
-          BOOKING_FORM_STORAGE_KEY,
-          JSON.stringify(values),
-        );
-      } catch {
-        // ignore storage errors
-      }
+      saveFormState(
+        BOOKING_FORM_STORAGE_KEY,
+        {
+          ...values,
+          uploadedImagesMeta: uploadedImagesMetaRef.current,
+          imageInputMode: imageInputModeRef.current,
+        },
+        locale,
+      );
     });
     return () => subscription.unsubscribe();
-  }, [watch]);
+  }, [watch, locale]);
 
   const contactMethodValue = watch("contactMethod");
-  const referenceUrlsValue = watch("referenceImageUrls") ?? [""];
-  const referenceUrlsRef = useRef<string[]>(referenceUrlsValue);
-  referenceUrlsRef.current = referenceUrlsValue;
+
+  const filledManualUrlsCount = manualUrls.filter(Boolean).length;
+  const uploadedCount = uploadedImagesMeta.length;
+  const totalReferenceCount = filledManualUrlsCount + uploadedCount;
+
+  useEffect(() => {
+    setValue(
+      "referenceImageUrls",
+      [
+        ...manualUrls.filter(Boolean),
+        ...uploadedImagesMeta.map((img) => img.url),
+      ],
+      { shouldValidate: false },
+    );
+  }, [manualUrls, uploadedImagesMeta, setValue]);
 
   const fullNameRegistration = register("fullName", {
     required: formT("fullName.errors.required"),
@@ -291,9 +351,10 @@ export function BookingForm() {
       setValue("referenceImageUrls", BOOKING_FORM_DEFAULTS.referenceImageUrls);
       setImageInputMode("url");
       setCopied(false);
-      setUploadedUrlSet(new Set());
+      setManualUrls([""]);
+      setUploadedImagesMeta([]);
       try {
-        sessionStorage.removeItem(BOOKING_FORM_STORAGE_KEY);
+        clearFormState(BOOKING_FORM_STORAGE_KEY);
       } catch {
         // ignore
       }
@@ -343,8 +404,8 @@ export function BookingForm() {
   }, [setError, state]);
 
   const addReferenceUrl = () => {
-    if (referenceUrlsValue.length >= MAX_REFERENCE_IMAGES) return;
-    setValue("referenceImageUrls", [...referenceUrlsValue, ""]);
+    if (totalReferenceCount >= MAX_REFERENCE_IMAGES) return;
+    setManualUrls((prev) => [...prev, ""]);
   };
 
   const onSubmit = handleSubmit((values) => {
@@ -798,6 +859,7 @@ export function BookingForm() {
             size="sm"
             type="button"
             onClick={() => setImageInputMode("url")}
+            disabled={uploadedCount >= MAX_REFERENCE_IMAGES}
           >
             <LinkIcon className="h-4 w-4" />
             {formT("reference.toggle.urls")}
@@ -807,6 +869,7 @@ export function BookingForm() {
             size="sm"
             type="button"
             onClick={() => setImageInputMode("upload")}
+            disabled={filledManualUrlsCount >= MAX_REFERENCE_IMAGES}
           >
             <Upload className="h-4 w-4" />
             {formT("reference.toggle.upload")}
@@ -826,12 +889,15 @@ export function BookingForm() {
                   </span>
                 ) : (
                   <FieldDescription>
-                    {formT("reference.urls.hint")}
+                    {formT("reference.urls.hint", {
+                      max: MAX_REFERENCE_IMAGES,
+                      count: totalReferenceCount,
+                    })}
                   </FieldDescription>
                 )}
               </div>
               <div className="flex flex-col gap-3">
-                {referenceUrlsValue.map((url, index) => (
+                {manualUrls.map((url, index) => (
                   <div key={index} className="flex gap-2">
                     <Input
                       id={index === 0 ? "referenceImageUrls-0" : undefined}
@@ -839,9 +905,8 @@ export function BookingForm() {
                       placeholder={formT("reference.urls.placeholder")}
                       value={url}
                       onChange={(e) =>
-                        setValue(
-                          "referenceImageUrls",
-                          referenceUrlsValue.map((u, i) =>
+                        setManualUrls((prev) =>
+                          prev.map((u, i) =>
                             i === index ? e.target.value : u,
                           ),
                         )
@@ -851,15 +916,16 @@ export function BookingForm() {
                       })}
                       className="flex-1"
                     />
-                    {referenceUrlsValue.length > 1 && (
+                    {manualUrls.length > 1 && (
                       <Button
                         type="button"
                         size="icon"
                         variant="outline"
                         onClick={() =>
-                          setValue(
-                            "referenceImageUrls",
-                            referenceUrlsValue.filter((_, i) => i !== index),
+                          setManualUrls((prev) =>
+                            prev.length > 1
+                              ? prev.filter((_, i) => i !== index)
+                              : prev,
                           )
                         }
                         aria-label={formT("reference.urls.removeAria", {
@@ -872,7 +938,7 @@ export function BookingForm() {
                     )}
                   </div>
                 ))}
-                {referenceUrlsValue.length < MAX_REFERENCE_IMAGES && (
+                {manualUrls.length < MAX_REFERENCE_IMAGES - uploadedCount && (
                   <Button
                     type="button"
                     variant="link"
@@ -899,45 +965,38 @@ export function BookingForm() {
                   </span>
                 ) : (
                   <FieldDescription>
-                    {formT("reference.upload.hint")}
+                    {formT("reference.upload.hint", {
+                      max: MAX_REFERENCE_IMAGES,
+                      count: totalReferenceCount,
+                    })}
                   </FieldDescription>
                 )}
               </div>
               <ImageUploader
                 folder="bookings"
-                maxFiles={
-                  MAX_REFERENCE_IMAGES -
-                  referenceUrlsValue.filter(Boolean).length
-                }
+                maxFiles={MAX_REFERENCE_IMAGES - filledManualUrlsCount}
                 keepUploadedImages={true}
-                initialUrls={[
-                  ...new Set(
-                    referenceUrlsValue.filter((u) => uploadedUrlSet.has(u)),
-                  ),
-                ]}
+                initialImages={uploadedImagesMeta}
                 onUploadComplete={(data) => {
-                  const current = [...referenceUrlsRef.current];
-                  data.forEach((item) => {
-                    const emptyIndex = current.findIndex((u) => !u);
-                    if (emptyIndex >= 0) {
-                      current[emptyIndex] = item.url;
-                    } else if (current.length < MAX_REFERENCE_IMAGES) {
-                      current.push(item.url);
-                    }
-                  });
-                  if (
-                    current.every((u) => u) &&
-                    current.length < MAX_REFERENCE_IMAGES
-                  ) {
-                    current.push("");
-                  }
-                  referenceUrlsRef.current = current;
-                  setUploadedUrlSet((prev) => {
-                    const next = new Set(prev);
-                    data.forEach((item) => next.add(item.url));
+                  setUploadedImagesMeta((prev) => {
+                    const next = [...prev];
+                    data.forEach((item) => {
+                      const existingIndex = next.findIndex(
+                        (i) => i.url === item.url,
+                      );
+                      const entry: UploadedImageMeta = {
+                        url: item.url,
+                        name: item.name,
+                        meta: item.meta,
+                      };
+                      if (existingIndex >= 0) {
+                        next[existingIndex] = entry;
+                      } else {
+                        next.push(entry);
+                      }
+                    });
                     return next;
                   });
-                  setValue("referenceImageUrls", current);
                 }}
               />
             </FieldContent>
