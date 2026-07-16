@@ -845,7 +845,7 @@ export function BookingForm() {
       </fieldset>
 
       {/* Section: Reference Images */}
-      <fieldset className="flex flex-col gap-6">
+      <fieldset className="flex min-w-0 flex-col gap-6">
         <legend className="sr-only">{formT("sections.references")}</legend>
         <div className="flex flex-col gap-2">
           <Eyebrow>{formT("sections.references")}</Eyebrow>

@@ -80,7 +80,7 @@ const SELECTED_DRAFT_DEFAULTS: SelectedDraftFormValues = {
   description: "",
 };
 
-const MAX_FILES = 20;
+const MAX_FILES = 15;
 
 const UPLOAD_DRAFTS_STORAGE_KEY = "gallery-upload-drafts";
 
@@ -334,7 +334,7 @@ export default function UploadGalleryPage() {
       />
 
       <div className="grid gap-6 lg:grid-cols-2">
-        <div className="flex flex-col gap-6">
+        <div className="flex min-w-0 flex-col gap-6">
           <Card className="rounded-2xl border border-border/60 bg-card/60 shadow-md">
             <CardContent className="flex flex-col gap-6 pt-6">
               <div>
@@ -347,7 +347,7 @@ export default function UploadGalleryPage() {
               </div>
               <ImageUploader
                 folder="gallery"
-                maxFiles={MAX_FILES}
+                maxFiles={Math.max(0, MAX_FILES - drafts.length)}
                 useOverwrite={true}
                 onUploadComplete={handleUploadComplete}
               />
