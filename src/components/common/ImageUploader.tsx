@@ -396,12 +396,12 @@ export function ImageUploader({
                     {fileMeta}
                   </AttachmentDescription>
                 </AttachmentContent>
-                <AttachmentActions>
+                <AttachmentActions className="-m-4">
                   {image.error && (
                     <AttachmentAction
                       type="button"
                       onClick={() => uploadImages([image])}
-                      variant="secondary"
+                      variant="default"
                       className="rounded-full"
                       aria-label={t("actions.retry")}
                     >
