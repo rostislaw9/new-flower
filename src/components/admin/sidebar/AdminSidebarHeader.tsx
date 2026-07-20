@@ -30,7 +30,7 @@ export function AdminSidebarHeader() {
         <SidebarMenuButton asChild className="justify-start">
           <Link href="/admin" onClick={handleNavigate}>
             <Cog size={20} className="text-accent" />
-            <Eyebrow className="group-data-[collapsible=icon]:hidden">
+            <Eyebrow className="text-nowrap group-data-[collapsible=icon]:hidden">
               Admin Console
             </Eyebrow>
           </Link>

@@ -20,7 +20,7 @@ import {
   useSortable,
 } from "@dnd-kit/sortable";
 import { CSS } from "@dnd-kit/utilities";
-import { Loader2, MoveLeft, RotateCcwSquare, Save } from "lucide-react";
+import { LoaderCircle, MoveLeft, RotateCcwSquare, Save } from "lucide-react";
 import { toast } from "sonner";
 
 import { AdminPageHeader } from "@/components/admin/AdminPageHeader";
@@ -232,7 +232,7 @@ export default function FeaturedOrderPage() {
         onClick={handleSave}
         className="flex items-center gap-2"
       >
-        {isSaving ? <Loader2 className="animate-spin" /> : <Save />}
+        {isSaving ? <LoaderCircle className="animate-spin" /> : <Save />}
         {isSaving ? t("saving") : t("save")}
       </Button>
     </div>
@@ -256,7 +256,7 @@ export default function FeaturedOrderPage() {
 
       {isLoading ? (
         <div className="flex min-h-[400px] flex-col items-center justify-center gap-3">
-          <Loader2 className="h-8 w-8 animate-spin" />
+          <LoaderCircle className="h-8 w-8 animate-spin" />
           <Text muted>{actionsT("loading")}</Text>
         </div>
       ) : items.length === 0 ? (

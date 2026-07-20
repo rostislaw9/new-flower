@@ -9,10 +9,10 @@ import { useRouter } from "next/navigation";
 import { useTopLoader } from "nextjs-toploader";
 
 import {
-  CheckCircle2,
-  Loader2,
+  CircleCheck,
+  LoaderCircle,
   MoveLeft,
-  SaveCheck,
+  SaveAll,
   Trash2,
 } from "lucide-react";
 import { toast } from "sonner";
@@ -409,7 +409,7 @@ export default function UploadGalleryPage() {
                           className="object-cover"
                         />
                         {isComplete && (
-                          <CheckCircle2 className="absolute right-2 top-2 h-5 w-5 text-emerald-600/80" />
+                          <CircleCheck className="absolute right-2 top-2 h-5 w-5 text-emerald-600/80" />
                         )}
                         <div className="absolute inset-x-0 bottom-0 flex items-center justify-between bg-gradient-to-t from-black/70 to-transparent px-2 pb-2 pt-6 text-xs text-white">
                           <span>#{index + 1}</span>
@@ -457,7 +457,7 @@ export default function UploadGalleryPage() {
                       disabled={removingId === selectedDraft.id}
                     >
                       {removingId === selectedDraft.id ? (
-                        <Loader2 className="animate-spin" />
+                        <LoaderCircle className="animate-spin" />
                       ) : (
                         <Trash2 />
                       )}
@@ -582,12 +582,12 @@ export default function UploadGalleryPage() {
             >
               {submitting ? (
                 <>
-                  <Loader2 className="animate-spin" />
+                  <LoaderCircle className="animate-spin" />
                   {actionsT("creating")}
                 </>
               ) : (
                 <>
-                  <SaveCheck />
+                  <SaveAll />
                   {uploadT("buttons.create")}
                 </>
               )}

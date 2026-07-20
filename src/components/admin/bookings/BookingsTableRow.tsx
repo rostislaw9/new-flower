@@ -6,7 +6,7 @@ import { useRouter } from "next/navigation";
 import { useTopLoader } from "nextjs-toploader";
 
 import type { AppointmentStatus } from "@prisma/client";
-import { Loader2, Trash2 } from "lucide-react";
+import { LoaderCircle, Trash2 } from "lucide-react";
 import { toast } from "sonner";
 
 import { Badge } from "@/components/styled/Badge";
@@ -153,7 +153,11 @@ export function BookingsTableRow({
               event.stopPropagation()
             }
           >
-            {deletePending ? <Loader2 className="animate-spin" /> : <Trash2 />}
+            {deletePending ? (
+              <LoaderCircle className="animate-spin" />
+            ) : (
+              <Trash2 />
+            )}
           </Button>
         </TableCell>
       </TableRow>

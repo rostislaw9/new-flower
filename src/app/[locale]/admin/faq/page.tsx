@@ -4,7 +4,13 @@ import { useCallback, useEffect, useState } from "react";
 
 import { useLocale, useTranslations } from "next-intl";
 
-import { ChevronDown, Loader2, MoveLeft, Plus, Trash2 } from "lucide-react";
+import {
+  ChevronDown,
+  LoaderCircle,
+  MoveLeft,
+  Plus,
+  Trash2,
+} from "lucide-react";
 import { toast } from "sonner";
 
 import { AdminPageHeader } from "@/components/admin/AdminPageHeader";
@@ -204,7 +210,7 @@ export default function FaqAdminPage() {
   if (loading) {
     return (
       <div className="flex min-h-[400px] flex-col items-center justify-center gap-3">
-        <Loader2 className="h-8 w-8 animate-spin" />
+        <LoaderCircle className="h-8 w-8 animate-spin" />
         <Text muted>{actionsT("loading")}</Text>
       </div>
     );

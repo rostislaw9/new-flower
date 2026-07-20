@@ -7,7 +7,7 @@ import { useTranslations } from "next-intl";
 import Image from "next/image";
 import { useRouter } from "next/navigation";
 
-import { ImageOff, Loader2, MoveLeft, Save, Trash2 } from "lucide-react";
+import { ImageOff, LoaderCircle, MoveLeft, Save, Trash2 } from "lucide-react";
 import { toast } from "sonner";
 
 import { AdminPageHeader } from "@/components/admin/AdminPageHeader";
@@ -222,7 +222,7 @@ export default function EditGalleryItemPage({
   if (loading) {
     return (
       <div className="flex min-h-[400px] flex-col items-center justify-center gap-3">
-        <Loader2 className="h-8 w-8 animate-spin" />
+        <LoaderCircle className="h-8 w-8 animate-spin" />
         <Text muted>{actionsT("loading")}</Text>
       </div>
     );
@@ -290,7 +290,7 @@ export default function EditGalleryItemPage({
                     <div className="relative aspect-[3/4] overflow-hidden rounded-xl border border-border/60 bg-muted/20">
                       {currentImageLoading && (
                         <div className="pointer-events-none absolute inset-0 z-10 flex items-center justify-center bg-background/30">
-                          <Loader2 className="h-6 w-6 animate-spin text-muted-foreground" />
+                          <LoaderCircle className="h-6 w-6 animate-spin text-muted-foreground" />
                         </div>
                       )}
                       <Image
@@ -461,7 +461,7 @@ export default function EditGalleryItemPage({
               >
                 {saving ? (
                   <>
-                    <Loader2 className="animate-spin" />
+                    <LoaderCircle className="animate-spin" />
                     {actionsT("saving")}
                   </>
                 ) : (

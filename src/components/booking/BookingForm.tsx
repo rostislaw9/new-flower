@@ -15,9 +15,9 @@ import { useLocale, useTranslations } from "next-intl";
 import {
   Check,
   Copy,
+  ImageUp,
   Link as LinkIcon,
-  Loader2,
-  Upload,
+  LoaderCircle,
   X,
 } from "lucide-react";
 import { toast } from "sonner";
@@ -852,7 +852,7 @@ export function BookingForm() {
           <Separator />
         </div>
 
-        {/* Toggle between URL and Upload */}
+        {/* Toggle between URL and ImageUp */}
         <div className="flex gap-2">
           <Button
             variant={imageInputMode === "url" ? "default" : "outline"}
@@ -871,7 +871,7 @@ export function BookingForm() {
             onClick={() => setImageInputMode("upload")}
             disabled={filledManualUrlsCount >= MAX_REFERENCE_IMAGES}
           >
-            <Upload className="h-4 w-4" />
+            <ImageUp className="h-4 w-4" />
             {formT("reference.toggle.upload")}
           </Button>
         </div>
@@ -1020,7 +1020,7 @@ export function BookingForm() {
           >
             {isPending ? (
               <>
-                <Loader2 className="animate-spin" />
+                <LoaderCircle className="animate-spin" />
                 {formT("actions.saving")}
               </>
             ) : (

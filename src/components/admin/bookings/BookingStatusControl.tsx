@@ -6,7 +6,7 @@ import { Controller, useForm } from "react-hook-form";
 import { useRouter } from "next/navigation";
 
 import type { AppointmentStatus } from "@prisma/client";
-import { Loader2 } from "lucide-react";
+import { LoaderCircle } from "lucide-react";
 import { toast } from "sonner";
 
 import { Badge } from "@/components/styled/Badge";
@@ -140,7 +140,11 @@ export function BookingStatusControl({
             className="w-full sm:w-auto sm:min-w-32"
             disabled={isPending || form.watch("status") === currentStatus}
           >
-            {isPending ? <Loader2 className="animate-spin" /> : labels.button}
+            {isPending ? (
+              <LoaderCircle className="animate-spin" />
+            ) : (
+              labels.button
+            )}
           </Button>
         </div>
       </div>

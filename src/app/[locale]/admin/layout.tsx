@@ -8,13 +8,13 @@ import Link from "next/link";
 import { usePathname } from "next/navigation";
 
 import {
+  BookImage,
   BookText,
   Calendar,
-  FileUser,
-  HelpCircle,
   Images,
   LayoutDashboard,
-  Star,
+  MessageCircleQuestionMark,
+  Sparkles,
 } from "lucide-react";
 
 import { AdminPageShell } from "@/components/admin/AdminPageShell";
@@ -68,14 +68,18 @@ export default function AdminLayout({ children }: { children: ReactNode }) {
     { href: "/admin", icon: LayoutDashboard, label: t("nav.dashboard") },
     {
       href: "/admin/artist-images",
-      icon: FileUser,
+      icon: BookImage,
       label: t("nav.artistImages"),
     },
     { href: "/admin/about", icon: BookText, label: t("nav.about") },
     { href: "/admin/gallery", icon: Images, label: t("nav.gallery") },
-    { href: "/admin/faq", icon: HelpCircle, label: t("nav.faq") },
+    {
+      href: "/admin/faq",
+      icon: MessageCircleQuestionMark,
+      label: t("nav.faq"),
+    },
     { href: "/admin/bookings", icon: Calendar, label: t("nav.bookings") },
-    { href: "/admin/reviews", icon: Star, label: t("nav.reviews") },
+    { href: "/admin/reviews", icon: Sparkles, label: t("nav.reviews") },
   ];
 
   const breadcrumbItems = useMemo(

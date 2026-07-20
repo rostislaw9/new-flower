@@ -5,7 +5,7 @@ import { Controller, useForm } from "react-hook-form";
 
 import { useLocale } from "next-intl";
 
-import { Loader2 } from "lucide-react";
+import { LoaderCircle } from "lucide-react";
 import { toast } from "sonner";
 
 import { RatingInput } from "@/components/reviews/RatingInput";
@@ -352,7 +352,7 @@ export function ReviewForm({ labels, success }: ReviewFormProps) {
         <Button type="submit" disabled={pending} className="w-full md:w-auto">
           {pending ? (
             <>
-              <Loader2 className="animate-spin" />
+              <LoaderCircle className="animate-spin" />
               {labels.submitting}
             </>
           ) : (

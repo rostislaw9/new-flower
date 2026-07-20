@@ -10,7 +10,7 @@ import {
   useMotionValue,
   useTransform,
 } from "framer-motion";
-import { ChevronLeft, ChevronRight, Loader2, X } from "lucide-react";
+import { ChevronLeft, ChevronRight, LoaderCircle, X } from "lucide-react";
 
 import { Eyebrow, Heading, Text } from "@/components/styled/Typography";
 import { cn } from "@/lib/utils";
@@ -290,7 +290,7 @@ export function Lightbox({
             >
               {imageLoading && (
                 <div className="absolute inset-0 z-[500] flex items-center justify-center bg-background/30">
-                  <Loader2 className="h-10 w-10 animate-spin text-muted-foreground" />
+                  <LoaderCircle className="h-10 w-10 animate-spin text-muted-foreground" />
                 </div>
               )}
               <Image

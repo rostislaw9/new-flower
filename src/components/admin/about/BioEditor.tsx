@@ -2,7 +2,7 @@
 
 import { useEffect, useState } from "react";
 
-import { Loader2, Save } from "lucide-react";
+import { LoaderCircle, Save } from "lucide-react";
 
 import { Button } from "@/components/styled/Button";
 import { Input } from "@/components/ui/input";
@@ -57,7 +57,7 @@ export function BioEditor({
               onSave(trimmedT, trimmedD);
             }}
           >
-            {saving ? <Loader2 className="animate-spin" /> : <Save />}
+            {saving ? <LoaderCircle className="animate-spin" /> : <Save />}
             {saveLabel}
           </Button>
         )}

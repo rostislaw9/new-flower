@@ -8,15 +8,15 @@ import { useRouter } from "next/navigation";
 import { useTopLoader } from "nextjs-toploader";
 
 import {
-  CheckSquare2,
+  ArrowUpDown,
   Flag,
   FlagOff,
-  GripVertical,
-  Loader2,
+  ImageUp,
+  LoaderCircle,
   MoveLeft,
   Square,
+  SquareCheck,
   Trash2,
-  Upload,
 } from "lucide-react";
 import { toast } from "sonner";
 
@@ -259,7 +259,7 @@ export default function GalleryAdminPage() {
   if (loading) {
     return (
       <div className="flex min-h-[400px] flex-col items-center justify-center gap-3">
-        <Loader2 className="h-8 w-8 animate-spin" />
+        <LoaderCircle className="h-8 w-8 animate-spin" />
         <Text muted>{actionsT("loading")}</Text>
       </div>
     );
@@ -284,7 +284,7 @@ export default function GalleryAdminPage() {
       </EmptyHeader>
       <EmptyContent>
         <Button variant="accent" href={uploadHref}>
-          <Upload />
+          <ImageUp />
           {t("publishWork")}
         </Button>
       </EmptyContent>
@@ -292,7 +292,7 @@ export default function GalleryAdminPage() {
   );
 
   const bulkActions = (
-    <div className="flex flex-row flex-wrap justify-between gap-2 border-b border-border/70 bg-background/70 p-2 shadow-sm backdrop-blur-sm">
+    <div className="-mx-2 flex flex-row flex-wrap justify-between gap-2 border-b border-border/70 bg-background/70 p-2 backdrop-blur-sm">
       {selectedIds.size > 0 ? (
         <>
           <Button
@@ -315,7 +315,7 @@ export default function GalleryAdminPage() {
                 className="bg-background/70"
               >
                 {bulkFlagLoading === "feature" ? (
-                  <Loader2 className="h-4 w-4 animate-spin" />
+                  <LoaderCircle className="h-4 w-4 animate-spin" />
                 ) : (
                   <Flag className="h-4 w-4" />
                 )}
@@ -333,7 +333,7 @@ export default function GalleryAdminPage() {
                 className="bg-background/70"
               >
                 {bulkFlagLoading === "unfeature" ? (
-                  <Loader2 className="h-4 w-4 animate-spin" />
+                  <LoaderCircle className="h-4 w-4 animate-spin" />
                 ) : (
                   <FlagOff className="h-4 w-4" />
                 )}
@@ -386,7 +386,7 @@ export default function GalleryAdminPage() {
             <div className="relative aspect-[3/4] overflow-hidden bg-muted/20">
               {!loadedImages[item.id] && (
                 <div className="pointer-events-none absolute inset-0 z-10 flex items-center justify-center bg-background/30">
-                  <Loader2 className="h-6 w-6 animate-spin text-muted-foreground" />
+                  <LoaderCircle className="h-6 w-6 animate-spin text-muted-foreground" />
                 </div>
               )}
               <Image
@@ -418,7 +418,7 @@ export default function GalleryAdminPage() {
                 aria-label={`Select ${item.title}`}
               >
                 {selectedIds.has(item.id) ? (
-                  <CheckSquare2 className="h-5 w-5 text-accent" />
+                  <SquareCheck className="h-5 w-5 text-accent" />
                 ) : (
                   <Square className="h-5 w-5 text-muted-foreground hover:text-accent" />
                 )}
@@ -446,7 +446,7 @@ export default function GalleryAdminPage() {
           className="flex items-center justify-center py-4"
         >
           {isLoadingMore && (
-            <Loader2 className="h-6 w-6 animate-spin text-muted-foreground" />
+            <LoaderCircle className="h-6 w-6 animate-spin text-muted-foreground" />
           )}
         </div>
       ) : null}
@@ -476,7 +476,7 @@ export default function GalleryAdminPage() {
                 href={reorderHref}
                 className="flex items-center gap-2 bg-background/70"
               >
-                <GripVertical className="h-4 w-4" />
+                <ArrowUpDown className="h-4 w-4" />
                 {isMobile ? t("reorder.buttonShort") : t("reorder.button")}
               </Button>
             </div>
@@ -486,7 +486,7 @@ export default function GalleryAdminPage() {
               href={uploadHref}
               className="bg-background/70"
             >
-              <Upload />
+              <ImageUp />
               {!isMobile && t("uploadButton")}
             </Button>
           </div>

@@ -5,7 +5,7 @@ import { useCallback, useMemo, useState } from "react";
 import { useTranslations } from "next-intl";
 import Image from "next/image";
 
-import { Check, Loader2, RefreshCw, Upload, X } from "lucide-react";
+import { Check, ImageUp, LoaderCircle, RefreshCw, X } from "lucide-react";
 import { toast } from "sonner";
 
 import { Button } from "@/components/styled/Button";
@@ -321,7 +321,7 @@ export function ImageUploader({
         />
         {isUploading && !showPreviewGrid ? (
           <>
-            <Loader2 className="mx-auto mb-2 animate-spin text-muted-foreground" />
+            <LoaderCircle className="mx-auto mb-2 animate-spin text-muted-foreground" />
             <Text muted>{t("actions.uploading.title")}</Text>
             <Text size="xs" muted>
               {t("actions.uploading.hint")}
@@ -330,7 +330,7 @@ export function ImageUploader({
         ) : (
           <div className="flex flex-col gap-1">
             <div>
-              <Upload className="mx-auto mb-2 text-muted-foreground" />
+              <ImageUp className="mx-auto mb-2 text-muted-foreground" />
               <Text muted>
                 {t("dropzone.hint.action")} <br className="md:hidden" />
                 {t("dropzone.hint.actionSecondary")}
@@ -381,7 +381,7 @@ export function ImageUploader({
                   />
                   {image.uploading && (
                     <div className="absolute inset-0 flex items-center justify-center bg-black/50">
-                      <Loader2 className="size-6 animate-spin text-white" />
+                      <LoaderCircle className="size-6 animate-spin text-white" />
                     </div>
                   )}
                   {image.uploaded && (
@@ -426,7 +426,7 @@ export function ImageUploader({
         </AttachmentGroup>
       )}
 
-      {/* Upload Button */}
+      {/* ImageUp Button */}
       {showPreviewGrid && images.length > 0 && !allUploaded && (
         <Button
           onClick={() => uploadImages(images)}
@@ -435,12 +435,12 @@ export function ImageUploader({
         >
           {isUploading ? (
             <>
-              <Loader2 className="animate-spin" />
+              <LoaderCircle className="animate-spin" />
               {t("actions.uploading.title")}
             </>
           ) : (
             <>
-              <Upload />
+              <ImageUp />
               {t("actions.upload")}
             </>
           )}

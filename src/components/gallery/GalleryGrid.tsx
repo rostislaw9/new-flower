@@ -6,7 +6,7 @@ import { useTranslations } from "next-intl";
 import Image from "next/image";
 
 import { motion } from "framer-motion";
-import { ChevronLeft, ChevronRight, Loader2 } from "lucide-react";
+import { ChevronLeft, ChevronRight, LoaderCircle } from "lucide-react";
 
 import { Text } from "@/components/styled/Typography";
 import { Empty, EmptyHeader, EmptyTitle } from "@/components/ui/empty";
@@ -144,7 +144,7 @@ export function GalleryGrid({
           >
             {!loadedIds[item.id] && (
               <div className="pointer-events-none absolute inset-0 z-10 flex items-center justify-center bg-background/30">
-                <Loader2 className="h-6 w-6 animate-spin text-muted-foreground" />
+                <LoaderCircle className="h-6 w-6 animate-spin text-muted-foreground" />
               </div>
             )}
             <Image
@@ -171,7 +171,7 @@ export function GalleryGrid({
       ))}
       {(isCategoryLoading || isLoadingMore) && (
         <div className="row-span-full flex flex-col items-center justify-center">
-          <Loader2 className="animate-spin text-muted-foreground" />
+          <LoaderCircle className="animate-spin text-muted-foreground" />
         </div>
       )}
       {loadMoreRef && hasMore && (

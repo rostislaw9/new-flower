@@ -4,7 +4,7 @@ import { useState, useTransition } from "react";
 
 import { useRouter } from "next/navigation";
 
-import { Eye, EyeOff, Flag, FlagOff, Loader2, Trash2 } from "lucide-react";
+import { Eye, EyeOff, Flag, FlagOff, LoaderCircle, Trash2 } from "lucide-react";
 import { toast } from "sonner";
 
 import { Button } from "@/components/styled/Button";
@@ -126,7 +126,7 @@ export function ReviewActions({
           aria-label={visible ? messages.visibleOff : messages.visibleOn}
         >
           {visiblePending ? (
-            <Loader2 className="animate-spin" />
+            <LoaderCircle className="animate-spin" />
           ) : visible ? (
             <EyeOff />
           ) : (
@@ -142,7 +142,7 @@ export function ReviewActions({
           aria-label={featured ? messages.toggleOff : messages.toggleOn}
         >
           {togglePending ? (
-            <Loader2 className="animate-spin" />
+            <LoaderCircle className="animate-spin" />
           ) : featured ? (
             <FlagOff />
           ) : (
@@ -156,7 +156,11 @@ export function ReviewActions({
           onClick={() => setConfirmOpen(true)}
           disabled={deletePending}
         >
-          {deletePending ? <Loader2 className="animate-spin" /> : <Trash2 />}
+          {deletePending ? (
+            <LoaderCircle className="animate-spin" />
+          ) : (
+            <Trash2 />
+          )}
         </Button>
       </div>
 

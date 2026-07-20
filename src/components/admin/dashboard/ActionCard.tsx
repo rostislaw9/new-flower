@@ -4,12 +4,12 @@ import { useRouter } from "next/navigation";
 import { useTopLoader } from "nextjs-toploader";
 
 import {
+  BookImage,
   BookText,
   Calendar,
-  FileUser,
-  HelpCircle,
   Images,
-  Star,
+  MessageCircleQuestionMark,
+  Sparkles,
 } from "lucide-react";
 
 import { Heading, Text } from "@/components/styled/Typography";
@@ -19,9 +19,9 @@ import { cn } from "@/lib/utils";
 const ICONS = {
   calendar: Calendar,
   images: Images,
-  star: Star,
-  user: FileUser,
-  faq: HelpCircle,
+  star: Sparkles,
+  user: BookImage,
+  faq: MessageCircleQuestionMark,
   about: BookText,
 } as const;
 

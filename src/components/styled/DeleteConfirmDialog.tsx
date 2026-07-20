@@ -2,7 +2,7 @@
 
 import { useState } from "react";
 
-import { Loader2, Trash2 } from "lucide-react";
+import { LoaderCircle, Trash2 } from "lucide-react";
 
 import { Button } from "@/components/styled/Button";
 import { Heading } from "@/components/styled/Typography";
@@ -72,7 +72,7 @@ export function DeleteConfirmDialog({
       >
         {deleting ? (
           <>
-            <Loader2 className="animate-spin" />
+            <LoaderCircle className="animate-spin" />
             {confirmLoadingLabel}
           </>
         ) : (
