@@ -39,6 +39,11 @@ export async function buildPageMetadata({
 
     alternates: {
       canonical: `${SITE_URL}${canonical}`,
+      languages: {
+        "en-US": `${SITE_URL}${canonical}`,
+        "th-TH": `${SITE_URL}/th${canonical === "/" ? "" : canonical}`,
+        "x-default": `${SITE_URL}${canonical}`,
+      },
     },
 
     openGraph: {

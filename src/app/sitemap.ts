@@ -2,57 +2,36 @@ import type { MetadataRoute } from "next";
 
 const SITE_URL = process.env.NEXT_PUBLIC_SITE_URL!;
 
+const PAGES = [
+  { path: "", priority: 1, changeFrequency: "monthly" as const },
+  { path: "/gallery", priority: 0.9, changeFrequency: "weekly" as const },
+  { path: "/reviews", priority: 0.8, changeFrequency: "weekly" as const },
+  { path: "/reviews/new", priority: 0.5, changeFrequency: "yearly" as const },
+  { path: "/booking", priority: 0.9, changeFrequency: "monthly" as const },
+  { path: "/about", priority: 0.7, changeFrequency: "monthly" as const },
+  { path: "/faq", priority: 0.6, changeFrequency: "monthly" as const },
+  { path: "/contact", priority: 0.5, changeFrequency: "yearly" as const },
+];
+
 export default function sitemap(): MetadataRoute.Sitemap {
   const now = new Date();
 
-  return [
-    {
-      url: SITE_URL,
+  return PAGES.map((page) => {
+    const enPath = page.path || "/";
+    const thPath = `/th${page.path}`;
+
+    return {
+      url: `${SITE_URL}${enPath}`,
       lastModified: now,
-      changeFrequency: "monthly",
-      priority: 1,
-    },
-    {
-      url: `${SITE_URL}/gallery`,
-      lastModified: now,
-      changeFrequency: "weekly",
-      priority: 0.9,
-    },
-    {
-      url: `${SITE_URL}/reviews`,
-      lastModified: now,
-      changeFrequency: "weekly",
-      priority: 0.8,
-    },
-    {
-      url: `${SITE_URL}/reviews/new`,
-      lastModified: now,
-      changeFrequency: "yearly",
-      priority: 0.5,
-    },
-    {
-      url: `${SITE_URL}/booking`,
-      lastModified: now,
-      changeFrequency: "monthly",
-      priority: 0.9,
-    },
-    {
-      url: `${SITE_URL}/about`,
-      lastModified: now,
-      changeFrequency: "monthly",
-      priority: 0.7,
-    },
-    {
-      url: `${SITE_URL}/faq`,
-      lastModified: now,
-      changeFrequency: "monthly",
-      priority: 0.6,
-    },
-    {
-      url: `${SITE_URL}/contact`,
-      lastModified: now,
-      changeFrequency: "yearly",
-      priority: 0.5,
-    },
-  ];
+      changeFrequency: page.changeFrequency,
+      priority: page.priority,
+      alternates: {
+        languages: {
+          "en-US": `${SITE_URL}${enPath}`,
+          "th-TH": `${SITE_URL}${thPath}`,
+          "x-default": `${SITE_URL}${enPath}`,
+        },
+      },
+    };
+  });
 }

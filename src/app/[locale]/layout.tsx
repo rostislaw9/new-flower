@@ -90,8 +90,9 @@ export async function generateMetadata({
     alternates: {
       canonical: SITE_URL,
       languages: {
-        "en-US": "/en",
-        "th-TH": "/th",
+        "en-US": SITE_URL,
+        "th-TH": `${SITE_URL}/th`,
+        "x-default": SITE_URL,
       },
     },
   };
