@@ -66,7 +66,7 @@ export async function generateMetadata({
     openGraph: {
       type: "website",
       locale: locale === "th" ? "th_TH" : "en_US",
-      url: SITE_URL,
+      url: `${SITE_URL}${locale === "th" ? "/th" : ""}`,
       siteName: "New Flower Tattoo",
       title: t("title"),
       description: t("description"),
@@ -88,7 +88,7 @@ export async function generateMetadata({
       images: [logoUrl],
     },
     alternates: {
-      canonical: SITE_URL,
+      canonical: `${SITE_URL}${locale === "th" ? "/th" : ""}`,
       languages: {
         "en-US": SITE_URL,
         "th-TH": `${SITE_URL}/th`,

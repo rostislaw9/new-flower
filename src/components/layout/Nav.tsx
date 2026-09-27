@@ -10,7 +10,7 @@ import { LanguageSwitcher } from "@/components/styled/LanguageSwitcher";
 import { Logo } from "@/components/styled/Logo";
 import { Heading } from "@/components/styled/Typography";
 import { type Locale, defaultLocale } from "@/i18n/config";
-import { isSupportedLocale } from "@/lib/locale-utils";
+import { getLocalizedPath, isSupportedLocale } from "@/lib/locale-utils";
 import { cn } from "@/lib/utils";
 
 const NAV_LINKS = [
@@ -60,7 +60,7 @@ export function Nav() {
   ) => {
     event.preventDefault();
     setMenuOpen(false);
-    const homePath = `/${locale}`;
+    const homePath = getLocalizedPath("/", locale);
     const isOnHome = pathname === "/" || pathname === homePath;
 
     if (isOnHome) {
@@ -92,7 +92,7 @@ export function Nav() {
             {NAV_LINKS.map(({ href, key }) => (
               <Button
                 key={href}
-                href={`/${locale}${href}`}
+                href={getLocalizedPath(href, locale)}
                 variant="link"
                 size="link"
                 className={getLinkClasses(
@@ -108,7 +108,7 @@ export function Nav() {
           <div className="hidden items-center gap-4 md:flex">
             <LanguageSwitcher linkClassName="text-2xs" />
             <Button
-              href={`/${locale}/booking`}
+              href={getLocalizedPath("/booking", locale)}
               variant="accent"
               size="sm"
               className={locale === "th" ? "text-md" : ""}
@@ -167,7 +167,7 @@ export function Nav() {
           {NAV_LINKS.map(({ href, key }) => (
             <Button
               key={href}
-              href={`/${locale}${href}`}
+              href={getLocalizedPath(href, locale)}
               variant="link"
               className={getLinkClasses(href)}
               onClick={() => setMenuOpen(false)}
@@ -176,7 +176,7 @@ export function Nav() {
             </Button>
           ))}
           <Button
-            href={`/${locale}/booking`}
+            href={getLocalizedPath("/booking", locale)}
             variant="accent"
             size="lg"
             className={cn(locale === "th" && "text-2xl", "portrait:my-8")}

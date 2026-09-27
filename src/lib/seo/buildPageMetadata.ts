@@ -31,6 +31,11 @@ export async function buildPageMetadata({
     ? rawLogo
     : `${SITE_URL}${rawLogo}`;
 
+  const canonicalUrl =
+    locale === "th"
+      ? `${SITE_URL}/th${canonical === "/" ? "" : canonical}`
+      : `${SITE_URL}${canonical}`;
+
   return {
     metadataBase: new URL(SITE_URL),
 
@@ -38,7 +43,7 @@ export async function buildPageMetadata({
     description,
 
     alternates: {
-      canonical: `${SITE_URL}${canonical}`,
+      canonical: canonicalUrl,
       languages: {
         "en-US": `${SITE_URL}${canonical}`,
         "th-TH": `${SITE_URL}/th${canonical === "/" ? "" : canonical}`,
@@ -49,7 +54,7 @@ export async function buildPageMetadata({
     openGraph: {
       type: "website",
       locale: locale === "th" ? "th_TH" : "en_US",
-      url: `${SITE_URL}${canonical}`,
+      url: canonicalUrl,
       siteName: "New Flower Tattoo",
       title: typeof title === "string" ? title : title.absolute,
       description,

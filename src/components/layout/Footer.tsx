@@ -8,6 +8,8 @@ import { Button } from "@/components/styled/Button";
 import { Logo } from "@/components/styled/Logo";
 import { Eyebrow, Text } from "@/components/styled/Typography";
 import { Separator } from "@/components/ui/separator";
+import { type Locale, defaultLocale } from "@/i18n/config";
+import { getLocalizedPath, isSupportedLocale } from "@/lib/locale-utils";
 
 const FOOTER_LINKS = [
   { href: "/booking", labelKey: "links.booking" },
@@ -28,9 +30,12 @@ interface FooterProps {
   locale: string;
 }
 
-export function Footer({ locale }: FooterProps) {
+export function Footer({ locale: rawLocale }: FooterProps) {
   const t = useTranslations("footer");
   const pathname = usePathname();
+  const locale: Locale = isSupportedLocale(rawLocale)
+    ? rawLocale
+    : defaultLocale;
 
   const year = new Date().getFullYear();
 
@@ -55,7 +60,7 @@ export function Footer({ locale }: FooterProps) {
                 {FOOTER_LINKS.map(({ href, labelKey }) => (
                   <Link
                     key={href}
-                    href={`/${locale}${href}`}
+                    href={getLocalizedPath(href, locale)}
                     className="font-sans text-sm text-muted-foreground transition-colors duration-300 hover:text-foreground"
                   >
                     {t(labelKey)}
@@ -65,7 +70,7 @@ export function Footer({ locale }: FooterProps) {
               <Button
                 variant="accent"
                 size="sm"
-                href={`/${locale}/reviews/new`}
+                href={getLocalizedPath("/reviews/new", locale)}
               >
                 {t("leaveReview")}
               </Button>

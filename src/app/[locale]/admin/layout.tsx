@@ -46,7 +46,7 @@ import {
 } from "@/components/ui/sidebar";
 import { useIsMobile } from "@/hooks/use-mobile";
 import { type Locale, defaultLocale } from "@/i18n/config";
-import { isSupportedLocale } from "@/lib/locale-utils";
+import { getLocalizedPath, isSupportedLocale } from "@/lib/locale-utils";
 
 const SIDEBAR_STORAGE_KEY = "admin-sidebar-open";
 
@@ -127,7 +127,10 @@ export default function AdminLayout({ children }: { children: ReactNode }) {
               system: t("theme.system"),
             }}
           />
-          <AdminSidebarFooter href={`/${locale}`} label={t("openWebsite")} />
+          <AdminSidebarFooter
+            href={getLocalizedPath("/", locale)}
+            label={t("openWebsite")}
+          />
         </SidebarFooter>
         <SidebarRail />
       </Sidebar>

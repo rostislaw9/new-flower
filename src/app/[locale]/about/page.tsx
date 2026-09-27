@@ -13,7 +13,7 @@ import { type Locale, defaultLocale } from "@/i18n/config";
 import { getAboutBio, getAboutJourneys } from "@/lib/about-data";
 import { getArtistImagesConfig } from "@/lib/artist-images-config";
 import { createBreadcrumbList } from "@/lib/breadcrumbs";
-import { isSupportedLocale } from "@/lib/locale-utils";
+import { getLocalizedPath, isSupportedLocale } from "@/lib/locale-utils";
 import { buildPageMetadata } from "@/lib/seo/buildPageMetadata";
 
 export async function generateMetadata({
@@ -195,7 +195,7 @@ export default async function AboutPage({ params }: AboutReviewsPageProps) {
               <Text muted>
                 {t("studio.location.description.prefix")}
                 <a
-                  href={`/${locale}/contact#studio-location`}
+                  href={`${getLocalizedPath("/contact", locale)}#studio-location`}
                   className="text-foreground underline underline-offset-2 transition-colors duration-300 hover:text-accent"
                 >
                   {t("studio.location.description.linkLabel")}

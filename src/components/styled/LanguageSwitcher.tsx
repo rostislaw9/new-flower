@@ -43,9 +43,7 @@ export function LanguageSwitcher({
         return;
       }
       persistPreferredLocale(nextLocale);
-      const nextPath = getLocalizedPath(pathname, nextLocale, {
-        canonical: false,
-      });
+      const nextPath = getLocalizedPath(pathname, nextLocale);
       const url = searchString ? `${nextPath}?${searchString}` : nextPath;
       router.push(url, { scroll: false });
     },

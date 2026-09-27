@@ -37,6 +37,15 @@ function checkBasicAuth(request: NextRequest) {
 export function middleware(request: NextRequest) {
   const { pathname } = request.nextUrl;
 
+  // Permanently redirect prefixed default-locale URLs ("/en/...") to their
+  // canonical unprefixed versions. next-intl does the same via a temporary
+  // 307, but these URLs moved for good.
+  if (pathname === "/en" || pathname.startsWith("/en/")) {
+    const url = request.nextUrl.clone();
+    url.pathname = pathname === "/en" ? "/" : pathname.slice(3);
+    return NextResponse.redirect(url, 308);
+  }
+
   // Skip i18n middleware for all API routes.
   // Protect only admin APIs.
   if (pathname.startsWith("/api")) {

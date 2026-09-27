@@ -1,5 +1,8 @@
 import { redirect } from "next/navigation";
 
+import { defaultLocale } from "@/i18n/config";
+import { getLocalizedPath, isSupportedLocale } from "@/lib/locale-utils";
+
 interface GalleryItemRedirectPageProps {
   params: Promise<{ locale: string; id: string }>;
 }
@@ -7,7 +10,8 @@ interface GalleryItemRedirectPageProps {
 export default async function GalleryItemRedirectPage({
   params,
 }: GalleryItemRedirectPageProps) {
-  const { locale, id } = await params;
+  const { locale: rawLocale, id } = await params;
+  const locale = isSupportedLocale(rawLocale) ? rawLocale : defaultLocale;
 
-  redirect(`/${locale}/admin/gallery/${id}/edit`);
+  redirect(getLocalizedPath(`/admin/gallery/${id}/edit`, locale));
 }

@@ -16,22 +16,33 @@ const PAGES = [
 export default function sitemap(): MetadataRoute.Sitemap {
   const now = new Date();
 
-  return PAGES.map((page) => {
+  return PAGES.flatMap((page) => {
     const enPath = page.path || "/";
     const thPath = `/th${page.path}`;
 
-    return {
-      url: `${SITE_URL}${enPath}`,
-      lastModified: now,
-      changeFrequency: page.changeFrequency,
-      priority: page.priority,
-      alternates: {
-        languages: {
-          "en-US": `${SITE_URL}${enPath}`,
-          "th-TH": `${SITE_URL}${thPath}`,
-          "x-default": `${SITE_URL}${enPath}`,
-        },
+    const alternates = {
+      languages: {
+        "en-US": `${SITE_URL}${enPath}`,
+        "th-TH": `${SITE_URL}${thPath}`,
+        "x-default": `${SITE_URL}${enPath}`,
       },
     };
+
+    return [
+      {
+        url: `${SITE_URL}${enPath}`,
+        lastModified: now,
+        changeFrequency: page.changeFrequency,
+        priority: page.priority,
+        alternates,
+      },
+      {
+        url: `${SITE_URL}${thPath}`,
+        lastModified: now,
+        changeFrequency: page.changeFrequency,
+        priority: page.priority,
+        alternates,
+      },
+    ];
   });
 }
